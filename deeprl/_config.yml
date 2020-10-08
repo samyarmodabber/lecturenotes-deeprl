@@ -1,0 +1,35 @@
+# Book settings
+title: Deep Reinforcement Learning
+author: Julien Vitay - julien.vitay@informatik.tu-chemnitz.de
+logo: img/tuc.svg
+
+latex:
+  latex_engine              : pdflatex
+  latex_documents:
+    targetname: book.tex
+
+sphinx:
+  config:
+    mathjax_path: https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
+  extra_extensions: ['IPython.sphinxext.ipython_console_highlighting']
+
+# Information about where the book exists on the web
+repository:
+  url                       : https://github.com/vitay/lecturenotes-deeprl  # Online location of your book
+  path_to_book              : deeprl  # Optional path to your book, relative to the repository root
+  branch                    : master  # Which branch of the repository should be used when creating links (optional)
+
+launch_buttons:
+  colab_url: "https://colab.research.google.com"
+  binderhub_url: "https://mybinder.org"  # The URL for your BinderHub (e.g., https://mybinder.org)
+
+# HTML-specific settings
+html:
+  extra_navbar              : Powered by <a href="https://jupyterbook.org">Jupyter Book</a>  # Will be displayed underneath the left navbar.
+  extra_footer              : "Technische Universität Chemnitz - Faculty of Computer Science - Professorship for Artificial Intelligence"  # Will be displayed underneath the footer.
+  home_page_in_navbar       : true  # Whether to include your home page in the left Navigation Bar
+  baseurl                   : "https://julien-vitay.net/lecturenotes-deeprl"  # The base URL where your book will be hosted. Used for creating image previews and social links. e.g.: https://mypage.com/mybook/
+
+
+execute:
+  execute_notebooks         : "off"  # Whether to execute notebooks at build time. Must be one of ("auto", "force", "cache", "off")
