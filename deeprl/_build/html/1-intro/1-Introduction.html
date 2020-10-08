@@ -15,6 +15,7 @@
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/style.css" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-dropdown.css" />
     <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
     <script src="../_static/sphinx-book-theme.js"></script>
@@ -117,11 +118,6 @@
    1. Introduction to Python
   </a>
  </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../5-exercises/ex2-Numpy.html">
-   2. Numpy and matplotlib
-  </a>
- </li>
 </ul>
 <p class="caption">
  <span class="caption-text">
@@ -203,7 +199,56 @@
             <i class="fas fa-list"></i> Contents
         </div>
         <nav id="bd-toc-nav">
-            
+            <ul class="nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#history-of-rl">
+   1.1. History of RL
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#the-agent-environment-interface">
+   1.2. The agent-environment interface
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#difference-between-supervised-and-reinforcement-learning">
+   1.3. Difference between supervised and reinforcement learning
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#applications-of-tabular-rl">
+   1.4. Applications of tabular RL
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#pendulum">
+     1.4.1. Pendulum
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#cartpole">
+     1.4.2. Cartpole
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#backgammon">
+     1.4.3. Backgammon
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#deep-reinforcement-learning-drl">
+   1.5. Deep Reinforcement Learning (DRL)
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#suggested-readings">
+   1.6. Suggested readings
+  </a>
+ </li>
+</ul>
+
         </nav>
     </div>
 </div>
@@ -216,6 +261,256 @@
 <h1><span class="section-number">1. </span>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h1>
 <p>Slides: <a class="reference external" href="https://www.tu-chemnitz.de/informatik/KI/edu/deeprl/lectures/pdf/1.1-Introduction.pdf">pdf</a></p>
 <style>.embed-container { position: relative; margin-bottom: 1%; height: 0; overflow: hidden; max-width: 100%; } .embed-container iframe, .embed-container object, .embed-container embed { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }</style><div class='embed-container'><iframe src='https://www.youtube.com/embed/3Ze2EZE2Pko' frameborder='0' allowfullscreen></iframe></div>
+<p>Deep reinforcement learning (deep RL or DRL) is the integration of deep learning methods, classically used in supervised or unsupervised learning contexts, with reinforcement learning (RL), a well-studied adaptive control method used in problems with delayed and partial feedback.</p>
+<p>There are different types of machine learning depending on the feedback received by the system:</p>
+<ul class="simple">
+<li><p><strong>Supervised learning:</strong> the correct answer is provided to the system.</p></li>
+<li><p><strong>Unsupervised learning:</strong> no answer is given to the system.</p></li>
+<li><p><strong>Reinforcement learning:</strong> an estimation of the correctness of the answer is provided.</p></li>
+</ul>
+<div class="section" id="history-of-rl">
+<h2><span class="section-number">1.1. </span>History of RL<a class="headerlink" href="#history-of-rl" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><strong>Early 20th century</strong>: animal behavior, psychology, operant conditioning</p>
+<ul>
+<li><p>Ivan Pavlov, Edward Thorndike, B.F. Skinner</p></li>
+</ul>
+</li>
+<li><p><strong>1950s</strong>: optimal control, Markov Decision Process, dynamic programming</p>
+<ul>
+<li><p>Richard Bellman, Ronald Howard</p></li>
+</ul>
+</li>
+<li><p><strong>1970s</strong>: trial-and-error learning</p>
+<ul>
+<li><p>Marvin Minsky, Harry Klopf, Robert Rescorla, Allan Wagner</p></li>
+</ul>
+</li>
+<li><p><strong>1980s</strong>: temporal difference learning, Q-learning</p>
+<ul>
+<li><p>Richard Sutton, Andrew Barto, Christopher Watkins, Peter Dayan</p></li>
+</ul>
+</li>
+<li><p><strong>2013-now</strong>: deep reinforcement learning</p>
+<ul>
+<li><p>Deepmind (Mnih, Silver, Graves…)</p></li>
+<li><p>OpenAI (Sutskever, Schulman…)</p></li>
+<li><p>Sergey Levine (Berkeley)</p></li>
+</ul>
+</li>
+</ul>
+<p>Reinforcement learning comes from animal behavior studies, especially <strong>operant conditioning / instrumental learning</strong>. <strong>Thorndike’s Law of Effect</strong> (1874–1949) suggested that behaviors followed by satisfying consequences tend to be repeated and those that produce unpleasant consequences are less likely to be repeated. Positive reinforcements (<strong>rewards</strong>) or negative reinforcements (<strong>punishments</strong>) can be used to modify behavior (<strong>Skinner’s box, 1936</strong>). This form of learning applies to all animals, including humans:</p>
+<ul class="simple">
+<li><p>Training (animals, children…)</p></li>
+<li><p>Addiction, economics, gambling, psychological manipulation…</p></li>
+</ul>
+<p><strong>Behaviorism:</strong> only behavior matters, not mental states.</p>
+<style>.embed-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; } .embed-container iframe, .embed-container object, .embed-container embed { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }</style><div class='embed-container'><iframe src='https://www.youtube.com/embed/y-g2OmRXb0g' frameborder='0' allowfullscreen></iframe></div>
+<p>The key concept of RL is <strong>trial and error</strong> learning. The agent (rat, robot, algorithm) tries out an <strong>action</strong> and observes the <strong>outcome</strong>.</p>
+<ul class="simple">
+<li><p>If the outcome is positive (reward), the action is reinforced (more likely to occur again).</p></li>
+<li><p>If the outcome is negative (punishment), the action will be avoided.</p></li>
+</ul>
+<p>After enough interactions, the agent has <strong>learned</strong> which action to perform in a given situation.</p>
+<p>RL is merely a formalization of the trial-and-error learning paradigm. The agent has to <strong>explore</strong> its environment via trial-and-error in order to gain knowledge. The biggest issue with this approach is that exploring large action spaces might necessitate a <strong>lot</strong> of trials (<strong>sample complexity</strong>). The modern techniques we will see in this course try to reduce the sample complexity.</p>
+</div>
+<div class="section" id="the-agent-environment-interface">
+<h2><span class="section-number">1.2. </span>The agent-environment interface<a class="headerlink" href="#the-agent-environment-interface" title="Permalink to this headline">¶</a></h2>
+<div class="figure align-default" id="id8">
+<a class="reference internal image-reference" href="../_images/rl-agent.jpg"><img alt="../_images/rl-agent.jpg" src="../_images/rl-agent.jpg" style="width: 80%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 1.1 </span><span class="caption-text">Agent-environment interface. Source: <a class="bibtex reference internal" href="../zreferences.html#sutton2017" id="id1">[SB17]</a>.</span><a class="headerlink" href="#id8" title="Permalink to this image">¶</a></p>
+</div>
+<p>The agent and the environment interact at discrete time steps:  <span class="math notranslate nohighlight">\(t\)</span>=0, 1, … The agent observes its state at time t:  <span class="math notranslate nohighlight">\(s_t \in \mathcal{S}\)</span>, produces an action at time t, depending on the available actions in the current state: <span class="math notranslate nohighlight">\(a_t \in \mathcal{A}(s_t)\)</span> and  receives a reward according to this action at time t+1: <span class="math notranslate nohighlight">\(r_{t+1} \in \Re\)</span>. It then updates its state: <span class="math notranslate nohighlight">\(s_{t+1} \in \mathcal{S}\)</span>. The behavior of the agent is therefore is a sequence of <strong>state-action-reward-state</strong> <span class="math notranslate nohighlight">\((s, a, r, s')\)</span> transitions.</p>
+<div class="figure align-default" id="id9">
+<a class="reference internal image-reference" href="../_images/rl-sequence.jpg"><img alt="../_images/rl-sequence.jpg" src="../_images/rl-sequence.jpg" style="width: 100%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 1.2 </span><span class="caption-text">State-action-reward-state sequences. Source: <a class="bibtex reference internal" href="../zreferences.html#sutton2017" id="id2">[SB17]</a>.</span><a class="headerlink" href="#id9" title="Permalink to this image">¶</a></p>
+</div>
+<p>Sequences <span class="math notranslate nohighlight">\(\tau = (s_0, a_0, r_1, s_1, a_1, \ldots, s_T)\)</span> are called <strong>episodes</strong>, <strong>trajectories</strong>, <strong>histories</strong> or <strong>rollouts</strong>.</p>
+<div class="figure align-default" id="id10">
+<a class="reference internal image-reference" href="../_images/rl-loop.png"><img alt="../_images/rl-loop.png" src="../_images/rl-loop.png" style="width: 100%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 1.3 </span><span class="caption-text">Agent-environment interface for video games. Source: David Silver <a class="reference external" href="http://www0.cs.ucl.ac.uk/staff/d.silver/web/Teaching.html">http://www0.cs.ucl.ac.uk/staff/d.silver/web/Teaching.html</a>.</span><a class="headerlink" href="#id10" title="Permalink to this image">¶</a></p>
+</div>
+<p>The state <span class="math notranslate nohighlight">\(s_t\)</span> can relate to:</p>
+<ul class="simple">
+<li><p>the <strong>environment state</strong>, i.e. all information external to the agent (position of objects, other agents, etc).</p></li>
+<li><p>the <strong>internal state</strong>, information about the agent itself (needs, joint positions, etc).</p></li>
+</ul>
+<p>Generally, the state represents all the information necessary to solve the task. The agent generally has no access to the states directly, but to <strong>observations</strong> <span class="math notranslate nohighlight">\(o_t\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[
+    o_t = f(s_t)
+\]</div>
+<p>Example: camera inputs do not contain all the necessary information such as the agent’s position. Imperfect information define <strong>partially observable problems</strong>.</p>
+<p>What we search in RL is the optimal <strong>policy</strong>: which action <span class="math notranslate nohighlight">\(a\)</span> should the agent perform in a state <span class="math notranslate nohighlight">\(s\)</span>? The policy <span class="math notranslate nohighlight">\(\pi\)</span> maps states into actions. It is defined as a <strong>probability distribution</strong> over states and actions:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{align}
+    \pi &amp;: \mathcal{S} \times \mathcal{A} \rightarrow P(\mathcal{S})\\
+    \\
+    &amp; (s, a) \rightarrow \pi(s, a)  = P(a_t = a | s_t = s) \\
+\end{align}
+\end{split}\]</div>
+<p><span class="math notranslate nohighlight">\(\pi(s, a)\)</span> is the probability of selecting the action <span class="math notranslate nohighlight">\(a\)</span> in <span class="math notranslate nohighlight">\(s\)</span>. We have of course:</p>
+<div class="math notranslate nohighlight">
+\[\sum_{a \in \mathcal{A}(s)} \pi(s, a) = 1\]</div>
+<p>Policies can be <strong>probabilistic</strong> / <strong>stochastic</strong>. <strong>Deterministic policies</strong> select a single action <span class="math notranslate nohighlight">\(a^*\)</span>in <span class="math notranslate nohighlight">\(s\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\pi(s, a) = \begin{cases} 1 \; \text{if} \; a = a^* \\ 0 \; \text{if} \; a \neq a^* \\ \end{cases}\end{split}\]</div>
+<p>The only teaching signal in RL is the <strong>reward function</strong>. The reward is a scalar value <span class="math notranslate nohighlight">\(r_{t+1}\)</span> provided to the system after each transition <span class="math notranslate nohighlight">\((s_t,a_t, s_{t+1})\)</span>. Rewards can also be probabilistic (casino). The mathematical expectation of these rewards defines the <strong>expected reward</strong> of a transition:</p>
+<div class="math notranslate nohighlight">
+\[
+    r(s, a, s') = \mathbb{E}_t [r_{t+1} | s_t = s, a_t = a, s_{t+1} = s']
+\]</div>
+<p>Rewards can be:</p>
+<ul class="simple">
+<li><p><strong>dense</strong>: a non-zero value is provided after each time step (easy).</p></li>
+<li><p><strong>sparse</strong>: non-zero rewards are given very seldom (difficult).</p></li>
+</ul>
+<p>The goal of the agent is to find a policy that <strong>maximizes</strong> the sum of future rewards at each timestep. The discounted sum of future rewards is called the <strong>return</strong>:</p>
+<div class="math notranslate nohighlight">
+\[
+    R_t = \sum_{k=0}^\infty \gamma ^k \, r_{t+k+1}
+\]</div>
+<p>Rewards can be delayed w.r.t to an action: we care about all future rewards to select an action, not only the immediate ones.  Example: in chess, the first moves are as important as the last ones in order to win, but they do not receive reward.</p>
+<p>The <strong>expected return</strong> in a state <span class="math notranslate nohighlight">\(s\)</span> is called its <strong>value</strong>:</p>
+<div class="math notranslate nohighlight">
+\[
+    V^\pi(s) = \mathbb{E}_\pi(R_t | s_t = s)
+\]</div>
+<p>The value of a state defines how good it is to be in that state. If a state has a high value, it means we will be able to collect a lot of rewards <strong>on the long term</strong> and <strong>on average</strong>.  Value functions are central to RL: if we know the value of all states, we can infer the policy. The optimal action is the one that leads to the state with the highest value. Most RL methods deal with estimating the value function from experience (trial and error).</p>
+<p><strong>Simple maze</strong></p>
+<div class="figure align-default" id="id11">
+<a class="reference internal image-reference" href="../_images/maze.png"><img alt="../_images/maze.png" src="../_images/maze.png" style="width: 80%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 1.4 </span><span class="caption-text">Simple maze. Source: David Silver <a class="reference external" href="http://www0.cs.ucl.ac.uk/staff/d.silver/web/Teaching.html">http://www0.cs.ucl.ac.uk/staff/d.silver/web/Teaching.html</a>.</span><a class="headerlink" href="#id11" title="Permalink to this image">¶</a></p>
+</div>
+<p>The goal is to find a path from start to goal as fast as possible.</p>
+<ul class="simple">
+<li><p><strong>States</strong>: position in the maze (1, 2, 3…).</p></li>
+<li><p><strong>Actions</strong>: up, down, left, right.</p></li>
+<li><p><strong>Rewards</strong>: -1 for each step until the exit.</p></li>
+</ul>
+<p>The value of each state indicates how good it is to be in that state. It can be learned by trial-and-error given a policy.</p>
+<div class="figure align-default" id="id12">
+<a class="reference internal image-reference" href="../_images/maze-value.png"><img alt="../_images/maze-value.png" src="../_images/maze-value.png" style="width: 80%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 1.5 </span><span class="caption-text">Value of each state. Source: David Silver <a class="reference external" href="http://www0.cs.ucl.ac.uk/staff/d.silver/web/Teaching.html">http://www0.cs.ucl.ac.uk/staff/d.silver/web/Teaching.html</a>.</span><a class="headerlink" href="#id12" title="Permalink to this image">¶</a></p>
+</div>
+<p>When the value of all states is known, we can infer the optimal policy by choosing actions leading to the states with the highest value.</p>
+<div class="figure align-default" id="id13">
+<a class="reference internal image-reference" href="../_images/maze-policy.png"><img alt="../_images/maze-policy.png" src="../_images/maze-policy.png" style="width: 80%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 1.6 </span><span class="caption-text">Optimal policy. Source: David Silver <a class="reference external" href="http://www0.cs.ucl.ac.uk/staff/d.silver/web/Teaching.html">http://www0.cs.ucl.ac.uk/staff/d.silver/web/Teaching.html</a>.</span><a class="headerlink" href="#id13" title="Permalink to this image">¶</a></p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>As we will see, the story is actually much more complicated…</p>
+</div>
+</div>
+<div class="section" id="difference-between-supervised-and-reinforcement-learning">
+<h2><span class="section-number">1.3. </span>Difference between supervised and reinforcement learning<a class="headerlink" href="#difference-between-supervised-and-reinforcement-learning" title="Permalink to this headline">¶</a></h2>
+<p><strong>Supervised learning</strong></p>
+<ul class="simple">
+<li><p>Correct input/output samples are provided by a <strong>superviser</strong> (training set).</p></li>
+<li><p>Learning is driven by <strong>prediction errors</strong>, the difference between the prediction and the target.</p></li>
+<li><p>Feedback is <strong>instantaneous</strong>: the target is immediately known.</p></li>
+<li><p><strong>Time</strong> does not matter: training samples are randomly sampled from the training set.</p></li>
+</ul>
+<p><strong>Reinforcement learning</strong></p>
+<ul class="simple">
+<li><p>Behavior is acquired through <strong>trial and error</strong>, no supervision.</p></li>
+<li><p><strong>Reinforcements</strong> (rewards or punishments) change the probability of selecting particular actions.</p></li>
+<li><p>Feedback is <strong>delayed</strong>: which action caused the reward? Credit assignment.</p></li>
+<li><p><strong>Time</strong> matters: as behavior gets better, the observed data changes.</p></li>
+</ul>
+</div>
+<div class="section" id="applications-of-tabular-rl">
+<h2><span class="section-number">1.4. </span>Applications of tabular RL<a class="headerlink" href="#applications-of-tabular-rl" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="pendulum">
+<h3><span class="section-number">1.4.1. </span>Pendulum<a class="headerlink" href="#pendulum" title="Permalink to this headline">¶</a></h3>
+<style>.embed-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; } .embed-container iframe, .embed-container object, .embed-container embed { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }</style><div class='embed-container'><iframe src='https://www.youtube.com/embed/v6IEpH4vYq0' frameborder='0' allowfullscreen></iframe></div>
+</div>
+<div class="section" id="cartpole">
+<h3><span class="section-number">1.4.2. </span>Cartpole<a class="headerlink" href="#cartpole" title="Permalink to this headline">¶</a></h3>
+<div class="figure align-default" id="id14">
+<a class="reference internal image-reference" href="../_images/cartpole-before.gif"><img alt="../_images/cartpole-before.gif" src="../_images/cartpole-before.gif" style="width: 60%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 1.7 </span><span class="caption-text">Cartpole before training. Source: <a class="reference external" href="https://towardsdatascience.com/cartpole-introduction-to-reinforcement-learning-ed0eb5b58288">https://towardsdatascience.com/cartpole-introduction-to-reinforcement-learning-ed0eb5b58288</a>.</span><a class="headerlink" href="#id14" title="Permalink to this image">¶</a></p>
+</div>
+<div class="figure align-default" id="id15">
+<a class="reference internal image-reference" href="../_images/cartpole-after.gif"><img alt="../_images/cartpole-after.gif" src="../_images/cartpole-after.gif" style="width: 60%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 1.8 </span><span class="caption-text">Cartpole after training. Source: <a class="reference external" href="https://towardsdatascience.com/cartpole-introduction-to-reinforcement-learning-ed0eb5b58288">https://towardsdatascience.com/cartpole-introduction-to-reinforcement-learning-ed0eb5b58288</a>.</span><a class="headerlink" href="#id15" title="Permalink to this image">¶</a></p>
+</div>
+<style>.embed-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; } .embed-container iframe, .embed-container object, .embed-container embed { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }</style><div class='embed-container'><iframe src='https://www.youtube.com/embed/XiigTGKZfks' frameborder='0' allowfullscreen></iframe></div>
+</div>
+<div class="section" id="backgammon">
+<h3><span class="section-number">1.4.3. </span>Backgammon<a class="headerlink" href="#backgammon" title="Permalink to this headline">¶</a></h3>
+<p>TD-Gammon <a class="bibtex reference internal" href="../zreferences.html#tesauro1995" id="id3">[Tes95]</a> was one of the first AI to beat human experts at a complex game, Backgammon.</p>
+<div class="figure align-default" id="id16">
+<a class="reference internal image-reference" href="../_images/tdgammon.png"><img alt="../_images/tdgammon.png" src="../_images/tdgammon.png" style="width: 50%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 1.9 </span><span class="caption-text">Backgammon. Source: <a class="bibtex reference internal" href="../zreferences.html#tesauro1995" id="id4">[Tes95]</a>.</span><a class="headerlink" href="#id16" title="Permalink to this image">¶</a></p>
+</div>
+<div class="figure align-default" id="id17">
+<a class="reference internal image-reference" href="../_images/tdgammon2.png"><img alt="../_images/tdgammon2.png" src="../_images/tdgammon2.png" style="width: 60%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 1.10 </span><span class="caption-text">TD-Gammon. Source: <a class="bibtex reference internal" href="../zreferences.html#tesauro1995" id="id5">[Tes95]</a>.</span><a class="headerlink" href="#id17" title="Permalink to this image">¶</a></p>
+</div>
+</div>
+</div>
+<div class="section" id="deep-reinforcement-learning-drl">
+<h2><span class="section-number">1.5. </span>Deep Reinforcement Learning (DRL)<a class="headerlink" href="#deep-reinforcement-learning-drl" title="Permalink to this headline">¶</a></h2>
+<div class="figure align-default" id="id18">
+<a class="reference internal image-reference" href="../_images/deeprl.jpg"><img alt="../_images/deeprl.jpg" src="../_images/deeprl.jpg" style="width: 80%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 1.11 </span><span class="caption-text">In deep RL, the policy is approximated by a deep neural network.</span><a class="headerlink" href="#id18" title="Permalink to this image">¶</a></p>
+</div>
+<p>Classical tabular RL was limited to toy problems, with few states and actions. It is only when coupled with <strong>deep neural networks</strong> that interesting applications of RL became possible. Deepmind (now Google) started the deep RL hype in 2013 by learning to solve 50+ Atari games with a CNN, the <strong>deep Q-network</strong> (DQN) <a class="bibtex reference internal" href="../zreferences.html#mnih2013" id="id6">[MKS+13]</a>.</p>
+<div class="figure align-default" id="id19">
+<a class="reference internal image-reference" href="../_images/discrete.png"><img alt="../_images/discrete.png" src="../_images/discrete.png" style="width: 100%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 1.12 </span><span class="caption-text">Architecture of the deep Q-network. Source: <a class="bibtex reference internal" href="../zreferences.html#mnih2013" id="id7">[MKS+13]</a>.</span><a class="headerlink" href="#id19" title="Permalink to this image">¶</a></p>
+</div>
+<style>.embed-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; } .embed-container iframe, .embed-container object, .embed-container embed { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }</style><div class='embed-container'><iframe src='https://www.youtube.com/embed/rQIShnTz1kU' frameborder='0' allowfullscreen></iframe></div>
+<p>Deep RL methods we since then improved and applied to a variety of control tasks, including simulated cars:</p>
+<style>.embed-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; } .embed-container iframe, .embed-container object, .embed-container embed { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }</style><div class='embed-container'><iframe src='https://www.youtube.com/embed/0xo1Ldx3L5Q' frameborder='0' allowfullscreen></iframe></div>
+<p>or Parkour:</p>
+<style>.embed-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; } .embed-container iframe, .embed-container object, .embed-container embed { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }</style><div class='embed-container'><iframe src='https://www.youtube.com/embed/faDKMMwOS2Q' frameborder='0' allowfullscreen></iframe></div>
+<p>One very famous success of deep RL is when <strong>AlphaGo</strong> managed to beat Lee Sedol at the ancient game of Go:</p>
+<style>.embed-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; } .embed-container iframe, .embed-container object, .embed-container embed { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }</style><div class='embed-container'><iframe src='https://www.youtube.com/embed/8tq1C8spV_g' frameborder='0' allowfullscreen></iframe></div>
+<p>DeepRL has since been applied to real-world robotics:</p>
+<style>.embed-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; } .embed-container iframe, .embed-container object, .embed-container embed { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }</style><div class='embed-container'><iframe src='https://www.youtube.com/embed/l8zKZLqkfII' frameborder='0' allowfullscreen></iframe></div>
+<style>.embed-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; } .embed-container iframe, .embed-container object, .embed-container embed { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }</style><div class='embed-container'><iframe src='https://www.youtube.com/embed/jwSbzNHGflM' frameborder='0' allowfullscreen></iframe></div>
+<p>or even autonomous driving (<a class="reference external" href="https://wayve.ai/blog/learning-to-drive-in-a-day-with-reinforcement-learning">https://wayve.ai/blog/learning-to-drive-in-a-day-with-reinforcement-learning</a>):</p>
+<style>.embed-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; } .embed-container iframe, .embed-container object, .embed-container embed { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }</style><div class='embed-container'><iframe src='https://www.youtube.com/embed/eRwTbRtnT1I' frameborder='0' allowfullscreen></iframe></div>
+<p>It is also used for more complex video games, such as <strong>DotA II</strong>:</p>
+<style>.embed-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; } .embed-container iframe, .embed-container object, .embed-container embed { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }</style><div class='embed-container'><iframe src='https://www.youtube.com/embed/eHipy_j29Xw' frameborder='0' allowfullscreen></iframe></div>
+<p>or Starcraft II (AlphaStar, <a class="reference external" href="https://deepmind.com/blog/article/alphastar-mastering-real-time-strategy-game-starcraft-ii">https://deepmind.com/blog/article/alphastar-mastering-real-time-strategy-game-starcraft-ii</a>)</p>
+<p><img alt="" src="../_images/alphastar.gif" /></p>
+<p>Deep RL is gaining a lot of importance in AI research, with lots of applications in control: video games, robotics, industrial applications… It may be AI’s best shot at producing intelligent behavior, as it does not rely on annotated data. A lot of problems have to be solved before becoming as mainstream as deep learning.</p>
+<ul class="simple">
+<li><p>Sample complexity is often prohibitive.</p></li>
+<li><p>Energy consumption and computing power simply crazy (AlphaGo: 1 MW, Dota2: 800 petaflop/s-days)</p></li>
+<li><p>The correct reward function is hard to design, ethical aspects. (<em>inverse RL</em>)</p></li>
+<li><p>Hard to incorporate expert knowledge. (<em>model-based RL</em>)</p></li>
+<li><p>Learns single tasks, does not generalize (<em>hierarchical RL</em>, <em>meta-learning</em>)</p></li>
+</ul>
+</div>
+<div class="section" id="suggested-readings">
+<h2><span class="section-number">1.6. </span>Suggested readings<a class="headerlink" href="#suggested-readings" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Sutton and Barto (1998, 2017). Reinforcement Learning: An Introduction. MIT Press.</p></li>
+</ul>
+<p><a class="reference external" href="http://incompleteideas.net/sutton/book/the-book.html">http://incompleteideas.net/sutton/book/the-book.html</a></p>
+<ul class="simple">
+<li><p>Szepesvari (2010). Algorithms for Reinforcement Learning. Morgan and Claypool.</p></li>
+</ul>
+<p><a class="reference external" href="http://www.ualberta.ca/%E2%88%BCszepesva/papers/RLAlgsInMDPs.pdf">http://www.ualberta.ca/%E2%88%BCszepesva/papers/RLAlgsInMDPs.pdf</a></p>
+<ul class="simple">
+<li><p>CS294 course of Sergey Levine at Berkeley.</p></li>
+</ul>
+<p><a class="reference external" href="http://rll.berkeley.edu/deeprlcourse/">http://rll.berkeley.edu/deeprlcourse/</a></p>
+<ul class="simple">
+<li><p>Reinforcement Learning course by David Silver at UCL.</p></li>
+</ul>
+<p><a class="reference external" href="http://www0.cs.ucl.ac.uk/staff/d.silver/web/Teaching.html">http://www0.cs.ucl.ac.uk/staff/d.silver/web/Teaching.html</a></p>
+<ul class="simple">
+<li><p>My notes on Deep Reinforcement Learning.</p></li>
+</ul>
+<p><a class="reference external" href="https://julien-vitay.net/deeprl">https://julien-vitay.net/deeprl</a></p>
+</div>
 </div>
 
     <script type="text/x-thebe-config">

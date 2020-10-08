@@ -12,4 +12,4 @@ export:
 	rsync -avze ssh --progress --delete ./deeprl/_build/html/ vitay@login.tu-chemnitz.de:/afs/tu-chemnitz.de/www/root/informatik/KI/edu/deeprl/notes/
 
 clean:
-	rm -rf ./deeprl/_build/html
+	rm -rf ./deeprl/_build
