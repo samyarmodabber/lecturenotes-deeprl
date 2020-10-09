@@ -2,9 +2,6 @@
 
 Slides: [pdf](https://www.tu-chemnitz.de/informatik/KI/edu/deeprl/lectures/pdf/1.1-Introduction.pdf)
 
-<style>.embed-container { position: relative; margin-bottom: 1%; height: 0; overflow: hidden; max-width: 100%; } .embed-container iframe, .embed-container object, .embed-container embed { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }</style><div class='embed-container'><iframe src='https://www.youtube.com/embed/3Ze2EZE2Pko' frameborder='0' allowfullscreen></iframe></div>
-
-
 
 Deep reinforcement learning (deep RL or DRL) is the integration of deep learning methods, classically used in supervised or unsupervised learning contexts, with reinforcement learning (RL), a well-studied adaptive control method used in problems with delayed and partial feedback.
 
@@ -51,7 +48,7 @@ Reinforcement learning comes from animal behavior studies, especially **operant 
 
 **Behaviorism:** only behavior matters, not mental states.
 
-<style>.embed-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; } .embed-container iframe, .embed-container object, .embed-container embed { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }</style><div class='embed-container'><iframe src='https://www.youtube.com/embed/y-g2OmRXb0g' frameborder='0' allowfullscreen></iframe></div>
+<div class='embed-container'><iframe src='https://www.youtube.com/embed/y-g2OmRXb0g' frameborder='0' allowfullscreen></iframe></div>
 
 
 The key concept of RL is **trial and error** learning. The agent (rat, robot, algorithm) tries out an **action** and observes the **outcome**.
@@ -222,7 +219,7 @@ As we will see, the story is actually much more complicated...
 
 ### Pendulum
 
-<style>.embed-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; } .embed-container iframe, .embed-container object, .embed-container embed { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }</style><div class='embed-container'><iframe src='https://www.youtube.com/embed/v6IEpH4vYq0' frameborder='0' allowfullscreen></iframe></div>
+<div class='embed-container'><iframe src='https://www.youtube.com/embed/v6IEpH4vYq0' frameborder='0' allowfullscreen></iframe></div>
 
 
 ### Cartpole
@@ -241,7 +238,7 @@ width: 60%
 Cartpole after training. Source: <https://towardsdatascience.com/cartpole-introduction-to-reinforcement-learning-ed0eb5b58288>.
 ```
 
-<style>.embed-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; } .embed-container iframe, .embed-container object, .embed-container embed { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }</style><div class='embed-container'><iframe src='https://www.youtube.com/embed/XiigTGKZfks' frameborder='0' allowfullscreen></iframe></div>
+<div class='embed-container'><iframe src='https://www.youtube.com/embed/XiigTGKZfks' frameborder='0' allowfullscreen></iframe></div>
 
 ### Backgammon
 
@@ -279,36 +276,36 @@ width: 100%
 Architecture of the deep Q-network. Source: {cite}`Mnih2013`.
 ```
 
-<style>.embed-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; } .embed-container iframe, .embed-container object, .embed-container embed { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }</style><div class='embed-container'><iframe src='https://www.youtube.com/embed/rQIShnTz1kU' frameborder='0' allowfullscreen></iframe></div>
+<div class='embed-container'><iframe src='https://www.youtube.com/embed/rQIShnTz1kU' frameborder='0' allowfullscreen></iframe></div>
 
 
 Deep RL methods we since then improved and applied to a variety of control tasks, including simulated cars:
 
-<style>.embed-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; } .embed-container iframe, .embed-container object, .embed-container embed { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }</style><div class='embed-container'><iframe src='https://www.youtube.com/embed/0xo1Ldx3L5Q' frameborder='0' allowfullscreen></iframe></div>
+<div class='embed-container'><iframe src='https://www.youtube.com/embed/0xo1Ldx3L5Q' frameborder='0' allowfullscreen></iframe></div>
 
 or Parkour:
 
-<style>.embed-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; } .embed-container iframe, .embed-container object, .embed-container embed { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }</style><div class='embed-container'><iframe src='https://www.youtube.com/embed/faDKMMwOS2Q' frameborder='0' allowfullscreen></iframe></div>
+<div class='embed-container'><iframe src='https://www.youtube.com/embed/faDKMMwOS2Q' frameborder='0' allowfullscreen></iframe></div>
 
 One very famous success of deep RL is when **AlphaGo** managed to beat Lee Sedol at the ancient game of Go:
 
 
-<style>.embed-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; } .embed-container iframe, .embed-container object, .embed-container embed { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }</style><div class='embed-container'><iframe src='https://www.youtube.com/embed/8tq1C8spV_g' frameborder='0' allowfullscreen></iframe></div>
+<div class='embed-container'><iframe src='https://www.youtube.com/embed/8tq1C8spV_g' frameborder='0' allowfullscreen></iframe></div>
 
 DeepRL has since been applied to real-world robotics:
 
-<style>.embed-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; } .embed-container iframe, .embed-container object, .embed-container embed { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }</style><div class='embed-container'><iframe src='https://www.youtube.com/embed/l8zKZLqkfII' frameborder='0' allowfullscreen></iframe></div>
+<div class='embed-container'><iframe src='https://www.youtube.com/embed/l8zKZLqkfII' frameborder='0' allowfullscreen></iframe></div>
 
 
-<style>.embed-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; } .embed-container iframe, .embed-container object, .embed-container embed { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }</style><div class='embed-container'><iframe src='https://www.youtube.com/embed/jwSbzNHGflM' frameborder='0' allowfullscreen></iframe></div>
+<div class='embed-container'><iframe src='https://www.youtube.com/embed/jwSbzNHGflM' frameborder='0' allowfullscreen></iframe></div>
 
 or even autonomous driving (<https://wayve.ai/blog/learning-to-drive-in-a-day-with-reinforcement-learning>):
 
-<style>.embed-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; } .embed-container iframe, .embed-container object, .embed-container embed { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }</style><div class='embed-container'><iframe src='https://www.youtube.com/embed/eRwTbRtnT1I' frameborder='0' allowfullscreen></iframe></div>
+<div class='embed-container'><iframe src='https://www.youtube.com/embed/eRwTbRtnT1I' frameborder='0' allowfullscreen></iframe></div>
 
 It is also used for more complex video games, such as **DotA II**:
 
-<style>.embed-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; } .embed-container iframe, .embed-container object, .embed-container embed { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }</style><div class='embed-container'><iframe src='https://www.youtube.com/embed/eHipy_j29Xw' frameborder='0' allowfullscreen></iframe></div>
+<div class='embed-container'><iframe src='https://www.youtube.com/embed/eHipy_j29Xw' frameborder='0' allowfullscreen></iframe></div>
 
 or Starcraft II (AlphaStar, <https://deepmind.com/blog/article/alphastar-mastering-real-time-strategy-game-starcraft-ii>)
 
