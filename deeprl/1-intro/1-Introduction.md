@@ -5,16 +5,11 @@ Slides: [pdf](https://www.tu-chemnitz.de/informatik/KI/edu/deeprl/lectures/pdf/1
 
 Deep reinforcement learning (deep RL or DRL) is the integration of deep learning methods, classically used in supervised or unsupervised learning contexts, with reinforcement learning (RL), a well-studied adaptive control method used in problems with delayed and partial feedback.
 
-There are different types of machine learning depending on the feedback received by the system:
-
-* **Supervised learning:** the correct answer is provided to the system.
-
-* **Unsupervised learning:** no answer is given to the system.
-
-* **Reinforcement learning:** an estimation of the correctness of the answer is provided.
-
 
 ## History of RL
+
+<div class='embed-container'><iframe src='https://www.youtube.com/embed/m2Y_k8A4iHU' frameborder='0' allowfullscreen></iframe></div>
+
 
 * **Early 20th century**: animal behavior, psychology, operant conditioning 
 
@@ -62,6 +57,9 @@ RL is merely a formalization of the trial-and-error learning paradigm. The agent
 
 
 ## The agent-environment interface
+
+<div class='embed-container'><iframe src='https://www.youtube.com/embed/QjhKJmFV8T4' frameborder='0' allowfullscreen></iframe></div>
+
 
 ```{figure} ../img/rl-agent.jpg
 ---
@@ -216,6 +214,8 @@ As we will see, the story is actually much more complicated...
 
 
 ## Applications of tabular RL
+
+<div class='embed-container'><iframe src='https://www.youtube.com/embed/EGI89ypJiv4' frameborder='0' allowfullscreen></iframe></div>
 
 ### Pendulum
 

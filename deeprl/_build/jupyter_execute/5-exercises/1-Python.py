@@ -19,7 +19,7 @@ Many resources to learn Python exist on the Web:
 -  Scipy lectures note [http://www.scipy-lectures.org](http://www.scipy-lectures.org/)
 -  An Introduction to Interactive Programming in Python on [Coursera](https://www.coursera.org/course/interactivepython).
 
-This notebook only introduces you to the basics and skips functionalities such as classes, as we will not need them in the exercises, so feel free to study additional resources if you want to master Python programming.
+This notebook only introduces you to the basics, so feel free to study additional resources if you want to master Python programming.
 
 ## Installation
 
@@ -82,37 +82,26 @@ To exit Python call the `exit()` function (or `Ctrl+d`):
 ```
 
 
-## Working With Python
+### Scripts
 
-There are basically three ways to program in Python: the interpreter for small commands, scripts for longer programs and notebooks (as here) for interactive programming.
+Instead of using the interpreter, you can run scripts which can be executed sequentially. Simply edit a text file called `MyScript.py` containing for example:
 
-### Python Interpreter
+```python
+# MyScript.py
+# Implements the Hello World example.
 
-To start the Python interpreter, simply type its name in a terminal under Linux:
+text = 'Hello World!' # define a string variable
+
+print(text)
+```
+
+The `#` character is used for comments. Execute this script by typing in a Terminal:
 
 ```bash
-user@machine ~ $ python
+python MyScript.py
 ```
 
-```python
-Python 3.7.4 (default, Jul 16 2019, 07:12:58) 
-[GCC 9.1.0] on linux
-Type "help", "copyright", "credits" or "license" for more information.
->>> 
-```
-
-You can then type anything at the prompt, for example a print statement:
-
-```python
->>> print("Hello World!")
-Hello World!
-```
-
-To exit Python call the `exit()` function (or `Ctrl+d`):
-
-```python
->>> exit()
-```
+As it is a scripted language, each instruction in the script is executed from the beginning to the end, except for the declared functions or classes which can be used later.
 
 ### Jupyter Notebooks
 
@@ -389,9 +378,7 @@ c = tel.values()
 
 
 
-### Flow Control
-
-#### If Statement 
+### If statement 
 
 Perhaps the most well-known conditional statement type is the `if` statement. For example:
 
@@ -451,7 +438,7 @@ if 0 in a:
 
 Note the use of the `in` keyword to know if an element exists in a list.
 
-#### For Loop
+### For loops
 
 The for statement in Python differs a bit from what you may be used to in C, Java or Pascal.
 
@@ -465,6 +452,7 @@ for word in list_words:
 ```
 
 **Q:** Iterate over the list you created previously and print each element.
+
 
 
 
@@ -570,6 +558,91 @@ z = add(a=4) # returns 5
 ```
 
 **Q:** Modify `say_hello_to()` so that the second argument is your own name by default.
+
+
+
+### Classes
+
+Classes are structures allowing to:
+
+1. Store information in an object.
+2. Apply functions on this information.
+
+In a nutshell:
+
+```python
+class Foo:
+    
+    def __init__(self, val):
+        self.val = val
+        
+    def print(self):
+        print(self.val)
+   
+    def set_val(self, val):
+        self.val = val
+        self.print()
+        
+a = Foo(42)
+a.print()
+```
+
+This defines the **class** `Foo`. The first (obligatory) method of the class is the **constructor** `__init__`. This determines how the **instance** `a` will be instantiated after the call to `a = Foo(42)`. The first argument is `self`, which represents the current instance of the class. We can specify other arguments to the constructor (here `val`), which can be processed or stored.
+
+Here we store `val` as an **attribute** of the class `Foo` with `self.val`. It is data that will be specific to each created object: if you create `b = Foo("reinforcement_learning")`, the attribute `self.val` will have different values between the two instances. As always in Python, the type does not matter, it can be a float, a string, a numpy array, another object...
+
+Attributes are accessible from each object as:
+
+```python
+x = a.val
+```
+
+You can set its value by:
+
+```python
+a.val = 12
+```
+
+Classes can define **methods** that can manipulate class attributes as any regular method. The first argument **must** always be `self`. With the `self` object, you can access all attributes (or other methods) of the instance.
+
+With our toy class, `a.set_val(34)` does exactly the same as `a.val = 34`, or `a.print()` is the same as `print(a.val)`.
+
+*For C++/Java experts:* attributes and methods are always public in Python. If you want to make an attribute private, preprend its name with an underscore, e.g. `self._val`. It will then not be part of the API of the class (but can be read or written publicly anyway...).
+
+**Q:** Play around with this basic class, create different objects with different attributes, print them, change them, etc.
+
+
+
+A major concept in **object-oriented programming** (OOP) is **class inheritance**. We will not use it much in these exercises, but let's talk shortly about it.
+
+Inheriting a class is creating a new class that inherits from the attributes and methods of another class (a kind of "copy" of the definition of the class). You can then add new attributes or methods, or overload existing ones.
+
+Example:
+
+```python
+class Bar(Foo):
+    def add(self, val):
+        self.val += val
+    def print(self):
+        print("val =", self.val)
+```
+
+`Bar` is a child class of `Foo`. It inherits all attributes and methods, including `__init__`, `print` and `set_val`. It creates a new method `add` and **overloads** `print`: the old definition of `print` in `Foo` does not exist anymore for instances of the `Bar` class (but does for instances of the `Foo` class). The constructor can also be overloaded, for example to add new arguments:
+
+```python
+class Bar(Foo):
+    def __init__(self, val, val2):
+        self.val2 = val2
+        super().__init__(val)
+    def add(self, val):
+        self.val += val
+    def print(self):
+        print("val =", self.val)
+```
+
+`super().__init__(val)` calls the constructor of the `Foo` class (the "super" class of `bar`), so it sets the value of `self.val`.
+
+**Q:** Play around with inheritance to understand the concept.
 
 
 
