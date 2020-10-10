@@ -1,0 +1,2720 @@
+
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gym environments &#8212; Deep Reinforcement Learning</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" integrity="sha384-KA6wR/X5RY4zFAHpv/CnoG2UW1uogYfdnP67Uv7eULvTveboZJg0qUpmJZb5VqzN" crossorigin="anonymous">
+    <link href="../_static/css/index.css" rel="stylesheet">
+    <link rel="stylesheet" href="../_static/sphinx-book-theme.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/style.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-dropdown.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/sphinx-book-theme.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/togglebutton.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/sphinx-book-theme.js"></script>
+    <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processRefs": false, "processEnvironments": false}})</script>
+    <script async="async" src="https://unpkg.com/thebelab@latest/lib/index.js"></script>
+    <script >
+        const thebe_selector = ".thebe"
+        const thebe_selector_input = "pre"
+        const thebe_selector_output = ".output"
+    </script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <link rel="canonical" href="https://julien-vitay.net/lecturenotes-deeprl/5-exercises/5-Gym.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="docsearch:language" content="en">
+
+
+<!-- Opengraph tags -->
+<meta property="og:url"         content="https://julien-vitay.net/lecturenotes-deeprl/5-exercises/5-Gym.html" />
+<meta property="og:type"        content="article" />
+<meta property="og:title"       content="Gym environments" />
+<meta property="og:description" content="Gym environments  In this course, we will mostly address RL environments available in the OpenAI Gym framework:  https://gym.openai.com  It provides a multitude" />
+<meta property="og:image"       content="https://julien-vitay.net/lecturenotes-deeprl/_static/tuc.svg" />
+
+<meta name="twitter:card" content="summary" />
+
+
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
+<a class="navbar-brand text-wrap" href="../index.html">
+  
+  <img src="../_static/tuc.svg" class="logo" alt="logo">
+  
+  
+  <h1 class="site-logo" id="site-title">Deep Reinforcement Learning</h1>
+  
+</a>
+</div>
+
+<form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form>
+
+<nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+  <ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../intro.html">
+   Deep Reinforcement Learning
+  </a>
+ </li>
+</ul>
+<p class="caption">
+ <span class="caption-text">
+  Introduction
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../1-intro/1-Introduction.html">
+   1. Introduction
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../1-intro/2-Math.html">
+   2. Math basics
+  </a>
+ </li>
+</ul>
+<p class="caption">
+ <span class="caption-text">
+  Exercises
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="ex1-Python.html">
+   1. Introduction to Python
+  </a>
+ </li>
+</ul>
+<p class="caption">
+ <span class="caption-text">
+  References
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../zreferences.html">
+   1. Bibliography
+  </a>
+ </li>
+</ul>
+
+</nav>
+
+ <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="row topbar fixed-top container-xl">
+    <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show">
+    </div>
+    <div class="col pl-2 topbar-main">
+        
+        <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+            data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+            aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+            title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+            <i class="fas fa-bars"></i>
+            <i class="fas fa-arrow-left"></i>
+            <i class="fas fa-arrow-up"></i>
+        </button>
+        
+        <div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="../_sources/5-exercises/5-Gym.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.ipynb</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+    
+</div>
+        <!-- Source interaction buttons -->
+
+
+        <!-- Full screen (wrap in <a> to have style consistency -->
+        <a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+                data-placement="bottom" onclick="toggleFullScreen()" title="Fullscreen mode"><i
+                    class="fas fa-expand"></i></button></a>
+
+        <!-- Launch buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
+    <div class="dropdown-buttons">
+        
+        <a class="binder-button" href="https://mybinder.org/v2/gh/vitay/lecturenotes-deeprl/master?urlpath=tree/deeprl/5-exercises/5-Gym.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
+                data-placement="left"><img class="binder-button-logo"
+                    src="../_static/images/logo_binder.svg"
+                    alt="Interact on binder">Binder</button></a>
+        
+        
+        
+        <a class="colab-button" href="https://colab.research.google.com/github/vitay/lecturenotes-deeprl/blob/master/deeprl/5-exercises/5-Gym.ipynb"><button type="button" class="btn btn-secondary topbarbtn"
+                title="Launch Colab" data-toggle="tooltip" data-placement="left"><img class="colab-button-logo"
+                    src="../_static/images/logo_colab.png"
+                    alt="Interact on Colab">Colab</button></a>
+        
+        
+    </div>
+</div>
+
+    </div>
+
+    <!-- Table of contents -->
+    <div class="d-none d-md-block col-md-2 bd-toc show">
+        <div class="tocsection onthispage pt-5 pb-3">
+            <i class="fas fa-list"></i> Contents
+        </div>
+        <nav id="bd-toc-nav">
+            
+        </nav>
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+        
+              <div>
+                
+  <div class="section" id="gym-environments">
+<h1>Gym environments<a class="headerlink" href="#gym-environments" title="Permalink to this headline">¶</a></h1>
+<p>In this course, we will mostly address RL environments available in the <strong>OpenAI Gym</strong> framework:</p>
+<p><a class="reference external" href="https://gym.openai.com">https://gym.openai.com</a></p>
+<p>It provides a multitude of RL problems, from simple text-based problems with a few dozens of states (Gridworld, Taxi) to continuous control problems (Cartpole, Pendulum) to Atari games (Breakout, Space Invaders) to complex robotics simulators (Mujoco, but the license is expensive):</p>
+<p><a class="reference external" href="https://gym.openai.com/envs">https://gym.openai.com/envs</a></p>
+<p>You can install gym and its dependencies with:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">atari_py</span> <span class="n">gym</span>
+</pre></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">gym</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>The main interest of gym is that all problems have a common interface defined by the class <code class="docutils literal notranslate"><span class="pre">gym.Env</span></code>. There are only three methods that have to be implemented and used when creating a new environment:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">reset()</span></code> restarts the environment and returns an initial state <span class="math notranslate nohighlight">\(s_0\)</span>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">step(action)</span></code> takes an action <span class="math notranslate nohighlight">\(a_t\)</span> and returns the new state <span class="math notranslate nohighlight">\(s_{t+1}\)</span>, the reward <span class="math notranslate nohighlight">\(r_{t+1}\)</span>. It also returns a boolean flag indicating whether the current state is terminal and dictionary containing additional info for debugging (optional).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">render()</span></code> displays the current state of the MDP, either text-based or in a graphical window. When learning, this should not be called to gain performance.</p></li>
+</ul>
+<p>Additionally, you override the constructor <code class="docutils literal notranslate"><span class="pre">__init__()</span></code> to setup the state space (called observation space) and the action space.</p>
+<p>State and action space can either be :</p>
+<ul class="simple">
+<li><p>discrete (<code class="docutils literal notranslate"><span class="pre">gym.spaces.Discrete(nb_states)</span></code>), with states being an integer between 0 and <code class="docutils literal notranslate"><span class="pre">nb_states</span></code> -1.</p></li>
+<li><p>feature-based (<code class="docutils literal notranslate"><span class="pre">gym.spaces.Box(low=0,</span> <span class="pre">high=255,</span> <span class="pre">shape=(SCREEN_HEIGHT,</span> <span class="pre">SCREEN_WIDTH,</span> <span class="pre">3))</span></code>) for pixel frames.</p></li>
+<li><p>continuous:</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">gym</span><span class="o">.</span><span class="n">spaces</span><span class="o">.</span><span class="n">Tuple</span><span class="p">(</span>
+    <span class="n">gym</span><span class="o">.</span><span class="n">spaces</span><span class="o">.</span><span class="n">Box</span><span class="p">(</span><span class="o">-</span><span class="mf">180.0</span><span class="p">,</span> <span class="mf">180.0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="c1"># First joint</span>
+    <span class="n">gym</span><span class="o">.</span><span class="n">spaces</span><span class="o">.</span><span class="n">Box</span><span class="p">(</span><span class="o">-</span><span class="mf">180.0</span><span class="p">,</span> <span class="mf">180.0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>  <span class="c1"># Second joint    </span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Here is an example of a dummy environment with discrete states and actions, where the transition probabilities and rewards are completely random:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">FooEnv</span><span class="p">(</span><span class="n">gym</span><span class="o">.</span><span class="n">Env</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nb_states</span><span class="p">,</span> <span class="n">nb_actions</span><span class="p">):</span>
+        <span class="s2">&quot;Initialize the environment, can accept additional parameters such as the number of states and actions.&quot;</span>
+        <span class="c1"># State space, can be discrete or continuous.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">observation_space</span> <span class="o">=</span> <span class="n">gym</span><span class="o">.</span><span class="n">spaces</span><span class="o">.</span><span class="n">Discrete</span><span class="p">(</span><span class="n">nb_states</span><span class="p">)</span>
+        
+        <span class="c1"># Action space, can be discrete or continuous.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">action_space</span> <span class="o">=</span> <span class="n">gym</span><span class="o">.</span><span class="n">spaces</span><span class="o">.</span><span class="n">Discrete</span><span class="p">(</span><span class="n">nb_actions</span><span class="p">)</span>    
+        
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+    
+    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="s2">&quot;Resets the environment and starts from an initial state.&quot;</span>
+        
+        <span class="c1"># Sample one state randomly </span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">observation_space</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span>
+        
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span>
+    
+    <span class="k">def</span> <span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">action</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Takes an action and returns a new state, a reward, a boolean (True for terminal states) </span>
+<span class="sd">        and a dictionary with additional info (optional)&quot;&quot;&quot;</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">observation_space</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span> <span class="c1"># Random transition to another state</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reward</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="c1"># Random reward</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">done</span> <span class="o">=</span> <span class="kc">False</span> <span class="c1"># Continuing task</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">info</span> <span class="o">=</span> <span class="p">{}</span> <span class="c1"># No info</span>
+        
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">reward</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">done</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">info</span>
+
+    <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;human&#39;</span><span class="p">):</span>
+        <span class="s2">&quot;Displays the current state of the environment. Can be text or video frames.&quot;</span>
+        
+        <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">)</span>
+    
+    <span class="k">def</span> <span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="s2">&quot;To be called before exiting, to free resources (not needed here).&quot;</span>
+        <span class="k">pass</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>With this interface, we can interact with the environment in a standardized way:</p>
+<ul class="simple">
+<li><p>We first create the environment.</p></li>
+<li><p>We pick an initial state with <code class="docutils literal notranslate"><span class="pre">reset()</span></code>.</p></li>
+<li><p>For a fixed number of steps (or until the episode terminates):</p>
+<ul>
+<li><p>We render the curent state with <code class="docutils literal notranslate"><span class="pre">render()</span></code>.</p></li>
+<li><p>We select an action using our RL algorithm or randomly.</p></li>
+<li><p>We take that action (<code class="docutils literal notranslate"><span class="pre">step()</span></code>), observe the new state and the reward.</p></li>
+<li><p>We go into the new state.</p></li>
+</ul>
+</li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create the environment</span>
+<span class="n">env</span> <span class="o">=</span> <span class="n">FooEnv</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+
+<span class="c1"># Sample the initial state</span>
+<span class="n">state</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+
+<span class="c1"># Sample 10 transitions</span>
+<span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
+    <span class="c1"># Render the current state</span>
+    <span class="n">env</span><span class="o">.</span><span class="n">render</span><span class="p">()</span>
+
+    <span class="c1"># Select an action randomly</span>
+    <span class="n">action</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">action_space</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span>
+    
+    <span class="c1"># Sample a single transition</span>
+    <span class="n">next_state</span><span class="p">,</span> <span class="n">reward</span><span class="p">,</span> <span class="n">done</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>
+    
+    <span class="c1"># Go in the next state</span>
+    <span class="n">state</span> <span class="o">=</span> <span class="n">next_state</span>
+
+<span class="c1"># Exit cleanly</span>
+<span class="n">env</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0
+3
+2
+6
+4
+8
+5
+8
+9
+2
+</pre></div>
+</div>
+</div>
+</div>
+<p>That’s it. To use any of the gym environments, replace the creation of the <code class="docutils literal notranslate"><span class="pre">FooEnv</span></code> instance by:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">env</span> <span class="o">=</span> <span class="n">gym</span><span class="o">.</span><span class="n">make</span><span class="p">(</span><span class="s1">&#39;CartPole-v0&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>if you want to interact with the Cartpole environment. Each environment has a unique key, with a version number (<code class="docutils literal notranslate"><span class="pre">v0</span></code>).</p>
+<p>To have a list of the available environments, call:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">envs</span> <span class="o">=</span> <span class="n">gym</span><span class="o">.</span><span class="n">envs</span><span class="o">.</span><span class="n">registry</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">envs</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Q:</strong> Interact randomly with many gym environments (Cartpole, Pendulum, Breakout, SpaceInvaders, etc). Print the rewards you obtain.</p>
+<p><em>Note 1:</em> If you run a fixed number of steps, you should reset the environment when a terminal state is encountered, other wise you will be stuck in that terminal state:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="n">done</span><span class="p">:</span>
+    <span class="n">state</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+</pre></div>
+</div>
+<p><em>Note 2:</em> If you stop the execution of a cell but the window does not close, run <code class="docutils literal notranslate"><span class="pre">env.close()</span></code> in a separate cell.</p>
+<p><em>Note 3:</em> Some environments are very fast, especially Atari games. A simple solution is to have python <strong>sleep</strong> a bit after rendering aframe, so that you can see something:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">time</span>
+<span class="c1"># ...</span>
+<span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1000</span><span class="p">):</span>
+    <span class="n">env</span><span class="o">.</span><span class="n">render</span><span class="p">()</span>
+    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.01</span><span class="p">)</span> <span class="c1"># sleep 10 milliseconds</span>
+    <span class="c1"># ...</span>
+</pre></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">gym</span> 
+<span class="c1"># Create the environment</span>
+<span class="n">env</span> <span class="o">=</span> <span class="n">gym</span><span class="o">.</span><span class="n">make</span><span class="p">(</span><span class="s1">&#39;CartPole-v0&#39;</span><span class="p">)</span>
+
+<span class="c1"># Sample the initial state</span>
+<span class="n">state</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+
+<span class="c1"># Sample 1000 transitions</span>
+<span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1000</span><span class="p">):</span>
+    <span class="c1"># Render the current state</span>
+    <span class="n">env</span><span class="o">.</span><span class="n">render</span><span class="p">()</span>
+
+    <span class="c1"># Select an action randomly</span>
+    <span class="n">action</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">action_space</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span>
+    
+    <span class="c1"># Sample a single transition</span>
+    <span class="n">next_state</span><span class="p">,</span> <span class="n">reward</span><span class="p">,</span> <span class="n">done</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>
+    
+    <span class="c1"># Go in the next state</span>
+    <span class="n">state</span> <span class="o">=</span> <span class="n">next_state</span>
+    
+    <span class="c1"># If terminal, reset</span>
+    <span class="k">if</span> <span class="n">done</span><span class="p">:</span>
+        <span class="n">state</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+
+<span class="c1"># Exit cleanly</span>
+<span class="n">env</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">time</span>
+
+<span class="c1"># Create the environment</span>
+<span class="n">env</span> <span class="o">=</span> <span class="n">gym</span><span class="o">.</span><span class="n">make</span><span class="p">(</span><span class="s1">&#39;SpaceInvaders-v0&#39;</span><span class="p">)</span>
+
+<span class="c1"># Sample the initial state</span>
+<span class="n">state</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+
+<span class="c1"># Sample 1000 transitions</span>
+<span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1000</span><span class="p">):</span>
+    <span class="c1"># Render the current state</span>
+    <span class="n">env</span><span class="o">.</span><span class="n">render</span><span class="p">()</span>
+    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.01</span><span class="p">)</span>
+
+    <span class="c1"># Select an action randomly</span>
+    <span class="n">action</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">action_space</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span>
+    
+    <span class="c1"># Sample a single transition</span>
+    <span class="n">next_state</span><span class="p">,</span> <span class="n">reward</span><span class="p">,</span> <span class="n">done</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>
+    
+    <span class="c1"># Go in the next state</span>
+    <span class="n">state</span> <span class="o">=</span> <span class="n">next_state</span>
+    
+    <span class="c1"># If terminal, reset</span>
+    <span class="k">if</span> <span class="n">done</span><span class="p">:</span>
+        <span class="n">state</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+
+<span class="c1"># Exit cleanly</span>
+<span class="n">env</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>Q:</strong> Create a <code class="docutils literal notranslate"><span class="pre">RecyclingRobot</span></code> gym-like environment using last week’s exercise.</p>
+<p>The parameters <code class="docutils literal notranslate"><span class="pre">alpha</span></code>, <code class="docutils literal notranslate"><span class="pre">beta</span></code>, <code class="docutils literal notranslate"><span class="pre">r_wait</span></code> and <code class="docutils literal notranslate"><span class="pre">r_search</span></code> should be passed to the constructor of the environment andsaved as attributes.</p>
+<p>The state space is discrete, with two states <code class="docutils literal notranslate"><span class="pre">high</span></code> and <code class="docutils literal notranslate"><span class="pre">low</span></code> which will have indices 0 and 1. The three discrete actions <code class="docutils literal notranslate"><span class="pre">search</span></code>, <code class="docutils literal notranslate"><span class="pre">wait</span></code> and <code class="docutils literal notranslate"><span class="pre">recharge</span></code> have indices 0, 1, and 2.</p>
+<p>The initial state of the MDP (<code class="docutils literal notranslate"><span class="pre">reset()</span></code>) should be the high state.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">step()</span></code> should generate transitions according to the dynamics of the MDP. Depending on the current state and the chosen action, make a transition to another state. For the actions <code class="docutils literal notranslate"><span class="pre">search</span></code> and <code class="docutils literal notranslate"><span class="pre">wait</span></code>, sample the reward from the normal distribution with mean <code class="docutils literal notranslate"><span class="pre">r_search</span></code> (resp. <code class="docutils literal notranslate"><span class="pre">r_wait</span></code>) and variance 0.5.</p>
+<p>If the random agent selects <code class="docutils literal notranslate"><span class="pre">recharge</span></code> in <code class="docutils literal notranslate"><span class="pre">high</span></code>, do nothing (next state is high, reward is 0).</p>
+<p>Rendering is just prntingthe current state. There is nothing to close.</p>
+<p>Interact randomly with the MDP for several steps and observe the rewards.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">RecylingRobot</span><span class="p">(</span><span class="n">gym</span><span class="o">.</span><span class="n">Env</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">alpha</span><span class="p">,</span> <span class="n">beta</span><span class="p">,</span> <span class="n">r_search</span><span class="p">,</span> <span class="n">r_wait</span><span class="p">):</span>
+        <span class="s2">&quot;Initialize the environment.&quot;</span>
+        
+        <span class="c1"># Store parameters</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span> <span class="o">=</span> <span class="n">alpha</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">beta</span> <span class="o">=</span> <span class="n">beta</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">r_search</span> <span class="o">=</span> <span class="n">r_search</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">r_wait</span> <span class="o">=</span> <span class="n">r_wait</span>
+        
+        <span class="c1"># State space, can be discrete or continuous.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">observation_space</span> <span class="o">=</span> <span class="n">gym</span><span class="o">.</span><span class="n">spaces</span><span class="o">.</span><span class="n">Discrete</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+        
+        <span class="c1"># Action space, can be discrete or continuous.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">action_space</span> <span class="o">=</span> <span class="n">gym</span><span class="o">.</span><span class="n">spaces</span><span class="o">.</span><span class="n">Discrete</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>    
+        
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+    
+    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="s2">&quot;Resets the environment and starts from an initial state.&quot;</span>
+        
+        <span class="c1"># Start in the high state</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="mi">0</span>
+        
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span>
+    
+    <span class="k">def</span> <span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">action</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Takes an action and returns a new state, a reward, a boolean (True for terminal states) </span>
+<span class="sd">        and a dictionary with additional info (optional)&quot;&quot;&quot;</span>
+        
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span> <span class="c1"># high</span>
+            <span class="k">if</span> <span class="n">action</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span> <span class="c1"># search</span>
+                <span class="n">p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">()</span>
+                <span class="k">if</span> <span class="n">p</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="mi">0</span> <span class="c1"># high</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="mi">1</span> <span class="c1"># low</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">reward</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">r_search</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+            <span class="k">elif</span> <span class="n">action</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span> <span class="c1"># wait</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="mi">0</span> <span class="c1"># high</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">reward</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">r_wait</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+            <span class="k">elif</span> <span class="n">action</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span> <span class="c1"># recharge</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="mi">0</span> <span class="c1"># high</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">reward</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span> <span class="c1"># low</span>
+            <span class="k">if</span> <span class="n">action</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span> <span class="c1"># search</span>
+                <span class="n">p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">()</span>
+                <span class="k">if</span> <span class="n">p</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">beta</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="mi">1</span> <span class="c1"># low</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">reward</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">r_search</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="mi">0</span> <span class="c1"># high</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">reward</span> <span class="o">=</span> <span class="o">-</span><span class="mf">3.0</span>
+            <span class="k">elif</span> <span class="n">action</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span> <span class="c1"># wait</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="mi">1</span> <span class="c1"># low</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">reward</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">r_wait</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+            <span class="k">elif</span> <span class="n">action</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span> <span class="c1"># recharge</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="mi">0</span> <span class="c1"># high</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">reward</span> <span class="o">=</span> <span class="mf">0.0</span>
+        
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">reward</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="p">{}</span>
+
+    <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;human&#39;</span><span class="p">):</span>
+        <span class="s2">&quot;Displays the current state of the environment. Can be text or video frames.&quot;</span>
+        
+        <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">)</span>
+    
+    <span class="k">def</span> <span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="s2">&quot;To be called before exiting, to free resources (not needed here).&quot;</span>
+        <span class="k">pass</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create the environment</span>
+<span class="n">env</span> <span class="o">=</span> <span class="n">RecylingRobot</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">beta</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">r_search</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">r_wait</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="n">states</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;high&#39;</span><span class="p">,</span> <span class="s1">&#39;low&#39;</span><span class="p">]</span>
+<span class="n">actions</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;search&#39;</span><span class="p">,</span> <span class="s1">&#39;wait&#39;</span><span class="p">,</span> <span class="s1">&#39;recharge&#39;</span><span class="p">]</span>
+
+<span class="c1"># Sample the initial state</span>
+<span class="n">state</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+
+<span class="c1"># Sample 1000 transitions</span>
+<span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
+    <span class="c1"># Render the current state</span>
+    <span class="n">env</span><span class="o">.</span><span class="n">render</span><span class="p">()</span>
+
+    <span class="c1"># Select an action randomly</span>
+    <span class="n">action</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">action_space</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span>
+    
+    <span class="c1"># Sample a single transition</span>
+    <span class="n">next_state</span><span class="p">,</span> <span class="n">reward</span><span class="p">,</span> <span class="n">done</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>
+    
+    <span class="nb">print</span><span class="p">(</span><span class="n">states</span><span class="p">[</span><span class="n">state</span><span class="p">],</span> <span class="s2">&quot;+&quot;</span><span class="p">,</span> <span class="n">actions</span><span class="p">[</span><span class="n">action</span><span class="p">],</span> <span class="s2">&quot;-&gt;&quot;</span><span class="p">,</span> <span class="n">states</span><span class="p">[</span><span class="n">next_state</span><span class="p">],</span> <span class="s2">&quot;:&quot;</span><span class="p">,</span> <span class="n">reward</span><span class="p">)</span>
+    
+    <span class="c1"># Go in the next state</span>
+    <span class="n">state</span> <span class="o">=</span> <span class="n">next_state</span>
+
+<span class="c1"># Exit cleanly</span>
+<span class="n">env</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0
+high + recharge -&gt; high : 0.0
+0
+high + recharge -&gt; high : 0.0
+0
+high + search -&gt; low : 7.072737524808381
+1
+low + search -&gt; low : 4.8748445459280205
+1
+low + recharge -&gt; high : 0.0
+0
+high + search -&gt; low : 6.499376102875357
+1
+low + wait -&gt; low : 1.6026651046615343
+1
+low + wait -&gt; low : 2.640782574427737
+1
+low + wait -&gt; low : 2.0998397935226567
+1
+low + search -&gt; high : -3.0
+</pre></div>
+</div>
+</div>
+</div>
+<p>To be complete, let’s implement the random agent as a class:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">RandomAgent</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">env</span><span class="p">,</span> <span class="n">gamma</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">env</span> <span class="o">=</span> <span class="n">env</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gamma</span> <span class="o">=</span> <span class="n">gamma</span>
+    <span class="k">def</span> <span class="nf">select_action</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">env</span><span class="o">.</span><span class="n">action_space</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span>
+    <span class="k">def</span> <span class="nf">learn</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">action</span><span class="p">,</span> <span class="n">reward</span><span class="p">,</span> <span class="n">next_state</span><span class="p">):</span>
+        <span class="k">pass</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>The agent takes the environment as an argument, as well as the discount rate <span class="math notranslate nohighlight">\(\gamma\)</span>. <code class="docutils literal notranslate"><span class="pre">select_action()</span></code> randomly samples an action from the action space of the environment. <code class="docutils literal notranslate"><span class="pre">learn()</span></code> does nothing because random agents do not learn. This will have to be implemented for RL algorithms.</p>
+<p><strong>Q:</strong> Modify the interaction loop so that the <code class="docutils literal notranslate"><span class="pre">RandomAgent</span></code> interacts with the <code class="docutils literal notranslate"><span class="pre">RecyclingRobot</span></code> environment for a fixed number of iterations.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create the environment</span>
+<span class="n">env</span> <span class="o">=</span> <span class="n">RecylingRobot</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">beta</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">r_search</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">r_wait</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="n">states</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;high&#39;</span><span class="p">,</span> <span class="s1">&#39;low&#39;</span><span class="p">]</span>
+<span class="n">actions</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;search&#39;</span><span class="p">,</span> <span class="s1">&#39;wait&#39;</span><span class="p">,</span> <span class="s1">&#39;recharge&#39;</span><span class="p">]</span>
+
+<span class="c1"># Creating the random agent</span>
+<span class="n">agent</span> <span class="o">=</span> <span class="n">RandomAgent</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">gamma</span><span class="o">=</span><span class="mf">0.7</span><span class="p">)</span>
+
+<span class="c1"># Sample the initial state</span>
+<span class="n">state</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+
+<span class="c1"># Sample 1000 transitions</span>
+<span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1000</span><span class="p">):</span>
+    <span class="c1"># Render the current state</span>
+    <span class="n">env</span><span class="o">.</span><span class="n">render</span><span class="p">()</span>
+
+    <span class="c1"># Select an action randomly</span>
+    <span class="n">action</span> <span class="o">=</span> <span class="n">agent</span><span class="o">.</span><span class="n">select_action</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+    
+    <span class="c1"># Sample a single transition</span>
+    <span class="n">next_state</span><span class="p">,</span> <span class="n">reward</span><span class="p">,</span> <span class="n">done</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>
+    
+    <span class="nb">print</span><span class="p">(</span><span class="n">states</span><span class="p">[</span><span class="n">state</span><span class="p">],</span> <span class="s2">&quot;+&quot;</span><span class="p">,</span> <span class="n">actions</span><span class="p">[</span><span class="n">action</span><span class="p">],</span> <span class="s2">&quot;-&gt;&quot;</span><span class="p">,</span> <span class="n">states</span><span class="p">[</span><span class="n">next_state</span><span class="p">],</span> <span class="s2">&quot;:&quot;</span><span class="p">,</span> <span class="n">reward</span><span class="p">)</span>
+    
+    <span class="c1"># Learn from the (s, a, r, s&#39;) transition</span>
+    <span class="n">agent</span><span class="o">.</span><span class="n">learn</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">action</span><span class="p">,</span> <span class="n">reward</span><span class="p">,</span> <span class="n">next_state</span><span class="p">)</span>
+    
+    <span class="c1"># Go in the next state</span>
+    <span class="n">state</span> <span class="o">=</span> <span class="n">next_state</span>
+
+<span class="c1"># Exit cleanly</span>
+<span class="n">env</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0
+high + wait -&gt; high : 1.2092650868954213
+0
+high + wait -&gt; high : 1.9985443925921826
+0
+high + search -&gt; high : 6.878534062032354
+0
+high + search -&gt; high : 5.876490775384255
+0
+high + wait -&gt; high : 2.6095647752778515
+0
+high + search -&gt; low : 6.142351959104785
+1
+low + wait -&gt; low : 2.318363792841558
+1
+low + wait -&gt; low : 1.6704729016262323
+1
+low + search -&gt; high : -3.0
+0
+high + wait -&gt; high : 1.9673012704614368
+0
+high + search -&gt; low : 6.742837143430857
+1
+low + recharge -&gt; high : 0.0
+0
+high + recharge -&gt; high : 0.0
+0
+high + wait -&gt; high : 2.3981331489900515
+0
+high + recharge -&gt; high : 0.0
+0
+high + wait -&gt; high : 2.2192785911313315
+0
+high + search -&gt; high : 6.080127019829225
+0
+high + wait -&gt; high : 0.8007715425065975
+0
+high + wait -&gt; high : 1.8432478405678347
+0
+high + search -&gt; high : 5.599776258981913
+0
+high + search -&gt; low : 5.558733917161804
+1
+low + wait -&gt; low : 2.525313755731908
+1
+low + recharge -&gt; high : 0.0
+0
+high + search -&gt; low : 5.296551032079032
+1
+low + wait -&gt; low : 2.2929838179795383
+1
+low + wait -&gt; low : 2.3587637791655216
+1
+low + search -&gt; high : -3.0
+0
+high + search -&gt; low : 6.229528697737933
+1
+low + wait -&gt; low : 2.630176444841829
+1
+low + search -&gt; low : 6.198299781149156
+1
+low + recharge -&gt; high : 0.0
+0
+high + wait -&gt; high : 2.0408722560149766
+0
+high + wait -&gt; high : 2.2799178813810634
+0
+high + recharge -&gt; high : 0.0
+0
+high + search -&gt; high : 5.3278545145604115
+0
+high + recharge -&gt; high : 0.0
+0
+high + recharge -&gt; high : 0.0
+0
+high + search -&gt; low : 5.621600203670738
+1
+low + search -&gt; high : -3.0
+0
+high + search -&gt; low : 5.667787958153184
+1
+low + wait -&gt; low : 2.3539186859996186
+1
+low + recharge -&gt; high : 0.0
+0
+high + wait -&gt; high : 2.3653785026424456
+0
+high + recharge -&gt; high : 0.0
+0
+high + wait -&gt; high : 2.1525780891329385
+0
+high + search -&gt; high : 5.067975482839415
+0
+high + wait -&gt; high : 1.3132684438396192
+0
+high + search -&gt; low : 5.391947207556771
+1
+low + recharge -&gt; high : 0.0
+0
+high + recharge -&gt; high : 0.0
+0
+high + recharge -&gt; high : 0.0
+0
+high + wait -&gt; high : 1.3886848895564357
+0
+high + search -&gt; low : 6.8134120628771155
+1
+low + wait -&gt; low : 2.164413797827271
+1
+low + recharge -&gt; high : 0.0
+0
+high + recharge -&gt; high : 0.0
+0
+high + wait -&gt; high : 1.8994163553809336
+0
+high + wait -&gt; high : 1.711905048752344
+0
+high + recharge -&gt; high : 0.0
+0
+high + wait -&gt; high : 2.805917502170746
+0
+high + search -&gt; low : 5.721959710425058
+1
+low + search -&gt; high : -3.0
+0
+high + search -&gt; low : 5.8798541382930765
+1
+low + recharge -&gt; high : 0.0
+0
+high + recharge -&gt; high : 0.0
+0
+high + search -&gt; high : 6.511830885178941
+0
+high + search -&gt; low : 5.865285951105909
+1
+low + wait -&gt; low : 2.061881119194831
+1
+low + wait -&gt; low : 2.159615259546591
+1
+low + wait -&gt; low : 1.6623915791751027
+1
+low + wait -&gt; low : 1.5682707768879292
+1
+low + recharge -&gt; high : 0.0
+0
+high + wait -&gt; high : 1.5416170117431127
+0
+high + search -&gt; low : 6.04509022010905
+1
+low + wait -&gt; low : 1.2993001213007909
+1
+low + search -&gt; low : 5.27864129050152
+1
+low + wait -&gt; low : 2.757878553164907
+1
+low + wait -&gt; low : 2.5363436431884283
+1
+low + wait -&gt; low : 1.695504793417782
+1
+low + recharge -&gt; high : 0.0
+0
+high + recharge -&gt; high : 0.0
+0
+high + wait -&gt; high : 2.3840322420966533
+0
+high + wait -&gt; high : 2.5696530384620724
+0
+high + search -&gt; low : 6.526485823778799
+1
+low + recharge -&gt; high : 0.0
+0
+high + search -&gt; high : 5.695523673294004
+0
+high + wait -&gt; high : 2.269246998366298
+0
+high + wait -&gt; high : 2.020808585249882
+0
+high + recharge -&gt; high : 0.0
+0
+high + wait -&gt; high : 2.565020487685631
+0
+high + search -&gt; low : 6.341644297334514
+1
+low + recharge -&gt; high : 0.0
+0
+high + recharge -&gt; high : 0.0
+0
+high + recharge -&gt; high : 0.0
+0
+high + search -&gt; high : 6.08434359349868
+0
+high + wait -&gt; high : 1.780322788213978
+0
+high + recharge -&gt; high : 0.0
+0
+high + search -&gt; low : 6.397492755600405
+1
+low + wait -&gt; low : 1.6662832066441755
+1
+low + wait -&gt; low : 1.9995522369273473
+1
+low + search -&gt; high : -3.0
+0
+high + search -&gt; low : 5.812252870714241
+1
+low + wait -&gt; low : 1.9849715863800859
+1
+low + search -&gt; high : -3.0
+0
+high + search -&gt; low : 5.9224521843224585
+1
+low + wait -&gt; low : 2.782495852011484
+1
+low + search -&gt; high : -3.0
+0
+high + recharge -&gt; high : 0.0
+0
+high + recharge -&gt; high : 0.0
+0
+high + recharge -&gt; high : 0.0
+0
+high + search -&gt; low : 6.252446895530273
+1
+low + wait -&gt; low : 1.569901550693137
+1
+low + wait -&gt; low : 1.9994334172058352
+1
+low + recharge -&gt; high : 0.0
+0
+high + recharge -&gt; high : 0.0
+0
+high + recharge -&gt; high : 0.0
+0
+high + recharge -&gt; high : 0.0
+0
+high + search -&gt; low : 5.770760036868453
+1
+low + recharge -&gt; high : 0.0
+0
+high + wait -&gt; high : 2.574967752350659
+0
+high + recharge -&gt; high : 0.0
+0
+high + recharge -&gt; high : 0.0
+0
+high + search -&gt; low : 5.838655459386825
+1
+low + recharge -&gt; high : 0.0
+0
+high + wait -&gt; high : 1.9468153796947438
+0
+high + wait -&gt; high : 2.6476585016085643
+0
+high + search -&gt; low : 6.841340447928304
+1
+low + recharge -&gt; high : 0.0
+0
+high + recharge -&gt; high : 0.0
+0
+high + search -&gt; high : 6.169822305263143
+0
+high + search -&gt; low : 6.840484481433586
+1
+low + recharge -&gt; high : 0.0
+0
+high + recharge -&gt; high : 0.0
+0
+high + wait -&gt; high : 2.0137392204632087
+0
+high + wait -&gt; high : 1.693393096002998
+0
+high + recharge -&gt; high : 0.0
+0
+high + recharge -&gt; high : 0.0
+0
+high + recharge -&gt; high : 0.0
+0
+high + recharge -&gt; high : 0.0
+0
+high + recharge -&gt; high : 0.0
+0
+high + recharge -&gt; high : 0.0
+0
+high + recharge -&gt; high : 0.0
+0
+high + wait -&gt; high : 2.2682750766828605
+0
+high + wait -&gt; high : 2.0778491026216184
+0
+high + wait -&gt; high : 1.9573318787798746
+0
+high + wait -&gt; high : 2.132532917635716
+0
+high + wait -&gt; high : 1.371905498655687
+0
+high + recharge -&gt; high : 0.0
+0
+high + recharge -&gt; high : 0.0
+0
+high + recharge -&gt; high : 0.0
+0
+high + recharge -&gt; high : 0.0
+0
+high + wait -&gt; high : 1.8014746982299088
+0
+high + search -&gt; low : 6.876397954570707
+1
+low + wait -&gt; low : 1.7678927443546755
+1
+low + recharge -&gt; high : 0.0
+0
+high + search -&gt; low : 6.502215231059971
+1
+low + recharge -&gt; high : 0.0
+0
+high + search -&gt; low : 6.447789647422198
+1
+low + search -&gt; high : -3.0
+0
+high + search -&gt; high : 6.458396200191456
+0
+high + search -&gt; low : 5.690823989016573
+1
+low + wait -&gt; low : 2.4536939706713614
+1
+low + wait -&gt; low : 2.230421499048544
+1
+low + wait -&gt; low : 2.0133422868257815
+1
+low + search -&gt; high : -3.0
+0
+high + wait -&gt; high : 2.4946160710858236
+0
+high + recharge -&gt; high : 0.0
+0
+high + recharge -&gt; high : 0.0
+0
+high + search -&gt; high : 4.888275977059284
+0
+high + recharge -&gt; high : 0.0
+0
+high + search -&gt; low : 6.192598590188255
+1
+low + recharge -&gt; high : 0.0
+0
+high + recharge -&gt; high : 0.0
+0
+high + recharge -&gt; high : 0.0
+0
+high + wait -&gt; high : 2.298482316237712
+0
+high + wait -&gt; high : 2.377658529418158
+0
+high + wait -&gt; high : 2.1094687789753586
+0
+high + search -&gt; low : 6.245264196614571
+1
+low + wait -&gt; low : 2.104480579202745
+1
+low + recharge -&gt; high : 0.0
+0
+high + wait -&gt; high : 1.605354249912292
+0
+high + wait -&gt; high : 1.1045329182872008
+0
+high + recharge -&gt; high : 0.0
+0
+high + wait -&gt; high : 1.9700827166528765
+0
+high + recharge -&gt; high : 0.0
+0
+high + search -&gt; low : 6.571444627000594
+1
+low + recharge -&gt; high : 0.0
+0
+high + search -&gt; high : 6.780794198415027
+0
+high + search -&gt; low : 5.63567729795499
+1
+low + recharge -&gt; high : 0.0
+0
+high + recharge -&gt; high : 0.0
+0
+high + search -&gt; low : 6.35200575320785
+1
+low + recharge -&gt; high : 0.0
+0
+high + recharge -&gt; high : 0.0
+0
+high + search -&gt; high : 5.427659293021725
+0
+high + wait -&gt; high : 2.0374259194567563
+0
+high + recharge -&gt; high : 0.0
+0
+high + search -&gt; low : 6.081464010948191
+1
+low + recharge -&gt; high : 0.0
+0
+high + search -&gt; high : 6.057860752089455
+0
+high + wait -&gt; high : 2.2521073943546113
+0
+high + wait -&gt; high : 2.779410850334817
+0
+high + wait -&gt; high : 1.4393142489678277
+0
+high + wait -&gt; high : 1.630640984733951
+0
+high + recharge -&gt; high : 0.0
+0
+high + recharge -&gt; high : 0.0
+0
+high + recharge -&gt; high : 0.0
+0
+high + search -&gt; low : 6.364511873249405
+1
+low + wait -&gt; low : 0.8136945551003456
+1
+low + wait -&gt; low : 1.9576235363516201
+1
+low + search -&gt; high : -3.0
+0
+high + recharge -&gt; high : 0.0
+0
+high + recharge -&gt; high : 0.0
+0
+high + wait -&gt; high : 2.62502030900841
+0
+high + recharge -&gt; high : 0.0
+0
+high + wait -&gt; high : 2.561040694835417
+0
+high + search -&gt; low : 6.374033523515258
+1
+low + recharge -&gt; high : 0.0
+0
+high + recharge -&gt; high : 0.0
+0
+high + wait -&gt; high : 1.9882817771663508
+0
+high + recharge -&gt; high : 0.0
+0
+high + recharge -&gt; high : 0.0
+0
+high + wait -&gt; high : 2.305233531117826
+0
+high + wait -&gt; high : 1.9919060880652135
+0
+high + recharge -&gt; high : 0.0
+0
+high + search -&gt; high : 5.8814839073503515
+0
+high + recharge -&gt; high : 0.0
+0
+high + search -&gt; high : 6.097757889776573
+0
+high + recharge -&gt; high : 0.0
+0
+high + wait -&gt; high : 1.464564321127033
+0
+high + recharge -&gt; high : 0.0
+0
+high + wait -&gt; high : 2.1988604618852374
+0
+high + recharge -&gt; high : 0.0
+0
+high + recharge -&gt; high : 0.0
+0
+high + search -&gt; low : 5.102700818528348
+1
+low + wait -&gt; low : 2.80167342438732
+1
+low + wait -&gt; low : 1.7280446946246792
+1
+low + wait -&gt; low : 1.4358350991804494
+1
+low + recharge -&gt; high : 0.0
+0
+high + search -&gt; low : 6.069979154125967
+1
+low + recharge -&gt; high : 0.0
+0
+high + wait -&gt; high : 2.3511214689524356
+0
+high + recharge -&gt; high : 0.0
+0
+high + wait -&gt; high : 1.8349673403502895
+0
+high + recharge -&gt; high : 0.0
+0
+high + wait -&gt; high : 1.4857869010594036
+0
+high + wait -&gt; high : 2.147385292486941
+0
+high + search -&gt; high : 5.9254637536973895
+0
+high + search -&gt; high : 5.983047240276414
+0
+high + recharge -&gt; high : 0.0
+0
+high + recharge -&gt; high : 0.0
+0
+high + recharge -&gt; high : 0.0
+0
+high + search -&gt; low : 7.04029569941305
+1
+low + search -&gt; low : 6.088504773453889
+1
+low + wait -&gt; low : 1.097888221386279
+1
+low + search -&gt; high : -3.0
+0
+high + wait -&gt; high : 1.4567115803978012
+0
+high + wait -&gt; high : 1.4303949168729169
+0
+high + wait -&gt; high : 1.1298816805208025
+0
+high + wait -&gt; high : 3.3088015716279577
+0
+high + wait -&gt; high : 2.1384211715611903
+0
+high + recharge -&gt; high : 0.0
+0
+high + wait -&gt; high : 1.8739050591002682
+0
+high + recharge -&gt; high : 0.0
+0
+high + search -&gt; low : 5.645687087329047
+1
+low + wait -&gt; low : 2.5332301412045872
+1
+low + wait -&gt; low : 1.6438376432560877
+1
+low + recharge -&gt; high : 0.0
+0
+high + wait -&gt; high : 2.3834557472142843
+0
+high + recharge -&gt; high : 0.0
+0
+high + search -&gt; low : 6.840255721793157
+1
+low + search -&gt; high : -3.0
+0
+high + search -&gt; low : 6.299038880654213
+1
+low + wait -&gt; low : 1.6064719828104892
+1
+low + wait -&gt; low : 1.5573091048751095
+1
+low + recharge -&gt; high : 0.0
+0
+high + wait -&gt; high : 2.5125471390807252
+0
+high + wait -&gt; high : 2.0515382583170014
+0
+high + recharge -&gt; high : 0.0
+0
+high + wait -&gt; high : 2.2307775023842638
+0
+high + search -&gt; high : 5.9708154630648895
+0
+high + search -&gt; high : 6.420427422644542
+0
+high + recharge -&gt; high : 0.0
+0
+high + recharge -&gt; high : 0.0
+0
+high + recharge -&gt; high : 0.0
+0
+high + recharge -&gt; high : 0.0
+0
+high + recharge -&gt; high : 0.0
+0
+high + wait -&gt; high : 2.2974678062778744
+0
+high + wait -&gt; high : 1.5887918082613157
+0
+high + wait -&gt; high : 0.8485078349668855
+0
+high + recharge -&gt; high : 0.0
+0
+high + wait -&gt; high : 1.5674967194279417
+0
+high + recharge -&gt; high : 0.0
+0
+high + search -&gt; high : 5.012254534383446
+0
+high + recharge -&gt; high : 0.0
+0
+high + wait -&gt; high : 1.9256949500303222
+0
+high + recharge -&gt; high : 0.0
+0
+high + recharge -&gt; high : 0.0
+0
+high + wait -&gt; high : 2.40168617504356
+0
+high + recharge -&gt; high : 0.0
+0
+high + wait -&gt; high : 2.079411151916272
+0
+high + search -&gt; low : 6.314456745154665
+1
+low + search -&gt; low : 5.934232743230768
+1
+low + wait -&gt; low : 2.0970862420187486
+1
+low + search -&gt; high : -3.0
+0
+high + wait -&gt; high : 1.6138385100422574
+0
+high + wait -&gt; high : 2.671522994944009
+0
+high + search -&gt; low : 5.19462791746599
+1
+low + recharge -&gt; high : 0.0
+0
+high + search -&gt; high : 5.017331926792961
+0
+high + search -&gt; high : 5.7457938371143715
+0
+high + search -&gt; high : 6.302185417856872
+0
+high + wait -&gt; high : 1.9745017645671945
+0
+high + recharge -&gt; high : 0.0
+0
+high + recharge -&gt; high : 0.0
+0
+high + recharge -&gt; high : 0.0
+0
+high + search -&gt; low : 6.206093981001841
+1
+low + search -&gt; high : -3.0
+0
+high + search -&gt; low : 6.1174545185014715
+1
+low + wait -&gt; low : 1.0389197593898736
+1
+low + search -&gt; high : -3.0
+0
+high + wait -&gt; high : 2.154814653961527
+0
+high + recharge -&gt; high : 0.0
+0
+high + search -&gt; low : 4.965531044430422
+1
+low + search -&gt; high : -3.0
+0
+high + wait -&gt; high : 2.975858926275496
+0
+high + wait -&gt; high : 1.6543940720118306
+0
+high + search -&gt; high : 5.975596113084964
+0
+high + search -&gt; low : 5.423167823566983
+1
+low + search -&gt; low : 6.653689273451407
+1
+low + recharge -&gt; high : 0.0
+0
+high + search -&gt; low : 5.211936481509017
+1
+low + recharge -&gt; high : 0.0
+0
+high + search -&gt; low : 5.925095099242746
+1
+low + wait -&gt; low : 1.161067716027159
+1
+low + wait -&gt; low : 1.635553061607892
+1
+low + recharge -&gt; high : 0.0
+0
+high + search -&gt; low : 5.901574402885187
+1
+low + search -&gt; high : -3.0
+0
+high + wait -&gt; high : 1.5861955800644614
+0
+high + recharge -&gt; high : 0.0
+0
+high + recharge -&gt; high : 0.0
+0
+high + recharge -&gt; high : 0.0
+0
+high + recharge -&gt; high : 0.0
+0
+high + search -&gt; low : 6.1581076473585545
+1
+low + wait -&gt; low : 2.173228129851207
+1
+low + search -&gt; high : -3.0
+0
+high + search -&gt; low : 5.834311239072572
+1
+low + recharge -&gt; high : 0.0
+0
+high + search -&gt; low : 6.33066078917932
+1
+low + search -&gt; low : 5.585746929005001
+1
+low + recharge -&gt; high : 0.0
+0
+high + wait -&gt; high : 1.9803818194767109
+0
+high + wait -&gt; high : 2.0997642231021887
+0
+high + recharge -&gt; high : 0.0
+0
+high + wait -&gt; high : 2.4586951811523283
+0
+high + recharge -&gt; high : 0.0
+0
+high + search -&gt; high : 6.271761982758284
+0
+high + recharge -&gt; high : 0.0
+0
+high + search -&gt; high : 5.326156256460517
+0
+high + wait -&gt; high : 2.0322157289355496
+0
+high + recharge -&gt; high : 0.0
+0
+high + wait -&gt; high : 1.8993654692084685
+0
+high + search -&gt; low : 5.552031219298827
+1
+low + recharge -&gt; high : 0.0
+0
+high + recharge -&gt; high : 0.0
+0
+high + search -&gt; low : 5.911483331145663
+1
+low + recharge -&gt; high : 0.0
+0
+high + search -&gt; high : 6.066872701166428
+0
+high + recharge -&gt; high : 0.0
+0
+high + recharge -&gt; high : 0.0
+0
+high + wait -&gt; high : 1.7395089856597306
+0
+high + wait -&gt; high : 1.3586847282526087
+0
+high + search -&gt; high : 6.089108127971238
+0
+high + wait -&gt; high : 1.6033491607458314
+0
+high + search -&gt; low : 6.311506777017575
+1
+low + search -&gt; high : -3.0
+0
+high + wait -&gt; high : 2.198134015699773
+0
+high + wait -&gt; high : 2.3709203244457626
+0
+high + wait -&gt; high : 2.5589644578964275
+0
+high + recharge -&gt; high : 0.0
+0
+high + wait -&gt; high : 2.093819948549534
+0
+high + recharge -&gt; high : 0.0
+0
+high + wait -&gt; high : 1.2536482781746994
+0
+high + wait -&gt; high : 1.9056199067121415
+0
+high + search -&gt; high : 6.015350339732814
+0
+high + search -&gt; low : 5.6236759983171725
+1
+low + recharge -&gt; high : 0.0
+0
+high + search -&gt; low : 6.01986725662497
+1
+low + wait -&gt; low : 1.78894446694041
+1
+low + search -&gt; high : -3.0
+0
+high + recharge -&gt; high : 0.0
+0
+high + wait -&gt; high : 2.0735895334101406
+0
+high + wait -&gt; high : 2.056229690640778
+0
+high + search -&gt; low : 5.606577326432536
+1
+low + wait -&gt; low : 1.2751515395619173
+1
+low + wait -&gt; low : 2.227769843126826
+1
+low + search -&gt; high : -3.0
+0
+high + search -&gt; low : 5.795627170605664
+1
+low + search -&gt; high : -3.0
+0
+high + wait -&gt; high : 2.14592258912813
+0
+high + search -&gt; low : 5.42474823357075
+1
+low + wait -&gt; low : 2.3092397362021013
+1
+low + wait -&gt; low : 2.224605916641899
+1
+low + wait -&gt; low : 1.8631532752205329
+1
+low + search -&gt; low : 6.006162878282504
+1
+low + search -&gt; high : -3.0
+0
+high + search -&gt; high : 6.568860456997295
+0
+high + wait -&gt; high : 1.7487282549655467
+0
+high + recharge -&gt; high : 0.0
+0
+high + search -&gt; high : 5.91877720034998
+0
+high + search -&gt; low : 5.607821811082397
+1
+low + wait -&gt; low : 2.0380478241466227
+1
+low + search -&gt; high : -3.0
+0
+high + search -&gt; low : 5.306296567444943
+1
+low + search -&gt; high : -3.0
+0
+high + wait -&gt; high : 2.644059641199135
+0
+high + search -&gt; low : 6.149771268007137
+1
+low + search -&gt; high : -3.0
+0
+high + recharge -&gt; high : 0.0
+0
+high + search -&gt; low : 5.167897693218035
+1
+low + wait -&gt; low : 1.7332087151380478
+1
+low + wait -&gt; low : 1.7562311870124616
+1
+low + wait -&gt; low : 1.6510247206662467
+1
+low + wait -&gt; low : 1.5464037426098243
+1
+low + recharge -&gt; high : 0.0
+0
+high + search -&gt; low : 6.2785275621946415
+1
+low + recharge -&gt; high : 0.0
+0
+high + recharge -&gt; high : 0.0
+0
+high + wait -&gt; high : 1.5201073054468206
+0
+high + search -&gt; low : 6.317078608517316
+1
+low + wait -&gt; low : 1.7389253299697836
+1
+low + search -&gt; low : 6.276047953358643
+1
+low + search -&gt; high : -3.0
+0
+high + wait -&gt; high : 2.36005210704151
+0
+high + recharge -&gt; high : 0.0
+0
+high + wait -&gt; high : 2.249447428766275
+0
+high + wait -&gt; high : 1.5738929236847974
+0
+high + wait -&gt; high : 2.313870019136938
+0
+high + recharge -&gt; high : 0.0
+0
+high + wait -&gt; high : 1.9032278795503925
+0
+high + recharge -&gt; high : 0.0
+0
+high + recharge -&gt; high : 0.0
+0
+high + recharge -&gt; high : 0.0
+0
+high + search -&gt; high : 5.4433467415205685
+0
+high + wait -&gt; high : 2.194225705084361
+0
+high + recharge -&gt; high : 0.0
+0
+high + recharge -&gt; high : 0.0
+0
+high + recharge -&gt; high : 0.0
+0
+high + recharge -&gt; high : 0.0
+0
+high + search -&gt; low : 5.435712873232778
+1
+low + recharge -&gt; high : 0.0
+0
+high + recharge -&gt; high : 0.0
+0
+high + search -&gt; high : 6.273463291147775
+0
+high + wait -&gt; high : 1.8001075156366484
+0
+high + wait -&gt; high : 2.053050820109822
+0
+high + recharge -&gt; high : 0.0
+0
+high + search -&gt; low : 5.950239849342699
+1
+low + recharge -&gt; high : 0.0
+0
+high + recharge -&gt; high : 0.0
+0
+high + wait -&gt; high : 2.9176828730513327
+0
+high + wait -&gt; high : 2.3233956246433136
+0
+high + search -&gt; low : 5.804456134165882
+1
+low + search -&gt; high : -3.0
+0
+high + wait -&gt; high : 2.8391530337441795
+0
+high + search -&gt; high : 4.839430313247233
+0
+high + wait -&gt; high : 2.1913374816622175
+0
+high + search -&gt; low : 4.265212618953256
+1
+low + wait -&gt; low : 2.1113135384827144
+1
+low + recharge -&gt; high : 0.0
+0
+high + search -&gt; low : 6.357093033334516
+1
+low + search -&gt; high : -3.0
+0
+high + recharge -&gt; high : 0.0
+0
+high + recharge -&gt; high : 0.0
+0
+high + wait -&gt; high : 2.258437471157067
+0
+high + recharge -&gt; high : 0.0
+0
+high + wait -&gt; high : 1.820995536509829
+0
+high + wait -&gt; high : 2.1228514270391026
+0
+high + recharge -&gt; high : 0.0
+0
+high + search -&gt; low : 5.383951803935543
+1
+low + wait -&gt; low : 2.1733242363027876
+1
+low + search -&gt; high : -3.0
+0
+high + search -&gt; high : 6.2819794333802745
+0
+high + wait -&gt; high : 1.9397825841255216
+0
+high + wait -&gt; high : 2.062574195124541
+0
+high + recharge -&gt; high : 0.0
+0
+high + search -&gt; low : 5.118192892317214
+1
+low + recharge -&gt; high : 0.0
+0
+high + recharge -&gt; high : 0.0
+0
+high + wait -&gt; high : 1.9220705942200098
+0
+high + wait -&gt; high : 2.2980602507200425
+0
+high + wait -&gt; high : 3.4001619459162367
+0
+high + wait -&gt; high : 2.217821040537753
+0
+high + search -&gt; high : 5.705469653662327
+0
+high + wait -&gt; high : 1.950488891268914
+0
+high + search -&gt; low : 6.960288415357693
+1
+low + search -&gt; high : -3.0
+0
+high + wait -&gt; high : 2.082593013185528
+0
+high + recharge -&gt; high : 0.0
+0
+high + wait -&gt; high : 1.882483361607017
+0
+high + wait -&gt; high : 1.7505003661543332
+0
+high + wait -&gt; high : 1.2065500346197076
+0
+high + wait -&gt; high : 1.8124402133727378
+0
+high + search -&gt; high : 4.853317167486047
+0
+high + wait -&gt; high : 2.114141662343793
+0
+high + wait -&gt; high : 1.7933641439179941
+0
+high + search -&gt; low : 6.220469989714215
+1
+low + wait -&gt; low : 2.66471859801105
+1
+low + search -&gt; high : -3.0
+0
+high + wait -&gt; high : 2.12259852972329
+0
+high + search -&gt; low : 5.963091616733265
+1
+low + wait -&gt; low : 2.454175857906253
+1
+low + wait -&gt; low : 1.9785624510549502
+1
+low + wait -&gt; low : 1.7301866399033952
+1
+low + wait -&gt; low : 3.070060189177669
+1
+low + recharge -&gt; high : 0.0
+0
+high + recharge -&gt; high : 0.0
+0
+high + wait -&gt; high : 1.1651645341560282
+0
+high + search -&gt; low : 5.759634027717325
+1
+low + recharge -&gt; high : 0.0
+0
+high + wait -&gt; high : 1.4997261497304237
+0
+high + search -&gt; low : 6.137217905984551
+1
+low + recharge -&gt; high : 0.0
+0
+high + wait -&gt; high : 2.3401504556232275
+0
+high + recharge -&gt; high : 0.0
+0
+high + wait -&gt; high : 2.168038964666852
+0
+high + recharge -&gt; high : 0.0
+0
+high + search -&gt; low : 6.302817342188965
+1
+low + wait -&gt; low : 2.0884715071109032
+1
+low + recharge -&gt; high : 0.0
+0
+high + recharge -&gt; high : 0.0
+0
+high + recharge -&gt; high : 0.0
+0
+high + recharge -&gt; high : 0.0
+0
+high + recharge -&gt; high : 0.0
+0
+high + search -&gt; high : 5.86191352428986
+0
+high + recharge -&gt; high : 0.0
+0
+high + wait -&gt; high : 1.3297418289665526
+0
+high + recharge -&gt; high : 0.0
+0
+high + recharge -&gt; high : 0.0
+0
+high + search -&gt; low : 7.467295593569931
+1
+low + wait -&gt; low : 2.9294413236806296
+1
+low + wait -&gt; low : 1.1750222134728774
+1
+low + wait -&gt; low : 2.2817525799802647
+1
+low + wait -&gt; low : 1.226451020096504
+1
+low + wait -&gt; low : 1.8434810573929739
+1
+low + wait -&gt; low : 2.136260934967749
+1
+low + recharge -&gt; high : 0.0
+0
+high + recharge -&gt; high : 0.0
+0
+high + wait -&gt; high : 2.022492191300296
+0
+high + wait -&gt; high : 1.64119148915358
+0
+high + search -&gt; high : 5.91972980658584
+0
+high + recharge -&gt; high : 0.0
+0
+high + recharge -&gt; high : 0.0
+0
+high + search -&gt; high : 5.897819440330189
+0
+high + wait -&gt; high : 1.5674065218229465
+0
+high + wait -&gt; high : 1.9866088963757973
+0
+high + recharge -&gt; high : 0.0
+0
+high + recharge -&gt; high : 0.0
+0
+high + search -&gt; low : 6.515585356879949
+1
+low + wait -&gt; low : 1.7888159592299124
+1
+low + search -&gt; low : 6.53511214012879
+1
+low + search -&gt; high : -3.0
+0
+high + search -&gt; high : 6.425026098189125
+0
+high + search -&gt; low : 6.563714959793888
+1
+low + wait -&gt; low : 2.744670902647997
+1
+low + search -&gt; low : 5.58490689917256
+1
+low + recharge -&gt; high : 0.0
+0
+high + wait -&gt; high : 1.71393034568932
+0
+high + wait -&gt; high : 1.5083458555871614
+0
+high + recharge -&gt; high : 0.0
+0
+high + recharge -&gt; high : 0.0
+0
+high + wait -&gt; high : 2.0464759999373796
+0
+high + recharge -&gt; high : 0.0
+0
+high + recharge -&gt; high : 0.0
+0
+high + recharge -&gt; high : 0.0
+0
+high + search -&gt; high : 7.152070740769064
+0
+high + search -&gt; low : 5.847846134364867
+1
+low + search -&gt; high : -3.0
+0
+high + wait -&gt; high : 1.9513843594075069
+0
+high + search -&gt; low : 6.333175638742766
+1
+low + search -&gt; low : 5.919543511835368
+1
+low + recharge -&gt; high : 0.0
+0
+high + wait -&gt; high : 1.4213104532792533
+0
+high + wait -&gt; high : 2.197951004601719
+0
+high + wait -&gt; high : 2.5101720738774707
+0
+high + wait -&gt; high : 0.5118646279872698
+0
+high + recharge -&gt; high : 0.0
+0
+high + recharge -&gt; high : 0.0
+0
+high + wait -&gt; high : 2.4097055603199906
+0
+high + wait -&gt; high : 2.2034432841188383
+0
+high + recharge -&gt; high : 0.0
+0
+high + wait -&gt; high : 2.324955422077747
+0
+high + search -&gt; low : 5.199505893092102
+1
+low + search -&gt; high : -3.0
+0
+high + recharge -&gt; high : 0.0
+0
+high + search -&gt; low : 6.839484710578862
+1
+low + wait -&gt; low : 1.423839914870384
+1
+low + wait -&gt; low : 1.4303678144887035
+1
+low + wait -&gt; low : 1.076666901449713
+1
+low + recharge -&gt; high : 0.0
+0
+high + wait -&gt; high : 2.326743447930939
+0
+high + search -&gt; low : 5.42854779403662
+1
+low + recharge -&gt; high : 0.0
+0
+high + search -&gt; high : 6.010488011324785
+0
+high + search -&gt; low : 6.405742828888929
+1
+low + wait -&gt; low : 1.682012995068027
+1
+low + wait -&gt; low : 2.891095366509146
+1
+low + search -&gt; high : -3.0
+0
+high + wait -&gt; high : 1.9909670495650313
+0
+high + wait -&gt; high : 1.911902934531266
+0
+high + wait -&gt; high : 1.9747782488927785
+0
+high + search -&gt; low : 5.9974578750360745
+1
+low + wait -&gt; low : 2.3101799302072252
+1
+low + search -&gt; high : -3.0
+0
+high + search -&gt; high : 6.224795433272073
+0
+high + recharge -&gt; high : 0.0
+0
+high + recharge -&gt; high : 0.0
+0
+high + wait -&gt; high : 1.8700678739646412
+0
+high + wait -&gt; high : 1.6469880858482648
+0
+high + search -&gt; low : 6.161995279041372
+1
+low + wait -&gt; low : 1.172302951541246
+1
+low + search -&gt; high : -3.0
+0
+high + recharge -&gt; high : 0.0
+0
+high + search -&gt; low : 6.37122620261722
+1
+low + search -&gt; low : 6.985462460883123
+1
+low + recharge -&gt; high : 0.0
+0
+high + recharge -&gt; high : 0.0
+0
+high + recharge -&gt; high : 0.0
+0
+high + wait -&gt; high : 1.3459562423757199
+0
+high + recharge -&gt; high : 0.0
+0
+high + search -&gt; low : 6.3059926754577
+1
+low + wait -&gt; low : 1.5732588560184264
+1
+low + recharge -&gt; high : 0.0
+0
+high + recharge -&gt; high : 0.0
+0
+high + recharge -&gt; high : 0.0
+0
+high + wait -&gt; high : 2.584773608040952
+0
+high + recharge -&gt; high : 0.0
+0
+high + wait -&gt; high : 1.5025499212453504
+0
+high + wait -&gt; high : 3.9496528876971686
+0
+high + search -&gt; high : 6.109813340383581
+0
+high + recharge -&gt; high : 0.0
+0
+high + search -&gt; low : 5.306849600798564
+1
+low + recharge -&gt; high : 0.0
+0
+high + recharge -&gt; high : 0.0
+0
+high + wait -&gt; high : 1.5952468161545317
+0
+high + wait -&gt; high : 2.4774311233202053
+0
+high + recharge -&gt; high : 0.0
+0
+high + recharge -&gt; high : 0.0
+0
+high + search -&gt; low : 6.050962329592714
+1
+low + recharge -&gt; high : 0.0
+0
+high + wait -&gt; high : 2.6391016246815813
+0
+high + wait -&gt; high : 2.121760306339344
+0
+high + wait -&gt; high : 2.127333687242249
+0
+high + wait -&gt; high : 2.3232910679944685
+0
+high + wait -&gt; high : 2.1539542646129233
+0
+high + recharge -&gt; high : 0.0
+0
+high + wait -&gt; high : 2.2357177480247383
+0
+high + recharge -&gt; high : 0.0
+0
+high + search -&gt; low : 5.876743567683974
+1
+low + recharge -&gt; high : 0.0
+0
+high + recharge -&gt; high : 0.0
+0
+high + search -&gt; low : 6.059653068032491
+1
+low + recharge -&gt; high : 0.0
+0
+high + recharge -&gt; high : 0.0
+0
+high + wait -&gt; high : 2.403125979680833
+0
+high + search -&gt; low : 6.053608377285801
+1
+low + recharge -&gt; high : 0.0
+0
+high + search -&gt; low : 5.379806494397295
+1
+low + search -&gt; high : -3.0
+0
+high + recharge -&gt; high : 0.0
+0
+high + search -&gt; low : 6.243024081484174
+1
+low + search -&gt; high : -3.0
+0
+high + search -&gt; low : 6.692997849798118
+1
+low + recharge -&gt; high : 0.0
+0
+high + search -&gt; high : 6.941568030185999
+0
+high + wait -&gt; high : 2.9447415092296763
+0
+high + wait -&gt; high : 1.8927613921923414
+0
+high + search -&gt; low : 5.640621750556319
+1
+low + search -&gt; high : -3.0
+0
+high + recharge -&gt; high : 0.0
+0
+high + search -&gt; high : 5.2638989100838804
+0
+high + search -&gt; low : 6.694748363217469
+1
+low + search -&gt; high : -3.0
+0
+high + recharge -&gt; high : 0.0
+0
+high + wait -&gt; high : 1.2913942714393976
+0
+high + recharge -&gt; high : 0.0
+0
+high + recharge -&gt; high : 0.0
+0
+high + wait -&gt; high : 2.504225173076019
+0
+high + recharge -&gt; high : 0.0
+0
+high + search -&gt; high : 5.670513498550286
+0
+high + search -&gt; low : 5.853505439287009
+1
+low + recharge -&gt; high : 0.0
+0
+high + recharge -&gt; high : 0.0
+0
+high + search -&gt; high : 6.073652714061692
+0
+high + search -&gt; low : 6.437146059403866
+1
+low + search -&gt; high : -3.0
+0
+high + wait -&gt; high : 2.569246226411389
+0
+high + search -&gt; low : 5.608308229684166
+1
+low + wait -&gt; low : 2.9204613472725627
+1
+low + search -&gt; high : -3.0
+0
+high + wait -&gt; high : 2.2936380513051935
+0
+high + search -&gt; low : 5.315315129839188
+1
+low + recharge -&gt; high : 0.0
+0
+high + search -&gt; low : 5.43492957362349
+1
+low + wait -&gt; low : 2.0683211946560336
+1
+low + recharge -&gt; high : 0.0
+0
+high + search -&gt; low : 6.906677520649494
+1
+low + search -&gt; high : -3.0
+0
+high + wait -&gt; high : 1.5292812556304884
+0
+high + wait -&gt; high : 1.9210962437261596
+0
+high + wait -&gt; high : 1.7541220763791476
+0
+high + search -&gt; low : 5.572502977352947
+1
+low + recharge -&gt; high : 0.0
+0
+high + recharge -&gt; high : 0.0
+0
+high + wait -&gt; high : 2.3566999228718477
+0
+high + recharge -&gt; high : 0.0
+0
+high + wait -&gt; high : 2.051691138795479
+0
+high + recharge -&gt; high : 0.0
+0
+high + recharge -&gt; high : 0.0
+0
+high + search -&gt; high : 5.1118055288249975
+0
+high + search -&gt; high : 5.055597828481773
+0
+high + wait -&gt; high : 2.313607099365808
+0
+high + wait -&gt; high : 1.2117389821075122
+0
+high + wait -&gt; high : 2.1809390843184926
+0
+high + recharge -&gt; high : 0.0
+0
+high + wait -&gt; high : 3.250574914131663
+0
+high + wait -&gt; high : 2.7394443881619983
+0
+high + wait -&gt; high : 1.9326652921766563
+0
+high + recharge -&gt; high : 0.0
+0
+high + search -&gt; high : 6.03894780231042
+0
+high + search -&gt; high : 5.834777238773111
+0
+high + recharge -&gt; high : 0.0
+0
+high + recharge -&gt; high : 0.0
+0
+high + wait -&gt; high : 1.7854117675354229
+0
+high + recharge -&gt; high : 0.0
+0
+high + search -&gt; low : 5.946752713401786
+1
+low + search -&gt; high : -3.0
+0
+high + wait -&gt; high : 0.7978328717369547
+0
+high + search -&gt; low : 6.159451129726044
+1
+low + wait -&gt; low : 1.960532585116384
+1
+low + wait -&gt; low : 2.316744763360366
+1
+low + recharge -&gt; high : 0.0
+0
+high + search -&gt; high : 6.204130173587835
+0
+high + wait -&gt; high : 1.2990957308619198
+0
+high + recharge -&gt; high : 0.0
+0
+high + wait -&gt; high : 0.9919303228683405
+0
+high + wait -&gt; high : 2.5498103719649703
+0
+high + wait -&gt; high : 1.9784295491074628
+0
+high + search -&gt; low : 5.562707758249752
+1
+low + search -&gt; low : 6.0217976906799215
+1
+low + wait -&gt; low : 1.7082250362127331
+1
+low + recharge -&gt; high : 0.0
+0
+high + search -&gt; low : 6.065336407299012
+1
+low + recharge -&gt; high : 0.0
+0
+high + recharge -&gt; high : 0.0
+0
+high + recharge -&gt; high : 0.0
+0
+high + search -&gt; low : 6.334582672392049
+1
+low + search -&gt; high : -3.0
+0
+high + wait -&gt; high : 1.4384902294623563
+0
+high + search -&gt; high : 6.41352977331629
+0
+high + recharge -&gt; high : 0.0
+0
+high + wait -&gt; high : 2.708856508517846
+0
+high + recharge -&gt; high : 0.0
+0
+high + search -&gt; low : 5.954627531126104
+1
+low + wait -&gt; low : 3.0538264960298713
+1
+low + wait -&gt; low : 2.0625821579104624
+1
+low + search -&gt; high : -3.0
+0
+high + recharge -&gt; high : 0.0
+0
+high + search -&gt; high : 6.56677581336681
+0
+high + recharge -&gt; high : 0.0
+0
+high + search -&gt; low : 5.626006217601209
+1
+low + recharge -&gt; high : 0.0
+0
+high + search -&gt; low : 5.280351057237436
+1
+low + recharge -&gt; high : 0.0
+0
+high + search -&gt; low : 5.565989684568636
+1
+low + wait -&gt; low : 2.4121345977973374
+1
+low + recharge -&gt; high : 0.0
+0
+high + wait -&gt; high : 2.183361579554024
+0
+high + recharge -&gt; high : 0.0
+0
+high + recharge -&gt; high : 0.0
+0
+high + recharge -&gt; high : 0.0
+0
+high + search -&gt; low : 6.021272235151354
+1
+low + recharge -&gt; high : 0.0
+0
+high + wait -&gt; high : 1.6855865564623729
+0
+high + search -&gt; low : 6.1217670757388065
+1
+low + recharge -&gt; high : 0.0
+0
+high + recharge -&gt; high : 0.0
+0
+high + recharge -&gt; high : 0.0
+0
+high + wait -&gt; high : 1.6990609862008514
+0
+high + recharge -&gt; high : 0.0
+0
+high + search -&gt; high : 5.406352633224368
+0
+high + wait -&gt; high : 1.4698054214686511
+0
+high + search -&gt; low : 6.627571433857986
+1
+low + wait -&gt; low : 2.015139121205242
+1
+low + search -&gt; high : -3.0
+0
+high + search -&gt; low : 5.6950730442837045
+1
+low + search -&gt; high : -3.0
+0
+high + wait -&gt; high : 2.0568515952020547
+0
+high + wait -&gt; high : 1.7403023682374927
+0
+high + search -&gt; high : 5.664969427361903
+0
+high + wait -&gt; high : 1.3242874494399706
+0
+high + wait -&gt; high : 1.8785941977629133
+0
+high + wait -&gt; high : 2.1475985751122586
+0
+high + recharge -&gt; high : 0.0
+0
+high + recharge -&gt; high : 0.0
+0
+high + wait -&gt; high : 1.8918014352018606
+0
+high + recharge -&gt; high : 0.0
+0
+high + wait -&gt; high : 2.123401365828705
+0
+high + wait -&gt; high : 2.7860766177695355
+0
+high + wait -&gt; high : 2.3612420093286763
+0
+high + recharge -&gt; high : 0.0
+0
+high + recharge -&gt; high : 0.0
+0
+high + wait -&gt; high : 2.1406430467329165
+0
+high + search -&gt; low : 6.09895985291598
+1
+low + wait -&gt; low : 2.5219080633335658
+1
+low + search -&gt; low : 6.643340279651854
+1
+low + recharge -&gt; high : 0.0
+0
+high + wait -&gt; high : 1.9054254373594979
+0
+high + recharge -&gt; high : 0.0
+0
+high + wait -&gt; high : 3.0524919320384885
+0
+high + search -&gt; low : 5.80315600050022
+1
+low + wait -&gt; low : 2.0686348787139917
+1
+low + search -&gt; low : 5.719887366734984
+1
+low + recharge -&gt; high : 0.0
+0
+high + search -&gt; high : 5.503640792203682
+0
+high + wait -&gt; high : 2.460183854553059
+0
+high + wait -&gt; high : 1.5323576863695412
+0
+high + search -&gt; low : 5.276056761837968
+1
+low + recharge -&gt; high : 0.0
+0
+high + wait -&gt; high : 1.5936071996285381
+0
+high + search -&gt; low : 6.602339267345451
+1
+low + search -&gt; high : -3.0
+0
+high + search -&gt; high : 5.8160291428675
+0
+high + recharge -&gt; high : 0.0
+0
+high + wait -&gt; high : 2.4297622242715544
+0
+high + search -&gt; high : 5.58431097868277
+0
+high + search -&gt; high : 6.412867384104523
+0
+high + search -&gt; low : 6.622826147719039
+1
+low + search -&gt; high : -3.0
+0
+high + wait -&gt; high : 1.170291660385406
+0
+high + recharge -&gt; high : 0.0
+0
+high + search -&gt; low : 6.510305039592994
+1
+low + recharge -&gt; high : 0.0
+0
+high + wait -&gt; high : 1.6523875576946874
+0
+high + recharge -&gt; high : 0.0
+0
+high + search -&gt; low : 6.275774319782262
+1
+low + search -&gt; low : 6.365900931159053
+1
+low + search -&gt; high : -3.0
+0
+high + search -&gt; low : 5.439970515051127
+1
+low + wait -&gt; low : 2.5349380679851192
+1
+low + search -&gt; low : 4.858676059297731
+1
+low + recharge -&gt; high : 0.0
+0
+high + search -&gt; low : 6.9651394420076524
+1
+low + search -&gt; high : -3.0
+0
+high + search -&gt; high : 6.376696741636212
+0
+high + wait -&gt; high : 3.071758383679194
+0
+high + wait -&gt; high : 1.232096226854447
+0
+high + search -&gt; high : 6.178384850878395
+0
+high + search -&gt; low : 6.17549736004045
+1
+low + wait -&gt; low : 2.2667182573105538
+1
+low + wait -&gt; low : 1.3294470595925079
+1
+low + wait -&gt; low : 2.4252128867896685
+1
+low + recharge -&gt; high : 0.0
+0
+high + recharge -&gt; high : 0.0
+0
+high + search -&gt; high : 5.199818941356012
+0
+high + wait -&gt; high : 2.933323214182114
+0
+high + wait -&gt; high : 2.5563497962332153
+0
+high + wait -&gt; high : 1.7033184624342457
+0
+high + wait -&gt; high : 1.6519030882082526
+0
+high + recharge -&gt; high : 0.0
+0
+high + recharge -&gt; high : 0.0
+0
+high + wait -&gt; high : 2.658751553100264
+0
+high + recharge -&gt; high : 0.0
+0
+high + search -&gt; high : 6.385427073750851
+0
+high + wait -&gt; high : 1.5753442425898672
+0
+high + search -&gt; low : 6.2037219228980875
+1
+low + search -&gt; high : -3.0
+0
+high + search -&gt; low : 5.070273173910144
+1
+low + search -&gt; high : -3.0
+0
+high + wait -&gt; high : 1.7884301511603429
+0
+high + search -&gt; low : 6.784492503557519
+1
+low + wait -&gt; low : 1.1440205582088363
+1
+low + search -&gt; high : -3.0
+0
+high + recharge -&gt; high : 0.0
+0
+high + recharge -&gt; high : 0.0
+0
+high + search -&gt; low : 5.286046159769109
+1
+low + recharge -&gt; high : 0.0
+0
+high + search -&gt; low : 5.4704791348916775
+1
+low + recharge -&gt; high : 0.0
+0
+high + wait -&gt; high : 2.1562750326101825
+0
+high + search -&gt; high : 5.963120975635718
+0
+high + wait -&gt; high : 1.1365816966862936
+0
+high + search -&gt; low : 7.079054387049842
+1
+low + recharge -&gt; high : 0.0
+0
+high + wait -&gt; high : 1.9271880203197789
+0
+high + wait -&gt; high : 2.8237723145778157
+0
+high + search -&gt; low : 5.180380080878361
+1
+low + search -&gt; low : 5.451716930977463
+1
+low + recharge -&gt; high : 0.0
+0
+high + recharge -&gt; high : 0.0
+0
+high + recharge -&gt; high : 0.0
+0
+high + recharge -&gt; high : 0.0
+0
+high + search -&gt; high : 7.0435947442537215
+0
+high + wait -&gt; high : 2.030185930441558
+0
+high + search -&gt; low : 6.08530807137244
+1
+low + search -&gt; low : 5.186171604701385
+1
+low + wait -&gt; low : 2.154552213740057
+1
+low + wait -&gt; low : 1.9325505369559783
+1
+low + wait -&gt; low : 2.4489223526982147
+1
+low + wait -&gt; low : 2.1995222960916676
+1
+low + wait -&gt; low : 2.3171735943939025
+1
+low + recharge -&gt; high : 0.0
+0
+high + wait -&gt; high : 1.2767651855285833
+0
+high + wait -&gt; high : 1.2524975981440245
+0
+high + wait -&gt; high : 1.8394437867302913
+0
+high + search -&gt; low : 6.456121604432562
+1
+low + wait -&gt; low : 1.9083314757568859
+1
+low + recharge -&gt; high : 0.0
+0
+high + wait -&gt; high : 2.455428601179825
+0
+high + search -&gt; high : 5.322270742265996
+0
+high + search -&gt; low : 6.2070917829472725
+1
+low + recharge -&gt; high : 0.0
+0
+high + wait -&gt; high : 1.363848468052518
+0
+high + wait -&gt; high : 1.8749398081423747
+0
+high + search -&gt; low : 5.954795860590425
+1
+low + search -&gt; high : -3.0
+0
+high + wait -&gt; high : 1.8672450851964324
+0
+high + search -&gt; low : 6.442161645815893
+1
+low + search -&gt; high : -3.0
+0
+high + wait -&gt; high : 2.0644083612189306
+0
+high + recharge -&gt; high : 0.0
+0
+high + search -&gt; low : 5.703975181228546
+1
+low + search -&gt; low : 5.760752769136767
+1
+low + wait -&gt; low : 2.3427665785826983
+1
+low + wait -&gt; low : 2.1446543543431655
+1
+low + search -&gt; high : -3.0
+0
+high + recharge -&gt; high : 0.0
+0
+high + search -&gt; low : 6.357103277707941
+1
+low + recharge -&gt; high : 0.0
+0
+high + wait -&gt; high : 1.8866029085506641
+0
+high + recharge -&gt; high : 0.0
+0
+high + search -&gt; low : 5.430136555049473
+1
+low + wait -&gt; low : 1.616833815094361
+1
+low + search -&gt; high : -3.0
+0
+high + search -&gt; high : 5.733192815390295
+0
+high + recharge -&gt; high : 0.0
+0
+high + recharge -&gt; high : 0.0
+0
+high + recharge -&gt; high : 0.0
+0
+high + search -&gt; high : 6.643097107828454
+0
+high + wait -&gt; high : 1.475269140625138
+0
+high + recharge -&gt; high : 0.0
+0
+high + recharge -&gt; high : 0.0
+0
+high + recharge -&gt; high : 0.0
+0
+high + search -&gt; low : 5.636165370981476
+1
+low + search -&gt; high : -3.0
+0
+high + search -&gt; low : 5.887439043718988
+1
+low + recharge -&gt; high : 0.0
+0
+high + search -&gt; high : 6.318069470932547
+0
+high + recharge -&gt; high : 0.0
+0
+high + search -&gt; low : 6.094070322396995
+1
+low + recharge -&gt; high : 0.0
+0
+high + search -&gt; high : 6.368152642889786
+0
+high + wait -&gt; high : 1.979753551688827
+0
+high + search -&gt; low : 6.708973278155687
+1
+low + recharge -&gt; high : 0.0
+0
+high + recharge -&gt; high : 0.0
+0
+high + wait -&gt; high : 2.6173086546556408
+0
+high + wait -&gt; high : 2.0299167427637363
+0
+high + wait -&gt; high : 1.9537971636359577
+0
+high + wait -&gt; high : 2.7562400350398453
+0
+high + search -&gt; low : 5.719143398889503
+1
+low + search -&gt; high : -3.0
+0
+high + search -&gt; low : 5.854028239176822
+1
+low + search -&gt; high : -3.0
+0
+high + recharge -&gt; high : 0.0
+0
+high + recharge -&gt; high : 0.0
+0
+high + wait -&gt; high : 2.2942183631851876
+0
+high + search -&gt; low : 6.656437719319226
+1
+low + recharge -&gt; high : 0.0
+0
+high + recharge -&gt; high : 0.0
+0
+high + wait -&gt; high : 2.017664394074315
+0
+high + search -&gt; low : 6.5024643407217155
+1
+low + search -&gt; high : -3.0
+0
+high + recharge -&gt; high : 0.0
+0
+high + recharge -&gt; high : 0.0
+0
+high + wait -&gt; high : 2.7776559147398228
+0
+high + recharge -&gt; high : 0.0
+0
+high + search -&gt; low : 6.323705420588515
+1
+low + wait -&gt; low : 1.9322895761869547
+1
+low + recharge -&gt; high : 0.0
+0
+high + wait -&gt; high : 1.097761032998298
+0
+high + wait -&gt; high : 2.0246140995904267
+0
+high + wait -&gt; high : 1.5140238137559505
+0
+high + search -&gt; high : 5.684548719724071
+0
+high + wait -&gt; high : 2.1718533678402165
+0
+high + wait -&gt; high : 1.8567171411122763
+0
+high + recharge -&gt; high : 0.0
+0
+high + search -&gt; low : 5.188834622755659
+1
+low + recharge -&gt; high : 0.0
+0
+high + search -&gt; low : 5.304624310405241
+</pre></div>
+</div>
+</div>
+</div>
+<p>That’s it! We now “only” need to define classes for all the sampling-based RL algorithms (MC, TD, deep RL) and we can interact with any environment using the previous cell!</p>
+</div>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./5-exercises"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+        </div>
+    </div>
+    
+    
+    <div class='prev-next-bottom'>
+        
+
+    </div>
+    <footer class="footer mt-5 mt-md-0">
+    <div class="container">
+      <p>
+        
+          By Julien Vitay - julien.vitay@informatik.tu-chemnitz.de<br/>
+        
+            &copy; Copyright 2020.<br/>
+          <div class="extra_footer">
+            Technische Universität Chemnitz - Faculty of Computer Science - Professorship for Artificial Intelligence
+          </div>
+      </p>
+    </div>
+  </footer>
+</main>
+
+
+      </div>
+    </div>
+
+    <script src="../_static/js/index.js"></script>
+    
+  </body>
+</html>
