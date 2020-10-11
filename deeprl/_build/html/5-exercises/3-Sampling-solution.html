@@ -219,7 +219,19 @@
             <i class="fas fa-list"></i> Contents
         </div>
         <nav id="bd-toc-nav">
-            
+            <ul class="nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#sampling-a-n-armed-bandit">
+   Sampling a n-armed bandit
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#bandit-environment">
+   Bandit environment
+  </a>
+ </li>
+</ul>
+
         </nav>
     </div>
 </div>
@@ -240,6 +252,8 @@
 </div>
 </div>
 </div>
+<div class="section" id="sampling-a-n-armed-bandit">
+<h2>Sampling a n-armed bandit<a class="headerlink" href="#sampling-a-n-armed-bandit" title="Permalink to this headline">¶</a></h2>
 <p>Let’s now create the n-armed bandit. The only thing we need to do is to randomly choose 5 true Q-values <span class="math notranslate nohighlight">\(Q^*(a)\)</span>.</p>
 <p>To be generic, let’s define <code class="docutils literal notranslate"><span class="pre">nb_actions=5</span></code> and create an array corresponding to the index of each action (0, 1, 2, 3, 4) for plotting purpose.</p>
 <div class="cell docutils container">
@@ -392,6 +406,65 @@
 </div>
 </div>
 <p><strong>A:</strong> the higher the variance of the distribution, the more samples we need to get correct estimates.</p>
+</div>
+<div class="section" id="bandit-environment">
+<h2>Bandit environment<a class="headerlink" href="#bandit-environment" title="Permalink to this headline">¶</a></h2>
+<p><strong>TODO</strong></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Bandit</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nb_actions</span><span class="p">,</span> <span class="n">mean</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">var_Q</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">var_r</span><span class="o">=</span><span class="mf">1.0</span><span class="p">):</span>
+        <span class="c1"># Store parameters</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nb_actions</span> <span class="o">=</span> <span class="n">nb_actions</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mean</span> <span class="o">=</span> <span class="n">mean</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">var_Q</span> <span class="o">=</span> <span class="n">var_Q</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">var_r</span> <span class="o">=</span> <span class="n">var_r</span>
+        
+        <span class="c1"># Initialize the true Q-values</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Q_star</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mean</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">var_Q</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">nb_actions</span><span class="p">)</span>
+        
+        <span class="c1"># Optimal action</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">a_star</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Q_star</span><span class="o">.</span><span class="n">argmax</span><span class="p">()</span>
+        
+    <span class="k">def</span> <span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">action</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">rng</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Q_star</span><span class="p">[</span><span class="n">action</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">var_r</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+        
+<span class="n">nb_actions</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="n">bandit</span> <span class="o">=</span> <span class="n">Bandit</span><span class="p">(</span><span class="n">nb_actions</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mean_reward</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nb_actions</span><span class="p">):</span>
+    
+    <span class="n">rewards</span> <span class="o">=</span> <span class="p">[]</span>
+    
+    <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1000</span><span class="p">):</span>
+        <span class="n">rewards</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">bandit</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">a</span><span class="p">))</span>
+    
+    <span class="n">mean_reward</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">rewards</span><span class="p">))</span>
+    
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">121</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">nb_actions</span><span class="p">),</span> <span class="n">bandit</span><span class="o">.</span><span class="n">Q_star</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Actions&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;$Q^*(a)$&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">122</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">nb_actions</span><span class="p">),</span> <span class="n">mean_reward</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Actions&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;$Q_t(a)$&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/3-Sampling-solution_22_0.png" src="../_images/3-Sampling-solution_22_0.png" />
+</div>
+</div>
+</div>
 </div>
 
     <script type="text/x-thebe-config">
