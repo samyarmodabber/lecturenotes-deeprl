@@ -275,7 +275,7 @@ A[negatives] = 0
 print(negatives)
 print(A)
 
-### 1.5. Basic linear algebra 
+### Basic linear algebra 
 
 Let's first define some matrices:
 
@@ -341,7 +341,7 @@ G = np.dot(B, A)
 print(F)
 print(G)
 
-### Multiplying a matrix with a vector
+#### Multiplying a matrix with a vector
 
 `*` and `np.dot` also apply on matrix-vector multiplications $\mathbf{y} = A \times \mathbf{x}$ or vector-vector multiplications.
 

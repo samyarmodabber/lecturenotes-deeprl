@@ -230,7 +230,7 @@ A[A < 0] = 0
 
 
 
-### 1.5. Basic linear algebra 
+### Basic linear algebra 
 
 Let's first define some matrices:
 
@@ -282,7 +282,7 @@ E = np.dot(A,  B)
 
 
 
-### Multiplying a matrix with a vector
+#### Multiplying a matrix with a vector
 
 `*` and `np.dot` also apply on matrix-vector multiplications $\mathbf{y} = A \times \mathbf{x}$ or vector-vector multiplications.
 
