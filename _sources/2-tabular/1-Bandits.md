@@ -531,7 +531,7 @@ The term $\sqrt{\frac{\ln t}{N_t(a)}}$ is an estimate of the variance of $Q_t(a)
 ---
 width: 100%
 ---
-Reinforcement comparison.
+Upper-Confidence-Bound action selection.
 ```
 
 The "smart" exploration of UCB allows to find the optimal action faster.

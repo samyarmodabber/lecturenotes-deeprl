@@ -677,7 +677,7 @@
 <p>The term <span class="math notranslate nohighlight">\(\sqrt{\frac{\ln t}{N_t(a)}}\)</span> is an estimate of the variance of <span class="math notranslate nohighlight">\(Q_t(a)\)</span>. The sum of both terms is an <strong>upper-bound</strong> of the true value <span class="math notranslate nohighlight">\(\mu + \sigma\)</span>. When an action has not been explored much yet, the uncertainty term will dominate and the action be explored, although its estimated value might be low. When an action has been sufficiently explored, the uncertainty term goes to 0 and we greedily follow <span class="math notranslate nohighlight">\(Q_t(a)\)</span>. The <strong>exploration-exploitation</strong> trade-off is automatically adjusted by counting visits to an action.</p>
 <div class="figure align-default" id="id30">
 <a class="reference internal image-reference" href="../_images/bandit-ucb.gif"><img alt="../_images/bandit-ucb.gif" src="../_images/bandit-ucb.gif" style="width: 100%;" /></a>
-<p class="caption"><span class="caption-number">Fig. 1.41 </span><span class="caption-text">Reinforcement comparison.</span><a class="headerlink" href="#id30" title="Permalink to this image">¶</a></p>
+<p class="caption"><span class="caption-number">Fig. 1.41 </span><span class="caption-text">Upper-Confidence-Bound action selection.</span><a class="headerlink" href="#id30" title="Permalink to this image">¶</a></p>
 </div>
 <p>The “smart” exploration of UCB allows to find the optimal action faster.</p>
 <div class="figure align-default" id="id31">
