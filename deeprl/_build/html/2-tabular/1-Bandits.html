@@ -576,7 +576,10 @@
 \end{split}\]</div>
 <p>The influence of <span class="math notranslate nohighlight">\(Q_0\)</span> on <span class="math notranslate nohighlight">\(Q_t\)</span> <strong>fades</strong> quickly with <span class="math notranslate nohighlight">\((1-\alpha)^t\)</span>, but that can be lost time or lead to a suboptimal policy. However, we can use this at our advantage with <strong>optimistic initialization</strong>.</p>
 <p>By choosing very high initial values for the estimates (they can only decrease), one can ensure that all possible actions will be selected during learning by the greedy method, solving the <strong>exploration problem</strong>. This leads however to an <strong>overestimation</strong> of the value of other actions.</p>
-<p><img alt="" src="../_images/bandit-optimistic.gif" /></p>
+<div class="figure align-default" id="id23">
+<a class="reference internal image-reference" href="../_images/bandit-optimistic.gif"><img alt="../_images/bandit-optimistic.gif" src="../_images/bandit-optimistic.gif" style="width: 80%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 1.34 </span><span class="caption-text">Optimistic initialization.</span><a class="headerlink" href="#id23" title="Permalink to this image">¶</a></p>
+</div>
 </div>
 <div class="section" id="reinforcement-comparison">
 <h3><span class="section-number">1.3.8. </span>Reinforcement comparison<a class="headerlink" href="#reinforcement-comparison" title="Permalink to this headline">¶</a></h3>
@@ -596,20 +599,24 @@
 <li><p>If an action brings less reward than usual (<strong>bad surprise</strong>), we decrease the preference for that action.</p></li>
 </ul>
 <p><span class="math notranslate nohighlight">\(\beta &gt; 0\)</span> and <span class="math notranslate nohighlight">\(0 &lt; \alpha &lt; 1\)</span> are two constant parameters.</p>
-<p>Preferences are updated by replacing the action-dependent Q-values by a baseline <span class="math notranslate nohighlight">\(\tilde{r}_t\)</span>:</p>
-<div class="math notranslate nohighlight">
-\[
-    p_{t+1}(a_t) =    p_{t}(a_t) + \beta \, (r_t - \tilde{r}_t)
-\]</div>
-<p>The preferences can be used to select the action using the soft-max method just as the Q-values (without temperature):</p>
+<p>The preferences can be used to select the action using the softmax method just like the Q-values (without temperature):</p>
 <div class="math notranslate nohighlight">
 \[
     \pi_t (a) = \frac{\exp p_t(a)}{ \sum_b \exp p_t(b)}
 \]</div>
-<p><img alt="" src="../_images/bandit-reinforcementcomparison.gif" /></p>
+<div class="figure align-default" id="id24">
+<a class="reference internal image-reference" href="../_images/bandit-reinforcementcomparison.gif"><img alt="../_images/bandit-reinforcementcomparison.gif" src="../_images/bandit-reinforcementcomparison.gif" style="width: 100%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 1.35 </span><span class="caption-text">Reinforcement comparison.</span><a class="headerlink" href="#id24" title="Permalink to this image">¶</a></p>
+</div>
 <p>Reinforcement comparison can be very effective, as it does not rely only on the rewards received, but also on their comparison with a <strong>baseline</strong>, the average reward. This idea is at the core of <strong>actor-critic</strong> architectures which we will see later. The initial average reward <span class="math notranslate nohighlight">\(\tilde{r}_{0}\)</span> can be set optimistically to encourage exploration.</p>
-<p><img alt="" src="../_images/bandit-comparison7.png" /></p>
-<p><img alt="" src="../_images/bandit-comparison8.png" /></p>
+<div class="figure align-default" id="id25">
+<a class="reference internal image-reference" href="../_images/bandit-comparison7.png"><img alt="../_images/bandit-comparison7.png" src="../_images/bandit-comparison7.png" style="width: 60%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 1.36 </span><span class="caption-text">Average reward per step.</span><a class="headerlink" href="#id25" title="Permalink to this image">¶</a></p>
+</div>
+<div class="figure align-default" id="id26">
+<a class="reference internal image-reference" href="../_images/bandit-comparison8.png"><img alt="../_images/bandit-comparison8.png" src="../_images/bandit-comparison8.png" style="width: 60%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 1.37 </span><span class="caption-text">Frequency of selection of the optimal action.</span><a class="headerlink" href="#id26" title="Permalink to this image">¶</a></p>
+</div>
 </div>
 <div class="section" id="gradient-bandit-algorithm">
 <h3><span class="section-number">1.3.9. </span>Gradient bandit algorithm<a class="headerlink" href="#gradient-bandit-algorithm" title="Permalink to this headline">¶</a></h3>
@@ -634,10 +641,19 @@
     \tilde{r}_{t+1} =  \tilde{r}_t + \alpha \, (r_t - \tilde{r}_t)
 \]</div>
 <p>The preference can increase become quite high, making the policy greedy towards the end. No need for a temperature parameter!</p>
-<p><img alt="" src="../_images/bandit-gradientbandit.gif" /></p>
+<div class="figure align-default" id="id27">
+<a class="reference internal image-reference" href="../_images/bandit-gradientbandit.gif"><img alt="../_images/bandit-gradientbandit.gif" src="../_images/bandit-gradientbandit.gif" style="width: 100%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 1.38 </span><span class="caption-text">Reinforcement comparison.</span><a class="headerlink" href="#id27" title="Permalink to this image">¶</a></p>
+</div>
 <p>Gradient bandit is not always better than reinforcement comparison, but learns initially faster (depending on the parameters <span class="math notranslate nohighlight">\(\alpha\)</span> and <span class="math notranslate nohighlight">\(\beta\)</span>).</p>
-<p><img alt="" src="../_images/bandit-comparison9.png" /></p>
-<p><img alt="" src="../_images/bandit-comparison10.png" /></p>
+<div class="figure align-default" id="id28">
+<a class="reference internal image-reference" href="../_images/bandit-comparison9.png"><img alt="../_images/bandit-comparison9.png" src="../_images/bandit-comparison9.png" style="width: 60%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 1.39 </span><span class="caption-text">Average reward per step.</span><a class="headerlink" href="#id28" title="Permalink to this image">¶</a></p>
+</div>
+<div class="figure align-default" id="id29">
+<a class="reference internal image-reference" href="../_images/bandit-comparison10.png"><img alt="../_images/bandit-comparison10.png" src="../_images/bandit-comparison10.png" style="width: 60%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 1.40 </span><span class="caption-text">Frequency of selection of the optimal action.</span><a class="headerlink" href="#id29" title="Permalink to this image">¶</a></p>
+</div>
 </div>
 <div class="section" id="upper-confidence-bound-action-selection">
 <h3><span class="section-number">1.3.10. </span>Upper-Confidence-Bound action selection<a class="headerlink" href="#upper-confidence-bound-action-selection" title="Permalink to this headline">¶</a></h3>
@@ -659,10 +675,19 @@
 \]</div>
 <p><span class="math notranslate nohighlight">\(Q_t(a)\)</span> is the current estimated value of <span class="math notranslate nohighlight">\(a\)</span> and <span class="math notranslate nohighlight">\(N_t(a)\)</span> is the number of times the action <span class="math notranslate nohighlight">\(a\)</span> has already been selected. It realizes a balance between trusting the estimates <span class="math notranslate nohighlight">\(Q_t(a)\)</span> and exploring uncertain actions which have not been explored much yet.</p>
 <p>The term <span class="math notranslate nohighlight">\(\sqrt{\frac{\ln t}{N_t(a)}}\)</span> is an estimate of the variance of <span class="math notranslate nohighlight">\(Q_t(a)\)</span>. The sum of both terms is an <strong>upper-bound</strong> of the true value <span class="math notranslate nohighlight">\(\mu + \sigma\)</span>. When an action has not been explored much yet, the uncertainty term will dominate and the action be explored, although its estimated value might be low. When an action has been sufficiently explored, the uncertainty term goes to 0 and we greedily follow <span class="math notranslate nohighlight">\(Q_t(a)\)</span>. The <strong>exploration-exploitation</strong> trade-off is automatically adjusted by counting visits to an action.</p>
-<p><img alt="" src="../_images/bandit-ucb.gif" /></p>
+<div class="figure align-default" id="id30">
+<a class="reference internal image-reference" href="../_images/bandit-ucb.gif"><img alt="../_images/bandit-ucb.gif" src="../_images/bandit-ucb.gif" style="width: 100%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 1.41 </span><span class="caption-text">Reinforcement comparison.</span><a class="headerlink" href="#id30" title="Permalink to this image">¶</a></p>
+</div>
 <p>The “smart” exploration of UCB allows to find the optimal action faster.</p>
-<p><img alt="" src="../_images/bandit-comparison11.png" /></p>
-<p><img alt="" src="../_images/bandit-comparison12.png" /></p>
+<div class="figure align-default" id="id31">
+<a class="reference internal image-reference" href="../_images/bandit-comparison11.png"><img alt="../_images/bandit-comparison11.png" src="../_images/bandit-comparison11.png" style="width: 60%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 1.42 </span><span class="caption-text">Average reward per step.</span><a class="headerlink" href="#id31" title="Permalink to this image">¶</a></p>
+</div>
+<div class="figure align-default" id="id32">
+<a class="reference internal image-reference" href="../_images/bandit-comparison12.png"><img alt="../_images/bandit-comparison12.png" src="../_images/bandit-comparison12.png" style="width: 60%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 1.43 </span><span class="caption-text">Frequency of selection of the optimal action.</span><a class="headerlink" href="#id32" title="Permalink to this image">¶</a></p>
+</div>
 </div>
 <div class="section" id="summary-of-evaluative-feedback-methods">
 <h3><span class="section-number">1.3.11. </span>Summary of evaluative feedback methods<a class="headerlink" href="#summary-of-evaluative-feedback-methods" title="Permalink to this headline">¶</a></h3>
@@ -685,11 +710,15 @@
     r_{t+1} \sim r(s, a)
 \]</div>
 <p>For example, the n-armed bandit could deliver rewards with different probabilities depending on who plays, the time of the year or the availability of funds in the casino. The problem is simply to estimate <span class="math notranslate nohighlight">\(Q(s, a)\)</span> instead of <span class="math notranslate nohighlight">\(Q(a)\)</span>…</p>
-<p><img alt="" src="../_images/bandit-hierarchy.png" /></p>
-<p>Source: <a class="reference external" href="https://medium.com/emergent-future/simple-reinforcement-learning-with-tensorflow-part-1-5-contextual-bandits-bff01d1aad9c">https://medium.com/emergent-future/simple-reinforcement-learning-with-tensorflow-part-1-5-contextual-bandits-bff01d1aad9c</a>]</p>
+<div class="figure align-default" id="id33">
+<a class="reference internal image-reference" href="../_images/bandit-hierarchy.png"><img alt="../_images/bandit-hierarchy.png" src="../_images/bandit-hierarchy.png" style="width: 90%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 1.44 </span><span class="caption-text">Contextual bandits are an intermediary problem between bandits and the full RL setup, as rewards depend on the state, but the state is not influenced by the action. Source: <a class="reference external" href="https://medium.com/emergent-future/simple-reinforcement-learning-with-tensorflow-part-1-5-contextual-bandits-bff01d1aad9c">https://medium.com/emergent-future/simple-reinforcement-learning-with-tensorflow-part-1-5-contextual-bandits-bff01d1aad9c</a></span><a class="headerlink" href="#id33" title="Permalink to this image">¶</a></p>
+</div>
 <p>Contextual bandits are for example useful for <strong>Recommender systems</strong>: actions are the display of an  advertisement, the context (or state) represents the user features / identity (possibly learned by an autoencoder), and the reward represents whether the user clicks on the ad or not.</p>
-<p><img alt="" src="../_images/contextualbandit.gif" /></p>
-<p><a class="reference external" href="https://aws.amazon.com/blogs/machine-learning/power-contextual-bandits-using-continual-learning-with-amazon-sagemaker-rl/">https://aws.amazon.com/blogs/machine-learning/power-contextual-bandits-using-continual-learning-with-amazon-sagemaker-rl/</a></p>
+<div class="figure align-default" id="id34">
+<a class="reference internal image-reference" href="../_images/contextualbandit.gif"><img alt="../_images/contextualbandit.gif" src="../_images/contextualbandit.gif" style="width: 40%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 1.45 </span><span class="caption-text">Contextual bandits are used in recommender systems. Source: <a class="reference external" href="https://aws.amazon.com/blogs/machine-learning/power-contextual-bandits-using-continual-learning-with-amazon-sagemaker-rl/">https://aws.amazon.com/blogs/machine-learning/power-contextual-bandits-using-continual-learning-with-amazon-sagemaker-rl/</a></span><a class="headerlink" href="#id34" title="Permalink to this image">¶</a></p>
+</div>
 <p>Some efficient algorithms have been developed recently, for example <a class="bibtex reference internal" href="../zreferences.html#agarwal2014" id="id1">[AHK+14]</a>, but we will not go into details in this course.</p>
 </div>
 </div>
