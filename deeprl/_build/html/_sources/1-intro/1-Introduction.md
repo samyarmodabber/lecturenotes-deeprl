@@ -83,7 +83,7 @@ Sequences $\tau = (s_0, a_0, r_1, s_1, a_1, \ldots, s_T)$ are called **episodes*
 ---
 width: 100%
 ---
-Agent-environment interface for video games. Source: David Silver <http://www0.cs.ucl.ac.uk/staff/d.silver/web/Teaching.html>.
+Agent-environment interface for video games. Source: David Silver <https://www.davidsilver.uk/teaching/>.
 ```
 
 The state $s_t$ can relate to:
@@ -337,7 +337,7 @@ Deep RL is gaining a lot of importance in AI research, with lots of applications
 
 * Reinforcement Learning course by David Silver at UCL.
 
-<http://www0.cs.ucl.ac.uk/staff/d.silver/web/Teaching.html>
+<https://www.davidsilver.uk/teaching/>
 
 * My notes on Deep Reinforcement Learning.
 

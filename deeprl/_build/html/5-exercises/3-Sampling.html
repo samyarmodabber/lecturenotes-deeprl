@@ -6,7 +6,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Sampling &#8212; Deep Reinforcement Learning</title>
+    <title>3.2.1. Sampling &#8212; Deep Reinforcement Learning</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" integrity="sha384-KA6wR/X5RY4zFAHpv/CnoG2UW1uogYfdnP67Uv7eULvTveboZJg0qUpmJZb5VqzN" crossorigin="anonymous">
     <link href="../_static/css/index.css" rel="stylesheet">
     <link rel="stylesheet" href="../_static/sphinx-book-theme.css" type="text/css" />
@@ -40,6 +40,8 @@
     <link rel="canonical" href="https://julien-vitay.net/lecturenotes-deeprl/5-exercises/3-Sampling.html" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="3.2.2. Sampling" href="3-Sampling-solution.html" />
+    <link rel="prev" title="3. Sampling" href="ex3-Sampling.html" />
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="docsearch:language" content="en">
@@ -116,13 +118,18 @@
    1. Bandits
   </a>
  </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../2-tabular/2-MDP.html">
+   2. Markov Decision Processes
+  </a>
+ </li>
 </ul>
 <p class="caption">
  <span class="caption-text">
   Exercises
  </span>
 </p>
-<ul class="nav sidenav_l1">
+<ul class="current nav sidenav_l1">
  <li class="toctree-l1">
   <a class="reference internal" href="ex1-Python.html">
    1. Introduction to Python
@@ -132,6 +139,23 @@
   <a class="reference internal" href="ex2-Numpy.html">
    2. Numpy and Matplotlib
   </a>
+ </li>
+ <li class="toctree-l1 current active">
+  <a class="reference internal" href="ex3-Sampling.html">
+   3. Sampling
+  </a>
+  <ul class="current">
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
+     3.2.1. Notebook
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="3-Sampling-solution.html">
+     3.2.2. Solution
+    </a>
+   </li>
+  </ul>
  </li>
 </ul>
 <p class="caption">
@@ -236,7 +260,19 @@
             <i class="fas fa-list"></i> Contents
         </div>
         <nav id="bd-toc-nav">
-            
+            <ul class="nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#sampling-a-n-armed-bandit">
+   3.2.1.1. Sampling a n-armed bandit
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#bandit-environment">
+   3.2.1.2. Bandit environment
+  </a>
+ </li>
+</ul>
+
         </nav>
     </div>
 </div>
@@ -246,7 +282,7 @@
               <div>
                 
   <div class="section" id="sampling">
-<h1>Sampling<a class="headerlink" href="#sampling" title="Permalink to this headline">¶</a></h1>
+<h1><span class="section-number">3.2.1. </span>Sampling<a class="headerlink" href="#sampling" title="Permalink to this headline">¶</a></h1>
 <p>In this first exercise, we will investigate how to evaluate the Q-value of each action available in a 5-armed bandit. It is mostly to give you intuition about the limits of sampling and the central limit theorem.</p>
 <p>Let’s start with importing numpy and matplotlib:</p>
 <div class="cell docutils container">
@@ -257,7 +293,10 @@
 </div>
 </div>
 </div>
+<div class="section" id="sampling-a-n-armed-bandit">
+<h2><span class="section-number">3.2.1.1. </span>Sampling a n-armed bandit<a class="headerlink" href="#sampling-a-n-armed-bandit" title="Permalink to this headline">¶</a></h2>
 <p>Let’s now create the n-armed bandit. The only thing we need to do is to randomly choose 5 true Q-values <span class="math notranslate nohighlight">\(Q^*(a)\)</span>.</p>
+<p><img alt="" src="../_images/bandit-example1.png" /></p>
 <p>To be generic, let’s define <code class="docutils literal notranslate"><span class="pre">nb_actions=5</span></code> and create an array corresponding to the index of each action (0, 1, 2, 3, 4) for plotting purpose.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -268,14 +307,14 @@
 </div>
 </div>
 <p><strong>Q:</strong> Create a numpy array <code class="docutils literal notranslate"><span class="pre">Q_star</span></code> with <code class="docutils literal notranslate"><span class="pre">nb_actions</span></code> values, normally distributed with a mean of 0 and standard deviation of 1 (as in the lecture).</p>
-<p><strong>Q:</strong> Plot the Q-values. Identify the optimal action.</p>
+<p><strong>Q:</strong> Plot the Q-values. Identify the optimal action <span class="math notranslate nohighlight">\(a^*\)</span>.</p>
 <p><em>Tip:</em> you could plot the array <code class="docutils literal notranslate"><span class="pre">Q_star</span></code> with <code class="docutils literal notranslate"><span class="pre">plt.plot</span></code>, but that would be ugly. Check the documentation of the <code class="docutils literal notranslate"><span class="pre">plt.bar</span></code> method.</p>
 <p>Great, now let’s start evaluating these Q-values with random sampling.</p>
 <p><strong>Q:</strong> Define an action sampling method <code class="docutils literal notranslate"><span class="pre">get_reward</span></code> taking as arguments:</p>
 <ul class="simple">
 <li><p>The array <code class="docutils literal notranslate"><span class="pre">Q_star</span></code>.</p></li>
 <li><p>The index <code class="docutils literal notranslate"><span class="pre">a</span></code> of the action you want to sample (between 0 and 4).</p></li>
-<li><p>An optional variance argument <code class="docutils literal notranslate"><span class="pre">var</span></code>, which shouldhave the value 1.0 by default.</p></li>
+<li><p>An optional variance argument <code class="docutils literal notranslate"><span class="pre">var</span></code>, which should have the value 1.0 by default.</p></li>
 </ul>
 <p>It should return a single value, sampled from the normal distribution with mean <code class="docutils literal notranslate"><span class="pre">Q_star[a]</span></code> and variance <code class="docutils literal notranslate"><span class="pre">var</span></code>.</p>
 <p><strong>Q:</strong> For each possible action <code class="docutils literal notranslate"><span class="pre">a</span></code>, take <code class="docutils literal notranslate"><span class="pre">nb_samples=10</span></code> out of the reward distribution and store them in a numpy array. Compute the mean of the samples for each action separately in a new array <code class="docutils literal notranslate"><span class="pre">Q_t</span></code>. Make a bar plot of these estimated Q-values.</p>
@@ -284,14 +323,60 @@
 <p>The mean square error is simply defined over the <code class="docutils literal notranslate"><span class="pre">nb_actions</span></code> actions as:</p>
 <div class="math notranslate nohighlight">
 \[\epsilon = \frac{1}{N} \, \sum_{a=0}^\text{nb_actions-1} (Q_t(a) - Q^*(a))^2\]</div>
-<p>At the end of the loop, plot the evolution of the mean square error with the number of samples. You can append each value of the mse in an empty list and then plotit with <code class="docutils literal notranslate"><span class="pre">plt.plot</span></code>, for example.</p>
+<p>At the end of the loop, plot the evolution of the mean square error with the number of samples. You can append each value of the mse in an empty list and then plot it with <code class="docutils literal notranslate"><span class="pre">plt.plot</span></code>, for example.</p>
 <p>The plot should give you an indication of how many samples you at least need to correctly estimate each action (30 or so). But according to the central limit theorem (CLT), the variance of the sample average also varies with the variance of the distribution itself.</p>
 <blockquote>
 <div><p>The distribution of sample averages is normally distributed with mean <span class="math notranslate nohighlight">\(\mu\)</span> and variance <span class="math notranslate nohighlight">\(\frac{\sigma^2}{N}\)</span>.</p>
 </div></blockquote>
 <div class="math notranslate nohighlight">
 \[S_N \sim \mathcal{N}(\mu, \frac{\sigma}{\sqrt{N}})\]</div>
-<p><strong>Q:</strong> Vary the variance of the reward distribution (as an argument to <code class="docutils literal notranslate"><span class="pre">get_reward</span></code>) and re-run the previous cell. Conclude.</p>
+<p><strong>Q:</strong> Vary the variance of the reward distribution (as an argument to <code class="docutils literal notranslate"><span class="pre">get_reward</span></code>) and re-run the previous experiment. Do not hesitate to take more samples.  Conclude.</p>
+</div>
+<div class="section" id="bandit-environment">
+<h2><span class="section-number">3.2.1.2. </span>Bandit environment<a class="headerlink" href="#bandit-environment" title="Permalink to this headline">¶</a></h2>
+<p>In order to prepare the next exercise, let’s now implement the n-armed bandit in a Python class. As reminded in the tutorial on Python, a class is defined using this structure:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">MyClass</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Documentation of the class.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">param1</span><span class="p">,</span> <span class="n">param2</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Constructor of the class.</span>
+<span class="sd">        </span>
+<span class="sd">        :param param1: first parameter.</span>
+<span class="sd">        :param param2: second parameter.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">param1</span> <span class="o">=</span> <span class="n">param1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">param2</span> <span class="o">=</span> <span class="n">param2</span>
+        
+    <span class="k">def</span> <span class="nf">method</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">another_param</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Method to do something.</span>
+<span class="sd">        </span>
+<span class="sd">        :param another_param: another parameter.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">another_param</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">param1</span><span class="p">)</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">param2</span>
+</pre></div>
+</div>
+<p>You can then create an object of the type <code class="docutils literal notranslate"><span class="pre">MyClass</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">my_object</span> <span class="o">=</span> <span class="n">MyClass</span><span class="p">(</span><span class="n">param1</span><span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span> <span class="n">param2</span><span class="o">=</span><span class="mf">2.0</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>and call any method of the class on the object:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">result</span> <span class="o">=</span> <span class="n">my_object</span><span class="o">.</span><span class="n">method</span><span class="p">(</span><span class="mf">3.0</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Q:</strong> Create a <code class="docutils literal notranslate"><span class="pre">Bandit</span></code> class taking as arguments:</p>
+<ul class="simple">
+<li><p>nb_actions: number of arms.</p></li>
+<li><p>mean: mean of the normal distribution for <span class="math notranslate nohighlight">\(Q^*\)</span>.</p></li>
+<li><p>std_Q: standard deviation of the normal distribution for <span class="math notranslate nohighlight">\(Q^*\)</span>.</p></li>
+<li><p>std_r: standard deviation of the normal distribution for the sampled rewards.</p></li>
+</ul>
+<p>The constructor should initialize a <code class="docutils literal notranslate"><span class="pre">Q_star</span></code> array accordingly and store it as an attribute. It should also store the optimal action.</p>
+<p>Add a method <code class="docutils literal notranslate"><span class="pre">step(action)</span></code> that samples a reward for a particular action and returns it.</p>
+<p><strong>Q:</strong> Create a 5-armed bandits and sample each action multiple times. Compare the mean reward to the ground truth as before.</p>
+</div>
 </div>
 
     <script type="text/x-thebe-config">
@@ -322,6 +407,8 @@
     
     <div class='prev-next-bottom'>
         
+    <a class='left-prev' id="prev-link" href="ex3-Sampling.html" title="previous page"><span class="section-number">3. </span>Sampling</a>
+    <a class='right-next' id="next-link" href="3-Sampling-solution.html" title="next page"><span class="section-number">3.2.2. </span>Sampling</a>
 
     </div>
     <footer class="footer mt-5 mt-md-0">
