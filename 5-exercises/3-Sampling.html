@@ -322,7 +322,7 @@
 <p><strong>Q:</strong> To better understand the influence of the number of samples on the accuracy of the sample average, create a <code class="docutils literal notranslate"><span class="pre">for</span></code> loop over the preceding code, with a number of samples increasing from 1 to 100. For each value, compute the <strong>mean square error</strong> (mse) between the estimates <code class="docutils literal notranslate"><span class="pre">Q_t</span></code> and the true values <code class="docutils literal notranslate"><span class="pre">Q^*</span></code>.</p>
 <p>The mean square error is simply defined over the <code class="docutils literal notranslate"><span class="pre">nb_actions</span></code> actions as:</p>
 <div class="math notranslate nohighlight">
-\[\epsilon = \frac{1}{N} \, \sum_{a=0}^\text{nb_actions-1} (Q_t(a) - Q^*(a))^2\]</div>
+\[\epsilon = \frac{1}{\text{nb_actions}} \, \sum_{a=0}^\text{nb_actions-1} (Q_t(a) - Q^*(a))^2\]</div>
 <p>At the end of the loop, plot the evolution of the mean square error with the number of samples. You can append each value of the mse in an empty list and then plot it with <code class="docutils literal notranslate"><span class="pre">plt.plot</span></code>, for example.</p>
 <p>The plot should give you an indication of how many samples you at least need to correctly estimate each action (30 or so). But according to the central limit theorem (CLT), the variance of the sample average also varies with the variance of the distribution itself.</p>
 <blockquote>
