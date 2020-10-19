@@ -10,7 +10,7 @@
 - part: Tabular RL
   chapters:
     - file: 2-tabular/1-Bandits
-    - file: 2-tabular/2-MDP
+    # - file: 2-tabular/2-MDP
 
 
 - part: Exercises
@@ -27,12 +27,12 @@
           title: Notebook
         - file: 5-exercises/2-Numpy-solution
           title: Solution
-    - file: 5-exercises/ex3-Sampling
-      sections:
-        - file: 5-exercises/3-Sampling
-          title: Notebook
-        - file: 5-exercises/3-Sampling-solution
-          title: Solution
+    # - file: 5-exercises/ex3-Sampling
+    #   sections:
+    #     - file: 5-exercises/3-Sampling
+    #       title: Notebook
+    #     - file: 5-exercises/3-Sampling-solution
+    #       title: Solution
 
 
 - part: References
