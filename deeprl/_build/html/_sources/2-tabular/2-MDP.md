@@ -7,6 +7,9 @@ Slides: [pdf](https://www.tu-chemnitz.de/informatik/KI/edu/deeprl/lectures/pdf/2
 
 ## From Finite State Machines to Markov Decision Process
 
+<div class='embed-container'><iframe src='https://www.youtube.com/embed/u8_DgEuqo3g' frameborder='0' allowfullscreen></iframe></div>
+
+
 The kind of task that can be solved by RL is called a **Markov Decision Process** (MDP). For a MDP, the environment is **fully observable**, i.e. the current state $s_t$ completely characterizes the process at time $t$. **Actions** $a_t$ provoke transitions between two states $s_t$ and $s_{t+1}$, according to **transition probabilities**. A **reward**  $r_{t+1}$ is (probabilistically) associated to each transition.
 
 ```{figure} ../img/rl-loop.png
@@ -376,6 +379,8 @@ $$
 
 ## Bellman equations
 
+<div class='embed-container'><iframe src='https://www.youtube.com/embed/1Z5sMSCEMRo' frameborder='0' allowfullscreen></iframe></div>
+
 ### Value Functions
 
 A central notion in RL is to estimate the **value** (or **utility**) of every state and action of the MDP. The value of a state $V^{\pi} (s)$ is the expected return when starting from that state and thereafter following the agent’s current policy $\pi$. 
@@ -409,10 +414,10 @@ $$
 State- and action-value functions are linked to each other. The value of a state $V^{\pi}(s)$ depends on the value $Q^{\pi} (s, a)$ of the action that will be chosen by the policy $\pi$ in $s$:
 
 $$
-        V^{\pi}(s) = Q^{\pi} (s, \pi(s)) = \sum_{a \in \mathcal{A}(s)} \pi(s, a) \, Q^{\pi} (s, a)
+        V^{\pi}(s) = \mathbb{E}_{a \sim \pi(s,a)} [Q^{\pi} (s, a)] = \sum_{a \in \mathcal{A}(s)} \pi(s, a) \, Q^{\pi} (s, a)
 $$
 
-If the policy $\pi$ is deterministic (the same action is chosen every time), the value of the state is the same as the value of that action (same expected return). If the policy $\pi$ is stochastic (actions are chosen with different probabilities), the value of the state is the weighted average of the value of the actions. If the Q-values are known, the V-values can be found easily.
+If the policy $\pi$ is deterministic (the same action is chosen every time), the value of the state is the same as the value of that action (same expected return). If the policy $\pi$ is stochastic (actions are chosen with different probabilities), the value of the state is the expectation (weighted average) of the value of the actions. If the Q-values are known, the V-values can be found easily.
 
 
 We can note that the return at time $t$ depends on the **immediate reward** $r_{t+1}$ and the return at the next time step $t+1$:
@@ -440,7 +445,7 @@ $$
 But that is only for a fixed $(s_t, a_t, s_{t+1})$ transition. Taking transition probabilities into account, one can obtain the Q-values when the V-values are known:
 
 $$
-        Q^{\pi}(s, a) = \sum_{s' \in \mathcal{S}} p(s' | s, a) \, [ r(s, a, s') + \gamma \, V^{\pi} (s') ]
+        Q^{\pi}(s, a) = \mathbb{E}_{s' \sim p(s'|s, a)} [ r(s, a, s') + \gamma \, V^{\pi} (s') ] = \sum_{s' \in \mathcal{S}} p(s' | s, a) \, [ r(s, a, s') + \gamma \, V^{\pi} (s') ]
 $$
 
 The value of an action depends on:
@@ -484,6 +489,8 @@ Backup diagrams of the Bellman equations. Left: the value of a state $s$ depends
 ```
 
 ## Bellman optimality equations
+
+<div class='embed-container'><iframe src='https://www.youtube.com/embed/mFucN5K351A' frameborder='0' allowfullscreen></iframe></div>
 
 ### Optimal policy
 
@@ -627,7 +634,7 @@ How much space and time do we need? A solution requires an exhaustive search, lo
 
 ```{figure} ../img/gpi-scheme.png
 ---
-width: 40%
+width: 30%
 ---
 Generalized Policy Iteration. Source: {cite}`Sutton1998`
 ```
