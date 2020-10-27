@@ -6,7 +6,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Sampling &#8212; Deep Reinforcement Learning</title>
+    <title>Bandits (part 1) &#8212; Deep Reinforcement Learning</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" integrity="sha384-KA6wR/X5RY4zFAHpv/CnoG2UW1uogYfdnP67Uv7eULvTveboZJg0qUpmJZb5VqzN" crossorigin="anonymous">
     <link href="../_static/css/index.css" rel="stylesheet">
     <link rel="stylesheet" href="../_static/sphinx-book-theme.css" type="text/css" />
@@ -37,7 +37,7 @@
         const thebe_selector_output = ".output"
     </script>
     <script async="async" src="../_static/sphinx-thebe.js"></script>
-    <link rel="canonical" href="https://julien-vitay.net/lecturenotes-deeprl/5-exercises/ex3-Sampling.html" />
+    <link rel="canonical" href="https://julien-vitay.net/lecturenotes-deeprl/5-exercises/ex4-Bandits.html" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
 
@@ -46,10 +46,10 @@
 
 
 <!-- Opengraph tags -->
-<meta property="og:url"         content="https://julien-vitay.net/lecturenotes-deeprl/5-exercises/ex3-Sampling.html" />
+<meta property="og:url"         content="https://julien-vitay.net/lecturenotes-deeprl/5-exercises/ex4-Bandits.html" />
 <meta property="og:type"        content="article" />
-<meta property="og:title"       content="Sampling" />
-<meta property="og:description" content="Sampling  The goal of this exercise is to understand how to sample rewards from a n-armed bandits and to understand the central limit theorem.  Presentation  &lt;d" />
+<meta property="og:title"       content="Bandits (part 1)" />
+<meta property="og:description" content="Bandits (part 1)" />
 <meta property="og:image"       content="https://julien-vitay.net/lecturenotes-deeprl/_static/tuc.svg" />
 
 <meta name="twitter:card" content="summary" />
@@ -192,7 +192,7 @@
         <!-- ipynb file if we had a myst markdown file -->
         
         <!-- Download raw file -->
-        <a class="dropdown-buttons" href="../_sources/5-exercises/ex3-Sampling.md"><button type="button"
+        <a class="dropdown-buttons" href="../_sources/5-exercises/ex4-Bandits.md"><button type="button"
                 class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
                 data-placement="left">.md</button></a>
         <!-- Download PDF via print -->
@@ -219,19 +219,7 @@
             <i class="fas fa-list"></i> Contents
         </div>
         <nav id="bd-toc-nav">
-            <ul class="nav section-nav flex-column">
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#presentation">
-   Presentation
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#commented-solution">
-   Commented solution
-  </a>
- </li>
-</ul>
-
+            
         </nav>
     </div>
 </div>
@@ -240,20 +228,8 @@
         
               <div>
                 
-  <div class="section" id="sampling">
-<h1>Sampling<a class="headerlink" href="#sampling" title="Permalink to this headline">¶</a></h1>
-<p>The goal of this exercise is to understand how to sample rewards from a n-armed bandits and to understand the central limit theorem.</p>
-<div class="section" id="presentation">
-<h2>Presentation<a class="headerlink" href="#presentation" title="Permalink to this headline">¶</a></h2>
-<div class="embed-container">
-  <iframe src="https://www.youtube.com/embed/PEsCxwjlTyU" frameborder="0" allowfullscreen></iframe>
-</div>
-</div>
-<div class="section" id="commented-solution">
-<h2>Commented solution<a class="headerlink" href="#commented-solution" title="Permalink to this headline">¶</a></h2>
-<div class="embed-container">
-  <iframe src="https://www.youtube.com/embed/E3fB4nyhoZ8" frameborder="0" allowfullscreen></iframe>
-</div></div>
+  <div class="section" id="bandits-part-1">
+<h1>Bandits (part 1)<a class="headerlink" href="#bandits-part-1" title="Permalink to this headline">¶</a></h1>
 </div>
 
     <script type="text/x-thebe-config">

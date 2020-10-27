@@ -1,0 +1,803 @@
+
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Monte-Carlo (MC) methods &#8212; Deep Reinforcement Learning</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" integrity="sha384-KA6wR/X5RY4zFAHpv/CnoG2UW1uogYfdnP67Uv7eULvTveboZJg0qUpmJZb5VqzN" crossorigin="anonymous">
+    <link href="../_static/css/index.css" rel="stylesheet">
+    <link rel="stylesheet" href="../_static/sphinx-book-theme.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/style.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-dropdown.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/sphinx-book-theme.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/togglebutton.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/sphinx-book-theme.js"></script>
+    <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processRefs": false, "processEnvironments": false}})</script>
+    <script async="async" src="https://unpkg.com/thebelab@latest/lib/index.js"></script>
+    <script >
+        const thebe_selector = ".thebe"
+        const thebe_selector_input = "pre"
+        const thebe_selector_output = ".output"
+    </script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <link rel="canonical" href="https://julien-vitay.net/lecturenotes-deeprl/2-tabular/2-MC.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="docsearch:language" content="en">
+
+
+<!-- Opengraph tags -->
+<meta property="og:url"         content="https://julien-vitay.net/lecturenotes-deeprl/2-tabular/2-MC.html" />
+<meta property="og:type"        content="article" />
+<meta property="og:title"       content="Monte-Carlo (MC) methods" />
+<meta property="og:description" content="Monte-Carlo (MC) methods  Monte-Carlo policy evaluation  The value of a state s) is defined as the mathematical expectation of the return obtained after that st" />
+<meta property="og:image"       content="https://julien-vitay.net/lecturenotes-deeprl/_static/tuc.svg" />
+
+<meta name="twitter:card" content="summary" />
+
+
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
+<a class="navbar-brand text-wrap" href="../index.html">
+  
+  <img src="../_static/tuc.svg" class="logo" alt="logo">
+  
+  
+  <h1 class="site-logo" id="site-title">Deep Reinforcement Learning</h1>
+  
+</a>
+</div>
+
+<form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form>
+
+<nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+  <ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../intro.html">
+   Deep Reinforcement Learning
+  </a>
+ </li>
+</ul>
+<p class="caption">
+ <span class="caption-text">
+  Introduction
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../1-intro/1-Introduction.html">
+   1. Introduction
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../1-intro/2-Math.html">
+   2. Math basics
+  </a>
+ </li>
+</ul>
+<p class="caption">
+ <span class="caption-text">
+  Tabular RL
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="1-Bandits.html">
+   1. Bandits
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="2-MDP.html">
+   2. Markov Decision Processes
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="3-DP.html">
+   3. Dynamic Programming
+  </a>
+ </li>
+</ul>
+<p class="caption">
+ <span class="caption-text">
+  Exercises
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../5-exercises/ex1-Python.html">
+   1. Introduction to Python
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../5-exercises/ex2-Numpy.html">
+   2. Numpy and Matplotlib
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../5-exercises/ex3-Sampling.html">
+   3. Sampling
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../5-exercises/ex4-Bandits.html">
+   4. Bandits (part 1)
+  </a>
+ </li>
+</ul>
+<p class="caption">
+ <span class="caption-text">
+  References
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../zreferences.html">
+   1. Bibliography
+  </a>
+ </li>
+</ul>
+
+</nav>
+
+ <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="row topbar fixed-top container-xl">
+    <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show">
+    </div>
+    <div class="col pl-2 topbar-main">
+        
+        <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+            data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+            aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+            title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+            <i class="fas fa-bars"></i>
+            <i class="fas fa-arrow-left"></i>
+            <i class="fas fa-arrow-up"></i>
+        </button>
+        
+        <div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="../_sources/2-tabular/2-MC.md"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.md</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+    
+</div>
+        <!-- Source interaction buttons -->
+
+
+        <!-- Full screen (wrap in <a> to have style consistency -->
+        <a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+                data-placement="bottom" onclick="toggleFullScreen()" title="Fullscreen mode"><i
+                    class="fas fa-expand"></i></button></a>
+
+        <!-- Launch buttons -->
+
+    </div>
+
+    <!-- Table of contents -->
+    <div class="d-none d-md-block col-md-2 bd-toc show">
+        <div class="tocsection onthispage pt-5 pb-3">
+            <i class="fas fa-list"></i> Contents
+        </div>
+        <nav id="bd-toc-nav">
+            <ul class="nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#monte-carlo-policy-evaluation">
+   Monte-Carlo policy evaluation
+  </a>
+ </li>
+</ul>
+
+        </nav>
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+        
+              <div>
+                
+  <div class="section" id="monte-carlo-mc-methods">
+<h1>Monte-Carlo (MC) methods<a class="headerlink" href="#monte-carlo-mc-methods" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="monte-carlo-policy-evaluation">
+<h2>Monte-Carlo policy evaluation<a class="headerlink" href="#monte-carlo-policy-evaluation" title="Permalink to this headline">¶</a></h2>
+<p>The value of a state <span class="math notranslate nohighlight">\(s) is defined as the mathematical expectation of the return obtained after that state and thereafter following the policy \)</span>\pi$:</p>
+<div class="math notranslate nohighlight">
+\[  V^{\pi} (s) = \mathbb{E}_{\rho_\pi} ( R_t | s_t = s) = \mathbb{E}_{\rho_\pi} ( \sum_{k=0}^{\infty} \gamma^k r_{t+k+1} | s_t = s ) \]</div>
+<p><strong>Monte-Carlo methods</strong> approximates this mathematical expectation by <strong>sampling</strong> <span class="math notranslate nohighlight">\(M\)</span> trajectories <span class="math notranslate nohighlight">\(\tau_i\)</span> starting from <span class="math notranslate nohighlight">\(s\)</span> and computing the sampling average of the obtained returns:</p>
+<div class="math notranslate nohighlight">
+\[
+    V^{\pi}(s) = \mathbb{E}_{\rho_\pi} (R_t | s_t = s) \approx \frac{1}{M} \sum_{i=1}^M R(\tau_i)
+\]</div>
+<p>If you have enough trajectories, the sampling average is an unbiased estimator of the value function. The advantage of Monte-Carlo methods is that they require only <strong>experience</strong>, not the complete dynamics <span class="math notranslate nohighlight">\(p(s' | s,a)\)</span> and <span class="math notranslate nohighlight">\(r(s, a, s')\)</span>.</p>
+<div class="admonition-monte-carlo-policy-evaluation admonition">
+<p class="admonition-title">Monte-Carlo policy evaluation</p>
+<p><strong>while</strong> True:</p>
+<ol class="simple">
+<li><p>Select an initial state <span class="math notranslate nohighlight">\(s_0\)</span>.</p></li>
+<li><p>Generate a sequence of actions according to the current policy <span class="math notranslate nohighlight">\(\pi\)</span> until a terminal state <span class="math notranslate nohighlight">\(s_T\)</span> is reached.</p></li>
+</ol>
+<div class="math notranslate nohighlight">
+\[
+    \tau = (s_o, a_o, r_ 1, s_1, a_1, \ldots, s_T)
+\]</div>
+<ol class="simple">
+<li><p>Compute the return <span class="math notranslate nohighlight">\(R_t = \sum_{k=0}^{\infty} \gamma^k r_{t+k+1}\)</span> for all encountered states <span class="math notranslate nohighlight">\(s_0, s_1, \ldots, s_T\)</span> and append it to a list of returns:</p></li>
+</ol>
+<div class="math notranslate nohighlight">
+\[
+    \text{Returns}(s_t) \leftarrow R_t
+\]</div>
+<ol class="simple">
+<li><p>Update the estimated value <span class="math notranslate nohighlight">\(V(s_t)\)</span> of all encountered state <span class="math notranslate nohighlight">\(s_t\)</span> as the average of the obtained returns since the beginning:</p></li>
+</ol>
+<div class="math notranslate nohighlight">
+\[
+    V(s_t) \leftarrow \text{Average}(\text{Returns}(s_t))
+\]</div>
+</div>
+<p><img alt="" src="2-tabular/img/running-average.jpg" /></p>
+<p>As in evaluative feedback, it may be expensive to store multiple returns for each state of the system and recompute the mean everytime. A simpler method to compute the mean is to maintain a <strong>running average</strong> of the obtained returns:</p>
+<div class="math notranslate nohighlight">
+\[
+    V(s_t) \leftarrow V(s_t) + \alpha \, (R_t - V(s_t))
+\]</div>
+<p>The new estimate is equal to the previous estimate plus a small part of the difference between the obtained return and the previous estimate. The running average tries to minimize the <strong>error</strong> between the current estimation and the obtained return. It uses a <strong>learning rate</strong> <span class="math notranslate nohighlight">\(0 &lt; \alpha &lt; 1\)</span>.</p>
+<div class="admonition-online-monte-carlo-policy-evaluation admonition">
+<p class="admonition-title">Online Monte-Carlo policy evaluation</p>
+<ul class="simple">
+<li><p>MC policy evaluation using running averages:</p></li>
+</ul>
+<p>[leftcol 15]</p>
+<p><img alt="" src="2-tabular/img/backup-MC.png" /></p>
+<p>[rightcol 85]</p>
+<ul>
+<li><p><strong>while</strong> True:</p>
+<ol class="simple">
+<li><p>Start from an initial state <span class="math notranslate nohighlight">\(s_0\)</span>.</p></li>
+<li><p>Generate a sequence of actions according to the current policy <span class="math notranslate nohighlight">\(\pi\)</span> until a terminal state <span class="math notranslate nohighlight">\(s_T\)</span> is reached.</p></li>
+</ol>
+<div class="math notranslate nohighlight">
+\[
+        \tau = (s_o, a_o, r_ 1, s_1, a_1, \ldots, s_T)
+    \]</div>
+<ol class="simple">
+<li><p>Compute the return <span class="math notranslate nohighlight">\(R_t = \sum_{k=0}^{\infty} \gamma^k r_{t+k+1}\)</span> for all encountered states <span class="math notranslate nohighlight">\(s_0, s_1, \ldots, s_T\)</span>.</p></li>
+<li><p>Update the estimated state value <span class="math notranslate nohighlight">\(V(s_t)\)</span> of all encountered states using the obtained return:</p></li>
+</ol>
+<div class="math notranslate nohighlight">
+\[
+        V(s_t) \leftarrow V(s_t) + \alpha \, (R_t - V(s_t))
+    \]</div>
+</li>
+</ul>
+</div>
+<p>The same method can be used to estimate Q-values.</p>
+<div class="admonition-monte-carlo-policy-evaluation-of-action-values admonition">
+<p class="admonition-title">Monte-Carlo policy evaluation of action values</p>
+<ul>
+<li><p><strong>while</strong> True:</p>
+<ol class="simple">
+<li><p>Start from an initial state <span class="math notranslate nohighlight">\(s_0\)</span>.</p></li>
+<li><p>Generate a sequence of actions according to the current policy <span class="math notranslate nohighlight">\(\pi\)</span> until a terminal state <span class="math notranslate nohighlight">\(s_T\)</span> is reached.</p></li>
+</ol>
+<div class="math notranslate nohighlight">
+\[
+        \tau = (s_o, a_o, r_ 1, s_1, a_1, \ldots, s_T)
+    \]</div>
+<ol class="simple">
+<li><p>Compute the return <span class="math notranslate nohighlight">\(R_t = \sum_{k=0}^{\infty} \gamma^k r_{t+k+1}\)</span> for all encountered state-action pairs <span class="math notranslate nohighlight">\((s_0, a_0), (s_1, a_1), \ldots, (s_{T-1}, a_{T-1})\)</span>.</p></li>
+<li><p>Update the estimated action value <span class="math notranslate nohighlight">\(Q(s_t, a_t)\)</span> of all encountered state-action pairs using the obtained return:</p></li>
+</ol>
+<div class="math notranslate nohighlight">
+\[
+        Q(s_t, a_t) = Q(s_t, a_t) + \alpha \, (R_t - Q(s_t, a_t))
+    \]</div>
+</li>
+</ul>
+</div>
+<p>There are much more values to estimate (one per state-action pair), but the policy will be easier to derive.</p>
+</div>
+</div>
+<div class="section" id="monte-carlo-policy-improvement">
+<h1>Monte-Carlo policy improvement<a class="headerlink" href="#monte-carlo-policy-improvement" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><p>After each episode, the state or action values of the visited <span class="math notranslate nohighlight">\((s, a)\)</span> pairs have changed, so the current policy might not be optimal anymore.</p></li>
+</ul>
+<p>[leftcol 30]</p>
+<p><img alt="" src="2-tabular/img/mc-control.png" /></p>
+<p>[rightcol 70]</p>
+<ul class="simple">
+<li><p>As in DP, the policy can then be improved in a greedy manner:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+        \pi'(s) &amp; = \text{argmax}_a Q(s, a)\\
+        &amp;\\
+        &amp; = \text{argmax}_a \sum_{s' \in \mathcal{S}} p(s'|s, a) \, [r(s, a, s') + \gamma \, V(s')] \\
+\end{aligned}
+\end{split}\]</div>
+<p>[endcol]</p>
+<ul class="simple">
+<li><p>Estimating the Q-values allows to act greedily, while estimating the V-values still requires the dynamics  <span class="math notranslate nohighlight">\(p(s' | s,a)\)</span> and <span class="math notranslate nohighlight">\(r(s, a, s')\)</span>.</p></li>
+</ul>
+</div>
+<div class="section" id="monte-carlo-control">
+<h1>Monte-Carlo control<a class="headerlink" href="#monte-carlo-control" title="Permalink to this headline">¶</a></h1>
+<ul>
+<li><p><strong>Monte-Carlo control</strong> alternates between <strong>MC policy evaluation</strong> and <strong>policy improvement</strong> until the optimal policy is found: generalized policy iteration (GPI).</p></li>
+<li><p><strong>while</strong> True:</p>
+<ol class="simple">
+<li><p>Select an initial state <span class="math notranslate nohighlight">\(s_0\)</span>.</p></li>
+<li><p>Generate a sequence of actions according to the current policy <span class="math notranslate nohighlight">\(\pi\)</span> until a terminal state <span class="math notranslate nohighlight">\(s_T\)</span> is reached.</p></li>
+</ol>
+<div class="math notranslate nohighlight">
+\[
+        \tau = (s_o, a_o, r_ 1, s_1, a_1, \ldots, s_T)
+    \]</div>
+<ol class="simple">
+<li><p>Compute the return <span class="math notranslate nohighlight">\(R_t = \sum_{k=0}^{\infty} \gamma^k r_{t+k+1}\)</span> of all encountered state-action pairs.</p></li>
+<li><p>Update the estimated action value <span class="math notranslate nohighlight">\(Q_k(s_t, a_t)\)</span> of all encountered state-action pairs:</p></li>
+</ol>
+<div class="math notranslate nohighlight">
+\[
+        Q(s_t, a_t) = Q(s_t, a_t) + \alpha \, (R_t - Q(s_t, a_t))
+    \]</div>
+<ol class="simple">
+<li><p>For each state <span class="math notranslate nohighlight">\(s_t\)</span> in the episode, <strong>improve</strong> the policy:</p></li>
+</ol>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+        \pi(s_t, a) = \begin{cases}
+                        1\; \text{if} \; a = \text{argmax} \, Q(s_t, a) \\
+                        0 \; \text{otherwise.} \\
+                      \end{cases}
+    \end{split}\]</div>
+</li>
+</ul>
+</div>
+<div class="section" id="how-to-generate-the-episodes">
+<h1>How to generate the episodes?<a class="headerlink" href="#how-to-generate-the-episodes" title="Permalink to this headline">¶</a></h1>
+<p><img alt="" src="2-tabular/img/exploration_vs_exploitation.png" />{width=50%}</p>
+<ul class="simple">
+<li><p>The problem with MC control is that we need a policy to generate the sample episodes, but it is that policy that we want to learn.</p></li>
+<li><p>We have the same <strong>exploration/exploitation</strong> problem as in bandits:</p>
+<ul>
+<li><p>If I trust my estimates too much (<strong>exploitation</strong>), I may miss more interesting solutions by keeping generating the same episodes.</p></li>
+<li><p>If I act randomly (<strong>exploration</strong>), I will find more interesting solutions, but I won’t keep doing them.</p></li>
+</ul>
+</li>
+</ul>
+<p>[citation Credit:<a class="reference external" href="http://ai.berkeley.edu/lecture_slides.html">http://ai.berkeley.edu/lecture_slides.html</a>]</p>
+</div>
+<div class="section" id="exploration-exploitation-dilemma">
+<h1>Exploration/Exploitation dilemma<a class="headerlink" href="#exploration-exploitation-dilemma" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><p><strong>Exploitation</strong> is using the current estimated values to select the greedy action:</p>
+<ul>
+<li><p>The estimated values represent how good we think an action is, so we have to use this value to update the policy.</p></li>
+</ul>
+</li>
+<li><p><strong>Exploration</strong> is executing non-greedy actions to try to reduce our uncertainty about the true values:</p>
+<ul>
+<li><p>The values are only estimates: they may be wrong so we can not trust them completely.</p></li>
+</ul>
+</li>
+<li><p>If you only <strong>exploit</strong> your estimates, you may miss interesting solutions.</p></li>
+<li><p>If you only <strong>explore</strong>, you do not use what you know: you act randomly and do not obtain as much reward as you could.</p></li>
+</ul>
+<p><span class="math notranslate nohighlight">\(\rightarrow\)</span> <strong>You can’t exploit all the time; you can’t explore all the time.</strong></p>
+<p><span class="math notranslate nohighlight">\(\rightarrow\)</span> You can never stop exploring; but you can reduce it if your performance is good enough.</p>
+<ul class="simple">
+<li><p>An easy solution to ensure exploration is to assume <strong>exploring starts</strong>, where every state-action pair has a non-zero probability to be selected as the start of an episode.</p></li>
+</ul>
+</div>
+<div class="section" id="stochastic-policies">
+<h1>Stochastic policies<a class="headerlink" href="#stochastic-policies" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><p><strong>Exploration</strong> can be ensured by forcing the learned policy to be <strong>stochastic</strong>, aka <strong><span class="math notranslate nohighlight">\(\epsilon\)</span>-soft</strong>.</p></li>
+</ul>
+<p>[leftcol]</p>
+<p><img alt="" src="2-tabular/img/epsilonggreedy-example.png" /></p>
+<ul class="simple">
+<li><p><strong><span class="math notranslate nohighlight">\(\epsilon\)</span>-Greedy action selection</strong> randomly selects non-greedy actions with a small probability <span class="math notranslate nohighlight">\(\epsilon\)</span>:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    \pi(s, a) = \begin{cases} 1 - \epsilon \; \text{if} \; a = \text{argmax}\, Q(s, a) \\ \frac{\epsilon}{|\mathcal{A}| - 1} \; \text{otherwise.} \end{cases}
+\end{split}\]</div>
+<p>[rightcol]</p>
+<p><img alt="" src="2-tabular/img/softmax-example.png" /></p>
+<ul class="simple">
+<li><p><strong>Softmax action selection</strong> uses a Gibbs (or Boltzmann) distribution to represent the probability of choosing the action <span class="math notranslate nohighlight">\(a\)</span> in state <span class="math notranslate nohighlight">\(s\)</span>:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[
+    \pi(s, a) = \frac{\exp Q(s, a) / \tau}{ \sum_b \exp Q(s, b) / \tau}
+\]</div>
+<p>[endcol]</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(\epsilon\)</span>-greedy choses non-greedy actions randomly, while softmax favors the best alternatives.</p></li>
+</ul>
+</div>
+<div class="section" id="on-policy-monte-carlo-control">
+<h1>On-policy Monte-Carlo control<a class="headerlink" href="#on-policy-monte-carlo-control" title="Permalink to this headline">¶</a></h1>
+<ul>
+<li><p>In <strong>on-policy</strong> control methods, the learned policy has to be <span class="math notranslate nohighlight">\(\epsilon\)</span>-soft, which means all actions have a probability of at least <span class="math notranslate nohighlight">\(\frac{\epsilon}{|\mathcal{A}|}\)</span> to be visited. <span class="math notranslate nohighlight">\(\epsilon\)</span>-greedy and softmax policies meet this criteria.</p></li>
+<li><p>Each sample episode is generated using this policy, which ensures exploration, while the control method still converges towards the optimal <span class="math notranslate nohighlight">\(\epsilon\)</span>-policy.</p></li>
+<li><p><strong>while</strong> True:</p>
+<ol class="simple">
+<li><p>Generate an episode <span class="math notranslate nohighlight">\(\tau = (s_0, a_0, r_1, \ldots, s_T)\)</span> using the current <strong>stochastic</strong> policy <span class="math notranslate nohighlight">\(\pi\)</span>.</p></li>
+<li><p>For each state-action pair <span class="math notranslate nohighlight">\((s_t, a_t)\)</span> in the episode, update the estimated Q-value:</p></li>
+</ol>
+<div class="math notranslate nohighlight">
+\[
+        Q(s_t, a_t) = Q(s_t, a_t) + \alpha \, (R_t - Q(s_t, a_t))
+    \]</div>
+<ol class="simple">
+<li><p>For each state <span class="math notranslate nohighlight">\(s_t\)</span> in the episode, improve the policy (e.g. <span class="math notranslate nohighlight">\(\epsilon\)</span>-greedy):</p></li>
+</ol>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+        \pi(s_t, a) = \begin{cases}
+                        1 - \epsilon \; \text{if} \; a = \text{argmax}\, Q(s, a) \\
+                        \frac{\epsilon}{|\mathcal{A(s_t)}-1|} \; \text{otherwise.} \\
+                      \end{cases}
+    \end{split}\]</div>
+</li>
+</ul>
+</div>
+<div class="section" id="off-policy-monte-carlo-control">
+<h1>Off-policy Monte-Carlo control<a class="headerlink" href="#off-policy-monte-carlo-control" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><p>Another option to ensure exploration is to generate the sample episodes using a policy <span class="math notranslate nohighlight">\(b(s, a)\)</span> different from the current policy <span class="math notranslate nohighlight">\(\pi(s, a)\)</span> of the agent.</p></li>
+<li><p>The <strong>behavior policy</strong> <span class="math notranslate nohighlight">\(b(s, a)\)</span> used to generate the episodes is only required to select at least occasionally the same actions as the <strong>learned policy</strong> <span class="math notranslate nohighlight">\(\pi(s, a)\)</span> (coverage assumption).</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[ \pi(s,a) &gt; 0 \Rightarrow b(s,a) &gt; 0\]</div>
+<ul class="simple">
+<li><p>An <span class="math notranslate nohighlight">\(\epsilon\)</span>-greedy behavior policy over the Q-values is often enough, while a deterministic (greedy) policy can be learned.</p></li>
+<li><p>The behavior policy could also come from <strong>expert knowledge</strong>, i.e. known episodes from the MDP generaed by somebody else.</p></li>
+</ul>
+</div>
+<div class="section" id="applications-of-rl-process-control">
+<h1>Applications of RL: process control<a class="headerlink" href="#applications-of-rl-process-control" title="Permalink to this headline">¶</a></h1>
+<p>[leftcol 40]</p>
+<p><img alt="" src="2-tabular/img/googledatacenterpipes.0.jpg" /></p>
+<p>[rightcol 60]</p>
+<p><img alt="" src="2-tabular/img/googledatacenter_1.png" /></p>
+<p>[endcol]</p>
+<ul class="simple">
+<li><p>40% reduction of energy consumption when using deep RL to control the cooling of Google’s datacenters.</p></li>
+<li><p>The RL algorithm learned passively from the <strong>behavior policy</strong> (expert decisions) what the optimal policy should be.</p></li>
+</ul>
+<p>[citation Source: <a class="reference external" href="https://deepmind.com/blog/deepmind-ai-reduces-google-data-centre-cooling-bill-40/">https://deepmind.com/blog/deepmind-ai-reduces-google-data-centre-cooling-bill-40/</a>]</p>
+</div>
+<div class="section" id="importance-sampling">
+<h1>Importance sampling<a class="headerlink" href="#importance-sampling" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><p>But are we mathematically allowed to do this?</p></li>
+<li><p>We search for the optimal policy that maximizes in expectation the return of each <strong>trajectory</strong> (episode) possible under the learned policy <span class="math notranslate nohighlight">\(\pi\)</span>:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[\mathcal{J}(\pi) = \mathbb{E}_{\tau \sim \rho_\pi} [R(\tau)]\]</div>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(\rho_\pi\)</span> denotes the probability distribution of trajectories achievable using the policy <span class="math notranslate nohighlight">\(\pi\)</span>.</p></li>
+<li><p>If we generate the trajectories from the behavior policy <span class="math notranslate nohighlight">\(b(s, a)\)</span>, we end up maximizing something else:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[\mathcal{J}'(\pi) = \mathbb{E}_{\tau \sim \rho_b} [R(\tau)]\]</div>
+<ul class="simple">
+<li><p>The policy that maximizes <span class="math notranslate nohighlight">\(\mathcal{J}'(\pi)\)</span> is <strong>not</strong> the optimal policy of the MDP.</p></li>
+</ul>
+</div>
+<div class="section" id="id1">
+<h1>Importance sampling<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
+<p><img alt="" src="2-tabular/img/importancesampling.svg" /></p>
+<ul class="simple">
+<li><p>If you try to estimate a parameter of a random distribution <span class="math notranslate nohighlight">\(\pi\)</span> using samples of another distribution <span class="math notranslate nohighlight">\(b\)</span>, the sample average will have a strong <strong>bias</strong>.</p></li>
+<li><p>We need to <strong>correct</strong> the samples from <span class="math notranslate nohighlight">\(b\)</span> in order to be able to estimate the parameters of <span class="math notranslate nohighlight">\(\pi\)</span> correctly:</p>
+<ul>
+<li><p><strong>importance sampling</strong> (IS).</p></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="id2">
+<h1>Importance sampling<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><p>We want to estimate the expected return of the trajectories generated by the policy <span class="math notranslate nohighlight">\(\pi\)</span>:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[\mathcal{J}(\pi) = \mathbb{E}_{\tau \sim \rho_\pi} [R(\tau)]\]</div>
+<ul class="simple">
+<li><p>We start by using the definition of the mathematical expectation:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[\mathcal{J}(\pi) = \int_\tau \rho_\pi(\tau) \, R(\tau) \, d\tau\]</div>
+<ul class="simple">
+<li><p>The expectation is the integral over all possible trajectories of their return <span class="math notranslate nohighlight">\(R(\tau\)</span>), weighted by the likelihood <span class="math notranslate nohighlight">\(\rho_\pi(\tau)\)</span> that a trajectory <span class="math notranslate nohighlight">\(\tau\)</span> is generated by the policy <span class="math notranslate nohighlight">\(\pi\)</span>.</p></li>
+</ul>
+<p><img alt="" src="2-tabular/img/importancesampling2.svg" />{width=40%}</p>
+</div>
+<div class="section" id="id3">
+<h1>Importance sampling<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><p>The trick is to introduce the behavior policy <span class="math notranslate nohighlight">\(b\)</span> in what we want to estimate:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[\mathcal{J}(\pi) = \int_\tau \frac{\rho_b(\tau)}{\rho_b(\tau)} \, \rho_\pi(\tau) \, R(\tau) \, d\tau\]</div>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(\rho_b(\tau)\)</span> is the likelihood that a trajectory <span class="math notranslate nohighlight">\(\tau\)</span> is generated by the behavior policy <span class="math notranslate nohighlight">\(b\)</span>.</p></li>
+<li><p>We shuffle a bit the terms:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[\mathcal{J}(\pi) = \int_\tau \rho_b(\tau) \, \frac{\rho_\pi(\tau)}{\rho_b(\tau)} \,  R(\tau) \, d\tau\]</div>
+<p>and notice that it has the form of an expectation over trajectories generated by <span class="math notranslate nohighlight">\(b\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[\mathcal{J}(\pi) = \mathbb{E}_{\tau \sim \rho_b} [\frac{\rho_\pi(\tau)}{\rho_b(\tau)} \, R(\tau)]\]</div>
+<ul class="simple">
+<li><p>This means that we can sample trajectories from <span class="math notranslate nohighlight">\(b\)</span>, but we need to <strong>correct</strong> the observed return by the <strong>importance sampling weight</strong> <span class="math notranslate nohighlight">\(\frac{\rho_\pi(\tau)}{\rho_b(\tau)}\)</span>.</p></li>
+</ul>
+</div>
+<div class="section" id="id4">
+<h1>Importance sampling<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><p>The importance sampling weight corrects the mismatch between <span class="math notranslate nohighlight">\(\pi\)</span> and <span class="math notranslate nohighlight">\(b\)</span>.</p></li>
+</ul>
+<p><img alt="" src="2-tabular/img/importancesampling3.svg" />{width=70%}</p>
+<ul class="simple">
+<li><p>If the two distributions are the same (on-policy), the IS weight is 1, no need to correct the return.</p></li>
+<li><p>If a sample is likely under <span class="math notranslate nohighlight">\(b\)</span> but not under <span class="math notranslate nohighlight">\(\pi\)</span>, we should not care about its return: <span class="math notranslate nohighlight">\(\frac{\rho_\pi(\tau)}{\rho_b(\tau)} &lt;&lt; 1\)</span></p></li>
+<li><p>If a sample is likely under <span class="math notranslate nohighlight">\(\pi\)</span> but not much under <span class="math notranslate nohighlight">\(b\)</span>, we increase its importance in estimating the return: <span class="math notranslate nohighlight">\(\frac{\rho_\pi(\tau)}{\rho_b(\tau)} &gt;&gt; 1\)</span></p></li>
+<li><p>The sampling average of the corrected samples will be closer from the true estimate (unbiased).</p></li>
+</ul>
+</div>
+<div class="section" id="id5">
+<h1>Importance sampling<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><p>Great, but how do we compute these probability distributions <span class="math notranslate nohighlight">\(\rho_\pi(\tau)\)</span> and <span class="math notranslate nohighlight">\(\rho_b(\tau)\)</span> for a trajectory <span class="math notranslate nohighlight">\(\tau\)</span>?</p></li>
+</ul>
+<p><img alt="" src="2-tabular/img/importancesampling2.svg" />{width=30%}</p>
+<ul class="simple">
+<li><p>A trajectory <span class="math notranslate nohighlight">\(\tau\)</span> is a sequence of state-action transitions <span class="math notranslate nohighlight">\((s_0, a_0, s_1, a_1, \ldots, s_T)\)</span> whose probability depends on:</p>
+<ul>
+<li><p>the probability of choosing an action <span class="math notranslate nohighlight">\(a_t\)</span> in state <span class="math notranslate nohighlight">\(s_t\)</span>: the <strong>policy</strong> <span class="math notranslate nohighlight">\(\pi(s, a)\)</span>.</p></li>
+<li><p>the probability of arriving in the state <span class="math notranslate nohighlight">\(s_{t+1}\)</span> from the state <span class="math notranslate nohighlight">\(s_t\)</span> with the action <span class="math notranslate nohighlight">\(a_t\)</span>: the <strong>transition probability</strong> <span class="math notranslate nohighlight">\(p(s_{t+1} | s_t, a_t)\)</span>.</p></li>
+</ul>
+</li>
+</ul>
+<p><img alt="" src="2-tabular/img/rl-sequence.jpg" />{width=60%}</p>
+</div>
+<div class="section" id="id6">
+<h1>Importance sampling<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><p>The <strong>likelihood</strong> of a trajectory <span class="math notranslate nohighlight">\(\tau = (s_0, a_0, s_1, a_1, \ldots, s_T)\)</span> under a policy <span class="math notranslate nohighlight">\(\pi\)</span> depends on the policy and the transition probabilities (Markov property):</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[
+    \rho_\pi(\tau) = p_\pi(s_0, a_0, s_1, a_1, \ldots, s_T) = p(s_0) \, \prod_{t=0}^{T-1} \pi_\theta(s_t, a_t) \, p(s_{t+1} | s_t, a_t)
+\]</div>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(p(s_0)\)</span> is the probability of starting an episode in <span class="math notranslate nohighlight">\(s_0\)</span>, we do not have control over it.</p></li>
+<li><p>What is interesting is that the transition probabilities disappear when calculating the <strong>importance sampling weight</strong>:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[
+    \rho_{0:T-1} = \frac{\rho_\pi(\tau)}{\rho_b(\tau)} = \frac{p_0 (s_0) \, \prod_{t=0}^{T-1} \pi(s_t, a_t) p(s_{t+1} | s_t, a_t)}{p_0 (s_0) \, \prod_{t=0}^T b(s_t, a_t) p(s_{t+1} | s_t, a_t)} = \frac{\prod_{t=0}^{T-1} \pi(s_t, a_t)}{\prod_{t=0}^T b(s_t, a_t)} = \prod_{t=0}^{T-1} \frac{\pi(s_t, a_t)}{b(s_t, a_t)}
+\]</div>
+<ul class="simple">
+<li><p>The importance sampling weight is simply the product over the length of the episode of the ratio between <span class="math notranslate nohighlight">\(\pi(s_t, a_t)\)</span> and <span class="math notranslate nohighlight">\(b(s_t, a_t)\)</span>.</p></li>
+</ul>
+</div>
+<div class="section" id="id7">
+<h1>Off-policy Monte-Carlo control<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><p>In <strong>off-policy MC control</strong>, we generate episodes using the behavior policy <span class="math notranslate nohighlight">\(b\)</span> and update <strong>greedily</strong> the learned policy <span class="math notranslate nohighlight">\(\pi\)</span>.</p></li>
+<li><p>For the state <span class="math notranslate nohighlight">\(s_t\)</span>, the obtained returns just need to be weighted by the relative probability of occurrence of the <strong>rest of the episode</strong> following the policies <span class="math notranslate nohighlight">\(\pi\)</span> and <span class="math notranslate nohighlight">\(b\)</span>:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[\rho_{t:T-1} = \prod_{k=t}^{T-1} \frac{\pi(s_k, a_k)}{b(s_k, a_k)}\]</div>
+<ul class="simple">
+<li><p>This gives us the updates:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[
+    V(s_t) = V(s_t) + \alpha  \, \rho_{t:T-1} \, (R_t - V(s_t))
+\]</div>
+<p>and:</p>
+<div class="math notranslate nohighlight">
+\[
+    Q(s_t, a_t) = Q(s_t, a_t) + \alpha  \, \rho_{t:T-1} \, (R_t - Q(s_t, a_t))
+\]</div>
+<ul class="simple">
+<li><p>Unlikely episodes under <span class="math notranslate nohighlight">\(\pi\)</span> are barely used for learning, likely ones are used a lot.</p></li>
+</ul>
+</div>
+<div class="section" id="id8">
+<h1>Off-policy Monte-Carlo control<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h1>
+<ul>
+<li><p><strong>while</strong> True:</p>
+<ol class="simple">
+<li><p>Generate an episode <span class="math notranslate nohighlight">\(\tau = (s_0, a_0, r_1, \ldots, s_T)\)</span> using the <strong>behavior</strong> policy <span class="math notranslate nohighlight">\(b\)</span>.</p></li>
+<li><p>For each state-action pair <span class="math notranslate nohighlight">\((s_t, a_t)\)</span> in the episode, update the estimated Q-value:</p></li>
+</ol>
+<div class="math notranslate nohighlight">
+\[\rho_{t:T-1} = \prod_{k=t}^{T-1} \frac{\pi(s_k, a_k)}{b(s_k, a_k)}\]</div>
+<div class="math notranslate nohighlight">
+\[
+        Q(s_t, a_t) = Q(s_t, a_t) + \alpha  \, \rho_{t:T-1} \, (R_t - Q(s_t, a_t))
+    \]</div>
+<ol class="simple">
+<li><p>For each state <span class="math notranslate nohighlight">\(s_t\)</span> in the episode, update the <strong>learned</strong> deterministic policy (greedy):</p></li>
+</ol>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+        \pi(s_t, a) = \begin{cases}
+                        1\; \text{if} \; a = \text{argmax} \, Q(s_t, a) \\
+                        0 \; \text{otherwise.} \\
+                      \end{cases}
+    \end{split}\]</div>
+</li>
+</ul>
+</div>
+<div class="section" id="id9">
+<h1>Off-policy Monte-Carlo control<a class="headerlink" href="#id9" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><p><strong>Problem 1:</strong> if the learned policy is greedy, the IS weight becomes quickly 0 for a non-greedy action <span class="math notranslate nohighlight">\(a_t\)</span>:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[\pi(s_t, a_t) = 0 \rightarrow \rho_{0:T-1} = \prod_{k=0}^{T-1} \frac{\pi(s_k, a_k)}{b(s_k, a_k)} = 0\]</div>
+<p>Off-policy MC control only learns from the last greedy actions, what is slow at the beginning.</p>
+<p><strong>Solution:</strong> <span class="math notranslate nohighlight">\(\pi\)</span> and <span class="math notranslate nohighlight">\(b\)</span> should not be very different. Usually <span class="math notranslate nohighlight">\(\pi\)</span> is greedy and <span class="math notranslate nohighlight">\(b\)</span> is a softmax (or <span class="math notranslate nohighlight">\(\epsilon\)</span>-greedy) over it.</p>
+<ul class="simple">
+<li><p><strong>Problem 2:</strong> if the learned policy is stochastic, the IS weights can quickly <strong>vanish</strong> to 0 or <strong>explode</strong> to infinity:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[\rho_{t:T-1} = \prod_{k=t}^{T-1} \frac{\pi(s_k, a_k)}{b(s_k, a_k)}\]</div>
+<p>If <span class="math notranslate nohighlight">\(\frac{\pi(s_k, a_k)}{b(s_k, a_k)}\)</span> is smaller than 1, the products go to 0. If it is bigger than 1, it grows to infinity.</p>
+<p><strong>Solution:</strong> one can normalize the IS weight between different episodes (see Sutton and Barto) or <strong>clip</strong> it (e.g. restrict it to [0.9, 1.1], see PPO later in this course).</p>
+</div>
+<div class="section" id="id10">
+<h1>Off-policy Monte-Carlo control<a class="headerlink" href="#id10" title="Permalink to this headline">¶</a></h1>
+<p><img alt="" src="2-tabular/img/offpolicy-MC.png" />{width=70%}</p>
+</div>
+<div class="section" id="advantages-of-off-policy-methods">
+<h1>Advantages of off-policy methods<a class="headerlink" href="#advantages-of-off-policy-methods" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><p>The main advantage of <strong>off-policy</strong> strategies is that you can learn from other’s actions, you don’t have to rely on your initially wrong policies to discover the solution by chance.</p></li>
+<li><p>Example: learning to play chess by studying thousands/millions of plays by chess masters.</p></li>
+<li><p>In a given state, only a subset of the possible actions are actually executed by experts: the others may be too obviously wrong.</p></li>
+<li><p>The exploration is then guided by this expert knowledge, not randomly among all possible actions.</p></li>
+<li><p>Off-policy methods greatly reduce the number of transitions needed to learn a policy: very stupid actions are not even considered, but the estimation policy learns an optimal strategy from the “classical” moves.</p></li>
+<li><p>Drawback: if a good move is not explored by the behavior policy, the learned policy will never try it.</p></li>
+</ul>
+</div>
+<div class="section" id="properties-of-monte-carlo-methods">
+<h1>Properties of Monte-Carlo methods<a class="headerlink" href="#properties-of-monte-carlo-methods" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><p>Monte-Carlo evaluation estimates value functions via <strong>sampling</strong> of entire episodes.</p></li>
+<li><p>Monte-Carlo control (evaluation-improvement) is a generalized policy iteration method.</p></li>
+<li><p>MC is <strong>model-free</strong>: you do not need to know <span class="math notranslate nohighlight">\(p(s' | s, a)\)</span> to learn the optimal policy, you just sample.</p></li>
+<li><p>MC only applies to <strong>episodic tasks</strong>: as you learn at the end of an episode, it is not possible to learn continuing tasks.</p></li>
+<li><p>MC suffers from the <strong>exploration-exploitation</strong> problem:</p>
+<ul>
+<li><p><strong>on-policy</strong> MC learns a stochastic policy (<span class="math notranslate nohighlight">\(\epsilon\)</span>-greedy, softmax) to ensure exploration.</p></li>
+<li><p><strong>off-policy</strong> MC learns a greedy policy, but explores via a behavior policy (importance sampling).</p></li>
+</ul>
+</li>
+<li><p>Monte-Carlo methods have:</p>
+<ul>
+<li><p>a <strong>small bias</strong>: with enough sampled episodes, the estimated values converge to the true values.</p></li>
+<li><p>a <strong>huge variance</strong>: the slightest change of the policy can completely change the episode and its return. You will need a lot of samples to form correct estimates: <strong>sample complexity</strong>.</p></li>
+</ul>
+</li>
+</ul>
+</div>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./2-tabular"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+        </div>
+    </div>
+    
+    
+    <div class='prev-next-bottom'>
+        
+
+    </div>
+    <footer class="footer mt-5 mt-md-0">
+    <div class="container">
+      <p>
+        
+          By Julien Vitay - julien.vitay@informatik.tu-chemnitz.de<br/>
+        
+            &copy; Copyright 2020.<br/>
+          <div class="extra_footer">
+            Technische Universität Chemnitz - Faculty of Computer Science - Professorship for Artificial Intelligence
+          </div>
+      </p>
+    </div>
+  </footer>
+</main>
+
+
+      </div>
+    </div>
+
+    <script src="../_static/js/index.js"></script>
+    
+  </body>
+</html>
