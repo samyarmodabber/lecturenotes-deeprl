@@ -6,7 +6,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Dynamic Programming &#8212; Deep Reinforcement Learning</title>
+    <title>3. Dynamic Programming &#8212; Deep Reinforcement Learning</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" integrity="sha384-KA6wR/X5RY4zFAHpv/CnoG2UW1uogYfdnP67Uv7eULvTveboZJg0qUpmJZb5VqzN" crossorigin="anonymous">
     <link href="../_static/css/index.css" rel="stylesheet">
     <link rel="stylesheet" href="../_static/sphinx-book-theme.css" type="text/css" />
@@ -40,6 +40,8 @@
     <link rel="canonical" href="https://julien-vitay.net/lecturenotes-deeprl/2-tabular/3-DP.html" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="4. Monte-Carlo (MC) methods" href="4-MC.html" />
+    <link rel="prev" title="2. Markov Decision Processes" href="2-MDP.html" />
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="docsearch:language" content="en">
@@ -110,7 +112,7 @@
   Tabular RL
  </span>
 </p>
-<ul class="nav sidenav_l1">
+<ul class="current nav sidenav_l1">
  <li class="toctree-l1">
   <a class="reference internal" href="1-Bandits.html">
    1. Bandits
@@ -119,6 +121,16 @@
  <li class="toctree-l1">
   <a class="reference internal" href="2-MDP.html">
    2. Markov Decision Processes
+  </a>
+ </li>
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   3. Dynamic Programming
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="4-MC.html">
+   4. Monte-Carlo (MC) methods
   </a>
  </li>
 </ul>
@@ -136,6 +148,16 @@
  <li class="toctree-l1">
   <a class="reference internal" href="../5-exercises/ex2-Numpy.html">
    2. Numpy and Matplotlib
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../5-exercises/ex3-Sampling.html">
+   3. Sampling
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../5-exercises/ex4-Bandits.html">
+   4. Bandits (part 1)
   </a>
  </li>
 </ul>
@@ -222,54 +244,54 @@
             <ul class="nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#policy-iteration">
-   Policy iteration
+   3.1. Policy iteration
   </a>
   <ul class="nav section-nav flex-column">
    <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#policy-evaluation">
-     Policy evaluation
+     3.1.1. Policy evaluation
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#iterative-policy-evaluation">
-     Iterative policy evaluation
+     3.1.2. Iterative policy evaluation
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#policy-improvement">
-     Policy improvement
+     3.1.3. Policy improvement
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#id2">
-     Policy iteration
+     3.1.4. Policy iteration
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#gridworld-example">
-     Gridworld example
+     3.1.5. Gridworld example
     </a>
    </li>
   </ul>
  </li>
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#value-iteration">
-   Value iteration
+   3.2. Value iteration
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#comparison-of-policy-and-value-iteration">
-   Comparison of Policy- and Value-iteration
+   3.3. Comparison of Policy- and Value-iteration
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#asynchronous-dynamic-programming">
-   Asynchronous dynamic programming
+   3.4. Asynchronous dynamic programming
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#curse-of-dimensionality">
-   Curse of dimensionality
+   3.5. Curse of dimensionality
   </a>
  </li>
 </ul>
@@ -283,10 +305,10 @@
               <div>
                 
   <div class="section" id="dynamic-programming">
-<h1>Dynamic Programming<a class="headerlink" href="#dynamic-programming" title="Permalink to this headline">¶</a></h1>
+<h1><span class="section-number">3. </span>Dynamic Programming<a class="headerlink" href="#dynamic-programming" title="Permalink to this headline">¶</a></h1>
 <div class="figure align-default" id="id3">
 <a class="reference internal image-reference" href="../_images/gpi-scheme.png"><img alt="../_images/gpi-scheme.png" src="../_images/gpi-scheme.png" style="width: 30%;" /></a>
-<p class="caption"><span class="caption-text">Generalized Policy Iteration. Source: <a class="bibtex reference internal" href="../zreferences.html#sutton1998" id="id1">[SB98]</a></span><a class="headerlink" href="#id3" title="Permalink to this image">¶</a></p>
+<p class="caption"><span class="caption-number">Fig. 3.1 </span><span class="caption-text">Generalized Policy Iteration. Source: <a class="bibtex reference internal" href="../zreferences.html#sutton1998" id="id1">[SB98]</a></span><a class="headerlink" href="#id3" title="Permalink to this image">¶</a></p>
 </div>
 <p>Dynamic Programming (DP) belongs to Generalized Policy Iteration (GPI) family as it iterates over two steps:</p>
 <ol>
@@ -307,9 +329,9 @@
 </ol>
 <p>After enough iterations, the policy converges to the <strong>optimal policy</strong> (if the states are Markov).</p>
 <div class="section" id="policy-iteration">
-<h2>Policy iteration<a class="headerlink" href="#policy-iteration" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">3.1. </span>Policy iteration<a class="headerlink" href="#policy-iteration" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="policy-evaluation">
-<h3>Policy evaluation<a class="headerlink" href="#policy-evaluation" title="Permalink to this headline">¶</a></h3>
+<h3><span class="section-number">3.1.1. </span>Policy evaluation<a class="headerlink" href="#policy-evaluation" title="Permalink to this headline">¶</a></h3>
 <p>Remember the Bellman equation for the state <span class="math notranslate nohighlight">\(s\)</span> and a fixed policy <span class="math notranslate nohighlight">\(\pi\)</span>:</p>
 <div class="math notranslate nohighlight">
 \[
@@ -401,7 +423,7 @@
 <p>Done! <strong>But</strong>, if we have <span class="math notranslate nohighlight">\(n\)</span> states, the matrix <span class="math notranslate nohighlight">\(\mathcal{P}^\pi\)</span> has <span class="math notranslate nohighlight">\(n^2\)</span> elements. Inverting <span class="math notranslate nohighlight">\(\mathbb{I} - \gamma \, \mathcal{P}^\pi\)</span> requires at least <span class="math notranslate nohighlight">\(\mathcal{O}(n^{2.37})\)</span> operations. Forget it if you have more than a thousand states (<span class="math notranslate nohighlight">\(1000^{2.37} \approx 13\)</span> million operations). In dynamic programming, we will therefore use <strong>iterative methods</strong> to estimate <span class="math notranslate nohighlight">\(\mathbf{V}^\pi\)</span> with (hopefully) less operations.</p>
 </div>
 <div class="section" id="iterative-policy-evaluation">
-<h3>Iterative policy evaluation<a class="headerlink" href="#iterative-policy-evaluation" title="Permalink to this headline">¶</a></h3>
+<h3><span class="section-number">3.1.2. </span>Iterative policy evaluation<a class="headerlink" href="#iterative-policy-evaluation" title="Permalink to this headline">¶</a></h3>
 <p>The idea of <strong>iterative policy evaluation</strong> (IPE) is to consider a sequence of consecutive state-value functions which should converge from initially wrong estimates <span class="math notranslate nohighlight">\(V_0(s)\)</span> towards the real state-value function <span class="math notranslate nohighlight">\(V^{\pi}(s)\)</span>.</p>
 <div class="math notranslate nohighlight">
 \[
@@ -409,7 +431,7 @@
 \]</div>
 <div class="figure align-default" id="id4">
 <a class="reference internal image-reference" href="../_images/iterativepolicyevaluation2.png"><img alt="../_images/iterativepolicyevaluation2.png" src="../_images/iterativepolicyevaluation2.png" style="width: 80%;" /></a>
-<p class="caption"><span class="caption-text">Backup diagram of iterative policy evaluation. Credit: David Silver.</span><a class="headerlink" href="#id4" title="Permalink to this image">¶</a></p>
+<p class="caption"><span class="caption-number">Fig. 3.2 </span><span class="caption-text">Backup diagram of iterative policy evaluation. Credit: David Silver.</span><a class="headerlink" href="#id4" title="Permalink to this image">¶</a></p>
 </div>
 <p>The value function at step <span class="math notranslate nohighlight">\(k+1\)</span> <span class="math notranslate nohighlight">\(V_{k+1}(s)\)</span> is computed using the previous estimates <span class="math notranslate nohighlight">\(V_{k}(s)\)</span> and the Bellman equation transformed into an <strong>update rule</strong>. In vector notation:</p>
 <div class="math notranslate nohighlight">
@@ -483,7 +505,7 @@
 </div>
 </div>
 <div class="section" id="policy-improvement">
-<h3>Policy improvement<a class="headerlink" href="#policy-improvement" title="Permalink to this headline">¶</a></h3>
+<h3><span class="section-number">3.1.3. </span>Policy improvement<a class="headerlink" href="#policy-improvement" title="Permalink to this headline">¶</a></h3>
 <p>The goal of finding the value function for a given policy <span class="math notranslate nohighlight">\(\pi\)</span> is to help improving this policy. For each state <span class="math notranslate nohighlight">\(s\)</span>, we would like to know if we should deterministically choose an action <span class="math notranslate nohighlight">\(a \neq \pi(s)\)</span> or not in order to improve the policy.</p>
 <p>The value of an action <span class="math notranslate nohighlight">\(a\)</span> in the state <span class="math notranslate nohighlight">\(s\)</span> for the policy <span class="math notranslate nohighlight">\(\pi\)</span> is given by:</p>
 <div class="math notranslate nohighlight">
@@ -514,7 +536,7 @@
 </div>
 </div>
 <div class="section" id="id2">
-<h3>Policy iteration<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<h3><span class="section-number">3.1.4. </span>Policy iteration<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
 <p>Once a policy <span class="math notranslate nohighlight">\(\pi\)</span> has been improved using <span class="math notranslate nohighlight">\(V^{\pi}\)</span> to yield a better policy <span class="math notranslate nohighlight">\(\pi'\)</span>, we can then compute <span class="math notranslate nohighlight">\(V^{\pi'}\)</span> and improve it again to yield an even better policy <span class="math notranslate nohighlight">\(\pi''\)</span>.</p>
 <p>The algorithm <strong>policy iteration</strong> successively uses <strong>policy evaluation</strong> and <strong>policy improvement</strong> to find the optimal policy.</p>
 <div class="math notranslate nohighlight">
@@ -555,17 +577,17 @@
 </div>
 </div>
 <div class="section" id="gridworld-example">
-<h3>Gridworld example<a class="headerlink" href="#gridworld-example" title="Permalink to this headline">¶</a></h3>
+<h3><span class="section-number">3.1.5. </span>Gridworld example<a class="headerlink" href="#gridworld-example" title="Permalink to this headline">¶</a></h3>
 <div class="figure align-default" id="id5">
 <a class="reference internal image-reference" href="../_images/dp-gridworld1.png"><img alt="../_images/dp-gridworld1.png" src="../_images/dp-gridworld1.png" style="width: 80%;" /></a>
-<p class="caption"><span class="caption-text">Gridworld example. Credit: David Silver</span><a class="headerlink" href="#id5" title="Permalink to this image">¶</a></p>
+<p class="caption"><span class="caption-number">Fig. 3.3 </span><span class="caption-text">Gridworld example. Credit: David Silver</span><a class="headerlink" href="#id5" title="Permalink to this image">¶</a></p>
 </div>
 <p><strong>Gridworld</strong> is an undiscounted MDP (we can take <span class="math notranslate nohighlight">\(\gamma=1\)</span>). The states are the position in the grid, the actions are up, down, left, right. Transitions to a wall leave in the same state. The reward is always -1, except after being in the terminal states in gray (<span class="math notranslate nohighlight">\(r=0\)</span>). The initial policy is random:</p>
 <div class="math notranslate nohighlight">
 \[\pi(s, \text{up}) = \pi(s, \text{down})= \pi(s, \text{left}) = \pi(s, \text{right}) = 0.25\]</div>
 <div class="figure align-default" id="id6">
 <a class="reference internal image-reference" href="../_images/dp-gridworld2.png"><img alt="../_images/dp-gridworld2.png" src="../_images/dp-gridworld2.png" style="width: 80%;" /></a>
-<p class="caption"><span class="caption-text">First iterations. Credit: David Silver</span><a class="headerlink" href="#id6" title="Permalink to this image">¶</a></p>
+<p class="caption"><span class="caption-number">Fig. 3.4 </span><span class="caption-text">First iterations. Credit: David Silver</span><a class="headerlink" href="#id6" title="Permalink to this image">¶</a></p>
 </div>
 <ul class="simple">
 <li><p><span class="math notranslate nohighlight">\(k=0\)</span>: The initial values <span class="math notranslate nohighlight">\(V_0\)</span> are set to 0 as the initial policy is random.</p></li>
@@ -574,7 +596,7 @@
 </ul>
 <div class="figure align-default" id="id7">
 <a class="reference internal image-reference" href="../_images/dp-gridworld3.png"><img alt="../_images/dp-gridworld3.png" src="../_images/dp-gridworld3.png" style="width: 80%;" /></a>
-<p class="caption"><span class="caption-text">Later iterations. Credit: David Silver</span><a class="headerlink" href="#id7" title="Permalink to this image">¶</a></p>
+<p class="caption"><span class="caption-number">Fig. 3.5 </span><span class="caption-text">Later iterations. Credit: David Silver</span><a class="headerlink" href="#id7" title="Permalink to this image">¶</a></p>
 </div>
 <ul class="simple">
 <li><p><span class="math notranslate nohighlight">\(k=3\)</span>:  The values continue to propagate.  The greedy policy at that step of policy evaluation is already optimal.</p></li>
@@ -588,7 +610,7 @@
 </div>
 </div>
 <div class="section" id="value-iteration">
-<h2>Value iteration<a class="headerlink" href="#value-iteration" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">3.2. </span>Value iteration<a class="headerlink" href="#value-iteration" title="Permalink to this headline">¶</a></h2>
 <p><strong>Policy iteration</strong> can converge in a surprisingly small number of iterations. One drawback of <em>policy iteration</em> is that it uses a full policy evaluation, which can be computationally exhaustive as the convergence of <span class="math notranslate nohighlight">\(V_k\)</span> is only at the limit and the number of states can be huge.</p>
 <p>The idea of <strong>value iteration</strong> is to interleave policy evaluation and policy improvement, so that the policy is improved after each iteration of policy evaluation, not after complete convergence. As policy improvement returns a deterministic greedy policy, updating of the value of a state is then simpler:</p>
 <div class="math notranslate nohighlight">
@@ -625,7 +647,7 @@
 </div>
 </div>
 <div class="section" id="comparison-of-policy-and-value-iteration">
-<h2>Comparison of Policy- and Value-iteration<a class="headerlink" href="#comparison-of-policy-and-value-iteration" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">3.3. </span>Comparison of Policy- and Value-iteration<a class="headerlink" href="#comparison-of-policy-and-value-iteration" title="Permalink to this headline">¶</a></h2>
 <p><strong>Full policy-evaluation backup</strong></p>
 <div class="math notranslate nohighlight">
 \[
@@ -633,7 +655,7 @@
 \]</div>
 <div class="figure align-default" id="id8">
 <a class="reference internal image-reference" href="../_images/fullpe.png"><img alt="../_images/fullpe.png" src="../_images/fullpe.png" style="width: 40%;" /></a>
-<p class="caption"><span class="caption-text">Backup diagram of policy evaluation.</span><a class="headerlink" href="#id8" title="Permalink to this image">¶</a></p>
+<p class="caption"><span class="caption-number">Fig. 3.6 </span><span class="caption-text">Backup diagram of policy evaluation.</span><a class="headerlink" href="#id8" title="Permalink to this image">¶</a></p>
 </div>
 <p><strong>Full value-iteration backup</strong></p>
 <div class="math notranslate nohighlight">
@@ -642,11 +664,11 @@
 \]</div>
 <div class="figure align-default" id="id9">
 <a class="reference internal image-reference" href="../_images/fullvi.png"><img alt="../_images/fullvi.png" src="../_images/fullvi.png" style="width: 40%;" /></a>
-<p class="caption"><span class="caption-text">Backup diagram of value evaluation.</span><a class="headerlink" href="#id9" title="Permalink to this image">¶</a></p>
+<p class="caption"><span class="caption-number">Fig. 3.7 </span><span class="caption-text">Backup diagram of value evaluation.</span><a class="headerlink" href="#id9" title="Permalink to this image">¶</a></p>
 </div>
 </div>
 <div class="section" id="asynchronous-dynamic-programming">
-<h2>Asynchronous dynamic programming<a class="headerlink" href="#asynchronous-dynamic-programming" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">3.4. </span>Asynchronous dynamic programming<a class="headerlink" href="#asynchronous-dynamic-programming" title="Permalink to this headline">¶</a></h2>
 <p>Synchronous DP requires exhaustive sweeps of the entire state set (<strong>synchronous backups</strong>).</p>
 <ul class="simple">
 <li><p><strong>while</strong> not converged:</p>
@@ -687,11 +709,11 @@
 <p>States with a high error should be updated in priority. If the Bellman error is small, this means that the current estimate <span class="math notranslate nohighlight">\(V(s)\)</span> is already close to what it should be: there is no hurry in evaluating this state. The main advantage is that the DP algorithm can be applied as the agent is actually experiencing its environment (no need for the dynamics of environment to be fully known).</p>
 </div>
 <div class="section" id="curse-of-dimensionality">
-<h2>Curse of dimensionality<a class="headerlink" href="#curse-of-dimensionality" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">3.5. </span>Curse of dimensionality<a class="headerlink" href="#curse-of-dimensionality" title="Permalink to this headline">¶</a></h2>
 <p>Policy-iteration and value-iteration consist of alternations between policy evaluation and policy improvement, although at different frequencies. This principle is called <strong>Generalized Policy Iteration</strong> (GPI). Finding an optimal policy is polynomial in the number of states and actions: <span class="math notranslate nohighlight">\(\mathcal{O}(n^2 \, m)\)</span> (<span class="math notranslate nohighlight">\(n\)</span> is the number of states, <span class="math notranslate nohighlight">\(m\)</span> the number of actions).  However, the number of states is often astronomical, e.g., often growing exponentially with the number of state variables (what Bellman called <strong>“the curse of dimensionality”</strong>) In practice, classical DP can only be applied to problems with a few millions of states.</p>
 <div class="figure align-default" id="id10">
 <a class="reference internal image-reference" href="../_images/cursedimensionality.png"><img alt="../_images/cursedimensionality.png" src="../_images/cursedimensionality.png" style="width: 100%;" /></a>
-<p class="caption"><span class="caption-text">Curse of dimensionality. Source: <a class="reference external" href="https://medium.com/diogo-menezes-borges/give-me-the-antidote-for-the-curse-of-dimensionality-b14bce4bf4d2">https://medium.com/diogo-menezes-borges/give-me-the-antidote-for-the-curse-of-dimensionality-b14bce4bf4d2</a></span><a class="headerlink" href="#id10" title="Permalink to this image">¶</a></p>
+<p class="caption"><span class="caption-number">Fig. 3.8 </span><span class="caption-text">Curse of dimensionality. Source: <a class="reference external" href="https://medium.com/diogo-menezes-borges/give-me-the-antidote-for-the-curse-of-dimensionality-b14bce4bf4d2">https://medium.com/diogo-menezes-borges/give-me-the-antidote-for-the-curse-of-dimensionality-b14bce4bf4d2</a></span><a class="headerlink" href="#id10" title="Permalink to this image">¶</a></p>
 </div>
 <p>If one variable can be represented by 5 discrete values:</p>
 <ul class="simple">
@@ -730,6 +752,8 @@
     
     <div class='prev-next-bottom'>
         
+    <a class='left-prev' id="prev-link" href="2-MDP.html" title="previous page"><span class="section-number">2. </span>Markov Decision Processes</a>
+    <a class='right-next' id="next-link" href="4-MC.html" title="next page"><span class="section-number">4. </span>Monte-Carlo (MC) methods</a>
 
     </div>
     <footer class="footer mt-5 mt-md-0">

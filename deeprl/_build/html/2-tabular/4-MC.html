@@ -6,7 +6,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Monte-Carlo (MC) methods &#8212; Deep Reinforcement Learning</title>
+    <title>4. Monte-Carlo (MC) methods &#8212; Deep Reinforcement Learning</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" integrity="sha384-KA6wR/X5RY4zFAHpv/CnoG2UW1uogYfdnP67Uv7eULvTveboZJg0qUpmJZb5VqzN" crossorigin="anonymous">
     <link href="../_static/css/index.css" rel="stylesheet">
     <link rel="stylesheet" href="../_static/sphinx-book-theme.css" type="text/css" />
@@ -40,6 +40,8 @@
     <link rel="canonical" href="https://julien-vitay.net/lecturenotes-deeprl/2-tabular/4-MC.html" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="1. Introduction to Python" href="../5-exercises/ex1-Python.html" />
+    <link rel="prev" title="3. Dynamic Programming" href="3-DP.html" />
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="docsearch:language" content="en">
@@ -110,7 +112,7 @@
   Tabular RL
  </span>
 </p>
-<ul class="nav sidenav_l1">
+<ul class="current nav sidenav_l1">
  <li class="toctree-l1">
   <a class="reference internal" href="1-Bandits.html">
    1. Bandits
@@ -119,6 +121,16 @@
  <li class="toctree-l1">
   <a class="reference internal" href="2-MDP.html">
    2. Markov Decision Processes
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="3-DP.html">
+   3. Dynamic Programming
+  </a>
+ </li>
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   4. Monte-Carlo (MC) methods
   </a>
  </li>
 </ul>
@@ -136,6 +148,16 @@
  <li class="toctree-l1">
   <a class="reference internal" href="../5-exercises/ex2-Numpy.html">
    2. Numpy and Matplotlib
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../5-exercises/ex3-Sampling.html">
+   3. Sampling
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../5-exercises/ex4-Bandits.html">
+   4. Bandits (part 1)
   </a>
  </li>
 </ul>
@@ -222,27 +244,27 @@
             <ul class="nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#monte-carlo-policy-evaluation">
-   Monte-Carlo policy evaluation
+   4.1. Monte-Carlo policy evaluation
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#monte-carlo-policy-improvement">
-   Monte-Carlo policy improvement
+   4.2. Monte-Carlo policy improvement
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#on-policy-monte-carlo-control">
-   On-policy Monte-Carlo control
+   4.3. On-policy Monte-Carlo control
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#importance-sampling">
-   Importance sampling
+   4.4. Importance sampling
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#off-policy-monte-carlo-control">
-   Off-policy Monte-Carlo control
+   4.5. Off-policy Monte-Carlo control
   </a>
  </li>
 </ul>
@@ -256,9 +278,9 @@
               <div>
                 
   <div class="section" id="monte-carlo-mc-methods">
-<h1>Monte-Carlo (MC) methods<a class="headerlink" href="#monte-carlo-mc-methods" title="Permalink to this headline">¶</a></h1>
+<h1><span class="section-number">4. </span>Monte-Carlo (MC) methods<a class="headerlink" href="#monte-carlo-mc-methods" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="monte-carlo-policy-evaluation">
-<h2>Monte-Carlo policy evaluation<a class="headerlink" href="#monte-carlo-policy-evaluation" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">4.1. </span>Monte-Carlo policy evaluation<a class="headerlink" href="#monte-carlo-policy-evaluation" title="Permalink to this headline">¶</a></h2>
 <p>The value of a state <span class="math notranslate nohighlight">\(s\)</span> is defined as the mathematical expectation of the return obtained after that state and thereafter following the policy <span class="math notranslate nohighlight">\(\pi\)</span>:</p>
 <div class="math notranslate nohighlight">
 \[V^{\pi} (s) = \mathbb{E}_{\rho_\pi} ( R_t | s_t = s) = \mathbb{E}_{\rho_\pi} ( \sum_{k=0}^{\infty} \gamma^k r_{t+k+1} | s_t = s )\]</div>
@@ -353,7 +375,7 @@
 <p>There are much more values to estimate (one per state-action pair), but the policy will be easier to derive.</p>
 </div>
 <div class="section" id="monte-carlo-policy-improvement">
-<h2>Monte-Carlo policy improvement<a class="headerlink" href="#monte-carlo-policy-improvement" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">4.2. </span>Monte-Carlo policy improvement<a class="headerlink" href="#monte-carlo-policy-improvement" title="Permalink to this headline">¶</a></h2>
 <p>After each episode, the state or action values of the visited <span class="math notranslate nohighlight">\((s, a)\)</span> pairs have changed, so the current policy might not be optimal anymore. As in DP, the policy can then be improved in a greedy manner:</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}\begin{aligned}
@@ -365,7 +387,7 @@
 <p>Estimating the Q-values allows to act greedily, while estimating the V-values still requires the dynamics  <span class="math notranslate nohighlight">\(p(s' | s,a)\)</span> and <span class="math notranslate nohighlight">\(r(s, a, s')\)</span>.</p>
 </div>
 <div class="section" id="on-policy-monte-carlo-control">
-<h2>On-policy Monte-Carlo control<a class="headerlink" href="#on-policy-monte-carlo-control" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">4.3. </span>On-policy Monte-Carlo control<a class="headerlink" href="#on-policy-monte-carlo-control" title="Permalink to this headline">¶</a></h2>
 <p><strong>Monte-Carlo control</strong> alternates between <strong>MC policy evaluation</strong> and <strong>policy improvement</strong> until the optimal policy is found: generalized policy iteration (GPI).</p>
 <div class="admonition-principle-of-monte-carlo-control admonition">
 <p class="admonition-title">Principle of Monte-Carlo control</p>
@@ -457,7 +479,7 @@
 <p>An <span class="math notranslate nohighlight">\(\epsilon\)</span>-greedy behavior policy over the Q-values is often enough, while a deterministic (greedy) policy can be learned. The behavior policy could also come from <strong>expert knowledge</strong>, i.e. known episodes from the MDP generaed by somebody else. But are we mathematically allowed to do this?</p>
 </div>
 <div class="section" id="importance-sampling">
-<h2>Importance sampling<a class="headerlink" href="#importance-sampling" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">4.4. </span>Importance sampling<a class="headerlink" href="#importance-sampling" title="Permalink to this headline">¶</a></h2>
 <p>We search for the optimal policy that maximizes in expectation the return of each <strong>trajectory</strong> (episode) possible under the learned policy <span class="math notranslate nohighlight">\(\pi\)</span>:</p>
 <div class="math notranslate nohighlight">
 \[\mathcal{J}(\pi) = \mathbb{E}_{\tau \sim \rho_\pi} [R(\tau)]\]</div>
@@ -467,7 +489,7 @@
 <p>The policy that maximizes <span class="math notranslate nohighlight">\(\mathcal{J}'(\pi)\)</span> is <strong>not</strong> the optimal policy of the MDP.</p>
 <div class="figure align-default" id="id1">
 <a class="reference internal image-reference" href="../_images/importancesampling.svg"><img alt="../_images/importancesampling.svg" src="../_images/importancesampling.svg" width="100%" /></a>
-<p class="caption"><span class="caption-text">You cannot use samples from one distribution to estimate something about another.</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
+<p class="caption"><span class="caption-number">Fig. 4.1 </span><span class="caption-text">You cannot use samples from one distribution to estimate something about another.</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
 </div>
 <p>If you try to estimate a parameter of a random distribution <span class="math notranslate nohighlight">\(\pi\)</span> using samples of another distribution <span class="math notranslate nohighlight">\(b\)</span>, the sample average will have a strong <strong>bias</strong>. We need to <strong>correct</strong> the samples from <span class="math notranslate nohighlight">\(b\)</span> in order to be able to estimate the parameters of <span class="math notranslate nohighlight">\(\pi\)</span> correctly: this is called <strong>importance sampling</strong> (IS).</p>
 <p>We want to estimate the expected return of the trajectories generated by the policy <span class="math notranslate nohighlight">\(\pi\)</span>:</p>
@@ -479,7 +501,7 @@
 <p>The expectation is the integral over all possible trajectories of their return <span class="math notranslate nohighlight">\(R(\tau\)</span>), weighted by the likelihood <span class="math notranslate nohighlight">\(\rho_\pi(\tau)\)</span> that a trajectory <span class="math notranslate nohighlight">\(\tau\)</span> is generated by the policy <span class="math notranslate nohighlight">\(\pi\)</span>.</p>
 <div class="figure align-default" id="id2">
 <a class="reference internal image-reference" href="../_images/importancesampling2.svg"><img alt="../_images/importancesampling2.svg" src="../_images/importancesampling2.svg" width="50%" /></a>
-<p class="caption"><span class="caption-text">RL maximizes the expected return of the trajectories generated by the policy.</span><a class="headerlink" href="#id2" title="Permalink to this image">¶</a></p>
+<p class="caption"><span class="caption-number">Fig. 4.2 </span><span class="caption-text">RL maximizes the expected return of the trajectories generated by the policy.</span><a class="headerlink" href="#id2" title="Permalink to this image">¶</a></p>
 </div>
 <p>The trick is to introduce the behavior policy <span class="math notranslate nohighlight">\(b\)</span> in what we want to estimate:</p>
 <div class="math notranslate nohighlight">
@@ -494,7 +516,7 @@
 <p>The importance sampling weight corrects the mismatch between <span class="math notranslate nohighlight">\(\pi\)</span> and <span class="math notranslate nohighlight">\(b\)</span>.</p>
 <div class="figure align-default" id="id3">
 <a class="reference internal image-reference" href="../_images/importancesampling3.svg"><img alt="../_images/importancesampling3.svg" src="../_images/importancesampling3.svg" width="100%" /></a>
-<p class="caption"><span class="caption-text">Importance sampling gives more weight to samples that are likely under the distribution to estimate.</span><a class="headerlink" href="#id3" title="Permalink to this image">¶</a></p>
+<p class="caption"><span class="caption-number">Fig. 4.3 </span><span class="caption-text">Importance sampling gives more weight to samples that are likely under the distribution to estimate.</span><a class="headerlink" href="#id3" title="Permalink to this image">¶</a></p>
 </div>
 <p>If the two distributions are the same (on-policy), the IS weight is 1, there is no need to correct the returns. If a sample is likely under <span class="math notranslate nohighlight">\(b\)</span> but not under <span class="math notranslate nohighlight">\(\pi\)</span>, we should not care about its return: <span class="math notranslate nohighlight">\(\frac{\rho_\pi(\tau)}{\rho_b(\tau)} &lt;&lt; 1\)</span>. If a sample is likely under <span class="math notranslate nohighlight">\(\pi\)</span> but not much under <span class="math notranslate nohighlight">\(b\)</span>, we increase its importance in estimating the return: <span class="math notranslate nohighlight">\(\frac{\rho_\pi(\tau)}{\rho_b(\tau)} &gt;&gt; 1\)</span>. The sampling average of the corrected samples will be closer from the true estimate (unbiased).</p>
 <p>How do we compute these probability distributions <span class="math notranslate nohighlight">\(\rho_\pi(\tau)\)</span> and <span class="math notranslate nohighlight">\(\rho_b(\tau)\)</span> for a trajectory <span class="math notranslate nohighlight">\(\tau\)</span>? A trajectory <span class="math notranslate nohighlight">\(\tau\)</span> is a sequence of state-action transitions <span class="math notranslate nohighlight">\((s_0, a_0, s_1, a_1, \ldots, s_T)\)</span> whose probability depends on:</p>
@@ -516,7 +538,7 @@
 <p>The importance sampling weight is simply the product over the length of the episode of the ratio between <span class="math notranslate nohighlight">\(\pi(s_t, a_t)\)</span> and <span class="math notranslate nohighlight">\(b(s_t, a_t)\)</span>.</p>
 </div>
 <div class="section" id="off-policy-monte-carlo-control">
-<h2>Off-policy Monte-Carlo control<a class="headerlink" href="#off-policy-monte-carlo-control" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">4.5. </span>Off-policy Monte-Carlo control<a class="headerlink" href="#off-policy-monte-carlo-control" title="Permalink to this headline">¶</a></h2>
 <p>In <strong>off-policy MC control</strong>, we generate episodes using the behavior policy <span class="math notranslate nohighlight">\(b\)</span> and update <strong>greedily</strong> the learned policy <span class="math notranslate nohighlight">\(\pi\)</span>. For the state <span class="math notranslate nohighlight">\(s_t\)</span>, the obtained returns just need to be weighted by the relative probability of occurrence of the <strong>rest of the episode</strong> following the policies <span class="math notranslate nohighlight">\(\pi\)</span> and <span class="math notranslate nohighlight">\(b\)</span>:</p>
 <div class="math notranslate nohighlight">
 \[\rho_{t:T-1} = \prod_{k=t}^{T-1} \frac{\pi(s_k, a_k)}{b(s_k, a_k)}\]</div>
@@ -626,6 +648,8 @@
     
     <div class='prev-next-bottom'>
         
+    <a class='left-prev' id="prev-link" href="3-DP.html" title="previous page"><span class="section-number">3. </span>Dynamic Programming</a>
+    <a class='right-next' id="next-link" href="../5-exercises/ex1-Python.html" title="next page"><span class="section-number">1. </span>Introduction to Python</a>
 
     </div>
     <footer class="footer mt-5 mt-md-0">
