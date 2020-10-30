@@ -1,5 +1,7 @@
 # Dynamic Programming
 
+Slides: [pdf](https://www.tu-chemnitz.de/informatik/KI/edu/deeprl/lectures/pdf/2.3-DP.pdf)
+
 ```{figure} ../img/gpi-scheme.png
 ---
 width: 30%
@@ -26,6 +28,9 @@ After enough iterations, the policy converges to the **optimal policy** (if the 
 
 
 ##  Policy iteration
+
+<div class='embed-container'><iframe src='https://www.youtube.com/embed/9LS_pD728yo' frameborder='0' allowfullscreen></iframe></div>
+
 
 ### Policy evaluation
 
@@ -139,6 +144,8 @@ $$
 Done! **But**, if we have $n$ states, the matrix $\mathcal{P}^\pi$ has $n^2$ elements. Inverting $\mathbb{I} - \gamma \, \mathcal{P}^\pi$ requires at least $\mathcal{O}(n^{2.37})$ operations. Forget it if you have more than a thousand states ($1000^{2.37} \approx 13$ million operations). In dynamic programming, we will therefore use **iterative methods** to estimate $\mathbf{V}^\pi$ with (hopefully) less operations.
 
 ### Iterative policy evaluation
+
+<div class='embed-container'><iframe src='https://www.youtube.com/embed/DOGbCQjSIlY' frameborder='0' allowfullscreen></iframe></div>
 
 The idea of **iterative policy evaluation** (IPE) is to consider a sequence of consecutive state-value functions which should converge from initially wrong estimates $V_0(s)$ towards the real state-value function $V^{\pi}(s)$.
 
@@ -281,7 +288,12 @@ $$
   \pi_0 \xrightarrow[]{E} V^{\pi_0} \xrightarrow[]{I} \pi_1 \xrightarrow[]{E} V^{\pi^1} \xrightarrow[]{I}  ... \xrightarrow[]{I} \pi^* \xrightarrow[]{E} V^{*}
 $$
 
-![](img/gpi.png)
+```{figure} ../img/gpi.png
+---
+width: 50%
+---
+Policy Iteration. Source: {cite}`Sutton1998`
+```
 
 The **optimal policy** being deterministic, policy improvement can be greedy over the state values. If the policy does not change after policy improvement, the optimal policy has been found.
 
@@ -348,6 +360,8 @@ Two things to notice:
 * There can be more than one optimal policy: some actions may have the same Q-value: choosing one or other is equally optimal.
 
 ## Value iteration
+
+<div class='embed-container'><iframe src='https://www.youtube.com/embed/lB_ouoRVWiE' frameborder='0' allowfullscreen></iframe></div>
 
 **Policy iteration** can converge in a surprisingly small number of iterations. One drawback of *policy iteration* is that it uses a full policy evaluation, which can be computationally exhaustive as the convergence of $V_k$ is only at the limit and the number of states can be huge.
 
