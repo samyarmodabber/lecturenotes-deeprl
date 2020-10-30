@@ -1,13 +1,17 @@
 # Monte-Carlo (MC) methods
 
+Slides: [pdf](https://www.tu-chemnitz.de/informatik/KI/edu/deeprl/lectures/pdf/2.4-MC.pdf)
+
 ## Monte-Carlo policy evaluation
+
+<div class='embed-container'><iframe src='https://www.youtube.com/embed/XD1h9iMxCTQ' frameborder='0' allowfullscreen></iframe></div>
 
 The value of a state $s$ is defined as the mathematical expectation of the return obtained after that state and thereafter following the policy $\pi$:
 
 $$V^{\pi} (s) = \mathbb{E}_{\rho_\pi} ( R_t | s_t = s) = \mathbb{E}_{\rho_\pi} ( \sum_{k=0}^{\infty} \gamma^k r_{t+k+1} | s_t = s )$$
 
 
-**Monte-Carlo methods** approximates this mathematical expectation by **sampling** $M$ trajectories $\tau_i$ starting from $s$ and computing the sampling average of the obtained returns:
+**Monte-Carlo methods** (MC) approximate this mathematical expectation by **sampling** $M$ trajectories $\tau_i$ starting from $s$ and computing the sampling average of the obtained returns:
 
 $$
     V^{\pi}(s) = \mathbb{E}_{\rho_\pi} (R_t | s_t = s) \approx \frac{1}{M} \sum_{i=1}^M R(\tau_i)
@@ -15,38 +19,9 @@ $$
 
 If you have enough trajectories, the sampling average is an unbiased estimator of the value function. The advantage of Monte-Carlo methods is that they require only **experience**, not the complete dynamics $p(s' | s,a)$ and $r(s, a, s')$.
 
+The idea of MC policy evaluation is to repeatedly sample **episodes** starting from each possible state $s_0$ and maintain a **running average** of the obtained returns for each state:
+
 ```{admonition} Monte-Carlo policy evaluation of state values
-
-* **while** True:
-    * Select an initial state $s_0$.
-    * Generate a sequence of transitions according to the current policy $\pi$ until a terminal state $s_T$ is reached.
-
-    $$
-        \tau = (s_o, a_o, r_ 1, s_1, a_1, \ldots, s_T)
-    $$
-
-    * Compute the return $R_t = \sum_{k=0}^{\infty} \gamma^k r_{t+k+1}$ for all encountered states $s_0, s_1, \ldots, s_T$ and append it to a list of returns:
-
-    $$
-        \text{Returns}(s_t) \leftarrow R_t
-    $$
-
-    * Update the estimated value $V(s_t)$ of all encountered state $s_t$ as the average of the obtained returns since the beginning:
-
-    $$
-        V(s_t) \leftarrow \text{Average}(\text{Returns}(s_t))
-    $$
-```
-
-As in evaluative feedback, it may be expensive to store multiple returns for each state of the system and recompute the mean everytime. A simpler method to compute the mean is to maintain a **running average** of the obtained returns:
-
-$$
-    V(s_t) \leftarrow V(s_t) + \alpha \, (R_t - V(s_t))
-$$
-
-The new estimate is equal to the previous estimate plus a small part of the difference between the obtained return and the previous estimate. The running average tries to minimize the **error** between the current estimation and the obtained return. It uses a **learning rate** $0 < \alpha < 1$.
-
-```{admonition} Online Monte-Carlo policy evaluation of state values
 
 * **while** True:
     
@@ -204,6 +179,8 @@ An $\epsilon$-greedy behavior policy over the Q-values is often enough, while a 
 
 
 ## Importance sampling
+
+<div class='embed-container'><iframe src='https://www.youtube.com/embed/g0qd41d62Gg' frameborder='0' allowfullscreen></iframe></div>
 
 We search for the optimal policy that maximizes in expectation the return of each **trajectory** (episode) possible under the learned policy $\pi$:
 

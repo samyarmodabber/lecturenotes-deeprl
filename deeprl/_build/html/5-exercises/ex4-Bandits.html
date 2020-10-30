@@ -40,7 +40,7 @@
     <link rel="canonical" href="https://julien-vitay.net/lecturenotes-deeprl/5-exercises/ex4-Bandits.html" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="4.1. Bandits" href="4-Bandits.html" />
+    <link rel="next" title="4.2.1. Bandits" href="4-Bandits.html" />
     <link rel="prev" title="3.2.2. Sampling" href="3-Sampling-solution.html" />
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -51,7 +51,7 @@
 <meta property="og:url"         content="https://julien-vitay.net/lecturenotes-deeprl/5-exercises/ex4-Bandits.html" />
 <meta property="og:type"        content="article" />
 <meta property="og:title"       content="Bandits (part 1)" />
-<meta property="og:description" content="Bandits (part 1)  " />
+<meta property="og:description" content="Bandits (part 1)  The goal of this exercise is to implement simple action selection mechanisms for the n-armed bandit:  Greedy action selection  \epsilon-greedy" />
 <meta property="og:image"       content="https://julien-vitay.net/lecturenotes-deeprl/_static/tuc.svg" />
 
 <meta name="twitter:card" content="summary" />
@@ -162,15 +162,20 @@
   <ul>
    <li class="toctree-l2">
     <a class="reference internal" href="4-Bandits.html">
-     4.1. Notebook
+     4.2.1. Notebook
     </a>
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="4-Bandits-solution.html">
-     4.2. Solution
+     4.2.2. Solution
     </a>
    </li>
   </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="ex5-Bandits2.html">
+   5. Bandits (part 2)
+  </a>
  </li>
 </ul>
 <p class="caption">
@@ -253,7 +258,19 @@
             <i class="fas fa-list"></i> Contents
         </div>
         <nav id="bd-toc-nav">
-            
+            <ul class="nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#presentation">
+   4.1. Presentation
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#commented-solution">
+   4.2. Commented solution
+  </a>
+ </li>
+</ul>
+
         </nav>
     </div>
 </div>
@@ -264,7 +281,25 @@
                 
   <div class="section" id="bandits-part-1">
 <h1><span class="section-number">4. </span>Bandits (part 1)<a class="headerlink" href="#bandits-part-1" title="Permalink to this headline">¶</a></h1>
+<p>The goal of this exercise is to implement simple action selection mechanisms for the n-armed bandit:</p>
+<ul class="simple">
+<li><p>Greedy action selection</p></li>
+<li><p><span class="math notranslate nohighlight">\(\epsilon\)</span>-greedy action selection</p></li>
+<li><p>Softmax action selection</p></li>
+</ul>
+<div class="section" id="presentation">
+<h2><span class="section-number">4.1. </span>Presentation<a class="headerlink" href="#presentation" title="Permalink to this headline">¶</a></h2>
+<div class="embed-container">
+  <iframe src="https://www.youtube.com/embed/pYxphhdmrD4" frameborder="0" allowfullscreen></iframe>
+</div>
+</div>
+<div class="section" id="commented-solution">
+<h2><span class="section-number">4.2. </span>Commented solution<a class="headerlink" href="#commented-solution" title="Permalink to this headline">¶</a></h2>
+<div class="embed-container">
+  <iframe src="https://www.youtube.com/embed/x60ffQE59Eo" frameborder="0" allowfullscreen></iframe>
+</div>
 <div class="toctree-wrapper compound">
+</div>
 </div>
 </div>
 
@@ -297,7 +332,7 @@
     <div class='prev-next-bottom'>
         
     <a class='left-prev' id="prev-link" href="3-Sampling-solution.html" title="previous page"><span class="section-number">3.2.2. </span>Sampling</a>
-    <a class='right-next' id="next-link" href="4-Bandits.html" title="next page"><span class="section-number">4.1. </span>Bandits</a>
+    <a class='right-next' id="next-link" href="4-Bandits.html" title="next page"><span class="section-number">4.2.1. </span>Bandits</a>
 
     </div>
     <footer class="footer mt-5 mt-md-0">

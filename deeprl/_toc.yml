@@ -11,8 +11,8 @@
   chapters:
     - file: 2-tabular/1-Bandits
     - file: 2-tabular/2-MDP
-    # - file: 2-tabular/3-DP
-    # - file: 2-tabular/4-MC
+    - file: 2-tabular/3-DP
+    - file: 2-tabular/4-MC
 
 
 - part: Exercises
@@ -38,12 +38,20 @@
         - file: 5-exercises/3-Sampling-solution
           title: Solution
 
-    # - file: 5-exercises/ex4-Bandits
-    #   sections:
-    #     - file: 5-exercises/4-Bandits
-    #       title: Notebook
-    #     - file: 5-exercises/4-Bandits-solution
-    #       title: Solution
+    - file: 5-exercises/ex4-Bandits
+      sections:
+        - file: 5-exercises/4-Bandits
+          title: Notebook
+        - file: 5-exercises/4-Bandits-solution
+          title: Solution
+
+
+    - file: 5-exercises/ex5-Bandits2
+      sections:
+        - file: 5-exercises/5-Bandits2
+          title: Notebook
+        - file: 5-exercises/5-Bandits2-solution
+          title: Solution
 
 
 - part: References

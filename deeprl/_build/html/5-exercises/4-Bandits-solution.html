@@ -6,7 +6,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>4.2. Bandits &#8212; Deep Reinforcement Learning</title>
+    <title>4.2.2. Bandits &#8212; Deep Reinforcement Learning</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" integrity="sha384-KA6wR/X5RY4zFAHpv/CnoG2UW1uogYfdnP67Uv7eULvTveboZJg0qUpmJZb5VqzN" crossorigin="anonymous">
     <link href="../_static/css/index.css" rel="stylesheet">
     <link rel="stylesheet" href="../_static/sphinx-book-theme.css" type="text/css" />
@@ -40,8 +40,8 @@
     <link rel="canonical" href="https://julien-vitay.net/lecturenotes-deeprl/5-exercises/4-Bandits-solution.html" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="1. Bibliography" href="../zreferences.html" />
-    <link rel="prev" title="4.1. Bandits" href="4-Bandits.html" />
+    <link rel="next" title="5. Bandits (part 2)" href="ex5-Bandits2.html" />
+    <link rel="prev" title="4.2.1. Bandits" href="4-Bandits.html" />
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="docsearch:language" content="en">
@@ -162,15 +162,20 @@
   <ul class="current">
    <li class="toctree-l2">
     <a class="reference internal" href="4-Bandits.html">
-     4.1. Notebook
+     4.2.1. Notebook
     </a>
    </li>
    <li class="toctree-l2 current active">
     <a class="current reference internal" href="#">
-     4.2. Solution
+     4.2.2. Solution
     </a>
    </li>
   </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="ex5-Bandits2.html">
+   5. Bandits (part 2)
+  </a>
  </li>
 </ul>
 <p class="caption">
@@ -278,12 +283,12 @@
             <ul class="nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#greedy-action-selection">
-   4.2.1. Greedy action selection
+   4.2.2.1. Greedy action selection
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#epsilon-greedy-action-selection">
-   4.2.2.
+   4.2.2.2.
    <span class="math notranslate nohighlight">
     \(\epsilon\)
    </span>
@@ -292,12 +297,12 @@
  </li>
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#softmax-action-selection">
-   4.2.3. Softmax action selection
+   4.2.2.3. Softmax action selection
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#exploration-scheduling">
-   4.2.4. Exploration scheduling
+   4.2.2.4. Exploration scheduling
   </a>
  </li>
 </ul>
@@ -311,7 +316,7 @@
               <div>
                 
   <div class="section" id="bandits">
-<h1><span class="section-number">4.2. </span>Bandits<a class="headerlink" href="#bandits" title="Permalink to this headline">¶</a></h1>
+<h1><span class="section-number">4.2.2. </span>Bandits<a class="headerlink" href="#bandits" title="Permalink to this headline">¶</a></h1>
 <p>In this part, we will investigate the properties of the action selection schemes seen in the lecture and compare their properties:</p>
 <ol class="simple">
 <li><p>greedy action selection</p></li>
@@ -402,7 +407,7 @@
 </div>
 </div>
 <div class="section" id="greedy-action-selection">
-<h2><span class="section-number">4.2.1. </span>Greedy action selection<a class="headerlink" href="#greedy-action-selection" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">4.2.2.1. </span>Greedy action selection<a class="headerlink" href="#greedy-action-selection" title="Permalink to this headline">¶</a></h2>
 <p>In <strong>greedy action selection</strong>, we systematically chose the action with the highest estimated Q-value at each play (or randomly when there are ties):</p>
 <div class="math notranslate nohighlight">
 \[a_t = \text{argmax}_a Q_t(a)\]</div>
@@ -742,7 +747,7 @@
 <p><strong>A:</strong> the greedy agent selects the optimal action around 80% of the time, vs. 50% for the 10-armed bandits. It is really not bad knowing that it starts at chance level (20% for 5 actions).</p>
 </div>
 <div class="section" id="epsilon-greedy-action-selection">
-<h2><span class="section-number">4.2.2. </span><span class="math notranslate nohighlight">\(\epsilon\)</span>-greedy action selection<a class="headerlink" href="#epsilon-greedy-action-selection" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">4.2.2.2. </span><span class="math notranslate nohighlight">\(\epsilon\)</span>-greedy action selection<a class="headerlink" href="#epsilon-greedy-action-selection" title="Permalink to this headline">¶</a></h2>
 <p>The main drawback of greedy action selection is that it does not explore: as soon as it finds an action better than the others (with a sufficiently positive true Q-value, i.e. where the sampled rewards are mostly positive), it will keep selecting that action and avoid exploring the other options.</p>
 <p>The estimated Q-value of the selected action will end up being quite correct, but those of the other actions will stay at 0.</p>
 <p>In <span class="math notranslate nohighlight">\(\epsilon\)</span>-greedy action selection, the greedy action <span class="math notranslate nohighlight">\(a_t^*\)</span> (with the highest estimated Q-value) will be selected with a probability <span class="math notranslate nohighlight">\(1-\epsilon\)</span>, the others with a probability of <span class="math notranslate nohighlight">\(\epsilon\)</span> altogether.</p>
@@ -842,7 +847,7 @@
 <p><strong>A:</strong> Depending on the value of <span class="math notranslate nohighlight">\(\epsilon\)</span>, <span class="math notranslate nohighlight">\(\epsilon\)</span>-greedy can perform better that greedy in the end, but will necessitate more time at the beginning. If there is too much exploration, <span class="math notranslate nohighlight">\(\epsilon\)</span>-greedy can be even worse than greedy.</p>
 </div>
 <div class="section" id="softmax-action-selection">
-<h2><span class="section-number">4.2.3. </span>Softmax action selection<a class="headerlink" href="#softmax-action-selection" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">4.2.2.3. </span>Softmax action selection<a class="headerlink" href="#softmax-action-selection" title="Permalink to this headline">¶</a></h2>
 <p>To avoid exploring actions which are clearly not optimal, another useful algorithm is <strong>softmax action selection</strong>. In this scheme, the estimated Q-values are ransformed into a probability distribution using the softmax opertion:</p>
 <div class="math notranslate nohighlight">
 \[
@@ -856,12 +861,16 @@
 \]</div>
 <p>This way, <span class="math notranslate nohighlight">\(Q_t(a) - \max_a Q_t(a)\)</span> is always negative, so its exponential is between 0 and 1.</p>
 <p><strong>Q:</strong> Implement the softmax action selection (with <span class="math notranslate nohighlight">\(\tau=0.5\)</span> at first) and compare its performance to greedy and <span class="math notranslate nohighlight">\(\epsilon\)</span>-greedy. Vary the temperature <span class="math notranslate nohighlight">\(\tau\)</span> and find the best possible value. Conclude.</p>
+<p><em>Hint:</em> To select actions with different probabilities, check the doc of <code class="docutils literal notranslate"><span class="pre">rng.choice()</span></code>.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">SoftmaxAgent</span><span class="p">(</span><span class="n">GreedyAgent</span><span class="p">):</span>
     
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bandit</span><span class="p">,</span> <span class="n">alpha</span><span class="p">,</span> <span class="n">tau</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">tau</span> <span class="o">=</span> <span class="n">tau</span>
+        
+        <span class="c1"># List of actions</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">actions</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">bandit</span><span class="o">.</span><span class="n">nb_actions</span><span class="p">)</span>
         
         <span class="c1"># Call the constructor of GreedyAgent</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">bandit</span><span class="p">,</span> <span class="n">alpha</span><span class="p">)</span>
@@ -872,7 +881,7 @@
         
         <span class="n">proba_softmax</span> <span class="o">=</span> <span class="n">logit</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">logit</span><span class="p">)</span>
         
-        <span class="n">action</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bandit</span><span class="o">.</span><span class="n">nb_actions</span><span class="p">),</span> <span class="n">p</span><span class="o">=</span><span class="n">proba_softmax</span><span class="p">)</span> 
+        <span class="n">action</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">actions</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="n">proba_softmax</span><span class="p">)</span> 
             
         <span class="k">return</span> <span class="n">action</span>
 </pre></div>
@@ -888,7 +897,7 @@
 <span class="n">alpha</span> <span class="o">=</span> <span class="mf">0.1</span>
 
 <span class="c1"># Tau for exploration</span>
-<span class="n">tau</span> <span class="o">=</span> <span class="mf">0.2</span>
+<span class="n">tau</span> <span class="o">=</span> <span class="mf">0.1</span>
 
 <span class="n">rewards_softmax</span> <span class="o">=</span> <span class="p">[]</span>
 <span class="n">optimal_softmax</span> <span class="o">=</span> <span class="p">[]</span>
@@ -899,7 +908,7 @@
     <span class="n">bandit</span> <span class="o">=</span> <span class="n">Bandit</span><span class="p">(</span><span class="n">nb_actions</span><span class="p">)</span>
 
     <span class="c1"># Estimates</span>
-    <span class="n">agent</span> <span class="o">=</span> <span class="n">EpsilonGreedyAgent</span><span class="p">(</span><span class="n">bandit</span><span class="p">,</span> <span class="n">alpha</span><span class="p">,</span> <span class="n">epsilon</span><span class="p">)</span>
+    <span class="n">agent</span> <span class="o">=</span> <span class="n">SoftmaxAgent</span><span class="p">(</span><span class="n">bandit</span><span class="p">,</span> <span class="n">alpha</span><span class="p">,</span> <span class="n">tau</span><span class="p">)</span>
 
     <span class="c1"># Store the rewards after each step</span>
     <span class="n">rewards</span><span class="p">,</span> <span class="n">optimal</span> <span class="o">=</span> <span class="n">agent</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="mi">1000</span><span class="p">)</span>
@@ -937,7 +946,7 @@
 <p><strong>A:</strong> softmax loses less time than <span class="math notranslate nohighlight">\(\epsilon\)</span>-greedy exploring the really bad solutions, so it is optimal earlier. It can be more efficient and optimal than the other methods, but finding the right value for <span class="math notranslate nohighlight">\(\tau\)</span> (0.1 works well) is difficult: its optimum value depends on the scaling of Q, you cannot know it in advance…</p>
 </div>
 <div class="section" id="exploration-scheduling">
-<h2><span class="section-number">4.2.4. </span>Exploration scheduling<a class="headerlink" href="#exploration-scheduling" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">4.2.2.4. </span>Exploration scheduling<a class="headerlink" href="#exploration-scheduling" title="Permalink to this headline">¶</a></h2>
 <p>The problem with this version of softmax (with a constant temperature) is that even after it has found the optimal action, it will still explore the other ones (although more rarely than at the beginning). The solution is to <strong>schedule</strong> the exploration parameter so that it explores a lot at the beginning (high temperature) and gradually switches to more exploitation (low temperature).</p>
 <p>Many schemes are possible for that, the simplest one (<strong>exponential decay</strong>) being to multiply the value of <span class="math notranslate nohighlight">\(\tau\)</span> by a number very close to 1 after <strong>each</strong> play:</p>
 <div class="math notranslate nohighlight">
@@ -952,6 +961,9 @@
         
         <span class="bp">self</span><span class="o">.</span><span class="n">tau_history</span> <span class="o">=</span> <span class="p">[]</span>
         
+        <span class="c1"># List of actions</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">actions</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">bandit</span><span class="o">.</span><span class="n">nb_actions</span><span class="p">)</span>
+        
         <span class="c1"># Call the constructor of GreedyAgent</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">bandit</span><span class="p">,</span> <span class="n">alpha</span><span class="p">,</span> <span class="n">tau</span><span class="p">)</span>
     
@@ -961,7 +973,7 @@
         <span class="c1"># Action selection</span>
         <span class="n">logit</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">Q_t</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">Q_t</span><span class="o">.</span><span class="n">max</span><span class="p">())</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">tau</span><span class="p">)</span>
         <span class="n">proba_softmax</span> <span class="o">=</span> <span class="n">logit</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">logit</span><span class="p">)</span>        
-        <span class="n">action</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bandit</span><span class="o">.</span><span class="n">nb_actions</span><span class="p">),</span> <span class="n">p</span><span class="o">=</span><span class="n">proba_softmax</span><span class="p">)</span> 
+        <span class="n">action</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">actions</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="n">proba_softmax</span><span class="p">)</span> 
         
         <span class="c1"># Decay tau</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">tau</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tau</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">tau_decay</span><span class="p">)</span>
@@ -1046,7 +1058,7 @@
 
 <span class="c1"># Tau for exploration</span>
 <span class="n">tau</span> <span class="o">=</span> <span class="mf">10.0</span>
-<span class="n">tau_decay</span> <span class="o">=</span> <span class="mf">0.1</span>
+<span class="n">tau_decay</span> <span class="o">=</span> <span class="mf">0.05</span>
 
 <span class="n">rewards_softmaxscheduled</span> <span class="o">=</span> <span class="p">[]</span>
 <span class="n">optimal_softmaxscheduled</span> <span class="o">=</span> <span class="p">[]</span>
@@ -1136,8 +1148,8 @@
     
     <div class='prev-next-bottom'>
         
-    <a class='left-prev' id="prev-link" href="4-Bandits.html" title="previous page"><span class="section-number">4.1. </span>Bandits</a>
-    <a class='right-next' id="next-link" href="../zreferences.html" title="next page"><span class="section-number">1. </span>Bibliography</a>
+    <a class='left-prev' id="prev-link" href="4-Bandits.html" title="previous page"><span class="section-number">4.2.1. </span>Bandits</a>
+    <a class='right-next' id="next-link" href="ex5-Bandits2.html" title="next page"><span class="section-number">5. </span>Bandits (part 2)</a>
 
     </div>
     <footer class="footer mt-5 mt-md-0">
