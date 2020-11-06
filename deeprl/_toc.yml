@@ -13,6 +13,7 @@
     - file: 2-tabular/2-MDP
     - file: 2-tabular/3-DP
     - file: 2-tabular/4-MC
+    - file: 2-tabular/5-TD
 
 
 - part: Exercises

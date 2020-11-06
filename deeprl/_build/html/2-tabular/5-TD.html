@@ -1,0 +1,877 @@
+
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>5. Temporal Difference learning &#8212; Deep Reinforcement Learning</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" integrity="sha384-KA6wR/X5RY4zFAHpv/CnoG2UW1uogYfdnP67Uv7eULvTveboZJg0qUpmJZb5VqzN" crossorigin="anonymous">
+    <link href="../_static/css/index.css" rel="stylesheet">
+    <link rel="stylesheet" href="../_static/sphinx-book-theme.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/style.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-dropdown.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/sphinx-book-theme.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/togglebutton.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/sphinx-book-theme.js"></script>
+    <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processRefs": false, "processEnvironments": false}})</script>
+    <script async="async" src="https://unpkg.com/thebelab@latest/lib/index.js"></script>
+    <script >
+        const thebe_selector = ".thebe"
+        const thebe_selector_input = "pre"
+        const thebe_selector_output = ".output"
+    </script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <link rel="canonical" href="https://julien-vitay.net/lecturenotes-deeprl/2-tabular/5-TD.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="1. Introduction to Python" href="../5-exercises/ex1-Python.html" />
+    <link rel="prev" title="4. Monte-Carlo (MC) methods" href="4-MC.html" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="docsearch:language" content="en">
+
+
+<!-- Opengraph tags -->
+<meta property="og:url"         content="https://julien-vitay.net/lecturenotes-deeprl/2-tabular/5-TD.html" />
+<meta property="og:type"        content="article" />
+<meta property="og:title"       content="Temporal Difference learning" />
+<meta property="og:description" content="Temporal Difference learning  Slides: pdf  Temporal Difference algorithms  &lt;div class=&#39;embed-container&#39;&gt;&lt;iframe src=&#39;https://www.youtube.com/embed/XLB98ZFsy8w&#39; " />
+<meta property="og:image"       content="https://julien-vitay.net/lecturenotes-deeprl/_static/tuc.svg" />
+
+<meta name="twitter:card" content="summary" />
+
+
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
+<a class="navbar-brand text-wrap" href="../index.html">
+  
+  <img src="../_static/tuc.svg" class="logo" alt="logo">
+  
+  
+  <h1 class="site-logo" id="site-title">Deep Reinforcement Learning</h1>
+  
+</a>
+</div>
+
+<form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form>
+
+<nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+  <ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../intro.html">
+   Deep Reinforcement Learning
+  </a>
+ </li>
+</ul>
+<p class="caption">
+ <span class="caption-text">
+  Introduction
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../1-intro/1-Introduction.html">
+   1. Introduction
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../1-intro/2-Math.html">
+   2. Math basics
+  </a>
+ </li>
+</ul>
+<p class="caption">
+ <span class="caption-text">
+  Tabular RL
+ </span>
+</p>
+<ul class="current nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="1-Bandits.html">
+   1. Bandits
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="2-MDP.html">
+   2. Markov Decision Processes
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="3-DP.html">
+   3. Dynamic Programming
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="4-MC.html">
+   4. Monte-Carlo (MC) methods
+  </a>
+ </li>
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   5. Temporal Difference learning
+  </a>
+ </li>
+</ul>
+<p class="caption">
+ <span class="caption-text">
+  Exercises
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../5-exercises/ex1-Python.html">
+   1. Introduction to Python
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../5-exercises/ex2-Numpy.html">
+   2. Numpy and Matplotlib
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../5-exercises/ex3-Sampling.html">
+   3. Sampling
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../5-exercises/ex4-Bandits.html">
+   4. Bandits (part 1)
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../5-exercises/ex5-Bandits2.html">
+   5. Bandits (part 2)
+  </a>
+ </li>
+</ul>
+<p class="caption">
+ <span class="caption-text">
+  References
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../zreferences.html">
+   1. Bibliography
+  </a>
+ </li>
+</ul>
+
+</nav>
+
+ <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="row topbar fixed-top container-xl">
+    <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show">
+    </div>
+    <div class="col pl-2 topbar-main">
+        
+        <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+            data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+            aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+            title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+            <i class="fas fa-bars"></i>
+            <i class="fas fa-arrow-left"></i>
+            <i class="fas fa-arrow-up"></i>
+        </button>
+        
+        <div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="../_sources/2-tabular/5-TD.md"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.md</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+    
+</div>
+        <!-- Source interaction buttons -->
+
+
+        <!-- Full screen (wrap in <a> to have style consistency -->
+        <a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+                data-placement="bottom" onclick="toggleFullScreen()" title="Fullscreen mode"><i
+                    class="fas fa-expand"></i></button></a>
+
+        <!-- Launch buttons -->
+
+    </div>
+
+    <!-- Table of contents -->
+    <div class="d-none d-md-block col-md-2 bd-toc show">
+        <div class="tocsection onthispage pt-5 pb-3">
+            <i class="fas fa-list"></i> Contents
+        </div>
+        <nav id="bd-toc-nav">
+            <ul class="nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#temporal-difference-algorithms">
+   5.1. Temporal Difference algorithms
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#sarsa-on-policy-td-control">
+     5.1.1. SARSA: On-policy TD control
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#q-learning-off-policy-td-control">
+     5.1.2. Q-learning: Off-policy TD control
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#actor-critic-methods">
+   5.2. Actor-critic methods
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#eligibility-traces-and-advantage-estimation">
+   5.3. Eligibility traces and advantage estimation
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#n-step-returns">
+     5.3.1. n-step returns
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#eligibility-traces">
+     5.3.2. Eligibility traces
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#generalized-advantage-estimation-gae">
+     5.3.3. Generalized advantage estimation (GAE)
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+        </nav>
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+        
+              <div>
+                
+  <div class="section" id="temporal-difference-learning">
+<h1><span class="section-number">5. </span>Temporal Difference learning<a class="headerlink" href="#temporal-difference-learning" title="Permalink to this headline">¶</a></h1>
+<p>Slides: <a class="reference external" href="https://www.tu-chemnitz.de/informatik/KI/edu/deeprl/lectures/pdf/2.5-TD.pdf">pdf</a></p>
+<div class="section" id="temporal-difference-algorithms">
+<h2><span class="section-number">5.1. </span>Temporal Difference algorithms<a class="headerlink" href="#temporal-difference-algorithms" title="Permalink to this headline">¶</a></h2>
+<div class='embed-container'><iframe src='https://www.youtube.com/embed/XLB98ZFsy8w' frameborder='0' allowfullscreen></iframe></div>
+<p>MC methods wait until the end of the episode to compute the obtained return, and update the estimates of all encountered states:</p>
+<div class="math notranslate nohighlight">
+\[
+    V(s_t) = V(s_t) + \alpha (R_t - V(s_t))
+\]</div>
+<p>If the episode is very long, learning might be very slow. If the task is continuing, it is impossible. Considering that the return at time <span class="math notranslate nohighlight">\(t\)</span> is the immediate reward plus the return in the next step:</p>
+<div class="math notranslate nohighlight">
+\[
+    R_t = r_{t+1} + \gamma \,  R_{t+1}
+\]</div>
+<p>we could replace <span class="math notranslate nohighlight">\(R_{t+1}\)</span> by an estimate, which is the value of the next state <span class="math notranslate nohighlight">\(V^\pi(s_{t+1}) = \mathbb{E}_\pi [R_{t+1} | s_{t+1}=s]\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[R_t \approx r_{t+1} + \gamma \,  V^\pi(s_{t+1})\]</div>
+<p><strong>Temporal-Difference (TD)</strong> methods simply replace the actual return by an estimation in the update rule:</p>
+<div class="math notranslate nohighlight">
+\[
+    V(s_t) = V(s_t) + \alpha \, (r_{t+1} + \gamma \, V(s_{t+1}) - V(s_t))
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(r_{t+1} + \gamma\, V(s_{t+1})\)</span> is a sampled estimate of the return.</p>
+<div class="figure align-default" id="id12">
+<a class="reference internal image-reference" href="../_images/MCTD.svg"><img alt="../_images/MCTD.svg" src="../_images/MCTD.svg" width="50%" /></a>
+<p class="caption"><span class="caption-number">Fig. 5.1 </span><span class="caption-text">TD replaces <span class="math notranslate nohighlight">\(R_{t+1}\)</span> with an estimate <span class="math notranslate nohighlight">\(V(s_{t+1})\)</span>. Adapted from <a class="bibtex reference internal" href="../zreferences.html#sutton1998" id="id1">[SB98]</a>.</span><a class="headerlink" href="#id12" title="Permalink to this image">¶</a></p>
+</div>
+<p>The quantity</p>
+<div class="math notranslate nohighlight">
+\[\delta_t = r_{t+1} + \gamma \, V(s_{t+1}) - V(s_t)\]</div>
+<p>is called equivalently the <strong>reward prediction error</strong> (RPE), the <strong>TD error</strong> or the <strong>advantage</strong> of the action <span class="math notranslate nohighlight">\(a_t\)</span>.  It is the difference between the estimated return in state <span class="math notranslate nohighlight">\(s_t\)</span> <span class="math notranslate nohighlight">\(V(s_t)\)</span> and the actual return <span class="math notranslate nohighlight">\(r_{t+1} + \gamma \, V(s_{t+1})\)</span>, computed with an estimation.</p>
+<p>If <span class="math notranslate nohighlight">\(\delta_t &gt; 0\)</span>, it means that we received more reward <span class="math notranslate nohighlight">\(r_{t+1}\)</span> than expected, or that we arrived in a state <span class="math notranslate nohighlight">\(s_{t+1}\)</span> that is better than expected: we should increase the value of <span class="math notranslate nohighlight">\(s_t\)</span> as we <strong>underestimate</strong> it.
+If <span class="math notranslate nohighlight">\(\delta_t &lt; 0\)</span>, we should decrease the value of <span class="math notranslate nohighlight">\(s_t\)</span> as we <strong>overestimate</strong> it.</p>
+<p>The learning procedure in TD is then possible after each transition: the backup diagram is limited to only one state and its follower.</p>
+<div class="admonition-td-0-policy-evaluation admonition">
+<p class="admonition-title">TD(0) policy evaluation</p>
+<ul>
+<li><p><strong>while</strong> True:</p>
+<ul>
+<li><p>Start from an initial state <span class="math notranslate nohighlight">\(s_0\)</span>.</p></li>
+<li><p><strong>foreach</strong> step <span class="math notranslate nohighlight">\(t\)</span> of the episode:</p>
+<ul class="simple">
+<li><p>Select <span class="math notranslate nohighlight">\(a_t\)</span> using the current policy <span class="math notranslate nohighlight">\(\pi\)</span> in state <span class="math notranslate nohighlight">\(s_t\)</span>.</p></li>
+<li><p>Apply <span class="math notranslate nohighlight">\(a_t\)</span>, observe <span class="math notranslate nohighlight">\(r_{t+1}\)</span> and <span class="math notranslate nohighlight">\(s_{t+1}\)</span>.</p></li>
+<li><p>Compute the TD error:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[\delta_t = r_{t+1} + \gamma \, V(s_{t+1}) - V(s_t)\]</div>
+<ul class="simple">
+<li><p>Update the state-value function of <span class="math notranslate nohighlight">\(s_t\)</span>:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[
+            V(s_t) = V(s_t) + \alpha \, \delta_t
+        \]</div>
+<ul class="simple">
+<li><p><strong>if</strong> <span class="math notranslate nohighlight">\(s_{t+1}\)</span> is terminal: <strong>break</strong></p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<p>TD learns from experience in a fully incremental manner. It does not need to wait until the end of an episode. It is therefore possible to learn continuing tasks. TD converges to <span class="math notranslate nohighlight">\(V^{\pi}\)</span> if the step-size parameter <span class="math notranslate nohighlight">\(\alpha\)</span> is small enough.</p>
+<p>The <strong>TD error</strong> is used to evaluate the policy:</p>
+<div class="math notranslate nohighlight">
+\[
+    V(s_t) = V(s_t) + \alpha \, (r_{t+1} + \gamma \, V(s_{t+1}) - V(s_t)) = V(s_t) + \alpha \, \delta_t
+\]</div>
+<p>The estimates converge to:</p>
+<div class="math notranslate nohighlight">
+\[V^\pi(s) = \mathbb{E}_\pi [r(s, a, s') + \gamma \, V^\pi(s')]\]</div>
+<p>By using an <strong>estimate of the return</strong> <span class="math notranslate nohighlight">\(R_t\)</span> instead of directly the return as in MC,  we <strong>increase the bias</strong> (estimates are always wrong, especially at the beginning of learning) but we <strong>reduce the variance</strong>: only <span class="math notranslate nohighlight">\(r(s, a, s')\)</span> is stochastic, not the value function <span class="math notranslate nohighlight">\(V^\pi\)</span>. We can therefore expect <strong>less optimal solutions</strong>, but we will also need <strong>less samples</strong>: better <strong>sample efficiency</strong> than MC but worse <strong>convergence</strong> (suboptimal).</p>
+<p>Q-values can be estimated in the same way:</p>
+<div class="math notranslate nohighlight">
+\[
+    Q(s_t, a_t) = Q(s_t, a_t) + \alpha \, (r_{t+1} + \gamma \, Q(s_{t+1}, a_{t+1}) - Q(s_t, a_t))
+\]</div>
+<p>Like for MC, the exploration/exploitation trade-off has to be managed: what is the next action <span class="math notranslate nohighlight">\(a_{t+1}\)</span>?  There are therefore two classes of TD control algorithms: <strong>on-policy</strong> (SARSA) and <strong>off-policy</strong> (Q-learning).</p>
+<div class="section" id="sarsa-on-policy-td-control">
+<h3><span class="section-number">5.1.1. </span>SARSA: On-policy TD control<a class="headerlink" href="#sarsa-on-policy-td-control" title="Permalink to this headline">¶</a></h3>
+<p><strong>SARSA</strong> (state-action-reward-state-action) updates the value of a state-action pair by using the predicted value of the next state-action pair according to the current policy.</p>
+<div class="figure align-default" id="id13">
+<a class="reference internal image-reference" href="../_images/sarsa-sequence.png"><img alt="../_images/sarsa-sequence.png" src="../_images/sarsa-sequence.png" style="width: 70%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 5.2 </span><span class="caption-text">State-action-reward-state-action transitions. Source: <a class="bibtex reference internal" href="../zreferences.html#sutton1998" id="id2">[SB98]</a>.</span><a class="headerlink" href="#id13" title="Permalink to this image">¶</a></p>
+</div>
+<p>When arriving in <span class="math notranslate nohighlight">\(s_{t+1}\)</span> from <span class="math notranslate nohighlight">\((s_t, a_t)\)</span>, we already sample the next action:</p>
+<div class="math notranslate nohighlight">
+\[a_{t+1} \sim \pi(s_{t+1}, a)\]</div>
+<p>We can now update the value of <span class="math notranslate nohighlight">\((s_t, a_t)\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[
+    Q(s_t, a_t) = Q(s_t, a_t) + \alpha \, (r_{t+1} + \gamma \, Q(s_{t+1}, a_{t+1}) - Q(s_t, a_t))
+\]</div>
+<p>The next action <span class="math notranslate nohighlight">\(a_{t+1}\)</span> will <strong>have to</strong> be executed next: SARSA is <strong>on-policy</strong>. You cannot change your mind and execute another <span class="math notranslate nohighlight">\(a_{t+1}\)</span>. The learned policy must be <span class="math notranslate nohighlight">\(\epsilon\)</span>-soft (stochastic) to ensure exploration. SARSA converges to the optimal policy if <span class="math notranslate nohighlight">\(\alpha\)</span> is small enough and if <span class="math notranslate nohighlight">\(\epsilon\)</span> (or <span class="math notranslate nohighlight">\(\tau\)</span>) slowly decreases to 0.</p>
+<div class="admonition-sarsa-on-policy-td-control admonition">
+<p class="admonition-title">SARSA: On-policy TD control</p>
+<ul>
+<li><p><strong>while</strong> True:</p>
+<ul>
+<li><p>Start from an initial state <span class="math notranslate nohighlight">\(s_0\)</span> and select <span class="math notranslate nohighlight">\(a_0\)</span> using the current policy <span class="math notranslate nohighlight">\(\pi\)</span>.</p></li>
+<li><p><strong>foreach</strong> step <span class="math notranslate nohighlight">\(t\)</span> of the episode:</p>
+<ul class="simple">
+<li><p>Apply <span class="math notranslate nohighlight">\(a_{t}\)</span>, observe <span class="math notranslate nohighlight">\(r_{t+1}\)</span> and <span class="math notranslate nohighlight">\(s_{t+1}\)</span>.</p></li>
+<li><p>Select <span class="math notranslate nohighlight">\(a_{t+1}\)</span> using the current <strong>stochastic</strong> policy <span class="math notranslate nohighlight">\(\pi\)</span>.</p></li>
+<li><p>Update the action-value function of <span class="math notranslate nohighlight">\((s_t, a_t)\)</span>:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[ Q(s_t, a_t) = Q(s_t, a_t) + \alpha \, (r_{t+1} + \gamma \, Q(s_{t+1}, a_{t+1})  - Q(s_t, a_t)) \]</div>
+<ul class="simple">
+<li><p>Improve the stochastic policy, e.g:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+            \pi(s_t, a) = \begin{cases}
+                            1 - \epsilon \; \text{if} \; a = \text{argmax} \, Q(s_t, a) \\
+                            \frac{\epsilon}{|\mathcal{A}(s_t) -1|} \; \text{otherwise.} \\
+                          \end{cases}
+        \end{split}\]</div>
+<ul class="simple">
+<li><p><strong>if</strong> <span class="math notranslate nohighlight">\(s_{t+1}\)</span> is terminal: <strong>break</strong></p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="q-learning-off-policy-td-control">
+<h3><span class="section-number">5.1.2. </span>Q-learning: Off-policy TD control<a class="headerlink" href="#q-learning-off-policy-td-control" title="Permalink to this headline">¶</a></h3>
+<p><strong>Q-learning</strong> directly approximates the optimal action-value function <span class="math notranslate nohighlight">\(Q^*\)</span> independently of the current policy, using the greedy action in the next state.</p>
+<div class="math notranslate nohighlight">
+\[Q(s_t, a_t) = Q(s_t, a_t) + \alpha \, (r_{t+1} + \gamma \, \max_a Q(s_{t+1}, a) - Q(s_t, a_t))\]</div>
+<p>The next action <span class="math notranslate nohighlight">\(a_{t+1}\)</span> can be generated by a behavior policy: Q-learning is <strong>off-policy</strong>, but the learned policy can be deterministic. The behavior policy can be an <span class="math notranslate nohighlight">\(\epsilon\)</span>-soft policy derived from <span class="math notranslate nohighlight">\(Q\)</span> or expert knowledge.  The behavior policy only needs to visit all state-action pairs during learning to ensure optimality.</p>
+<div class="admonition-q-learning-off-policy-td-control admonition">
+<p class="admonition-title">Q-learning: Off-policy TD control</p>
+<ul>
+<li><p><strong>while</strong> True:</p>
+<ul>
+<li><p>Start from an initial state <span class="math notranslate nohighlight">\(s_0\)</span>.</p></li>
+<li><p><strong>foreach</strong> step <span class="math notranslate nohighlight">\(t\)</span> of the episode:</p>
+<ul class="simple">
+<li><p>Select <span class="math notranslate nohighlight">\(a_{t}\)</span> using the behavior policy <span class="math notranslate nohighlight">\(b\)</span> (e.g. derived from <span class="math notranslate nohighlight">\(\pi\)</span>).</p></li>
+<li><p>Apply <span class="math notranslate nohighlight">\(a_t\)</span>, observe <span class="math notranslate nohighlight">\(r_{t+1}\)</span> and <span class="math notranslate nohighlight">\(s_{t+1}\)</span>.</p></li>
+<li><p>Update the action-value function of <span class="math notranslate nohighlight">\((s_t, a_t)\)</span>:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[Q(s_t, a_t) = Q(s_t, a_t) + \alpha \, (r_{t+1} + \gamma \, \max_a Q(s_{t+1}, a) - Q(s_t, a_t))\]</div>
+<ul class="simple">
+<li><p>Improve greedily the learned policy:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[\begin{split}\pi(s_t, a) = \begin{cases}
+                        1\; \text{if} \; a = \text{argmax} \, Q(s_t, a) \\
+                        0 \; \text{otherwise.} \\
+                      \end{cases}\end{split}\]</div>
+<ul class="simple">
+<li><p><strong>if</strong> <span class="math notranslate nohighlight">\(s_{t+1}\)</span> is terminal: <strong>break</strong></p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<p>In off-policy Monte-Carlo, Q-values are estimated using the return of the rest of the episode on average:</p>
+<div class="math notranslate nohighlight">
+\[Q^\pi(s, a) = \mathbb{E}_{\tau \sim \rho_b}[\rho_{0:T-1} \, R(\tau) | s_0 = s, a_0=a]\]</div>
+<p>As the rest of the episode is generated by <span class="math notranslate nohighlight">\(b\)</span>, we need to correct the returns using the importance sampling weight. In Q-learning, Q-values are estimated using other estimates:</p>
+<div class="math notranslate nohighlight">
+\[Q^\pi(s, a) = \mathbb{E}_{s_t \sim \rho_b, a_t \sim b}[ r_{t+1} + \gamma \, \max_a Q^\pi(s_{t+1}, a) | s_t = s, a_t=a]\]</div>
+<p>As we only sample <strong>transitions</strong> using <span class="math notranslate nohighlight">\(b\)</span> and not episodes, there is no need to correct the returns: the returns use estimates <span class="math notranslate nohighlight">\(Q^\pi\)</span>, which depend on <span class="math notranslate nohighlight">\(\pi\)</span> and not <span class="math notranslate nohighlight">\(b\)</span>.</p>
+<div class="admonition-temporal-difference-learning admonition">
+<p class="admonition-title">Temporal Difference learning</p>
+<ul>
+<li><p><strong>Temporal Difference</strong> allow to learn Q-values from single transitions instead of complete episodes.</p></li>
+<li><p>MC methods can only be applied to episodic problems, while TD works for continuing tasks.</p></li>
+<li><p>MC and TD methods are <strong>model-free</strong>: you do not need to know anything about the environment (<span class="math notranslate nohighlight">\(p(s' |s, a)\)</span> and <span class="math notranslate nohighlight">\(r(s, a, s')\)</span>) to learn.</p></li>
+<li><p>The <strong>exploration-exploitation</strong> dilemma must be dealt with:</p>
+<ul class="simple">
+<li><p><strong>On-policy</strong> TD (SARSA) follows the learned stochastic policy.</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[
+        Q(s, a) = Q(s, a) + \alpha \, (r(s, a, s') + \gamma \, Q(s', a') - Q(s, a))
+    \]</div>
+<ul class="simple">
+<li><p><strong>Off-policy</strong> TD (Q-learning) follows a behavior policy and learns a deterministic policy.</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[
+        Q(s, a) = Q(s, a) + \alpha \, (r(s, a, s') + \gamma \, \max_a Q(s', a) - Q(s, a))
+    \]</div>
+</li>
+<li><p>TD uses <strong>bootstrapping</strong> like DP: it uses other estimates to update one estimate.</p></li>
+<li><p>Q-learning is the go-to method in tabular RL.</p></li>
+</ul>
+</div>
+</div>
+</div>
+<div class="section" id="actor-critic-methods">
+<h2><span class="section-number">5.2. </span>Actor-critic methods<a class="headerlink" href="#actor-critic-methods" title="Permalink to this headline">¶</a></h2>
+<div class='embed-container'><iframe src='https://www.youtube.com/embed/6IyZ3BGmuSI' frameborder='0' allowfullscreen></iframe></div>
+<p>Actor-critic methods are TD methods that have a separate memory structure to explicitly represent the policy independent of the value function. The policy <span class="math notranslate nohighlight">\(\pi\)</span> is implemented by the <strong>actor</strong>, because it is used to select actions. The estimated values <span class="math notranslate nohighlight">\(V(s)\)</span> are implemented by the <strong>critic</strong>, because it criticizes the actions made by the actor. Learning is always <strong>on-policy</strong>: the critic must learn about and critique whatever policy is currently being followed by the actor.</p>
+<div class="figure align-default" id="id14">
+<a class="reference internal image-reference" href="../_images/actorcritic.png"><img alt="../_images/actorcritic.png" src="../_images/actorcritic.png" style="width: 50%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 5.3 </span><span class="caption-text">Actor-critic architecture. Source: <a class="bibtex reference internal" href="../zreferences.html#sutton1998" id="id3">[SB98]</a>.</span><a class="headerlink" href="#id14" title="Permalink to this image">¶</a></p>
+</div>
+<p>The critic computes the <strong>TD error</strong> or <strong>1-step advantage</strong> after each transition <span class="math notranslate nohighlight">\((s_t, a_t, r_{t+1}, s_{t+1})\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[\delta_t = r_{t+1} + \gamma \, V(s_{t+1}) - V(s_t)\]</div>
+<p>This scalar signal is the output of the critic and drives learning in both the actor and the critic. It tells us how good the action <span class="math notranslate nohighlight">\(a_t\)</span> was compared to our expectation <span class="math notranslate nohighlight">\(V(s_t)\)</span>.</p>
+<p>When the advantage <span class="math notranslate nohighlight">\(\delta_t &gt; 0\)</span>, this means that the action lead to a better reward or a better state than what was expected by <span class="math notranslate nohighlight">\(V(s_t)\)</span>, which is a <strong>good surprise</strong>, so the action should be reinforced (selected again) and the value of that state increased.</p>
+<p>When <span class="math notranslate nohighlight">\(\delta_t &lt; 0\)</span>, this means that the previous estimation of <span class="math notranslate nohighlight">\((s_t, a_t)\)</span> was too high (<strong>bad surprise</strong>), so the action should be avoided in the future and the value of the state reduced.</p>
+<p>The critic is updated using this scalar signal:</p>
+<div class="math notranslate nohighlight">
+\[ V(s_t) \leftarrow V(s_t) + \alpha \, \delta_t\]</div>
+<p>The actor is updated according to this TD error signal. For example a softmax actor over preferences:</p>
+<div class="math notranslate nohighlight">
+\[p(s_t, a_t) \leftarrow p(s_t, a_t) + \beta \, \delta_t\]</div>
+<div class="math notranslate nohighlight">
+\[\pi(s, a) = \frac{\exp{p(s, a)}}{\sum_b \exp{p(s, b)}}\]</div>
+<p>When <span class="math notranslate nohighlight">\(\delta_t &gt;0\)</span>, the preference is increased, so the probability of selecting it again increases. When <span class="math notranslate nohighlight">\(\delta_t &lt;0\)</span>, the preference is decreased, so the probability of selecting it again decreases. This is the equivalent of <strong>reinforcement comparison</strong> for bandits.</p>
+<div class="admonition-actor-critic-algorithm-with-preferences admonition">
+<p class="admonition-title">Actor-critic algorithm with preferences</p>
+<ul>
+<li><p>Start in <span class="math notranslate nohighlight">\(s_0\)</span>. Initialize the preferences <span class="math notranslate nohighlight">\(p(s,a)\)</span> for each state action pair and the critic <span class="math notranslate nohighlight">\(V(s)\)</span> for each state.</p></li>
+<li><p><strong>foreach</strong> step <span class="math notranslate nohighlight">\(t\)</span>:</p>
+<ul class="simple">
+<li><p>Select <span class="math notranslate nohighlight">\(a_t\)</span> using the <strong>actor</strong> <span class="math notranslate nohighlight">\(\pi\)</span> in state <span class="math notranslate nohighlight">\(s_t\)</span>:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[\pi(s_t, a) = \frac{\exp{p(s, a)}}{\sum_b \exp{p(s, b)}}\]</div>
+<ul class="simple">
+<li><p>Apply <span class="math notranslate nohighlight">\(a_t\)</span>, observe <span class="math notranslate nohighlight">\(r_{t+1}\)</span> and <span class="math notranslate nohighlight">\(s_{t+1}\)</span>.</p></li>
+<li><p>Compute the TD error in <span class="math notranslate nohighlight">\(s_t\)</span> using the <strong>critic</strong>:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[
+        \delta_t = r_{t+1} + \gamma \, V(s_{t+1}) - V(s_t)
+    \]</div>
+<ul class="simple">
+<li><p>Update the <strong>actor</strong>:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[
+        p(s_t, a_t) \leftarrow p(s_t, a_t) + \beta \, \delta_t
+    \]</div>
+<ul class="simple">
+<li><p>Update the <strong>critic</strong>:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[
+        V(s_t) \leftarrow V(s_t) + \alpha \, \delta_t
+    \]</div>
+</li>
+</ul>
+</div>
+<p>The advantage of the separation between the actor and the critic is that now the actor can take any form (preferences, linear approximation, deep networks). It requires minimal computation in order to select the actions, in particular when the action space is huge or even continuous. It can learn stochastic policies, which is particularly useful in non-Markov problems.</p>
+<p><strong>It is obligatory to learn on-policy:</strong>  the critic must evaluate the actions taken by the current actor and the actor must learn from the current critic, not “old” V-values.</p>
+<div class="admonition-value-based-vs-policy-based-algorithms admonition">
+<p class="admonition-title">Value-based vs. policy-based algorithms</p>
+<ul class="simple">
+<li><p><strong>Value-based</strong> methods use value estimates <span class="math notranslate nohighlight">\(Q_t(s, a)\)</span> to infer a policy:</p>
+<ul>
+<li><p><strong>On-policy</strong> methods learn and use a stochastic policy to explore.</p></li>
+<li><p><strong>Off-policy</strong> methods learn a deterministic policy but use a (stochastic) behavior policy to explore.</p></li>
+</ul>
+</li>
+<li><p><strong>Policy-based</strong> methods directly learn the policy <span class="math notranslate nohighlight">\(\pi_t(s, a)\)</span> (<strong>actor</strong>) using preferences or function approximators.</p>
+<ul>
+<li><p>A <strong>critic</strong> learning values is used to improve the policy w.r.t a performance baseline.</p></li>
+<li><p>Actor-critic architectures are strictly <strong>on-policy</strong>.</p></li>
+</ul>
+</li>
+</ul>
+<table class="colwidths-auto table">
+<thead>
+<tr class="row-odd"><th class="text-align:center head"><p></p></th>
+<th class="text-align:center head"><p>Bandits</p></th>
+<th class="text-align:center head"><p>MDP</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-align:center"><p><strong>Value-based</strong></p></td>
+<td class="text-align:center"><p></p></td>
+<td class="text-align:center"><p></p></td>
+</tr>
+<tr class="row-odd"><td class="text-align:center"><p><span class="math notranslate nohighlight">\(\qquad\)</span>On-policy</p></td>
+<td class="text-align:center"><p><span class="math notranslate nohighlight">\(\epsilon\)</span>-greedy, softmax</p></td>
+<td class="text-align:center"><p>SARSA</p></td>
+</tr>
+<tr class="row-even"><td class="text-align:center"><p><span class="math notranslate nohighlight">\(\qquad\)</span>Off-policy</p></td>
+<td class="text-align:center"><p>greedy</p></td>
+<td class="text-align:center"><p>Q-learning</p></td>
+</tr>
+<tr class="row-odd"><td class="text-align:center"><p><strong>Policy-based</strong></p></td>
+<td class="text-align:center"><p></p></td>
+<td class="text-align:center"><p></p></td>
+</tr>
+<tr class="row-even"><td class="text-align:center"><p><span class="math notranslate nohighlight">\(\qquad\)</span>On-policy</p></td>
+<td class="text-align:center"><p>Reinforcement comparison</p></td>
+<td class="text-align:center"><p>Actor-critic</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="eligibility-traces-and-advantage-estimation">
+<h2><span class="section-number">5.3. </span>Eligibility traces and advantage estimation<a class="headerlink" href="#eligibility-traces-and-advantage-estimation" title="Permalink to this headline">¶</a></h2>
+<div class='embed-container'><iframe src='https://www.youtube.com/embed/Coe9U4bv-nI' frameborder='0' allowfullscreen></iframe></div>
+<p>MC has <strong>high variance, zero bias</strong>: it has good convergence properties and we are more likely to find the optimal policy. It is not very sensitive to initial estimates, and very simple to understand and use.</p>
+<p>TD has <strong>low variance, some bias</strong>, so it is usually more <strong>sample efficient</strong> than MC. TD(0) converges to <span class="math notranslate nohighlight">\(V^\pi(s)\)</span> (but not always with function approximation). The policy might be suboptimal. It is more sensitive to initial values (bootstrapping).</p>
+<div class="figure align-default" id="id15">
+<a class="reference internal image-reference" href="../_images/gridworld-lambda.png"><img alt="../_images/gridworld-lambda.png" src="../_images/gridworld-lambda.png" style="width: 70%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 5.4 </span><span class="caption-text">Gridworld environment. Source: <a class="bibtex reference internal" href="../zreferences.html#sutton1998" id="id4">[SB98]</a>.</span><a class="headerlink" href="#id15" title="Permalink to this image">¶</a></p>
+</div>
+<p>When the reward function is sparse (e.g. only at the end of a game), only the last action, leading to that reward, will be updated the first time in TD.</p>
+<div class="math notranslate nohighlight">
+\[
+    Q(s, a) = Q(s, a) + \alpha \, (r(s, a, s') + \gamma \, \max_a Q(s', a) - Q(s, a))
+\]</div>
+<p>The previous actions, which were equally important in obtaining the reward, will only be updated the next time they are visited. This makes learning very slow: if the path to the reward has <span class="math notranslate nohighlight">\(n\)</span> steps, you will need to repeat the same episode at least <span class="math notranslate nohighlight">\(n\)</span> times to learn the Q-value of the first action.</p>
+<div class="section" id="n-step-returns">
+<h3><span class="section-number">5.3.1. </span>n-step returns<a class="headerlink" href="#n-step-returns" title="Permalink to this headline">¶</a></h3>
+<div class="figure align-default" id="id16">
+<a class="reference internal image-reference" href="../_images/nstep.png"><img alt="../_images/nstep.png" src="../_images/nstep.png" style="width: 70%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 5.5 </span><span class="caption-text">n-step returns. Source: <a class="bibtex reference internal" href="../zreferences.html#sutton1998" id="id5">[SB98]</a>.</span><a class="headerlink" href="#id16" title="Permalink to this image">¶</a></p>
+</div>
+<p>Optimally, we would like a trade-off between:</p>
+<ul class="simple">
+<li><p>TD (only one state/action is updated each time, small variance but significant bias)</p></li>
+<li><p>Monte-Carlo (all states/actions in an episode are updated, no bias but huge variance).</p></li>
+</ul>
+<p>In <strong>n-step TD prediction</strong>, the next <span class="math notranslate nohighlight">\(n\)</span> rewards are used to estimate the return, the rest is approximated.
+The <strong>n-step return</strong> is the discounted sum of the <span class="math notranslate nohighlight">\(n\)</span> next rewards is computed as in MC plus the predicted value at step <span class="math notranslate nohighlight">\(t+n+1\)</span> which replaces the rest as in TD.</p>
+<div class="math notranslate nohighlight">
+\[
+    R^n_t = \sum_{k=0}^{n-1} \gamma^{k} \, r_{t+k+1} + \gamma^n \,  V(s_{t+n+1}) 
+\]</div>
+<p>We can update the value of the state with this n-step return:</p>
+<div class="math notranslate nohighlight">
+\[
+    V(s_t) = V(s_t) + \alpha \, (R^n_t - V (s_t))
+\]</div>
+<p>The <strong>n-step advantage</strong> at time <span class="math notranslate nohighlight">\(t\)</span> is:</p>
+<div class="math notranslate nohighlight">
+\[
+A^n_t = \sum_{k=0}^{n-1} \gamma^{k} \, r_{t+k+1} + \gamma^n \,  V(s_{t+n+1}) - V (s_t)
+\]</div>
+<p>It is easy to check that the <strong>TD error</strong> is the 1-step advantage:</p>
+<div class="math notranslate nohighlight">
+\[
+    \delta_t = A^1_t = r_{t+1} + \gamma \, V(s_{t+1}) - V(s_t)
+\]</div>
+<p>As you use more “real” rewards, you <strong>reduce the bias</strong> of Q-learning. As you use estimates for the rest of the episode, you <strong>reduce the variance</strong> of MC methods. But how to choose <span class="math notranslate nohighlight">\(n\)</span>?</p>
+</div>
+<div class="section" id="eligibility-traces">
+<h3><span class="section-number">5.3.2. </span>Eligibility traces<a class="headerlink" href="#eligibility-traces" title="Permalink to this headline">¶</a></h3>
+<p>One solution is to <strong>average</strong> the n-step returns, using a discount factor <span class="math notranslate nohighlight">\(\lambda\)</span> :</p>
+<div class="math notranslate nohighlight">
+\[R^\lambda_t = (1  - \lambda) \, \sum_{n=1}^\infty \lambda^{n-1} \, R^n_t\]</div>
+<div class="figure align-default" id="id17">
+<a class="reference internal image-reference" href="../_images/eligibility-forward.png"><img alt="../_images/eligibility-forward.png" src="../_images/eligibility-forward.png" style="width: 60%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 5.6 </span><span class="caption-text"><span class="math notranslate nohighlight">\(\lambda\)</span>-returns are averages of all n-step returns. Source: <a class="bibtex reference internal" href="../zreferences.html#sutton1998" id="id6">[SB98]</a>.</span><a class="headerlink" href="#id17" title="Permalink to this image">¶</a></p>
+</div>
+<p>The term <span class="math notranslate nohighlight">\(1- \lambda\)</span> is there to ensure that the coefficients <span class="math notranslate nohighlight">\(\lambda^{n-1}\)</span> sum to one.</p>
+<div class="math notranslate nohighlight">
+\[\sum_{n=1}^\infty \lambda^{n-1} = \dfrac{1}{1 - \lambda}\]</div>
+<p>Each reward <span class="math notranslate nohighlight">\(r_{t+k+1}\)</span> will count multiple times in the <span class="math notranslate nohighlight">\(\lambda\)</span>-return. Distant rewards are discounted by <span class="math notranslate nohighlight">\(\lambda^k\)</span> in addition to <span class="math notranslate nohighlight">\(\gamma^k\)</span>.</p>
+<div class="figure align-default" id="id18">
+<a class="reference internal image-reference" href="../_images/eligibility-forward-decay.png"><img alt="../_images/eligibility-forward-decay.png" src="../_images/eligibility-forward-decay.png" style="width: 70%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 5.7 </span><span class="caption-text"><span class="math notranslate nohighlight">\(\lambda\)</span> controls the importance of large n-step returns. Source: <a class="bibtex reference internal" href="../zreferences.html#sutton1998" id="id7">[SB98]</a>.</span><a class="headerlink" href="#id18" title="Permalink to this image">¶</a></p>
+</div>
+<p>Large n-step returns (MC) should not have as much importance as small ones (TD), as they have a high variance.</p>
+<p>To understand the role of <span class="math notranslate nohighlight">\(\lambda\)</span>, let’s split the infinite sum w.r.t the end of the episode at time <span class="math notranslate nohighlight">\(T\)</span>. n-step returns with <span class="math notranslate nohighlight">\(n \geq T\)</span> all have a MC return of <span class="math notranslate nohighlight">\(R_t\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[R^\lambda_t = (1  - \lambda) \, \sum_{n=1}^{T-t-1} \lambda^{n-1} \, R^n_t + \lambda^{T-t-1} \, R_t\]</div>
+<p><span class="math notranslate nohighlight">\(\lambda\)</span> controls the bias-variance trade-off:</p>
+<ul class="simple">
+<li><p>If <span class="math notranslate nohighlight">\(\lambda=0\)</span>, the <span class="math notranslate nohighlight">\(\lambda\)</span>-return is equal to <span class="math notranslate nohighlight">\(R^1_t = r_{t+1} + \gamma \, V(s_{t+1})\)</span>, i.e. TD: high bias, low variance.</p></li>
+<li><p>If <span class="math notranslate nohighlight">\(\lambda=1\)</span>, the <span class="math notranslate nohighlight">\(\lambda\)</span>-return is equal to <span class="math notranslate nohighlight">\(R_t = \sum_{k=0}^{\infty} \gamma^{k} \, r_{t+k+1}\)</span>, i.e. MC: low bias, high variance.</p></li>
+</ul>
+<p>This <strong>forward view</strong> of eligibility traces implies to look at all future rewards until the end of the episode to perform a value update. This prevents online learning using single transitions.</p>
+<div class="figure align-default" id="id19">
+<a class="reference internal image-reference" href="../_images/eligibility-forward-view.png"><img alt="../_images/eligibility-forward-view.png" src="../_images/eligibility-forward-view.png" style="width: 70%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 5.8 </span><span class="caption-text">Forward view of eligibility traces. Source: <a class="bibtex reference internal" href="../zreferences.html#sutton1998" id="id8">[SB98]</a>.</span><a class="headerlink" href="#id19" title="Permalink to this image">¶</a></p>
+</div>
+<p>Another view on eligibility traces is that the  <strong>TD reward prediction error</strong> at time <span class="math notranslate nohighlight">\(t\)</span> is sent backwards in time:</p>
+<div class="math notranslate nohighlight">
+\[
+ \delta_t = r_{t+1} + \gamma V(s_{t+1}) - V(s_t)
+\]</div>
+<div class="figure align-default" id="id20">
+<a class="reference internal image-reference" href="../_images/eligibility-backwards.png"><img alt="../_images/eligibility-backwards.png" src="../_images/eligibility-backwards.png" style="width: 70%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 5.9 </span><span class="caption-text">Backward view of eligibility traces. Source: <a class="bibtex reference internal" href="../zreferences.html#sutton1998" id="id9">[SB98]</a>.</span><a class="headerlink" href="#id20" title="Permalink to this image">¶</a></p>
+</div>
+<p>Every state <span class="math notranslate nohighlight">\(s\)</span> previously visited during the episode will be updated proportionally to the current TD error and an <strong>eligibility trace</strong> <span class="math notranslate nohighlight">\(e_t(s)\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[
+    V(s) \leftarrow V(s) + \alpha \, \delta_t \, e_t(s)
+\]</div>
+<p>The eligibility trace defines since how long the state was visited:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+    e_t(s) = \begin{cases}
+                \gamma \, \lambda \, e_{t-1}(s) \qquad\qquad \text{if} \quad s \neq s_t \\
+                e_{t-1}(s) + 1 \qquad \text{if} \quad s = s_t \\
+            \end{cases}
+\end{split}\]</div>
+<div class="figure align-default" id="id21">
+<a class="reference internal image-reference" href="../_images/traces.png"><img alt="../_images/traces.png" src="../_images/traces.png" style="width: 70%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 5.10 </span><span class="caption-text">Updating of eligibility traces. Source: <a class="bibtex reference internal" href="../zreferences.html#sutton1998" id="id10">[SB98]</a>.</span><a class="headerlink" href="#id21" title="Permalink to this image">¶</a></p>
+</div>
+<p><span class="math notranslate nohighlight">\(\lambda\)</span> defines how important is a future TD error for the current state.</p>
+<div class="admonition-td-lambda-algorithm-policy-evaluation admonition">
+<p class="admonition-title">TD(<span class="math notranslate nohighlight">\(\lambda\)</span>) algorithm: policy evaluation</p>
+<ul>
+<li><p><strong>foreach</strong> step <span class="math notranslate nohighlight">\(t\)</span> of the episode:</p>
+<ul class="simple">
+<li><p>Select <span class="math notranslate nohighlight">\(a_t\)</span> using the current policy <span class="math notranslate nohighlight">\(\pi\)</span> in state <span class="math notranslate nohighlight">\(s_t\)</span>, observe <span class="math notranslate nohighlight">\(r_{t+1}\)</span> and <span class="math notranslate nohighlight">\(s_{t+1}\)</span>.</p></li>
+<li><p>Compute the TD error in <span class="math notranslate nohighlight">\(s_t\)</span>:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[
+        \delta_t = r_{t+1} + \gamma \, V_k(s_{t+1}) - V_k(s_t)
+    \]</div>
+<ul class="simple">
+<li><p>Increment the trace of <span class="math notranslate nohighlight">\(s_t\)</span>:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[
+        e_{t+1}(s_t) = e_t(s_t) + 1
+    \]</div>
+<ul>
+<li><p><strong>foreach</strong> state <span class="math notranslate nohighlight">\(s \in [s_o, \ldots, s_t]\)</span> in the episode:</p>
+<ul class="simple">
+<li><p>Update the state value function:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[
+            V_{k+1}(s) = V_k(s) + \alpha \, \delta_t \, e_t(s)
+        \]</div>
+<ul class="simple">
+<li><p>Decay the eligibility trace:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[
+            e_{t+1}(s) = \lambda \, \gamma \, e_t(s)
+        \]</div>
+</li>
+<li><p><strong>if</strong> <span class="math notranslate nohighlight">\(s_{t+1}\)</span> is terminal: <strong>break</strong></p></li>
+</ul>
+</li>
+</ul>
+</div>
+<p>The backward view of eligibility traces can be applied on single transitions, given we know the history of visited states and maintain a trace for each of them. Eligibility traces are a very useful way to speed learning up in TD methods and control the bias/variance trade-off. This modification can be applied to all TD methods: TD(<span class="math notranslate nohighlight">\(\lambda\)</span>) for states, SARSA(<span class="math notranslate nohighlight">\(\lambda\)</span>) and Q(<span class="math notranslate nohighlight">\(\lambda\)</span>) for actions.</p>
+<p>The main drawback is that we need to keep a trace for ALL possible state-action pairs: memory consumption. Clever programming can limit this issue. The value of <span class="math notranslate nohighlight">\(\lambda\)</span> has to be carefully chosen for the problem: perhaps initial actions are random and should not be reinforced. If your problem is not strictly Markov (POMDP), eligibility traces can help as they update the history!</p>
+</div>
+<div class="section" id="generalized-advantage-estimation-gae">
+<h3><span class="section-number">5.3.3. </span>Generalized advantage estimation (GAE)<a class="headerlink" href="#generalized-advantage-estimation-gae" title="Permalink to this headline">¶</a></h3>
+<p>The <strong>n-step advantage</strong> at time <span class="math notranslate nohighlight">\(t\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[
+A^n_t = \sum_{k=0}^{n-1} \gamma^{k} \, r_{t+k+1} + \gamma^n \,  V(s_{t+n+1}) - V (s_t)
+\]</div>
+<p>can be written as function of the TD error of the next <span class="math notranslate nohighlight">\(n\)</span> transitions:</p>
+<div class="math notranslate nohighlight">
+\[
+    A^{n}_t = \sum_{l=0}^{n-1} \gamma^l \, \delta_{t+l}
+\]</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Proof with <span class="math notranslate nohighlight">\(n=2\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+A^2_t &amp;= r_{t+1} + \gamma \, r_{t+2} + \gamma^2 \, V(s_{t+2}) - V(s_{t}) \\
+&amp;\\
+&amp;= (r_{t+1} - V(s_t)) + \gamma \, (r_{t+2} + \gamma \, V(s_{t+2}) ) \\
+&amp;\\
+&amp;= (r_{t+1} + \gamma \, V(s_{t+1}) - V(s_t)) + \gamma \, (r_{t+2} + \gamma \, V(s_{t+2}) - V(s_{t+1})) \\
+&amp;\\
+&amp;= \delta_t + \gamma \, \delta_{t+1}
+\end{aligned}
+\end{split}\]</div>
+</div>
+<p>The <strong>n-step advantage</strong> realizes a bias/variance trade-off, but which value of <span class="math notranslate nohighlight">\(n\)</span> should we choose?</p>
+<div class="math notranslate nohighlight">
+\[
+A^n_t = \sum_{k=0}^{n-1} \gamma^{k} \, r_{t+k+1} + \gamma^n \,  V(s_{t+n+1}) - V (s_t)
+\]</div>
+<p>Schulman et al. (2015) <a class="bibtex reference internal" href="../zreferences.html#schulman2015a" id="id11">[SML+15]</a> proposed a <strong>generalized advantage estimate</strong> (GAE) <span class="math notranslate nohighlight">\(A_t^{\text{GAE}(\gamma, \lambda)}\)</span> summing all possible n-step advantages with a discount parameter <span class="math notranslate nohighlight">\(\lambda\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[A_t^{\text{GAE}(\gamma, \lambda)} = (1 - \lambda) \sum_{n=1}^\infty \lambda^n \, A^n_t\]</div>
+<p>This is just a forward eligibility trace over distant n-step advantages: the 1-step advantage is more important the the 1000-step advantage (too much variance). We can show that the GAE can be expressed as a function of the future 1-step TD errors:</p>
+<div class="math notranslate nohighlight">
+\[A_t^{\text{GAE}(\gamma, \lambda)} = \sum_{k=0}^\infty (\gamma \, \lambda)^k \, \delta_{t+k}\]</div>
+<p>The parameter <span class="math notranslate nohighlight">\(\lambda\)</span> controls the <strong>bias-variance</strong> trade-off.</p>
+<ul class="simple">
+<li><p>When <span class="math notranslate nohighlight">\(\lambda=0\)</span>, the generalized advantage is the TD error:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[A_t^{\text{GAE}(\gamma, 0)} = r_{t+1} + \gamma \, V(s_{t+1}) - V(s_t)  = \delta_{t}\]</div>
+<ul class="simple">
+<li><p>When <span class="math notranslate nohighlight">\(\lambda=1\)</span>, the generalized advantage is the MC advantage:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[A_t^{\text{GAE}(\gamma, 1)} = \sum_{k=0}^\infty \gamma^k \, r_{t+k+1} - V(s_t) = R_t - V(s_t)\]</div>
+<p>Any value in between controls the bias-variance trade-off: from the high bias / low variance of TD to the small bias / high variance of MC. In practice, it leads to a better estimation than n-step advantages, but is more computationally expensive.</p>
+</div>
+</div>
+</div>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./2-tabular"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+        </div>
+    </div>
+    
+    
+    <div class='prev-next-bottom'>
+        
+    <a class='left-prev' id="prev-link" href="4-MC.html" title="previous page"><span class="section-number">4. </span>Monte-Carlo (MC) methods</a>
+    <a class='right-next' id="next-link" href="../5-exercises/ex1-Python.html" title="next page"><span class="section-number">1. </span>Introduction to Python</a>
+
+    </div>
+    <footer class="footer mt-5 mt-md-0">
+    <div class="container">
+      <p>
+        
+          By Julien Vitay - julien.vitay@informatik.tu-chemnitz.de<br/>
+        
+            &copy; Copyright 2020.<br/>
+          <div class="extra_footer">
+            Technische Universität Chemnitz - Faculty of Computer Science - Professorship for Artificial Intelligence
+          </div>
+      </p>
+    </div>
+  </footer>
+</main>
+
+
+      </div>
+    </div>
+
+    <script src="../_static/js/index.js"></script>
+    
+  </body>
+</html>
