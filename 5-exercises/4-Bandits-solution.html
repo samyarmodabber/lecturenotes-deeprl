@@ -133,6 +133,11 @@
    4. Monte-Carlo (MC) methods
   </a>
  </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../2-tabular/5-TD.html">
+   5. Temporal Difference learning
+  </a>
+ </li>
 </ul>
 <p class="caption">
  <span class="caption-text">
@@ -506,7 +511,7 @@
 </pre></div>
 </div>
 <p>The constructor should initialize the array of estimated Q-values <code class="docutils literal notranslate"><span class="pre">Q_t</span></code> and store it as an attribute.</p>
-<p>Define a method <code class="docutils literal notranslate"><span class="pre">act(self)</span></code> that returns the index of the greedy action based on the current estimates, as well as a method <code class="docutils literal notranslate"><span class="pre">update(self,</span> <span class="pre">action,</span> <span class="pre">reward)</span></code> that allows to update the estimated Q-value of the action given the obtained reward. Define also a <code class="docutils literal notranslate"><span class="pre">train(self,</span> <span class="pre">nb_steps)</span></code> method that implements the complete training process for <code class="docutils literal notranslate"><span class="pre">nb_steps=1000</span></code> plays.</p>
+<p>Define a method <code class="docutils literal notranslate"><span class="pre">act(self)</span></code> that returns the index of the greedy action based on the current estimates, as well as a method <code class="docutils literal notranslate"><span class="pre">update(self,</span> <span class="pre">action,</span> <span class="pre">reward)</span></code> that allows to update the estimated Q-value of the action given the obtained reward. Define also a <code class="docutils literal notranslate"><span class="pre">train(self,</span> <span class="pre">nb_steps)</span></code> method that implements the complete training process for <code class="docutils literal notranslate"><span class="pre">nb_steps=1000</span></code> plays and returns the list of obtained rewards.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">GreedyAgent</span><span class="p">:</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bandit</span><span class="p">,</span> <span class="n">alpha</span><span class="p">):</span>
         <span class="c1"># TODO</span>
@@ -643,7 +648,7 @@
             <span class="n">rewards</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">reward</span><span class="p">)</span>
             
             <span class="c1"># Optimal action</span>
-            <span class="k">if</span> <span class="n">action</span> <span class="o">==</span> <span class="n">bandit</span><span class="o">.</span><span class="n">a_star</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">action</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">bandit</span><span class="o">.</span><span class="n">a_star</span><span class="p">:</span>
                 <span class="n">optimal</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mf">1.0</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">optimal</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)</span>
@@ -857,7 +862,7 @@
 <p>In practice, <span class="math notranslate nohighlight">\(\exp \frac{Q_t(a)}{\tau}\)</span> can be very huge if the Q-values are high or the temperature is small, creating numerical instability (NaN). It is much more stable to substract the maximal Q-value from all Q-values before applying the softmax:</p>
 <div class="math notranslate nohighlight">
 \[
-    \pi(a) = \frac{\exp \displaystyle\frac{Q_t(a) - \max_a Q_t(a)}{\tau}}{ \sum_a \exp \displaystyle\frac{Q_t(a) - \max_a Q_t(a)}{\tau}}
+    \pi(a) = \frac{\exp \displaystyle\frac{Q_t(a) - \max_a Q_t(a)}{\tau}}{ \sum_b \exp \displaystyle\frac{Q_t(b) - \max_b Q_t(b)}{\tau}}
 \]</div>
 <p>This way, <span class="math notranslate nohighlight">\(Q_t(a) - \max_a Q_t(a)\)</span> is always negative, so its exponential is between 0 and 1.</p>
 <p><strong>Q:</strong> Implement the softmax action selection (with <span class="math notranslate nohighlight">\(\tau=0.5\)</span> at first) and compare its performance to greedy and <span class="math notranslate nohighlight">\(\epsilon\)</span>-greedy. Vary the temperature <span class="math notranslate nohighlight">\(\tau\)</span> and find the best possible value. Conclude.</p>
