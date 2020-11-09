@@ -1,0 +1,530 @@
+
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Deep learning &#8212; Deep Reinforcement Learning</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" integrity="sha384-KA6wR/X5RY4zFAHpv/CnoG2UW1uogYfdnP67Uv7eULvTveboZJg0qUpmJZb5VqzN" crossorigin="anonymous">
+    <link href="../_static/css/index.css" rel="stylesheet">
+    <link rel="stylesheet" href="../_static/sphinx-book-theme.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/style.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-dropdown.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/sphinx-book-theme.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/togglebutton.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/sphinx-book-theme.js"></script>
+    <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processRefs": false, "processEnvironments": false}})</script>
+    <script async="async" src="https://unpkg.com/thebelab@latest/lib/index.js"></script>
+    <script >
+        const thebe_selector = ".thebe"
+        const thebe_selector_input = "pre"
+        const thebe_selector_output = ".output"
+    </script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <link rel="canonical" href="https://julien-vitay.net/lecturenotes-deeprl/2-tabular/7-NN.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="docsearch:language" content="en">
+
+
+<!-- Opengraph tags -->
+<meta property="og:url"         content="https://julien-vitay.net/lecturenotes-deeprl/2-tabular/7-NN.html" />
+<meta property="og:type"        content="article" />
+<meta property="og:title"       content="Deep learning" />
+<meta property="og:description" content="Deep learning  Feedforward neural networks  An artificial neural network (ANN) is a cascade of fully-connected (FC) layers of artificial neurons.    Shallow vs." />
+<meta property="og:image"       content="https://julien-vitay.net/lecturenotes-deeprl/_static/tuc.svg" />
+
+<meta name="twitter:card" content="summary" />
+
+
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
+<a class="navbar-brand text-wrap" href="../index.html">
+  
+  <img src="../_static/tuc.svg" class="logo" alt="logo">
+  
+  
+  <h1 class="site-logo" id="site-title">Deep Reinforcement Learning</h1>
+  
+</a>
+</div>
+
+<form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form>
+
+<nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+  <ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../intro.html">
+   Deep Reinforcement Learning
+  </a>
+ </li>
+</ul>
+<p class="caption">
+ <span class="caption-text">
+  Introduction
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../1-intro/1-Introduction.html">
+   1. Introduction
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../1-intro/2-Math.html">
+   2. Math basics
+  </a>
+ </li>
+</ul>
+<p class="caption">
+ <span class="caption-text">
+  Tabular RL
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="1-Bandits.html">
+   1. Bandits
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="2-MDP.html">
+   2. Markov Decision Processes
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="3-DP.html">
+   3. Dynamic Programming
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="4-MC.html">
+   4. Monte-Carlo (MC) methods
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="5-TD.html">
+   5. Temporal Difference learning
+  </a>
+ </li>
+</ul>
+<p class="caption">
+ <span class="caption-text">
+  Exercises
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../5-exercises/ex1-Python.html">
+   1. Introduction to Python
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../5-exercises/ex2-Numpy.html">
+   2. Numpy and Matplotlib
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../5-exercises/ex3-Sampling.html">
+   3. Sampling
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../5-exercises/ex4-Bandits.html">
+   4. Bandits (part 1)
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../5-exercises/ex5-Bandits2.html">
+   5. Bandits (part 2)
+  </a>
+ </li>
+</ul>
+<p class="caption">
+ <span class="caption-text">
+  References
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../zreferences.html">
+   1. Bibliography
+  </a>
+ </li>
+</ul>
+
+</nav>
+
+ <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="row topbar fixed-top container-xl">
+    <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show">
+    </div>
+    <div class="col pl-2 topbar-main">
+        
+        <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+            data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+            aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+            title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+            <i class="fas fa-bars"></i>
+            <i class="fas fa-arrow-left"></i>
+            <i class="fas fa-arrow-up"></i>
+        </button>
+        
+        <div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="../_sources/2-tabular/7-NN.md"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.md</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+    
+</div>
+        <!-- Source interaction buttons -->
+
+
+        <!-- Full screen (wrap in <a> to have style consistency -->
+        <a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+                data-placement="bottom" onclick="toggleFullScreen()" title="Fullscreen mode"><i
+                    class="fas fa-expand"></i></button></a>
+
+        <!-- Launch buttons -->
+
+    </div>
+
+    <!-- Table of contents -->
+    <div class="d-none d-md-block col-md-2 bd-toc show">
+        <div class="tocsection onthispage pt-5 pb-3">
+            <i class="fas fa-list"></i> Contents
+        </div>
+        <nav id="bd-toc-nav">
+            <ul class="nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#feedforward-neural-networks">
+   Feedforward neural networks
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#convolutional-neural-networks">
+   Convolutional neural networks
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#autoencoders">
+   Autoencoders
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#recurrent-neural-networks">
+   Recurrent neural networks
+  </a>
+ </li>
+</ul>
+
+        </nav>
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+        
+              <div>
+                
+  <div class="section" id="deep-learning">
+<h1>Deep learning<a class="headerlink" href="#deep-learning" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="feedforward-neural-networks">
+<h2>Feedforward neural networks<a class="headerlink" href="#feedforward-neural-networks" title="Permalink to this headline">¶</a></h2>
+<p>An <strong>artificial neural network</strong> (ANN) is a cascade of <strong>fully-connected</strong> (FC) layers of artificial neurons.</p>
+<div class="figure align-default" id="id1">
+<a class="reference internal image-reference" href="../_images/shallowdeep.png"><img alt="../_images/shallowdeep.png" src="../_images/shallowdeep.png" style="width: 100%;" /></a>
+<p class="caption"><span class="caption-text">Shallow vs. deep neural networks.</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
+</div>
+<p>Each layer <span class="math notranslate nohighlight">\(k\)</span> transforms an input vector <span class="math notranslate nohighlight">\(\mathbf{h}_{k-1}\)</span> into an output vector <span class="math notranslate nohighlight">\(\mathbf{h}_{k}\)</span> using a weight matrix <span class="math notranslate nohighlight">\(W_k\)</span>, a bias vector <span class="math notranslate nohighlight">\(\mathbf{b}_k\)</span> and an activation function <span class="math notranslate nohighlight">\(f()\)</span>.</p>
+<div class="math notranslate nohighlight">
+\[\mathbf{h}_{k} = f(W_k \times \mathbf{h}_{k-1} + \mathbf{b}_k)\]</div>
+<p>Overall, ANNs are <strong>non-linear parameterized function estimators</strong> from the inputs <span class="math notranslate nohighlight">\(\mathbf{x}\)</span> to the outputs <span class="math notranslate nohighlight">\(\mathbf{y}\)</span> with parameters <span class="math notranslate nohighlight">\(\theta\)</span> (all weight matrices and biases).</p>
+<div class="math notranslate nohighlight">
+\[\mathbf{y} = F_\theta (\mathbf{x})\]</div>
+<p>ANNs can be used for both <strong>regression</strong> (continuous outputs) and <strong>classification</strong> (discrete outputs) tasks. We have a fixed <strong>training set</strong> <span class="math notranslate nohighlight">\(\mathcal{D}\)</span> of <span class="math notranslate nohighlight">\(N\)</span> samples <span class="math notranslate nohighlight">\((\mathbf{x}_t, \mathbf{t}_i)\)</span>, where <span class="math notranslate nohighlight">\(t_i\)</span> is the <strong>desired output</strong> or <strong>target</strong>.</p>
+<ul>
+<li><p><strong>Regression:</strong></p>
+<ul class="simple">
+<li><p>The output layer uses a <strong>linear</strong> activation function: <span class="math notranslate nohighlight">\(f(x) = x\)</span></p></li>
+<li><p>The network minimizes the <strong>mean square error</strong> (mse) of the model on the training set:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[\mathcal{L}(\theta) = \mathbb{E}_{\mathbf{x}, \mathbf{t} \in \mathcal{D}} [ ||\mathbf{t} - \mathbf{y}||^2 ]\]</div>
+</li>
+<li><p><strong>Classification:</strong></p>
+<ul class="simple">
+<li><p>The output layer uses the <strong>softmax</strong> operator to produce a probabilty distribution: <span class="math notranslate nohighlight">\(y_j = \frac{e^{z_j}}{\sum_k e^{z_k}}\)</span></p></li>
+<li><p>The network minimizes the <strong>cross-entropy</strong> or <strong>negative log-likelihood</strong> of the model on the training set:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[\mathcal{L}(\theta) = \mathbb{E}_{\mathbf{x}, \mathbf{t} \in \mathcal{D}} [ - \mathbf{t} \, \log \mathbf{y} ]\]</div>
+</li>
+</ul>
+<p>The cross-entropy between two probability distributions <span class="math notranslate nohighlight">\(X\)</span> and <span class="math notranslate nohighlight">\(Y\)</span> measures their similarity:</p>
+<div class="math notranslate nohighlight">
+\[
+    H(X, Y) = \mathbb{E}_{x \sim X}[- \log P(Y=x)]
+\]</div>
+<p>It measures whether samples from <span class="math notranslate nohighlight">\(X\)</span> are likely under <span class="math notranslate nohighlight">\(Y\)</span>? Minimizing the cross-entropy makes the two distributions equal almost anywhere.</p>
+<div class="figure align-default" id="id2">
+<a class="reference internal image-reference" href="../_images/crossentropy1.svg"><img alt="../_images/crossentropy1.svg" src="../_images/crossentropy1.svg" width="100%" /></a>
+<p class="caption"><span class="caption-text">The cross-entropy measures the similarity of the two probability distributions.</span><a class="headerlink" href="#id2" title="Permalink to this image">¶</a></p>
+</div>
+<p>In supervised learning, the targets <span class="math notranslate nohighlight">\(\mathbf{t}\)</span> are fixed <strong>one-hot encoded vectors</strong>.</p>
+<div class="math notranslate nohighlight">
+\[\mathcal{L}(\theta) = \mathbb{E}_{\mathbf{x}, \mathbf{t} \in \mathcal{D}} [ - \sum_j t_j \, \log y_{j} ]\]</div>
+<p>But it could be any target distribution.</p>
+<div class="figure align-default" id="id3">
+<a class="reference internal image-reference" href="../_images/crossentropy-animation.gif"><img alt="../_images/crossentropy-animation.gif" src="../_images/crossentropy-animation.gif" style="width: 70%;" /></a>
+<p class="caption"><span class="caption-text">Cross-entropy between multinomial distributions.</span><a class="headerlink" href="#id3" title="Permalink to this image">¶</a></p>
+</div>
+<p>In both cases, we want to minimize the loss variant by applying <strong>Stochastic Gradient Descent</strong> (SGD) or a variant (Adam, RMSprop).</p>
+<div class="math notranslate nohighlight">
+\[
+    \Delta \theta = - \eta \, \nabla_\theta \mathcal{L}(\theta)
+\]</div>
+<p>The question is how to compute the <strong>gradient of the loss function</strong> w.r.t the parameters <span class="math notranslate nohighlight">\(\theta\)</span>. For both the mse and cross-entropy loss functions, we have:</p>
+<div class="math notranslate nohighlight">
+\[\nabla_\theta \mathcal{L}(\theta) = \mathbb{E}_\mathcal{D} [- (\mathbf{t} - \mathbf{y}) \, \nabla_\theta \, \mathbf{y}]\]</div>
+<p>There is an algorithm to compute efficiently the gradient of the output w.r.t the parameters: <strong>backpropagation</strong> (see Neurocomputing). In deep RL, we do not care about backprop: tensorflow or pytorch do it for us.</p>
+<div class="figure align-default" id="id4">
+<a class="reference internal image-reference" href="../_images/deeprl1.jpg"><img alt="../_images/deeprl1.jpg" src="../_images/deeprl1.jpg" style="width: 80%;" /></a>
+<p class="caption"><span class="caption-text">Principle of deep reinforcement learning.</span><a class="headerlink" href="#id4" title="Permalink to this image">¶</a></p>
+</div>
+<p>There are three aspects to consider when building a neural network:</p>
+<ol class="simple">
+<li><p><strong>Architecture:</strong>  how many layers, what type of layers, how many neurons, etc.</p>
+<ul class="simple">
+<li><p>Task-dependent: each RL task will require a different architecture. Not our focus.</p></li>
+</ul>
+</li>
+<li><p><strong>Loss function:</strong> what should the network do?</p>
+<ul class="simple">
+<li><p>Central to deep RL!</p></li>
+</ul>
+</li>
+<li><p><strong>Update rule</strong> how should we update the parameters <span class="math notranslate nohighlight">\(\theta\)</span> to minimize the loss function? SGD, backprop.</p>
+<ul class="simple">
+<li><p>Not really our problem, but see <em>natural gradients</em> later.</p></li>
+</ul>
+</li>
+</ol>
+</div>
+<div class="section" id="convolutional-neural-networks">
+<h2>Convolutional neural networks<a class="headerlink" href="#convolutional-neural-networks" title="Permalink to this headline">¶</a></h2>
+<p>When using images as inputs, <strong>fully-connected networks</strong> (FCN) would have too many weights: slow learning and overfitting.</p>
+<div class="figure align-default" id="id5">
+<a class="reference internal image-reference" href="../_images/fullyconnected.png"><img alt="../_images/fullyconnected.png" src="../_images/fullyconnected.png" style="width: 50%;" /></a>
+<p class="caption"><span class="caption-text">Fully-connected layers necessitate too many parameters on images.</span><a class="headerlink" href="#id5" title="Permalink to this image">¶</a></p>
+</div>
+<p><strong>Convolutional layers</strong> reduce the number of weights by <strong>reusing</strong> weights at different locations. This the principle of a convolution, which leads to fast and efficient learning.</p>
+<div class="figure align-default" id="id6">
+<a class="reference internal image-reference" href="../_images/convolutional.png"><img alt="../_images/convolutional.png" src="../_images/convolutional.png" style="width: 50%;" /></a>
+<p class="caption"><span class="caption-text">Convolutional layers share weights on the image.</span><a class="headerlink" href="#id6" title="Permalink to this image">¶</a></p>
+</div>
+<p>A <strong>convolutional layer</strong> extracts <strong>features</strong> of its inputs. <span class="math notranslate nohighlight">\(d\)</span> filters are defined with very small sizes (3x3, 5x5…). Each filter is convoluted over the input image (or the previous layer) to create a <strong>feature map</strong>. The set of <span class="math notranslate nohighlight">\(d\)</span> feature maps becomes a new 3D structure: a <strong>tensor</strong>. If the input image is 32x32x3, the resulting tensor will be 32x32xd. The convolutional layer has only very few parameters: each feature map has 3x3 values in the filter and a bias, i.e. 10 parameters. The convolution operation is <strong>differentiable</strong>: backprop will work.</p>
+<div class="figure align-default" id="id7">
+<a class="reference internal image-reference" href="../_images/depthcol.jpeg"><img alt="../_images/depthcol.jpeg" src="../_images/depthcol.jpeg" style="width: 50%;" /></a>
+<p class="caption"><span class="caption-text">Convolutional layer. Source: <a class="reference external" href="http://cs231n.github.io/convolutional-networks/">http://cs231n.github.io/convolutional-networks/</a></span><a class="headerlink" href="#id7" title="Permalink to this image">¶</a></p>
+</div>
+<p>The number of elements in a convolutional layer is still too high. We need to reduce the spatial dimension of a convolutional layer by <strong>downsampling</strong> it. For each feature, a <strong>max-pooling</strong> layer takes the maximum value of a feature for each subregion of the image (mostly 2x2). Pooling allows translation invariance: the same input pattern will be detected whatever its position in the input image. Max-pooling is also differentiable.</p>
+<div class="figure align-default" id="id8">
+<a class="reference internal image-reference" href="../_images/maxpooling.jpg"><img alt="../_images/maxpooling.jpg" src="../_images/maxpooling.jpg" style="width: 50%;" /></a>
+<p class="caption"><span class="caption-text">Convolutional layer. Source: <a class="reference external" href="http://cs231n.github.io/convolutional-networks/">http://cs231n.github.io/convolutional-networks/</a></span><a class="headerlink" href="#id8" title="Permalink to this image">¶</a></p>
+</div>
+<p>A <strong>convolutional neural network</strong> (CNN) is a cascade of convolution and pooling operations, extracting layer by layer increasingly  complex features. The spatial dimensions decrease after each pooling operation, but the number of extracted features increases after each convolution. One usually stops when the spatial dimensions are around 7x7. The last layers are fully connected. Can be used for regression and classification depending on the output layer and the loss function. Training a CNN uses backpropagation all along: the convolution and pooling operations are differentiable.</p>
+<div class="figure align-default" id="id9">
+<a class="reference internal image-reference" href="../_images/lenet.png"><img alt="../_images/lenet.png" src="../_images/lenet.png" style="width: 100%;" /></a>
+<p class="caption"><span class="caption-text">Convolutional neural network.</span><a class="headerlink" href="#id9" title="Permalink to this image">¶</a></p>
+</div>
+<p>The only thing we need to know is that CNNs are non-linear function approximators that work well with images.</p>
+<div class="math notranslate nohighlight">
+\[\mathbf{y} = F_\theta (\mathbf{x})\]</div>
+<p>The convolutional layers <strong>extract complex features</strong> from the images through learning. The last FC layers allow to approximate values (regression) or probability distributions (classification).</p>
+</div>
+<div class="section" id="autoencoders">
+<h2>Autoencoders<a class="headerlink" href="#autoencoders" title="Permalink to this headline">¶</a></h2>
+<p>The problem with FCN and CNN is that they <strong>extract features</strong> in supervised learning tasks: Need for a lot of annotated data (image, label). <strong>Autoencoders</strong> allows <strong>unsupervised learning</strong>, as they only need inputs (images). Their task is to <strong>reconstruct</strong> the input:</p>
+<div class="math notranslate nohighlight">
+\[\mathbf{y} = \mathbf{\tilde{x}} \approx \mathbf{x}\]</div>
+<p>The <strong>reconstruction loss</strong> is simply the <strong>mse</strong> between the input and its reconstruction.</p>
+<div class="math notranslate nohighlight">
+\[
+    \mathcal{L}_\text{autoencoder}(\theta) = \mathbb{E}_{\mathbf{x} \in \mathcal{D}} [ ||\mathbf{\tilde{x}} - \mathbf{x}||^2 ]
+\]</div>
+<p>Apart from the loss function, they are trained as regular NNs. Autoencoders consists of:</p>
+<ul class="simple">
+<li><p>the <strong>encoder</strong>: from the input <span class="math notranslate nohighlight">\(\mathbf{x}\)</span> to the <strong>latent space</strong> <span class="math notranslate nohighlight">\(\mathbf{z}\)</span>.</p></li>
+<li><p>the <strong>decoder</strong>: from the latent space <span class="math notranslate nohighlight">\(\mathbf{z}\)</span> to the reconstructed input <span class="math notranslate nohighlight">\(\mathbf{\tilde{x}}\)</span>.</p></li>
+</ul>
+<div class="figure align-default" id="id10">
+<a class="reference internal image-reference" href="../_images/autoencoder-architecture.png"><img alt="../_images/autoencoder-architecture.png" src="../_images/autoencoder-architecture.png" style="width: 100%;" /></a>
+<p class="caption"><span class="caption-text">Autoencoder. Source: <a class="reference external" href="https://lilianweng.github.io/lil-log/2018/08/12/from-autoencoder-to-beta-vae.html">https://lilianweng.github.io/lil-log/2018/08/12/from-autoencoder-to-beta-vae.html</a></span><a class="headerlink" href="#id10" title="Permalink to this image">¶</a></p>
+</div>
+<p>The <strong>latent space</strong> <span class="math notranslate nohighlight">\(\mathbf{z}\)</span> is a <strong>compressed representation</strong> (bottleneck) of the inputs <span class="math notranslate nohighlight">\(\mathbf{x}\)</span>. It has to learn to compress efficiently the inputs without losing too much information, in order to reconstruct the inputs: Dimensionality reduction, unsupervised feature extraction.</p>
+<p>In deep RL, we can construct the feature vector with an autoencoder. The autoencoder can be trained offline with a random agent or online with the current policy (auxiliary loss).</p>
+<div class="figure align-default" id="id11">
+<a class="reference internal image-reference" href="../_images/autoencoder-RL.svg"><img alt="../_images/autoencoder-RL.svg" src="../_images/autoencoder-RL.svg" width="100%" /></a>
+<p class="caption"><span class="caption-text">Autoencoders can be used in RL to find a feature space where linear FA can apply easily.</span><a class="headerlink" href="#id11" title="Permalink to this image">¶</a></p>
+</div>
+</div>
+<div class="section" id="recurrent-neural-networks">
+<h2>Recurrent neural networks<a class="headerlink" href="#recurrent-neural-networks" title="Permalink to this headline">¶</a></h2>
+<p>FCN, CNN and AE are <strong>feedforward neural networks</strong>: they transform an input <span class="math notranslate nohighlight">\(\mathbf{x}\)</span> into an output <span class="math notranslate nohighlight">\(\mathbf{y}\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[\mathbf{y} = F_\theta(\mathbf{x})\]</div>
+<p>If you present a sequence of inputs <span class="math notranslate nohighlight">\(\mathbf{x}_0, \mathbf{x}_1, \ldots, \mathbf{x}_t\)</span> to a feedforward network, the outputs will be independent from each other:</p>
+<div class="math notranslate nohighlight">
+\[\mathbf{y}_0 = F_\theta(\mathbf{x}_0)\]</div>
+<div class="math notranslate nohighlight">
+\[\mathbf{y}_1 = F_\theta(\mathbf{x}_1)\]</div>
+<div class="math notranslate nohighlight">
+\[\dots\]</div>
+<div class="math notranslate nohighlight">
+\[\mathbf{y}_t = F_\theta(\mathbf{x}_t)\]</div>
+<p>The output <span class="math notranslate nohighlight">\(\mathbf{y}_t\)</span> does <strong>not</strong> depend on the history of inputs <span class="math notranslate nohighlight">\(\mathbf{x}_0, \mathbf{x}_1, \ldots, \mathbf{x}_{t-1}\)</span>. This not always what you want. If your inputs are frames of a video, the correct response at time <span class="math notranslate nohighlight">\(t\)</span> might also depend on previous frames.
+The task of the NN could be to explain what happens at each frame. As we saw, a single frame is often not enough to predict the future (<strong>Markov property</strong>).</p>
+<div class="figure align-default" id="id12">
+<a class="reference internal image-reference" href="../_images/RNN-rolled.png"><img alt="../_images/RNN-rolled.png" src="../_images/RNN-rolled.png" style="width: 30%;" /></a>
+<p class="caption"><span class="caption-text">Recurrent neural network. Source: <a class="reference external" href="https://colah.github.io/posts/2015-08-Understanding-LSTMs/">https://colah.github.io/posts/2015-08-Understanding-LSTMs/</a></span><a class="headerlink" href="#id12" title="Permalink to this image">¶</a></p>
+</div>
+<p>A <strong>recurrent neural network</strong> (RNN) uses it previous output as an additional input (<em>context</em>). All vectors have a time index <span class="math notranslate nohighlight">\(t\)</span> denoting the time at which this vector was computed. The input vector at time <span class="math notranslate nohighlight">\(t\)</span> is <span class="math notranslate nohighlight">\(\mathbf{x}_t\)</span>, the output vector is <span class="math notranslate nohighlight">\(\mathbf{h}_t\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[
+    \mathbf{h}_t = f(W_x \times \mathbf{x}_t + W_h \times \mathbf{h}_{t-1} + \mathbf{b})
+\]</div>
+<p>The input <span class="math notranslate nohighlight">\(\mathbf{x}_t\)</span> and previous output <span class="math notranslate nohighlight">\(\mathbf{h}_{t-1}\)</span> are multiplied by <strong>learnable weights</strong>:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(W_x\)</span> is the input weight matrix.</p></li>
+<li><p><span class="math notranslate nohighlight">\(W_h\)</span> is the recurrent weight matrix.</p></li>
+</ul>
+<p>This is equivalent to a deep neural network taking the whole history <span class="math notranslate nohighlight">\(\mathbf{x}_0, \mathbf{x}_1, \ldots, \mathbf{x}_t\)</span> as inputs, but reusing weights between two time steps. The weights are trainable using <strong>backpropagation through time</strong> (BPTT). A RNN can learn the <strong>temporal dependencies</strong> between inputs.</p>
+<div class="figure align-default" id="id13">
+<a class="reference internal image-reference" href="../_images/RNN-unrolled.png"><img alt="../_images/RNN-unrolled.png" src="../_images/RNN-unrolled.png" style="width: 100%;" /></a>
+<p class="caption"><span class="caption-text">Recurrent neural network, unrolled. Source: <a class="reference external" href="https://colah.github.io/posts/2015-08-Understanding-LSTMs/">https://colah.github.io/posts/2015-08-Understanding-LSTMs/</a></span><a class="headerlink" href="#id13" title="Permalink to this image">¶</a></p>
+</div>
+<p>A popular variant of RNN is <strong>LSTM</strong> (long short-term memory). In addition to the input <span class="math notranslate nohighlight">\(\mathbf{x}_t\)</span> and output <span class="math notranslate nohighlight">\(\mathbf{h}_t\)</span>, it also has a <strong>state</strong> (or <strong>memory</strong> or <strong>context</strong>) <span class="math notranslate nohighlight">\(\mathbf{C}_t\)</span> which is maintained over time. It also contains three multiplicative <strong>gates</strong>:</p>
+<ul class="simple">
+<li><p>The <strong>input gate</strong> controls which inputs should enter the memory.</p></li>
+<li><p>The <strong>forget gate</strong> controls which memory should be forgotten.</p></li>
+<li><p>The <strong>output gate</strong> controls which part of the memory should be used to produce the output.</p></li>
+</ul>
+<div class="figure align-default" id="id14">
+<a class="reference internal image-reference" href="../_images/LSTM-cell2.png"><img alt="../_images/LSTM-cell2.png" src="../_images/LSTM-cell2.png" style="width: 60%;" /></a>
+<p class="caption"><span class="caption-text">LSTM cell. Source: <a class="reference external" href="https://colah.github.io/posts/2015-08-Understanding-LSTMs/">https://colah.github.io/posts/2015-08-Understanding-LSTMs/</a></span><a class="headerlink" href="#id14" title="Permalink to this image">¶</a></p>
+</div>
+<p>An obvious use case of RNNs in deep RL is for POMDP (partially observable MDP). If the individual states <span class="math notranslate nohighlight">\(s_t\)</span> do not have the Markov property, the output of a LSTM does: The output of the RNN is a representation of the complete history <span class="math notranslate nohighlight">\(s_0, s_1, \ldots, s_t\)</span>. We can apply RL on the output of a RNN and solve POMDPs for free!</p>
+<div class="figure align-default" id="id15">
+<a class="reference internal image-reference" href="../_images/capture-flag2.gif"><img alt="../_images/capture-flag2.gif" src="../_images/capture-flag2.gif" style="width: 100%;" /></a>
+<p class="caption"><span class="caption-text">LSTM layers help solving POMDP by concatenating and compressing the history. Source: <a class="reference external" href="https://deepmind.com/blog/article/capture-the-flag-science">https://deepmind.com/blog/article/capture-the-flag-science</a></span><a class="headerlink" href="#id15" title="Permalink to this image">¶</a></p>
+</div>
+</div>
+</div>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./2-tabular"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+        </div>
+    </div>
+    
+    
+    <div class='prev-next-bottom'>
+        
+
+    </div>
+    <footer class="footer mt-5 mt-md-0">
+    <div class="container">
+      <p>
+        
+          By Julien Vitay - julien.vitay@informatik.tu-chemnitz.de<br/>
+        
+            &copy; Copyright 2020.<br/>
+          <div class="extra_footer">
+            Technische Universität Chemnitz - Faculty of Computer Science - Professorship for Artificial Intelligence
+          </div>
+      </p>
+    </div>
+  </footer>
+</main>
+
+
+      </div>
+    </div>
+
+    <script src="../_static/js/index.js"></script>
+    
+  </body>
+</html>
