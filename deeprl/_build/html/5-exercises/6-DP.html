@@ -1,0 +1,607 @@
+
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dynamic programming &#8212; Deep Reinforcement Learning</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" integrity="sha384-KA6wR/X5RY4zFAHpv/CnoG2UW1uogYfdnP67Uv7eULvTveboZJg0qUpmJZb5VqzN" crossorigin="anonymous">
+    <link href="../_static/css/index.css" rel="stylesheet">
+    <link rel="stylesheet" href="../_static/sphinx-book-theme.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/style.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-dropdown.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/sphinx-book-theme.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/togglebutton.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/sphinx-book-theme.js"></script>
+    <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processRefs": false, "processEnvironments": false}})</script>
+    <script async="async" src="https://unpkg.com/thebelab@latest/lib/index.js"></script>
+    <script >
+        const thebe_selector = ".thebe"
+        const thebe_selector_input = "pre"
+        const thebe_selector_output = ".output"
+    </script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <link rel="canonical" href="https://julien-vitay.net/lecturenotes-deeprl/5-exercises/6-DP.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="docsearch:language" content="en">
+
+
+<!-- Opengraph tags -->
+<meta property="og:url"         content="https://julien-vitay.net/lecturenotes-deeprl/5-exercises/6-DP.html" />
+<meta property="og:type"        content="article" />
+<meta property="og:title"       content="Dynamic programming" />
+<meta property="og:description" content="Dynamic programming  import numpy as np import matplotlib.pyplot as plt  The goal of this exercise is to find the optimal policy for the recycling robot.    In " />
+<meta property="og:image"       content="https://julien-vitay.net/lecturenotes-deeprl/_static/tuc.svg" />
+
+<meta name="twitter:card" content="summary" />
+
+
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
+<a class="navbar-brand text-wrap" href="../index.html">
+  
+  <img src="../_static/tuc.svg" class="logo" alt="logo">
+  
+  
+  <h1 class="site-logo" id="site-title">Deep Reinforcement Learning</h1>
+  
+</a>
+</div>
+
+<form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form>
+
+<nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+  <ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../intro.html">
+   Deep Reinforcement Learning
+  </a>
+ </li>
+</ul>
+<p class="caption">
+ <span class="caption-text">
+  Introduction
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../1-intro/1-Introduction.html">
+   1. Introduction
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../1-intro/2-Math.html">
+   2. Math basics
+  </a>
+ </li>
+</ul>
+<p class="caption">
+ <span class="caption-text">
+  Tabular RL
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../2-tabular/1-Bandits.html">
+   1. Bandits
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../2-tabular/2-MDP.html">
+   2. Markov Decision Processes
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../2-tabular/3-DP.html">
+   3. Dynamic Programming
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../2-tabular/4-MC.html">
+   4. Monte-Carlo (MC) methods
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../2-tabular/5-TD.html">
+   5. Temporal Difference learning
+  </a>
+ </li>
+</ul>
+<p class="caption">
+ <span class="caption-text">
+  Exercises
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="ex1-Python.html">
+   1. Introduction to Python
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="ex2-Numpy.html">
+   2. Numpy and Matplotlib
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="ex3-Sampling.html">
+   3. Sampling
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="ex4-Bandits.html">
+   4. Bandits (part 1)
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="ex5-Bandits2.html">
+   5. Bandits (part 2)
+  </a>
+ </li>
+</ul>
+<p class="caption">
+ <span class="caption-text">
+  References
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../zreferences.html">
+   1. Bibliography
+  </a>
+ </li>
+</ul>
+
+</nav>
+
+ <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="row topbar fixed-top container-xl">
+    <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show">
+    </div>
+    <div class="col pl-2 topbar-main">
+        
+        <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+            data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+            aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+            title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+            <i class="fas fa-bars"></i>
+            <i class="fas fa-arrow-left"></i>
+            <i class="fas fa-arrow-up"></i>
+        </button>
+        
+        <div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="../_sources/5-exercises/6-DP.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.ipynb</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+    
+</div>
+        <!-- Source interaction buttons -->
+
+
+        <!-- Full screen (wrap in <a> to have style consistency -->
+        <a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+                data-placement="bottom" onclick="toggleFullScreen()" title="Fullscreen mode"><i
+                    class="fas fa-expand"></i></button></a>
+
+        <!-- Launch buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
+    <div class="dropdown-buttons">
+        
+        <a class="binder-button" href="https://mybinder.org/v2/gh/vitay/lecturenotes-deeprl/master?urlpath=tree/deeprl/5-exercises/6-DP.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
+                data-placement="left"><img class="binder-button-logo"
+                    src="../_static/images/logo_binder.svg"
+                    alt="Interact on binder">Binder</button></a>
+        
+        
+        
+        <a class="colab-button" href="https://colab.research.google.com/github/vitay/lecturenotes-deeprl/blob/master/deeprl/5-exercises/6-DP.ipynb"><button type="button" class="btn btn-secondary topbarbtn"
+                title="Launch Colab" data-toggle="tooltip" data-placement="left"><img class="colab-button-logo"
+                    src="../_static/images/logo_colab.png"
+                    alt="Interact on Colab">Colab</button></a>
+        
+        
+    </div>
+</div>
+
+    </div>
+
+    <!-- Table of contents -->
+    <div class="d-none d-md-block col-md-2 bd-toc show">
+        <div class="tocsection onthispage pt-5 pb-3">
+            <i class="fas fa-list"></i> Contents
+        </div>
+        <nav id="bd-toc-nav">
+            <ul class="nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#policy-iteration">
+   Policy Iteration
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#iterative-policy-evaluation">
+     Iterative policy evaluation
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id1">
+     Policy iteration
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#value-iteration">
+   Value iteration
+  </a>
+ </li>
+</ul>
+
+        </nav>
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+        
+              <div>
+                
+  <div class="section" id="dynamic-programming">
+<h1>Dynamic programming<a class="headerlink" href="#dynamic-programming" title="Permalink to this headline">¶</a></h1>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>The goal of this exercise is to find the optimal policy for the recycling robot.</p>
+<p><img alt="" src="../_images/recyclingrobot1.png" /></p>
+<p>In this problem, a recycling robot has to search for empty cans to collect (each can defines a “reward” given to the robot). It can also decide to stay where it is to save its battery and wait that somebody brings it a can (which gives less cans in average than actively searching for them).</p>
+<p>The robot has two battery levels, <em>high</em> and <em>low</em>.</p>
+<ul class="simple">
+<li><p>In the <em>high</em> level, the robot can either search or wait.</p></li>
+<li><p>In the <em>low</em> state, three actions are possible: search, wait and recharge.</p></li>
+</ul>
+<p>State-action transitions are probabilistic, i.e. they bring the robot in different states based on different probabilities <span class="math notranslate nohighlight">\(\alpha\)</span> and <span class="math notranslate nohighlight">\(\beta\)</span>.</p>
+<p>This problem defines a finite MDP, with two states <em>high</em> and <em>low</em> corresponding to the battery level. The actions <em>search</em> and <em>wait</em> are possible in the <em>high</em> and <em>low</em> states, while the action <em>recharge</em> is only possible in the <em>low</em> state.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{aligned}
+    \mathcal{S} &amp;=&amp; \{ \text{high}, \text{low} \} \\
+    \mathcal{A}(\text{high} ) &amp;=&amp; \{ \text{search}, \text{wait} \} \\
+    \mathcal{A}(\text{low} ) &amp;=&amp; \{ \text{search}, \text{wait}, \text{recharge} \}
+\end{aligned}
+\end{split}\]</div>
+<p>The action <em>search</em> brings on average a reward of <span class="math notranslate nohighlight">\(\mathcal{R}^\text{search}\)</span>, the action <em>wait</em> a reward of <span class="math notranslate nohighlight">\(\mathcal{R}^\text{wait}\)</span>, the action <em>recharge</em> brings no reward, but allows to get in the <em>high</em> state.</p>
+<p>Note that if the robot decides to search in the <em>low</em> state, there is a probability <span class="math notranslate nohighlight">\(1 - \beta\)</span> that it totally empties its battery, requiring human intervention. This is punished with a negative reward of -3.</p>
+<p>The transition and reward probabilities of each transition is defined in the following table, completely defining a MDP.</p>
+<table class="colwidths-auto table">
+<thead>
+<tr class="row-odd"><th class="text-align:center head"><p>s</p></th>
+<th class="text-align:center head"><p>s’</p></th>
+<th class="text-align:center head"><p>a</p></th>
+<th class="text-align:center head"><p>p(s’ / s, a)</p></th>
+<th class="text-align:center head"><p>r(s, a, s’)</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-align:center"><p>high</p></td>
+<td class="text-align:center"><p>high</p></td>
+<td class="text-align:center"><p>search</p></td>
+<td class="text-align:center"><p><span class="math notranslate nohighlight">\(\alpha\)</span></p></td>
+<td class="text-align:center"><p><span class="math notranslate nohighlight">\(\mathcal{R}^\text{search}\)</span></p></td>
+</tr>
+<tr class="row-odd"><td class="text-align:center"><p>high</p></td>
+<td class="text-align:center"><p>low</p></td>
+<td class="text-align:center"><p>search</p></td>
+<td class="text-align:center"><p><span class="math notranslate nohighlight">\(1 - \alpha\)</span></p></td>
+<td class="text-align:center"><p><span class="math notranslate nohighlight">\(\mathcal{R}^\text{search}\)</span></p></td>
+</tr>
+<tr class="row-even"><td class="text-align:center"><p>low</p></td>
+<td class="text-align:center"><p>high</p></td>
+<td class="text-align:center"><p>search</p></td>
+<td class="text-align:center"><p><span class="math notranslate nohighlight">\(1 - \beta\)</span></p></td>
+<td class="text-align:center"><p><span class="math notranslate nohighlight">\(-3\)</span></p></td>
+</tr>
+<tr class="row-odd"><td class="text-align:center"><p>low</p></td>
+<td class="text-align:center"><p>low</p></td>
+<td class="text-align:center"><p>search</p></td>
+<td class="text-align:center"><p><span class="math notranslate nohighlight">\(\beta\)</span></p></td>
+<td class="text-align:center"><p><span class="math notranslate nohighlight">\(\mathcal{R}^\text{search}\)</span></p></td>
+</tr>
+<tr class="row-even"><td class="text-align:center"><p>high</p></td>
+<td class="text-align:center"><p>high</p></td>
+<td class="text-align:center"><p>wait</p></td>
+<td class="text-align:center"><p><span class="math notranslate nohighlight">\(1\)</span></p></td>
+<td class="text-align:center"><p><span class="math notranslate nohighlight">\(\mathcal{R}^\text{wait}\)</span></p></td>
+</tr>
+<tr class="row-odd"><td class="text-align:center"><p>high</p></td>
+<td class="text-align:center"><p>low</p></td>
+<td class="text-align:center"><p>wait</p></td>
+<td class="text-align:center"><p><span class="math notranslate nohighlight">\(0\)</span></p></td>
+<td class="text-align:center"><p><span class="math notranslate nohighlight">\(\mathcal{R}^\text{wait}\)</span></p></td>
+</tr>
+<tr class="row-even"><td class="text-align:center"><p>low</p></td>
+<td class="text-align:center"><p>high</p></td>
+<td class="text-align:center"><p>wait</p></td>
+<td class="text-align:center"><p><span class="math notranslate nohighlight">\(0\)</span></p></td>
+<td class="text-align:center"><p><span class="math notranslate nohighlight">\(\mathcal{R}^\text{wait}\)</span></p></td>
+</tr>
+<tr class="row-odd"><td class="text-align:center"><p>low</p></td>
+<td class="text-align:center"><p>low</p></td>
+<td class="text-align:center"><p>wait</p></td>
+<td class="text-align:center"><p><span class="math notranslate nohighlight">\(1\)</span></p></td>
+<td class="text-align:center"><p><span class="math notranslate nohighlight">\(\mathcal{R}^\text{wait}\)</span></p></td>
+</tr>
+<tr class="row-even"><td class="text-align:center"><p>low</p></td>
+<td class="text-align:center"><p>high</p></td>
+<td class="text-align:center"><p>recharge</p></td>
+<td class="text-align:center"><p><span class="math notranslate nohighlight">\(1\)</span></p></td>
+<td class="text-align:center"><p><span class="math notranslate nohighlight">\(0\)</span></p></td>
+</tr>
+<tr class="row-odd"><td class="text-align:center"><p>low</p></td>
+<td class="text-align:center"><p>low</p></td>
+<td class="text-align:center"><p>recharge</p></td>
+<td class="text-align:center"><p><span class="math notranslate nohighlight">\(0\)</span></p></td>
+<td class="text-align:center"><p><span class="math notranslate nohighlight">\(0\)</span></p></td>
+</tr>
+</tbody>
+</table>
+<p>The goal of this exercise is to find the optimal policy <span class="math notranslate nohighlight">\(\pi^*\)</span> of the robot, i.e to find for each state the action that should be performed systematically in order to gather the maximum of reward on the long term.</p>
+<p>We will apply here two <strong>dynamic programming</strong> methods, policy iteration and value iteration, to solve the Bellman equations.</p>
+<p>The Bellman equation for the state function is:</p>
+<div class="math notranslate nohighlight">
+\[V^{\pi} (s)  = \sum_{a \in \mathcal{A}(s)} \pi(s, a) \, \sum_{s' \in \mathcal{S}} p(s' | s, a) \, [ r(s, a, s') + \gamma \, V^{\pi} (s') ]\]</div>
+<p><strong>Q:</strong> On paper, adapt the Bellman equation to the problem. First, for every state <span class="math notranslate nohighlight">\(s\)</span> and possible action <span class="math notranslate nohighlight">\(a\)</span>, find the optimal value of the action with the form:</p>
+<div class="math notranslate nohighlight">
+\[Q^{\pi} (s, a) = f( V^\pi (\text{high}), V^\pi (\text{low}), \alpha, \beta, \gamma, \mathcal{R}^{\text{search}}, \mathcal{R}^{\text{wait}} )\]</div>
+<p>Deduce the Bellman equation for the two states <span class="math notranslate nohighlight">\(V^\pi (\text{high})\)</span> and <span class="math notranslate nohighlight">\(V^\pi (\text{low})\)</span>.</p>
+<div class="section" id="policy-iteration">
+<h2>Policy Iteration<a class="headerlink" href="#policy-iteration" title="Permalink to this headline">¶</a></h2>
+<p>Now that we have the Bellman equations for the two states high and low, we can solve them using <strong>iterative policy evaluation</strong> for a fixed policy <span class="math notranslate nohighlight">\(\pi\)</span>.</p>
+<div class="section" id="iterative-policy-evaluation">
+<h3>Iterative policy evaluation<a class="headerlink" href="#iterative-policy-evaluation" title="Permalink to this headline">¶</a></h3>
+<p>Let’s start by setting the parameters of the MDP. In the rest of the exercise, you will modify these parameters to investigate how it changes the optimal policy.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Transition probabilities</span>
+<span class="n">alpha</span> <span class="o">=</span> <span class="mf">0.3</span>
+<span class="n">beta</span> <span class="o">=</span> <span class="mf">0.2</span>
+
+<span class="c1"># Discount parameter</span>
+<span class="n">gamma</span> <span class="o">=</span> <span class="mf">0.7</span>
+
+<span class="c1"># Expected rewards</span>
+<span class="n">r_search</span> <span class="o">=</span> <span class="mf">6.0</span>
+<span class="n">r_wait</span> <span class="o">=</span> <span class="mf">2.0</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>There are many ways to represent states and actions in a MDP. The suggestion for this exercise is to use dictionaries here the keys are the actions’ name and the vaues are indices:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">nb_states</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="n">nb_actions</span> <span class="o">=</span> <span class="mi">3</span>
+
+<span class="n">s</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;high&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;low&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">}</span>
+<span class="n">a</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;search&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;wait&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;recharge&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Using dictionaries, you can access numpy arrays with <code class="docutils literal notranslate"><span class="pre">s['high']</span></code> or <code class="docutils literal notranslate"><span class="pre">a['recharge']</span></code> instead of 0 and 2, what will make the code readable.</p>
+<p>The next step is to initialize numpy arrays where we will store the V and Q values. <code class="docutils literal notranslate"><span class="pre">V</span></code> will have only two elements for high and low, while <code class="docutils literal notranslate"><span class="pre">Q</span></code> will be a 2x3 matrix with one element for each state-action pair. Notice that (high, recharge) is not a possible action, so this element will not be be updated.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">V</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nb_states</span><span class="p">)</span>
+<span class="n">Q</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">nb_states</span><span class="p">,</span> <span class="n">nb_actions</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>You can then access the individual values with <code class="docutils literal notranslate"><span class="pre">V[s['high']]</span></code> or <code class="docutils literal notranslate"><span class="pre">Q[s['low'],</span> <span class="pre">a['wait']]</span></code>.</p>
+<p>We can now evaluate a policy <span class="math notranslate nohighlight">\(\pi\)</span>. In dynamic programming, the policies are deterministic, as we want to estimate the optimal policy.</p>
+<p>To implement the policy, we just need to assign the index of an action to each state, i.e. <span class="math notranslate nohighlight">\(\pi(s)\)</span>. The following cell creates an initial policy <span class="math notranslate nohighlight">\(\pi\)</span> where the agent <strong>searches</strong> in both states high and low. We here make sure that the array contains integers (0, 1 or 2), but that is not even necessary.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>Q:</strong> Evaluate this policy using iterative policy evaluation.</p>
+<p>We would normally only need to update the V-value of the two states using:</p>
+<div class="math notranslate nohighlight">
+\[
+     V (s) \leftarrow \sum_{a \in \mathcal{A}(s)} \pi(s, a) \, \sum_{s' \in \mathcal{S}} p(s' | s, a) \, [ r(s, a, s') + \gamma \, V (s') ] \quad \forall s \in \mathcal{S}
+\]</div>
+<p>The code will be more readable if you first update the Q-values of the 5 state-action pairs:</p>
+<div class="math notranslate nohighlight">
+\[
+     Q (s, a) \leftarrow  \sum_{s' \in \mathcal{S}} p(s' | s, a) \, [ r(s, a, s') + \gamma \, V (s') ] \quad \forall s \in \mathcal{S}
+\]</div>
+<p>and only then update the two V-values:</p>
+<div class="math notranslate nohighlight">
+\[
+     V (s) \leftarrow \sum_{a \in \mathcal{A}(s)} \pi(s, a) \, Q(s, a)
+\]</div>
+<p>These updates should normally be applied until the V-values converge. For simplicity, we could decide to simply apply 50 updates or so, and hope that it is enough.</p>
+<p>Record the V-value of the two states after each update and plot them.</p>
+<p><strong>Q:</strong> Do the V-values converge? How fast? What do the final values represent? Change the value of <span class="math notranslate nohighlight">\(\gamma\)</span> and conclude on its importance (do not forget to reset the V and Q arrays to 0!).</p>
+<p><strong>Q:</strong> Print the Q-values at the end of the policy evaluation. What would the greedy policy with respect to these Q-values?</p>
+<p><strong>Q:</strong> Change the initial policy to this policy and evaluate it. What happens? Compare the final value of the states under both policies. Which one is the best?</p>
+</div>
+<div class="section" id="id1">
+<h3>Policy iteration<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<p>Improving the policy is now straightforward. We just to look at the Q-values in each state, and change the policy so that it takes the action with the maximal Q-value. If this does not change the policy (we still take the same actions), we have found the optimal policy, we can stop.</p>
+<p><strong>Q:</strong> Implement policy iteration.</p>
+<p>Do not forget to reset the V and Q arrays at the beginning of the cell, as well as the original policy.</p>
+<p>Use an infinite loop that you will quit when the policy has not changed between two iterations. Something like:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+    <span class="c1"># 1 - Policy evaluation</span>
+    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">50</span><span class="p">):</span>
+        <span class="c1"># Update the values</span>
+    
+    <span class="c1"># 2 - Policy improvement</span>
+    
+    <span class="k">if</span> <span class="n">pi</span> <span class="o">!=</span> <span class="n">pi_old</span><span class="p">:</span>
+        <span class="k">break</span>
+</pre></div>
+</div>
+<p><strong>Beware:</strong> if you simply assign the policy to another array and modify the policy:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pi_old</span> <span class="o">=</span> <span class="n">pi</span>
+<span class="n">pi</span><span class="p">[</span><span class="n">s</span><span class="p">[</span><span class="s1">&#39;high&#39;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="s1">&#39;search&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">pi_old</span></code> will also change! You need to <code class="docutils literal notranslate"><span class="pre">.copy()</span></code> the policy.</p>
+</div>
+</div>
+<div class="section" id="value-iteration">
+<h2>Value iteration<a class="headerlink" href="#value-iteration" title="Permalink to this headline">¶</a></h2>
+<p>In value iteration, we merge the policy evaluation and improvement in a single update rule:</p>
+<div class="math notranslate nohighlight">
+\[
+    V (s) \leftarrow \max_{a \in \mathcal{A}(s)} \sum_{s' \in \mathcal{S}} p(s' | s, a) \, [ r(s, a, s') + \gamma \, V (s') ]
+\]</div>
+<p>The value of state takes the value of its greedy action. The policy is therefore implicitly greedy w.r.t the Q-values.</p>
+<p>The algorithm becomes:</p>
+<ul>
+<li><p>while not converged:</p>
+<ul>
+<li><p>for all states <span class="math notranslate nohighlight">\(s\)</span>:</p>
+<ul class="simple">
+<li><p>Update the value estimates with:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[
+            V (s)  \leftarrow \max_{a \in \mathcal{A}(s)} \sum_{s' \in \mathcal{S}} p(s' | s, a) \, [ r(s, a, s') + \gamma \, V (s') ]
+        \]</div>
+</li>
+</ul>
+</li>
+</ul>
+<p><strong>Q:</strong> Modify your previous code to implement value iteration. Use a fixed number of iterations (e.g. 50) as in policy evaluation. Visualize the evolution of the V-values and print the greedy policy after each iteration. Conclude.</p>
+<p><strong>Q:</strong>  Change the value of the discount factor <span class="math notranslate nohighlight">\(\gamma =0.3\)</span> so that the agent becomes short-sighted: it only takes into account the immediate rewards, but forgets about the long-term. Does it change the strategy? Explain why.</p>
+<p><strong>Q:</strong> Change <span class="math notranslate nohighlight">\(\gamma\)</span> to 0.99 (far-sighted agent). What does it change and why?</p>
+<p><strong>Q:</strong>  Change the parameters to:</p>
+<div class="math notranslate nohighlight">
+\[\alpha = 0.01 \quad \beta = 0.2 \quad \gamma = 0.7 \quad \mathcal{R}^{\text{search}} = 6 \quad  \mathcal{R}^{\text{wait}} = 5\]</div>
+<p>Find the optimal policy. What is the optimal action to be taken in the state <em>high</em>, although the probability to stay in this state is very small? Why?</p>
+<p><strong>Q:</strong> Find a set of parameters where it would be optimal to search while in the <em>low</em> state.</p>
+</div>
+</div>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./5-exercises"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+        </div>
+    </div>
+    
+    
+    <div class='prev-next-bottom'>
+        
+
+    </div>
+    <footer class="footer mt-5 mt-md-0">
+    <div class="container">
+      <p>
+        
+          By Julien Vitay - julien.vitay@informatik.tu-chemnitz.de<br/>
+        
+            &copy; Copyright 2020.<br/>
+          <div class="extra_footer">
+            Technische Universität Chemnitz - Faculty of Computer Science - Professorship for Artificial Intelligence
+          </div>
+      </p>
+    </div>
+  </footer>
+</main>
+
+
+      </div>
+    </div>
+
+    <script src="../_static/js/index.js"></script>
+    
+  </body>
+</html>
