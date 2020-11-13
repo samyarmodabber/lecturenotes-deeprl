@@ -6,7 +6,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Function approximation &#8212; Deep Reinforcement Learning</title>
+    <title>6. Function approximation &#8212; Deep Reinforcement Learning</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" integrity="sha384-KA6wR/X5RY4zFAHpv/CnoG2UW1uogYfdnP67Uv7eULvTveboZJg0qUpmJZb5VqzN" crossorigin="anonymous">
     <link href="../_static/css/index.css" rel="stylesheet">
     <link rel="stylesheet" href="../_static/sphinx-book-theme.css" type="text/css" />
@@ -40,6 +40,8 @@
     <link rel="canonical" href="https://julien-vitay.net/lecturenotes-deeprl/2-tabular/6-FA.html" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="7. Deep learning" href="7-NN.html" />
+    <link rel="prev" title="5. Temporal Difference learning" href="5-TD.html" />
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="docsearch:language" content="en">
@@ -49,7 +51,7 @@
 <meta property="og:url"         content="https://julien-vitay.net/lecturenotes-deeprl/2-tabular/6-FA.html" />
 <meta property="og:type"        content="article" />
 <meta property="og:title"       content="Function approximation" />
-<meta property="og:description" content="Function approximation  Limits of tabular RL  All the methods seen so far belong to tabular RL. Q-learning necessitates to store in a Q-table one Q-value per st" />
+<meta property="og:description" content="Function approximation  Slides: pdf  Limits of tabular RL  &lt;div class=&#39;embed-container&#39;&gt;&lt;iframe src=&#39;https://www.youtube.com/embed/el6F6Drem88&#39; frameborder=&#39;0&#39; " />
 <meta property="og:image"       content="https://julien-vitay.net/lecturenotes-deeprl/_static/tuc.svg" />
 
 <meta name="twitter:card" content="summary" />
@@ -110,7 +112,7 @@
   Tabular RL
  </span>
 </p>
-<ul class="nav sidenav_l1">
+<ul class="current nav sidenav_l1">
  <li class="toctree-l1">
   <a class="reference internal" href="1-Bandits.html">
    1. Bandits
@@ -134,6 +136,16 @@
  <li class="toctree-l1">
   <a class="reference internal" href="5-TD.html">
    5. Temporal Difference learning
+  </a>
+ </li>
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   6. Function approximation
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="7-NN.html">
+   7. Deep learning
   </a>
  </li>
 </ul>
@@ -166,6 +178,11 @@
  <li class="toctree-l1">
   <a class="reference internal" href="../5-exercises/ex5-Bandits2.html">
    5. Bandits (part 2)
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../5-exercises/ex6-DP.html">
+   6. Dynamic programming
   </a>
  </li>
 </ul>
@@ -252,69 +269,69 @@
             <ul class="nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#limits-of-tabular-rl">
-   Limits of tabular RL
+   6.1. Limits of tabular RL
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#id1">
-   Function approximation
+   6.2. Function approximation
   </a>
   <ul class="nav section-nav flex-column">
    <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#feature-vectors">
-     Feature vectors
+     6.2.1. Feature vectors
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#state-value-approximation">
-     State value approximation
+     6.2.2. State value approximation
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#action-value-approximation">
-     Action value approximation
+     6.2.3. Action value approximation
     </a>
    </li>
   </ul>
  </li>
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#feature-construction">
-   Feature construction
+   6.3. Feature construction
   </a>
   <ul class="nav section-nav flex-column">
    <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#linear-features">
-     Linear features
+     6.3.1. Linear features
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#polynomial-features">
-     Polynomial features
+     6.3.2. Polynomial features
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#fourier-transforms">
-     Fourier transforms
+     6.3.3. Fourier transforms
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#discrete-coding">
-     Discrete coding
+     6.3.4. Discrete coding
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#coarse-coding">
-     Coarse coding
+     6.3.5. Coarse coding
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#tile-coding">
-     Tile coding
+     6.3.6. Tile coding
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#radial-basis-functions-rbf">
-     Radial-basis functions (RBF)
+     6.3.7. Radial-basis functions (RBF)
     </a>
    </li>
   </ul>
@@ -330,31 +347,34 @@
               <div>
                 
   <div class="section" id="function-approximation">
-<h1>Function approximation<a class="headerlink" href="#function-approximation" title="Permalink to this headline">¶</a></h1>
+<h1><span class="section-number">6. </span>Function approximation<a class="headerlink" href="#function-approximation" title="Permalink to this headline">¶</a></h1>
+<p>Slides: <a class="reference external" href="https://www.tu-chemnitz.de/informatik/KI/edu/deeprl/lectures/pdf/2.6-FunctionApproximation.pdf">pdf</a></p>
 <div class="section" id="limits-of-tabular-rl">
-<h2>Limits of tabular RL<a class="headerlink" href="#limits-of-tabular-rl" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">6.1. </span>Limits of tabular RL<a class="headerlink" href="#limits-of-tabular-rl" title="Permalink to this headline">¶</a></h2>
+<div class='embed-container'><iframe src='https://www.youtube.com/embed/el6F6Drem88' frameborder='0' allowfullscreen></iframe></div>
 <p>All the methods seen so far belong to <strong>tabular RL</strong>. Q-learning necessitates to store in a <strong>Q-table</strong> one Q-value per state-action pair <span class="math notranslate nohighlight">\((s, a)\)</span>.</p>
 <div class="figure align-default" id="id8">
 <a class="reference internal image-reference" href="../_images/qtable.gif"><img alt="../_images/qtable.gif" src="../_images/qtable.gif" style="width: 100%;" /></a>
-<p class="caption"><span class="caption-text">Tabular Q-learning. Source: <a class="reference external" href="https://towardsdatascience.com/qrash-course-deep-q-networks-from-the-ground-up-1bbda41d3677">https://towardsdatascience.com/qrash-course-deep-q-networks-from-the-ground-up-1bbda41d3677</a></span><a class="headerlink" href="#id8" title="Permalink to this image">¶</a></p>
+<p class="caption"><span class="caption-number">Fig. 6.1 </span><span class="caption-text">Tabular Q-learning. Source: <a class="reference external" href="https://towardsdatascience.com/qrash-course-deep-q-networks-from-the-ground-up-1bbda41d3677">https://towardsdatascience.com/qrash-course-deep-q-networks-from-the-ground-up-1bbda41d3677</a></span><a class="headerlink" href="#id8" title="Permalink to this image">¶</a></p>
 </div>
 <p>If a state has never been visited during learning, the Q-values will still be at their initial value (0.0), no policy can be derived.</p>
 <div class="figure align-default" id="id9">
 <a class="reference internal image-reference" href="../_images/tabular-generalization.svg"><img alt="../_images/tabular-generalization.svg" src="../_images/tabular-generalization.svg" width="60%" /></a>
-<p class="caption"><span class="caption-text">In high-dimensional state spaces (e.g. images), tabular RL cannot generalize between close states.</span><a class="headerlink" href="#id9" title="Permalink to this image">¶</a></p>
+<p class="caption"><span class="caption-number">Fig. 6.2 </span><span class="caption-text">In high-dimensional state spaces (e.g. images), tabular RL cannot generalize between close states.</span><a class="headerlink" href="#id9" title="Permalink to this image">¶</a></p>
 </div>
 <p>Similar states likely have the same optimal action: we want to be able to <strong>generalize</strong> the policy between states. For most realistic problems, the size of the Q-table becomes quickly untractable. If you use black-and-white 256x256 images as inputs, you have <span class="math notranslate nohighlight">\(2^{256 * 256} = 10^{19728}\)</span> possible states! <strong>Tabular RL</strong> is therefore limited to toy problems.</p>
 <p>Tabular RL also only works for small <strong>discrete action spaces</strong>. Robots have <strong>continuous action spaces</strong>, where the actions are changes in <strong>joint angles</strong> or <strong>torques</strong>. A joint angle could for example take any value in <span class="math notranslate nohighlight">\([0, \pi]\)</span>. A solution would be to <strong>discretize</strong> the action space (one action per degree), but we would fall into the <strong>curse of dimensionality</strong>.</p>
 <div class="figure align-default" id="id10">
 <a class="reference internal image-reference" href="../_images/cursedimensionality.png"><img alt="../_images/cursedimensionality.png" src="../_images/cursedimensionality.png" style="width: 90%;" /></a>
-<p class="caption"><span class="caption-text">Curse of dimensionality. Source: <a class="reference external" href="https://medium.com/diogo-menezes-borges/give-me-the-antidote-for-the-curse-of-dimensionality-b14bce4bf4d2">https://medium.com/diogo-menezes-borges/give-me-the-antidote-for-the-curse-of-dimensionality-b14bce4bf4d2</a></span><a class="headerlink" href="#id10" title="Permalink to this image">¶</a></p>
+<p class="caption"><span class="caption-number">Fig. 6.3 </span><span class="caption-text">Curse of dimensionality. Source: <a class="reference external" href="https://medium.com/diogo-menezes-borges/give-me-the-antidote-for-the-curse-of-dimensionality-b14bce4bf4d2">https://medium.com/diogo-menezes-borges/give-me-the-antidote-for-the-curse-of-dimensionality-b14bce4bf4d2</a></span><a class="headerlink" href="#id10" title="Permalink to this image">¶</a></p>
 </div>
 <p>The more degrees of freedom, the more discrete actions, the more entries in the Q-table… Tabular RL cannot deal with continuous action spaces, unless we approximate the policy with an <strong>actor-critic</strong> architecture.</p>
 </div>
 <div class="section" id="id1">
-<h2>Function approximation<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">6.2. </span>Function approximation<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<div class='embed-container'><iframe src='https://www.youtube.com/embed/cATgUO0QBes' frameborder='0' allowfullscreen></iframe></div>
 <div class="section" id="feature-vectors">
-<h3>Feature vectors<a class="headerlink" href="#feature-vectors" title="Permalink to this headline">¶</a></h3>
+<h3><span class="section-number">6.2.1. </span>Feature vectors<a class="headerlink" href="#feature-vectors" title="Permalink to this headline">¶</a></h3>
 <p>Let’s represent a state <span class="math notranslate nohighlight">\(s\)</span> by a vector of <span class="math notranslate nohighlight">\(d\)</span> <strong>features</strong> <span class="math notranslate nohighlight">\(\phi(s) = [\phi_1(s), \phi_2(s), \ldots, \phi_d(s)]^T\)</span>. For the cartpole, the feature vector would be:</p>
 <div class="math notranslate nohighlight">
 \[\begin{split} \phi(s) = \begin{bmatrix}x \\ \dot{x} \\ \theta \\ \dot{\theta} \end{bmatrix}\end{split}\]</div>
@@ -387,19 +407,19 @@
 <p>We can also represent <strong>continuous state spaces</strong> with feature vectors, as in cartpole.</p>
 </div>
 <div class="section" id="state-value-approximation">
-<h3>State value approximation<a class="headerlink" href="#state-value-approximation" title="Permalink to this headline">¶</a></h3>
+<h3><span class="section-number">6.2.2. </span>State value approximation<a class="headerlink" href="#state-value-approximation" title="Permalink to this headline">¶</a></h3>
 <p>In <strong>state value approximation</strong>, we want to approximate the state value function <span class="math notranslate nohighlight">\(V^\pi(s)\)</span> with a <strong>parameterized function</strong> <span class="math notranslate nohighlight">\(V_\varphi(s)\)</span>:</p>
 <div class="math notranslate nohighlight">
 \[V_\varphi(s) \approx V^\pi(s)\]</div>
 <div class="figure align-default" id="id11">
 <a class="reference internal image-reference" href="../_images/functionapproximation-state.svg"><img alt="../_images/functionapproximation-state.svg" src="../_images/functionapproximation-state.svg" width="80%" /></a>
-<p class="caption"><span class="caption-text">State value approximation.</span><a class="headerlink" href="#id11" title="Permalink to this image">¶</a></p>
+<p class="caption"><span class="caption-number">Fig. 6.4 </span><span class="caption-text">State value approximation.</span><a class="headerlink" href="#id11" title="Permalink to this image">¶</a></p>
 </div>
 <p>The parameterized function can have any form. Its has a set of parameters <span class="math notranslate nohighlight">\(\varphi\)</span> used to transform the feature vector <span class="math notranslate nohighlight">\(\phi(s)\)</span> into an approximated value <span class="math notranslate nohighlight">\(V_\varphi(s)\)</span>.</p>
 <p>The simplest function approximator (FA) is the <strong>linear approximator</strong>.</p>
 <div class="figure align-default" id="id12">
 <a class="reference internal image-reference" href="../_images/functionapproximation-state-linear.svg"><img alt="../_images/functionapproximation-state-linear.svg" src="../_images/functionapproximation-state-linear.svg" width="80%" /></a>
-<p class="caption"><span class="caption-text">Linear state value approximation.</span><a class="headerlink" href="#id12" title="Permalink to this image">¶</a></p>
+<p class="caption"><span class="caption-number">Fig. 6.5 </span><span class="caption-text">Linear state value approximation.</span><a class="headerlink" href="#id12" title="Permalink to this image">¶</a></p>
 </div>
 <p>The approximated value is a linear combination of the features:</p>
 <div class="math notranslate nohighlight">
@@ -441,7 +461,7 @@
 \end{split}\]</div>
 <p>As it would be too slow to compute the expectation on the whole state space (<strong>batch algorithm</strong>), we will sample the quantity:</p>
 <div class="math notranslate nohighlight">
-\[\mathcal{l}(\varphi) = \eta \,  (V^\pi(s) - V_\varphi(s)) \, \nabla_\varphi V_\varphi(s)\]</div>
+\[\delta_\varphi = \eta \,  (V^\pi(s) - V_\varphi(s)) \, \nabla_\varphi V_\varphi(s)\]</div>
 <p>and update the parameters with <strong>stochastic gradient descent</strong> (SGD).</p>
 <p>If we sample <span class="math notranslate nohighlight">\(K\)</span> states <span class="math notranslate nohighlight">\(s_i\)</span> from the state space, we get:</p>
 <div class="math notranslate nohighlight">
@@ -542,21 +562,21 @@ Semi-gradient TD has less variance, but a significant bias as <span class="math 
 \[\mathcal{L}(\varphi) = \mathbb{E}_{s \in \mathcal{S}} [ (r_{t+1} + \gamma \, V_\varphi(s') - V_\varphi(s))^2]= \mathbb{E}_{s \in \mathcal{S}} [ \delta_t^2]\]</div>
 </div>
 <div class="section" id="action-value-approximation">
-<h3>Action value approximation<a class="headerlink" href="#action-value-approximation" title="Permalink to this headline">¶</a></h3>
+<h3><span class="section-number">6.2.3. </span>Action value approximation<a class="headerlink" href="#action-value-approximation" title="Permalink to this headline">¶</a></h3>
 <p>Q-values can be approximated by a parameterized function <span class="math notranslate nohighlight">\(Q_\theta(s, a)\)</span> in the same manner. There are basically two options for the structure of the function approximator:</p>
 <ul class="simple">
 <li><p>The FA takes a feature vector for both the state <span class="math notranslate nohighlight">\(s\)</span> and the action <span class="math notranslate nohighlight">\(a\)</span> (which can be continuous) as inputs, and outputs a single Q-value <span class="math notranslate nohighlight">\(Q_\theta(s ,a)\)</span>.</p></li>
 </ul>
 <div class="figure align-default" id="id13">
 <a class="reference internal image-reference" href="../_images/functionapproximation-action1.svg"><img alt="../_images/functionapproximation-action1.svg" src="../_images/functionapproximation-action1.svg" width="80%" /></a>
-<p class="caption"><span class="caption-text">Action value approximation for a single action.</span><a class="headerlink" href="#id13" title="Permalink to this image">¶</a></p>
+<p class="caption"><span class="caption-number">Fig. 6.6 </span><span class="caption-text">Action value approximation for a single action.</span><a class="headerlink" href="#id13" title="Permalink to this image">¶</a></p>
 </div>
 <ul class="simple">
 <li><p>The FA takes a feature vector for the state <span class="math notranslate nohighlight">\(s\)</span> as input, and outputs one Q-value <span class="math notranslate nohighlight">\(Q_\theta(s ,a)\)</span> per possible action (the action space must be discrete).</p></li>
 </ul>
 <div class="figure align-default" id="id14">
 <a class="reference internal image-reference" href="../_images/functionapproximation-action2.svg"><img alt="../_images/functionapproximation-action2.svg" src="../_images/functionapproximation-action2.svg" width="80%" /></a>
-<p class="caption"><span class="caption-text">Action value approximation for all actions.</span><a class="headerlink" href="#id14" title="Permalink to this image">¶</a></p>
+<p class="caption"><span class="caption-number">Fig. 6.7 </span><span class="caption-text">Action value approximation for all actions.</span><a class="headerlink" href="#id14" title="Permalink to this image">¶</a></p>
 </div>
 <p>In both cases, we minimize the mse between the true value <span class="math notranslate nohighlight">\(Q^\pi(s, a)\)</span> and the approximated value <span class="math notranslate nohighlight">\(Q_\theta(s, a)\)</span>.</p>
 <div class="admonition-q-learning-with-function-approximation admonition">
@@ -590,9 +610,10 @@ Semi-gradient TD has less variance, but a significant bias as <span class="math 
 </div>
 </div>
 <div class="section" id="feature-construction">
-<h2>Feature construction<a class="headerlink" href="#feature-construction" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">6.3. </span>Feature construction<a class="headerlink" href="#feature-construction" title="Permalink to this headline">¶</a></h2>
+<div class='embed-container'><iframe src='https://www.youtube.com/embed/t39QwC_5vXI' frameborder='0' allowfullscreen></iframe></div>
 <div class="section" id="linear-features">
-<h3>Linear features<a class="headerlink" href="#linear-features" title="Permalink to this headline">¶</a></h3>
+<h3><span class="section-number">6.3.1. </span>Linear features<a class="headerlink" href="#linear-features" title="Permalink to this headline">¶</a></h3>
 <p>Before we dive into deep RL (i.e. RL with non-linear FA), let’s see how we can design good <strong>feature vectors</strong> for linear function approximation. The problem with deep NN is that they need a lot of samples to converge, what worsens the fundamental problem of RL: <strong>sample efficiency</strong>. By engineering the right features, we could use linear approximators, which converge much faster. The convergence of linear FA is <strong>guaranteed</strong>, not (always) non-linear ones.</p>
 <p>Why do we need to choose features? For the cartpole, the feature vector <span class="math notranslate nohighlight">\(\phi(s)\)</span> could be:</p>
 <div class="math notranslate nohighlight">
@@ -603,17 +624,17 @@ Semi-gradient TD has less variance, but a significant bias as <span class="math 
 <p>This answer is no, as a high angular velocity <span class="math notranslate nohighlight">\(\dot{\theta}\)</span> is good when the pole is horizontal (going up) but bad if the pole is vertical (will not stop). The value would depends linearly on something like <span class="math notranslate nohighlight">\(\dot{\theta} \, \sin \theta\)</span>, which is a non-linear combination of features.</p>
 <p>Let’s suppose we have a simple problem where the state <span class="math notranslate nohighlight">\(s\)</span> is represented by two continuous variables <span class="math notranslate nohighlight">\(x\)</span> and <span class="math notranslate nohighlight">\(y\)</span>. The true value function <span class="math notranslate nohighlight">\(V^\pi(s)\)</span> is a non-linear function of <span class="math notranslate nohighlight">\(x\)</span> and <span class="math notranslate nohighlight">\(y\)</span>.</p>
 <div class="figure align-default" id="id15">
-<a class="reference internal image-reference" href="../_images/featurecoding-data.png"><img alt="../_images/featurecoding-data.png" src="../_images/featurecoding-data.png" style="width: 80%;" /></a>
-<p class="caption"><span class="caption-text">State values <span class="math notranslate nohighlight">\(V^\pi(s)\)</span> for a two-dimensional state space.</span><a class="headerlink" href="#id15" title="Permalink to this image">¶</a></p>
+<a class="reference internal image-reference" href="../_images/featurecoding-data.png"><img alt="../_images/featurecoding-data.png" src="../_images/featurecoding-data.png" style="width: 60%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 6.8 </span><span class="caption-text">State values <span class="math notranslate nohighlight">\(V^\pi(s)\)</span> for a two-dimensional state space.</span><a class="headerlink" href="#id15" title="Permalink to this image">¶</a></p>
 </div>
 <p>If we apply linear FA directly on the feature vector <span class="math notranslate nohighlight">\([x, y]\)</span>, we catch the tendency of <span class="math notranslate nohighlight">\(V^\pi(s)\)</span> but we make a lot of bad predictions: <strong>high bias</strong> (underfitting).</p>
 <div class="figure align-default" id="id16">
-<a class="reference internal image-reference" href="../_images/featurecoding-linear.png"><img alt="../_images/featurecoding-linear.png" src="../_images/featurecoding-linear.png" style="width: 80%;" /></a>
-<p class="caption"><span class="caption-text">Linear approximation of the state value function.</span><a class="headerlink" href="#id16" title="Permalink to this image">¶</a></p>
+<a class="reference internal image-reference" href="../_images/featurecoding-linear.png"><img alt="../_images/featurecoding-linear.png" src="../_images/featurecoding-linear.png" style="width: 60%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 6.9 </span><span class="caption-text">Linear approximation of the state value function.</span><a class="headerlink" href="#id16" title="Permalink to this image">¶</a></p>
 </div>
 </div>
 <div class="section" id="polynomial-features">
-<h3>Polynomial features<a class="headerlink" href="#polynomial-features" title="Permalink to this headline">¶</a></h3>
+<h3><span class="section-number">6.3.2. </span>Polynomial features<a class="headerlink" href="#polynomial-features" title="Permalink to this headline">¶</a></h3>
 <p>To introduce non-linear relationships between continuous variables, a simple method is to construct the feature with <strong>polynomials</strong> of the variables.</p>
 <p>Example with polynomials of order 2:</p>
 <div class="math notranslate nohighlight">
@@ -632,17 +653,17 @@ Semi-gradient TD has less variance, but a significant bias as <span class="math 
     V_\varphi(s) = w_0 + w_1 \, x + w_2 \, y + w_3 \, x \, y + w_4 \, x^2 + w_5 \, y^2 + \ldots
 \]</div>
 <div class="figure align-default" id="id17">
-<a class="reference internal image-reference" href="../_images/featurecoding-polynomial2.png"><img alt="../_images/featurecoding-polynomial2.png" src="../_images/featurecoding-polynomial2.png" style="width: 80%;" /></a>
-<p class="caption"><span class="caption-text">Polynomial approximation of the state value function with order 2.</span><a class="headerlink" href="#id17" title="Permalink to this image">¶</a></p>
+<a class="reference internal image-reference" href="../_images/featurecoding-polynomial2.png"><img alt="../_images/featurecoding-polynomial2.png" src="../_images/featurecoding-polynomial2.png" style="width: 60%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 6.10 </span><span class="caption-text">Polynomial approximation of the state value function with order 2.</span><a class="headerlink" href="#id17" title="Permalink to this image">¶</a></p>
 </div>
 <div class="figure align-default" id="id18">
-<a class="reference internal image-reference" href="../_images/featurecoding-polynomial6.png"><img alt="../_images/featurecoding-polynomial6.png" src="../_images/featurecoding-polynomial6.png" style="width: 80%;" /></a>
-<p class="caption"><span class="caption-text">Polynomial approximation of the state value function with order 6.</span><a class="headerlink" href="#id18" title="Permalink to this image">¶</a></p>
+<a class="reference internal image-reference" href="../_images/featurecoding-polynomial6.png"><img alt="../_images/featurecoding-polynomial6.png" src="../_images/featurecoding-polynomial6.png" style="width: 60%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 6.11 </span><span class="caption-text">Polynomial approximation of the state value function with order 6.</span><a class="headerlink" href="#id18" title="Permalink to this image">¶</a></p>
 </div>
 <p>The higher the degree of the polynomial, the better the fit, but the number of features grows exponentially. This adds to the computational complexity and leads to <strong>overfitting</strong>: if we only sample some states, high-order polynomials will not interpolate correctly.</p>
 </div>
 <div class="section" id="fourier-transforms">
-<h3>Fourier transforms<a class="headerlink" href="#fourier-transforms" title="Permalink to this headline">¶</a></h3>
+<h3><span class="section-number">6.3.3. </span>Fourier transforms<a class="headerlink" href="#fourier-transforms" title="Permalink to this headline">¶</a></h3>
 <p>Instead of approximating a state variable <span class="math notranslate nohighlight">\(x\)</span> by a polynomial:</p>
 <div class="math notranslate nohighlight">
 \[
@@ -656,26 +677,26 @@ Semi-gradient TD has less variance, but a significant bias as <span class="math 
 <p>The Fourier theorem tells us that, if we take enough frequencies, we can reconstruct the signal <span class="math notranslate nohighlight">\(V_\varphi(s)\)</span> perfectly.</p>
 <div class="figure align-default" id="id19">
 <a class="reference internal image-reference" href="../_images/featurecoding-fourier1.png"><img alt="../_images/featurecoding-fourier1.png" src="../_images/featurecoding-fourier1.png" style="width: 100%;" /></a>
-<p class="caption"><span class="caption-text">Fourier transform in 1D. Source: <a class="bibtex reference internal" href="../zreferences.html#sutton1998" id="id2">[SB98]</a>.</span><a class="headerlink" href="#id19" title="Permalink to this image">¶</a></p>
+<p class="caption"><span class="caption-number">Fig. 6.12 </span><span class="caption-text">Fourier transform in 1D. Source: <a class="bibtex reference internal" href="../zreferences.html#sutton1998" id="id2">[SB98]</a>.</span><a class="headerlink" href="#id19" title="Permalink to this image">¶</a></p>
 </div>
 <p>It is just a change of basis, the problem stays a linear regression to find <span class="math notranslate nohighlight">\(w_0, w_1, w_2\)</span>, etc.</p>
 <p>Fourier transforms can be applied on multivariate functions as well.</p>
 <div class="figure align-default" id="id20">
 <a class="reference internal image-reference" href="../_images/featurecoding-fourier2.png"><img alt="../_images/featurecoding-fourier2.png" src="../_images/featurecoding-fourier2.png" style="width: 100%;" /></a>
-<p class="caption"><span class="caption-text">Fourier transform in 2D. Source: <a class="bibtex reference internal" href="../zreferences.html#sutton1998" id="id3">[SB98]</a>.</span><a class="headerlink" href="#id20" title="Permalink to this image">¶</a></p>
+<p class="caption"><span class="caption-number">Fig. 6.13 </span><span class="caption-text">Fourier transform in 2D. Source: <a class="bibtex reference internal" href="../zreferences.html#sutton1998" id="id3">[SB98]</a>.</span><a class="headerlink" href="#id20" title="Permalink to this image">¶</a></p>
 </div>
 <div class="figure align-default" id="id21">
 <a class="reference internal image-reference" href="../_images/featurecoding-fourier3.png"><img alt="../_images/featurecoding-fourier3.png" src="../_images/featurecoding-fourier3.png" style="width: 100%;" /></a>
-<p class="caption"><span class="caption-text">Comparison of polynomial and Fourier features. Source: <a class="bibtex reference internal" href="../zreferences.html#sutton1998" id="id4">[SB98]</a>.</span><a class="headerlink" href="#id21" title="Permalink to this image">¶</a></p>
+<p class="caption"><span class="caption-number">Fig. 6.14 </span><span class="caption-text">Comparison of polynomial and Fourier features. Source: <a class="bibtex reference internal" href="../zreferences.html#sutton1998" id="id4">[SB98]</a>.</span><a class="headerlink" href="#id21" title="Permalink to this image">¶</a></p>
 </div>
 <p>A Fourier basis tends to work better than a polynomial basis. The main problem is that the number of features increases very fast with the number of input dimensions and  the desired precision (higher-order polynomials, more frequencies).</p>
 </div>
 <div class="section" id="discrete-coding">
-<h3>Discrete coding<a class="headerlink" href="#discrete-coding" title="Permalink to this headline">¶</a></h3>
+<h3><span class="section-number">6.3.4. </span>Discrete coding<a class="headerlink" href="#discrete-coding" title="Permalink to this headline">¶</a></h3>
 <p>An obvious solution for continuous state variables is to <strong>discretize</strong> the input space. The input space is divided into a grid of non-overlapping <strong>tiles</strong>.</p>
 <div class="figure align-default" id="id22">
-<a class="reference internal image-reference" href="../_images/featurecoding-tile1.png"><img alt="../_images/featurecoding-tile1.png" src="../_images/featurecoding-tile1.png" style="width: 80%;" /></a>
-<p class="caption"><span class="caption-text">Linear approximation of the state value function using discrete coding.</span><a class="headerlink" href="#id22" title="Permalink to this image">¶</a></p>
+<a class="reference internal image-reference" href="../_images/featurecoding-tile1.png"><img alt="../_images/featurecoding-tile1.png" src="../_images/featurecoding-tile1.png" style="width: 60%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 6.15 </span><span class="caption-text">Linear approximation of the state value function using discrete coding.</span><a class="headerlink" href="#id22" title="Permalink to this image">¶</a></p>
 </div>
 <p>The feature vector is a <strong>binary</strong> vector with a 1 when the input is inside a tile, 0 otherwise.</p>
 <div class="math notranslate nohighlight">
@@ -683,11 +704,11 @@ Semi-gradient TD has less variance, but a significant bias as <span class="math 
 <p>This ensures <strong>generalization</strong> inside a tile: you only need a couple of samples inside a tile to know the mean value of all the states. Drawbacks: the value function is step-like (discontinuous), the correct size of a tile is not known, we fall into the <strong>curse of dimensionality</strong>.</p>
 </div>
 <div class="section" id="coarse-coding">
-<h3>Coarse coding<a class="headerlink" href="#coarse-coding" title="Permalink to this headline">¶</a></h3>
+<h3><span class="section-number">6.3.5. </span>Coarse coding<a class="headerlink" href="#coarse-coding" title="Permalink to this headline">¶</a></h3>
 <p>A more efficient solution is <strong>coarse coding</strong>. The tiles (rectangles, circles, or what you need) need to <strong>overlap</strong>.</p>
 <div class="figure align-default" id="id23">
 <a class="reference internal image-reference" href="../_images/featurecoding-tile2.png"><img alt="../_images/featurecoding-tile2.png" src="../_images/featurecoding-tile2.png" style="width: 60%;" /></a>
-<p class="caption"><span class="caption-text">Coarse coding uses overlapping tiles. Source: <a class="bibtex reference internal" href="../zreferences.html#sutton1998" id="id5">[SB98]</a>.</span><a class="headerlink" href="#id23" title="Permalink to this image">¶</a></p>
+<p class="caption"><span class="caption-number">Fig. 6.16 </span><span class="caption-text">Coarse coding uses overlapping tiles. Source: <a class="bibtex reference internal" href="../zreferences.html#sutton1998" id="id5">[SB98]</a>.</span><a class="headerlink" href="#id23" title="Permalink to this image">¶</a></p>
 </div>
 <p>A state <span class="math notranslate nohighlight">\(s\)</span> is encoded by a <strong>binary vector</strong>, but with several 1, for each tile it belongs.</p>
 <div class="math notranslate nohighlight">
@@ -695,24 +716,24 @@ Semi-gradient TD has less variance, but a significant bias as <span class="math 
 <p>This allows generalization inside a tile, but also <strong>across tiles</strong>. The size and shape of the <strong>“receptive field”</strong> influences the generalization properties.</p>
 <div class="figure align-default" id="id24">
 <a class="reference internal image-reference" href="../_images/featurecoding-tile4.png"><img alt="../_images/featurecoding-tile4.png" src="../_images/featurecoding-tile4.png" style="width: 90%;" /></a>
-<p class="caption"><span class="caption-text">The overlap between tiles defines the generalization. Source: <a class="bibtex reference internal" href="../zreferences.html#sutton1998" id="id6">[SB98]</a>.</span><a class="headerlink" href="#id24" title="Permalink to this image">¶</a></p>
+<p class="caption"><span class="caption-number">Fig. 6.17 </span><span class="caption-text">The overlap between tiles defines the generalization. Source: <a class="bibtex reference internal" href="../zreferences.html#sutton1998" id="id6">[SB98]</a>.</span><a class="headerlink" href="#id24" title="Permalink to this image">¶</a></p>
 </div>
 </div>
 <div class="section" id="tile-coding">
-<h3>Tile coding<a class="headerlink" href="#tile-coding" title="Permalink to this headline">¶</a></h3>
+<h3><span class="section-number">6.3.6. </span>Tile coding<a class="headerlink" href="#tile-coding" title="Permalink to this headline">¶</a></h3>
 <p>A simple way to ensure that tiles overlap is to use several regular grids with an <strong>offset</strong>. Each tiling will be <strong>coarse</strong>, but the location of a state will be quite precise as it may belong to many tiles.</p>
 <div class="figure align-default" id="id25">
 <a class="reference internal image-reference" href="../_images/featurecoding-tile3.png"><img alt="../_images/featurecoding-tile3.png" src="../_images/featurecoding-tile3.png" style="width: 100%;" /></a>
-<p class="caption"><span class="caption-text">Tile coding. Source: <a class="bibtex reference internal" href="../zreferences.html#sutton1998" id="id7">[SB98]</a>.</span><a class="headerlink" href="#id25" title="Permalink to this image">¶</a></p>
+<p class="caption"><span class="caption-number">Fig. 6.18 </span><span class="caption-text">Tile coding. Source: <a class="bibtex reference internal" href="../zreferences.html#sutton1998" id="id7">[SB98]</a>.</span><a class="headerlink" href="#id25" title="Permalink to this image">¶</a></p>
 </div>
 <p>This helps against the curse of dimensionality: high precision, but the number of tiles does not grow exponentially.</p>
 </div>
 <div class="section" id="radial-basis-functions-rbf">
-<h3>Radial-basis functions (RBF)<a class="headerlink" href="#radial-basis-functions-rbf" title="Permalink to this headline">¶</a></h3>
+<h3><span class="section-number">6.3.7. </span>Radial-basis functions (RBF)<a class="headerlink" href="#radial-basis-functions-rbf" title="Permalink to this headline">¶</a></h3>
 <p>The feature vector in tile coding is a binary vector: there will be <strong>discontinuous jumps</strong> in the approximated value function when moving between tiles. We can use <strong>radial-basis functions</strong> (RBF) such as Gaussians to map the state space.</p>
 <div class="figure align-default" id="id26">
 <a class="reference internal image-reference" href="../_images/featurecoding-rbf.png"><img alt="../_images/featurecoding-rbf.png" src="../_images/featurecoding-rbf.png" style="width: 100%;" /></a>
-<p class="caption"><span class="caption-text">Radial-basis functions.</span><a class="headerlink" href="#id26" title="Permalink to this image">¶</a></p>
+<p class="caption"><span class="caption-number">Fig. 6.19 </span><span class="caption-text">Radial-basis functions.</span><a class="headerlink" href="#id26" title="Permalink to this image">¶</a></p>
 </div>
 <p>We set a set of centers <span class="math notranslate nohighlight">\(\{c_i\}_{i=1}^K\)</span> in the input space on a regular grid (or randomly). Each element of the feature vector will be a Gaussian function of the distance between the state <span class="math notranslate nohighlight">\(s\)</span> and one center:</p>
 <div class="math notranslate nohighlight">
@@ -766,6 +787,8 @@ Semi-gradient TD has less variance, but a significant bias as <span class="math 
     
     <div class='prev-next-bottom'>
         
+    <a class='left-prev' id="prev-link" href="5-TD.html" title="previous page"><span class="section-number">5. </span>Temporal Difference learning</a>
+    <a class='right-next' id="next-link" href="7-NN.html" title="next page"><span class="section-number">7. </span>Deep learning</a>
 
     </div>
     <footer class="footer mt-5 mt-md-0">

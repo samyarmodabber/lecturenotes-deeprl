@@ -14,8 +14,8 @@
     - file: 2-tabular/3-DP
     - file: 2-tabular/4-MC
     - file: 2-tabular/5-TD
-    # - file: 2-tabular/6-FA
-    # - file: 2-tabular/7-NN
+    - file: 2-tabular/6-FA
+    - file: 2-tabular/7-NN
 
 
 - part: Exercises
@@ -56,12 +56,12 @@
         - file: 5-exercises/5-Bandits2-solution
           title: Solution
 
-    # - file: 5-exercises/ex6-DP
-    #   sections:
-    #     - file: 5-exercises/6-DP
-    #       title: Notebook
-    #     - file: 5-exercises/6-DP-solution
-    #       title: Solution
+    - file: 5-exercises/ex6-DP
+      sections:
+        - file: 5-exercises/6-DP
+          title: Notebook
+        - file: 5-exercises/6-DP-solution
+          title: Solution
 
 
 - part: References

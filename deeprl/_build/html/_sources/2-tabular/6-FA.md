@@ -1,7 +1,10 @@
 # Function approximation
 
+Slides: [pdf](https://www.tu-chemnitz.de/informatik/KI/edu/deeprl/lectures/pdf/2.6-FunctionApproximation.pdf)
 
 ## Limits of tabular RL
+
+<div class='embed-container'><iframe src='https://www.youtube.com/embed/el6F6Drem88' frameborder='0' allowfullscreen></iframe></div>
 
 All the methods seen so far belong to **tabular RL**. Q-learning necessitates to store in a **Q-table** one Q-value per state-action pair $(s, a)$.
 
@@ -35,6 +38,8 @@ Curse of dimensionality. Source: <https://medium.com/diogo-menezes-borges/give-m
 The more degrees of freedom, the more discrete actions, the more entries in the Q-table... Tabular RL cannot deal with continuous action spaces, unless we approximate the policy with an **actor-critic** architecture.
 
 ## Function approximation
+
+<div class='embed-container'><iframe src='https://www.youtube.com/embed/cATgUO0QBes' frameborder='0' allowfullscreen></iframe></div>
 
 ### Feature vectors
 
@@ -150,7 +155,7 @@ $$
 
 As it would be too slow to compute the expectation on the whole state space (**batch algorithm**), we will sample the quantity:
     
-$$\mathcal{l}(\varphi) = \eta \,  (V^\pi(s) - V_\varphi(s)) \, \nabla_\varphi V_\varphi(s)$$
+$$\delta_\varphi = \eta \,  (V^\pi(s) - V_\varphi(s)) \, \nabla_\varphi V_\varphi(s)$$
 
 and update the parameters with **stochastic gradient descent** (SGD).
 
@@ -309,6 +314,8 @@ In both cases, we minimize the mse between the true value $Q^\pi(s, a)$ and the 
 
 ## Feature construction
 
+<div class='embed-container'><iframe src='https://www.youtube.com/embed/t39QwC_5vXI' frameborder='0' allowfullscreen></iframe></div>
+
 ### Linear features
 
 Before we dive into deep RL (i.e. RL with non-linear FA), let's see how we can design good **feature vectors** for linear function approximation. The problem with deep NN is that they need a lot of samples to converge, what worsens the fundamental problem of RL: **sample efficiency**. By engineering the right features, we could use linear approximators, which converge much faster. The convergence of linear FA is **guaranteed**, not (always) non-linear ones.
@@ -327,7 +334,7 @@ Let's suppose we have a simple problem where the state $s$ is represented by two
 
 ```{figure} ../img/featurecoding-data.png
 ---
-width: 80%
+width: 60%
 ---
 State values $V^\pi(s)$ for a two-dimensional state space.
 ```
@@ -336,7 +343,7 @@ If we apply linear FA directly on the feature vector $[x, y]$, we catch the tend
 
 ```{figure} ../img/featurecoding-linear.png
 ---
-width: 80%
+width: 60%
 ---
 Linear approximation of the state value function.
 ```
@@ -367,14 +374,14 @@ $$
 
 ```{figure} ../img/featurecoding-polynomial2.png
 ---
-width: 80%
+width: 60%
 ---
 Polynomial approximation of the state value function with order 2.
 ```
 
 ```{figure} ../img/featurecoding-polynomial6.png
 ---
-width: 80%
+width: 60%
 ---
 Polynomial approximation of the state value function with order 6.
 ```
@@ -431,7 +438,7 @@ An obvious solution for continuous state variables is to **discretize** the inpu
 
 ```{figure} ../img/featurecoding-tile1.png
 ---
-width: 80%
+width: 60%
 ---
 Linear approximation of the state value function using discrete coding.
 ```

@@ -1,8 +1,10 @@
 # Deep learning
 
-
+Slides: [pdf](https://www.tu-chemnitz.de/informatik/KI/edu/deeprl/lectures/pdf/2.7-DeepNetworks.pdf)
 
 ## Feedforward neural networks
+
+<div class='embed-container'><iframe src='https://www.youtube.com/embed/pVneu-1EYdI' frameborder='0' allowfullscreen></iframe></div>
 
 An **artificial neural network** (ANN) is a cascade of **fully-connected** (FC) layers of artificial neurons.
 
@@ -21,7 +23,7 @@ Overall, ANNs are **non-linear parameterized function estimators** from the inpu
 
 $$\mathbf{y} = F_\theta (\mathbf{x})$$
 
-ANNs can be used for both **regression** (continuous outputs) and **classification** (discrete outputs) tasks. We have a fixed **training set** $\mathcal{D}$ of $N$ samples $(\mathbf{x}_t, \mathbf{t}_i)$, where $t_i$ is the **desired output** or **target**.
+ANNs can be used for both **regression** (continuous outputs) and **classification** (discrete outputs) tasks. In supervised learning, we have a fixed **training set** $\mathcal{D}$ of $N$ samples $(\mathbf{x}_t, \mathbf{t}_i)$, where $t_i$ is the **desired output** or **target**.
 
 * **Regression:**
 
@@ -104,6 +106,8 @@ There are three aspects to consider when building a neural network:
 
 ## Convolutional neural networks
 
+<div class='embed-container'><iframe src='https://www.youtube.com/embed/t244PS_tZtY' frameborder='0' allowfullscreen></iframe></div>
+
 When using images as inputs, **fully-connected networks** (FCN) would have too many weights: slow learning and overfitting.
 
 ```{figure} ../img/fullyconnected.png
@@ -159,6 +163,8 @@ The convolutional layers **extract complex features** from the images through le
 
 ## Autoencoders
 
+<div class='embed-container'><iframe src='https://www.youtube.com/embed/IqrEdV9ejO8' frameborder='0' allowfullscreen></iframe></div>
+
 
 The problem with FCN and CNN is that they **extract features** in supervised learning tasks: Need for a lot of annotated data (image, label). **Autoencoders** allows **unsupervised learning**, as they only need inputs (images). Their task is to **reconstruct** the input:
 
@@ -198,6 +204,8 @@ Autoencoders can be used in RL to find a feature space where linear FA can apply
 
 
 ## Recurrent neural networks
+
+<div class='embed-container'><iframe src='https://www.youtube.com/embed/dkxIqBjldtY' frameborder='0' allowfullscreen></iframe></div>
 
 FCN, CNN and AE are **feedforward neural networks**: they transform an input $\mathbf{x}$ into an output $\mathbf{y}$:
 
