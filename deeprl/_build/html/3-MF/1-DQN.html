@@ -1,0 +1,932 @@
+
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>1. Deep Q-Learning &#8212; Deep Reinforcement Learning</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" integrity="sha384-KA6wR/X5RY4zFAHpv/CnoG2UW1uogYfdnP67Uv7eULvTveboZJg0qUpmJZb5VqzN" crossorigin="anonymous">
+    <link href="../_static/css/index.css" rel="stylesheet">
+    <link rel="stylesheet" href="../_static/sphinx-book-theme.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/style.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-dropdown.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/sphinx-book-theme.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/togglebutton.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/sphinx-book-theme.js"></script>
+    <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processRefs": false, "processEnvironments": false}})</script>
+    <script async="async" src="https://unpkg.com/thebelab@latest/lib/index.js"></script>
+    <script >
+        const thebe_selector = ".thebe"
+        const thebe_selector_input = "pre"
+        const thebe_selector_output = ".output"
+    </script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <link rel="canonical" href="https://julien-vitay.net/lecturenotes-deeprl/3-MF/1-DQN.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="1. Introduction to Python" href="../5-exercises/ex1-Python.html" />
+    <link rel="prev" title="7. Deep learning" href="../2-tabular/7-NN.html" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="docsearch:language" content="en">
+
+
+<!-- Opengraph tags -->
+<meta property="og:url"         content="https://julien-vitay.net/lecturenotes-deeprl/3-MF/1-DQN.html" />
+<meta property="og:type"        content="article" />
+<meta property="og:title"       content="Deep Q-Learning" />
+<meta property="og:description" content="Deep Q-Learning  Slides: pdf  Value-based deep RL  &lt;div class=&#39;embed-container&#39;&gt;&lt;iframe src=&#39;https://www.youtube.com/embed/_luuEjWJU20&#39; frameborder=&#39;0&#39; allowful" />
+<meta property="og:image"       content="https://julien-vitay.net/lecturenotes-deeprl/_static/tuc.svg" />
+
+<meta name="twitter:card" content="summary" />
+
+
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
+<a class="navbar-brand text-wrap" href="../index.html">
+  
+  <img src="../_static/tuc.svg" class="logo" alt="logo">
+  
+  
+  <h1 class="site-logo" id="site-title">Deep Reinforcement Learning</h1>
+  
+</a>
+</div>
+
+<form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form>
+
+<nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+  <ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../intro.html">
+   Deep Reinforcement Learning
+  </a>
+ </li>
+</ul>
+<p class="caption">
+ <span class="caption-text">
+  Introduction
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../1-intro/1-Introduction.html">
+   1. Introduction
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../1-intro/2-Math.html">
+   2. Math basics
+  </a>
+ </li>
+</ul>
+<p class="caption">
+ <span class="caption-text">
+  Tabular RL
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../2-tabular/1-Bandits.html">
+   1. Bandits
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../2-tabular/2-MDP.html">
+   2. Markov Decision Processes
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../2-tabular/3-DP.html">
+   3. Dynamic Programming
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../2-tabular/4-MC.html">
+   4. Monte-Carlo (MC) methods
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../2-tabular/5-TD.html">
+   5. Temporal Difference learning
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../2-tabular/6-FA.html">
+   6. Function approximation
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../2-tabular/7-NN.html">
+   7. Deep learning
+  </a>
+ </li>
+</ul>
+<p class="caption">
+ <span class="caption-text">
+  Model-free RL
+ </span>
+</p>
+<ul class="current nav sidenav_l1">
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   1. Deep Q-Learning
+  </a>
+ </li>
+</ul>
+<p class="caption">
+ <span class="caption-text">
+  Exercises
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../5-exercises/ex1-Python.html">
+   1. Introduction to Python
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../5-exercises/ex2-Numpy.html">
+   2. Numpy and Matplotlib
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../5-exercises/ex3-Sampling.html">
+   3. Sampling
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../5-exercises/ex4-Bandits.html">
+   4. Bandits (part 1)
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../5-exercises/ex5-Bandits2.html">
+   5. Bandits (part 2)
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../5-exercises/ex6-DP.html">
+   6. Dynamic programming
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../5-exercises/ex7-Gym.html">
+   7. Gym environments
+  </a>
+ </li>
+</ul>
+<p class="caption">
+ <span class="caption-text">
+  References
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../zreferences.html">
+   1. Bibliography
+  </a>
+ </li>
+</ul>
+
+</nav>
+
+ <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="row topbar fixed-top container-xl">
+    <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show">
+    </div>
+    <div class="col pl-2 topbar-main">
+        
+        <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+            data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+            aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+            title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+            <i class="fas fa-bars"></i>
+            <i class="fas fa-arrow-left"></i>
+            <i class="fas fa-arrow-up"></i>
+        </button>
+        
+        <div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="../_sources/3-MF/1-DQN.md"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.md</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+    
+</div>
+        <!-- Source interaction buttons -->
+
+
+        <!-- Full screen (wrap in <a> to have style consistency -->
+        <a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+                data-placement="bottom" onclick="toggleFullScreen()" title="Fullscreen mode"><i
+                    class="fas fa-expand"></i></button></a>
+
+        <!-- Launch buttons -->
+
+    </div>
+
+    <!-- Table of contents -->
+    <div class="d-none d-md-block col-md-2 bd-toc show">
+        <div class="tocsection onthispage pt-5 pb-3">
+            <i class="fas fa-list"></i> Contents
+        </div>
+        <nav id="bd-toc-nav">
+            <ul class="nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#value-based-deep-rl">
+   1.1. Value-based deep RL
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#correlated-inputs">
+     1.1.1. Correlated inputs
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#non-stationary-targets">
+     1.1.2. Non-stationary targets
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#deep-q-network-dqn">
+   1.2. Deep Q-network (DQN)
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#experience-replay-memory">
+     1.2.1. Experience replay memory
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#target-network">
+     1.2.2. Target network
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#dqn-algorithm">
+     1.2.3. DQN algorithm
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#dqn-results">
+     1.2.4. DQN results
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#dqn-variants">
+   1.3. DQN variants
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#double-dqn">
+     1.3.1. Double DQN
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#prioritized-experience-replay">
+     1.3.2. Prioritized Experience Replay
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#dueling-networks">
+     1.3.3. Dueling networks
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+        </nav>
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+        
+              <div>
+                
+  <div class="section" id="deep-q-learning">
+<h1><span class="section-number">1. </span>Deep Q-Learning<a class="headerlink" href="#deep-q-learning" title="Permalink to this headline">¶</a></h1>
+<p>Slides: <a class="reference external" href="https://www.tu-chemnitz.de/informatik/KI/edu/deeprl/lectures/pdf/3.1-DQN.pdf">pdf</a></p>
+<div class="section" id="value-based-deep-rl">
+<h2><span class="section-number">1.1. </span>Value-based deep RL<a class="headerlink" href="#value-based-deep-rl" title="Permalink to this headline">¶</a></h2>
+<div class='embed-container'><iframe src='https://www.youtube.com/embed/_luuEjWJU20' frameborder='0' allowfullscreen></iframe></div>
+<p>The basic idea in <strong>value-based deep RL</strong> is to approximate the Q-values in each possible state, using a <strong>deep neural network</strong> with free parameters <span class="math notranslate nohighlight">\(\theta\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[Q_\theta(s, a) \approx Q^\pi(s, a) = \mathbb{E}_\pi (R_t | s_t=s, a_t=a)\]</div>
+<p>The Q-values now depend on the parameters <span class="math notranslate nohighlight">\(\theta\)</span> of the DNN. The derived policy <span class="math notranslate nohighlight">\(\pi_\theta\)</span> uses for example an <span class="math notranslate nohighlight">\(\epsilon\)</span>-greedy or softmax action selection scheme over the estimated Q-values:</p>
+<div class="math notranslate nohighlight">
+\[
+    \pi_\theta(s, a) \leftarrow \text{Softmax} (Q_\theta(s, a))
+\]</div>
+<p>There are two possibilities to approximate Q-values <span class="math notranslate nohighlight">\(Q_\theta(s, a)\)</span>:</p>
+<ul class="simple">
+<li><p>The DNN approximates the Q-value of a single <span class="math notranslate nohighlight">\((s, a)\)</span> pair. The action space can be continuous.</p></li>
+</ul>
+<div class="figure align-default" id="id17">
+<a class="reference internal image-reference" href="../_images/functionapproximation-action11.svg"><img alt="../_images/functionapproximation-action11.svg" src="../_images/functionapproximation-action11.svg" width="80%" /></a>
+<p class="caption"><span class="caption-number">Fig. 1.46 </span><span class="caption-text">Action value approximation for a single action.</span><a class="headerlink" href="#id17" title="Permalink to this image">¶</a></p>
+</div>
+<ul class="simple">
+<li><p>The DNN approximates the Q-value of all actions <span class="math notranslate nohighlight">\(a\)</span> in a state <span class="math notranslate nohighlight">\(s\)</span>. The action space must be discrete (one output neuron per action).</p></li>
+</ul>
+<div class="figure align-default" id="id18">
+<a class="reference internal image-reference" href="../_images/functionapproximation-action21.svg"><img alt="../_images/functionapproximation-action21.svg" src="../_images/functionapproximation-action21.svg" width="80%" /></a>
+<p class="caption"><span class="caption-number">Fig. 1.47 </span><span class="caption-text">Action value approximation for all actions.</span><a class="headerlink" href="#id18" title="Permalink to this image">¶</a></p>
+</div>
+<p>We could simply adapt Q-learning with FA to the DNN:</p>
+<div class="admonition-naive-deep-q-learning-with-function-approximation admonition">
+<p class="admonition-title">Naive deep Q-learning with function approximation</p>
+<ul>
+<li><p>Initialize the deep neural network with parameters <span class="math notranslate nohighlight">\(\theta\)</span>.</p></li>
+<li><p>Start from an initial state <span class="math notranslate nohighlight">\(s_0\)</span>.</p></li>
+<li><p>for <span class="math notranslate nohighlight">\(t \in [0, T_\text{total}]\)</span>:</p>
+<ul class="simple">
+<li><p>Select <span class="math notranslate nohighlight">\(a_{t}\)</span> using a softmax over the Q-values <span class="math notranslate nohighlight">\(Q_\theta(s_t, a)\)</span>.</p></li>
+<li><p>Take <span class="math notranslate nohighlight">\(a_t\)</span>, observe <span class="math notranslate nohighlight">\(r_{t+1}\)</span> and <span class="math notranslate nohighlight">\(s_{t+1}\)</span>.</p></li>
+<li><p>Update the parameters <span class="math notranslate nohighlight">\(\theta\)</span> by minimizing the loss function:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[\mathcal{L}(\theta) = (r_{t+1} + \gamma \, \max_{a'} Q_\theta(s_{t+1}, a') - Q_\theta(s_t, a_t))^2\]</div>
+</li>
+</ul>
+</div>
+<p>This naive approach will not work: DNNs cannot learn from single examples (online learning = instability). DNNs require <strong>stochastic gradient descent</strong> (SGD):</p>
+<div class="math notranslate nohighlight">
+\[
+    \mathcal{L}(\theta) = E_\mathcal{D} (||\textbf{t} - \textbf{y}||^2) \approx \frac{1}{K} \sum_{i=1}^K ||\textbf{t}_i - \textbf{y}_i||^2
+\]</div>
+<p>The loss function is estimated by <strong>sampling</strong> a minibatch of <span class="math notranslate nohighlight">\(K\)</span> <strong>i.i.d</strong> samples from the training set to compute the loss function and update the parameters <span class="math notranslate nohighlight">\(\theta\)</span>. This is necessary to avoid local minima of the loss function. Although Q-learning can learn from single transitions, it is not possible using DNN.  Why not using the last <span class="math notranslate nohighlight">\(K\)</span> transitions to train the network? We could store them in a <strong>transition buffer</strong> and train the network on it.</p>
+<div class="admonition-naive-deep-q-learning-with-a-transition-buffer admonition">
+<p class="admonition-title">Naive deep Q-learning with a transition buffer</p>
+<ul>
+<li><p>Initialize the deep neural network with parameters <span class="math notranslate nohighlight">\(\theta\)</span>.</p></li>
+<li><p>Initialize an empty <strong>transition buffer</strong> <span class="math notranslate nohighlight">\(\mathcal{D}\)</span> of size <span class="math notranslate nohighlight">\(K\)</span>: <span class="math notranslate nohighlight">\(\{(s_k, a_k, r_k, s'_k)\}_{k=1}^K\)</span>.</p></li>
+<li><p>for <span class="math notranslate nohighlight">\(t \in [0, T_\text{total}]\)</span>:</p>
+<ul>
+<li><p>Select <span class="math notranslate nohighlight">\(a_{t}\)</span> using a softmax over the Q-values <span class="math notranslate nohighlight">\(Q_\theta(s_t, a)\)</span>.</p></li>
+<li><p>Take <span class="math notranslate nohighlight">\(a_t\)</span>, observe <span class="math notranslate nohighlight">\(r_{t+1}\)</span> and <span class="math notranslate nohighlight">\(s_{t+1}\)</span>.</p></li>
+<li><p>Store <span class="math notranslate nohighlight">\((s_t, a_t, r_{t+1}, s_{t+1})\)</span> in the transition buffer.</p></li>
+<li><p>Every <span class="math notranslate nohighlight">\(K\)</span> steps:</p>
+<ul class="simple">
+<li><p>Update the parameters <span class="math notranslate nohighlight">\(\theta\)</span> using the transition buffer:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[\mathcal{L}(\theta) = \frac{1}{K} \, \sum_{k=1}^K (r_k + \gamma \, \max_{a'} Q_\theta(s'_k, a') - Q_\theta(s_k, a_k))^2\]</div>
+<ul class="simple">
+<li><p>Empty the transition buffer.</p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="correlated-inputs">
+<h3><span class="section-number">1.1.1. </span>Correlated inputs<a class="headerlink" href="#correlated-inputs" title="Permalink to this headline">¶</a></h3>
+<p>Unfortunately, this does not work either. The last <span class="math notranslate nohighlight">\(K\)</span> transitions <span class="math notranslate nohighlight">\((s, a, r, s')\)</span> are not <strong>i.i.d</strong> (independent and identically distributed). The transition <span class="math notranslate nohighlight">\((s_{t+1}, a_{t+1}, r_{t+2}, s_{t+2})\)</span> <strong>depends</strong> on <span class="math notranslate nohighlight">\((s_{t}, a_{t}, r_{t+1}, s_{t+1})\)</span> by definition, i.e. the transitions are <strong>correlated</strong>. Even worse, when playing video games, successive frames will be very similar or even identical.</p>
+<div class="figure align-default" id="id19">
+<a class="reference internal image-reference" href="../_images/breakout.png"><img alt="../_images/breakout.png" src="../_images/breakout.png" style="width: 80%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 1.48 </span><span class="caption-text">Successive video frames are extremely correlated.</span><a class="headerlink" href="#id19" title="Permalink to this image">¶</a></p>
+</div>
+<p>The actions are also correlated: you move the paddle to the left for several successive steps.</p>
+<p>Feeding transitions sequentially to a DNN is the same as giving all MNIST 0’s to a DNN, then all 1’s, etc… It does not work.</p>
+<div class="figure align-default" id="id20">
+<a class="reference internal image-reference" href="../_images/erm.png"><img alt="../_images/erm.png" src="../_images/erm.png" style="width: 100%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 1.49 </span><span class="caption-text">Correlated vs. uniformaly sampled MNIST digits.</span><a class="headerlink" href="#id20" title="Permalink to this image">¶</a></p>
+</div>
+<p>In SL, we have all the training data <strong>before</strong> training: it is possible to get i.i.d samples by shuffling the training set between two epochs. In RL, we create the “training set” (transitions) <strong>during</strong> training: the samples are not i.i.d as we act sequentially over time.</p>
+</div>
+<div class="section" id="non-stationary-targets">
+<h3><span class="section-number">1.1.2. </span>Non-stationary targets<a class="headerlink" href="#non-stationary-targets" title="Permalink to this headline">¶</a></h3>
+<p>In SL, the <strong>targets</strong> <span class="math notranslate nohighlight">\(\mathbf{t}\)</span> do not change over time: an image of a cat stays an image of a cat throughout learning.</p>
+<div class="math notranslate nohighlight">
+\[\mathcal{L}(\theta) = \mathbb{E}_{\mathbf{x}, \mathbf{t} \sim \mathcal{D}} [||\mathbf{t} - F_\theta(\mathbf{x})||^2]\]</div>
+<p>The problem is said <strong>stationary</strong>, as the distribution of the data does not change over time.</p>
+<p>In RL, the <strong>targets</strong> <span class="math notranslate nohighlight">\(t = r + \gamma \, \max_{a'} Q_\theta(s', a')\)</span> do change over time:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(Q_\theta(s', a')\)</span> depends on <span class="math notranslate nohighlight">\(\theta\)</span>, so after one optimization step, all targets have changed!</p></li>
+<li><p>As we improve the policy over training, we collect higher returns.</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[\mathcal{L}(\theta) = \mathbb{E}_{s, a \sim \pi_\theta} [(r + \gamma \, \max_{a'} Q_\theta(s', a') - Q_\theta(s, a))^2]\]</div>
+<p>Neural networks do not like this at all. After a while, they give up and settle on a <strong>suboptimal</strong> policy.</p>
+<div class="figure align-default" id="id21">
+<a class="reference internal image-reference" href="../_images/nonstationarity.svg"><img alt="../_images/nonstationarity.svg" src="../_images/nonstationarity.svg" width="70%" /></a>
+<p class="caption"><span class="caption-number">Fig. 1.50 </span><span class="caption-text">Supervised learning has stationary targets, not RL. Learning is much less efficient and optimal in RL.</span><a class="headerlink" href="#id21" title="Permalink to this image">¶</a></p>
+</div>
+</div>
+</div>
+<div class="section" id="deep-q-network-dqn">
+<h2><span class="section-number">1.2. </span>Deep Q-network (DQN)<a class="headerlink" href="#deep-q-network-dqn" title="Permalink to this headline">¶</a></h2>
+<div class='embed-container'><iframe src='https://www.youtube.com/embed/r17pjvvj3Qc' frameborder='0' allowfullscreen></iframe></div>
+<p>Non-linear approximators never really worked with RL before 2013 because of:</p>
+<ol class="simple">
+<li><p>The correlation between successive inputs or outputs.</p></li>
+<li><p>The non-stationarity of the problem.</p></li>
+</ol>
+<p>These two problems are very bad for deep networks, which end up overfitting the learned episodes or not learning anything at all. Deepmind researchers <a class="bibtex reference internal" href="../zreferences.html#mnih2013" id="id1">[MKS+13]</a> proposed to use two classical ML tricks to overcome these problems:</p>
+<ol class="simple">
+<li><p>experience replay memory.</p></li>
+<li><p>target networks.</p></li>
+</ol>
+<div class="section" id="experience-replay-memory">
+<h3><span class="section-number">1.2.1. </span>Experience replay memory<a class="headerlink" href="#experience-replay-memory" title="Permalink to this headline">¶</a></h3>
+<p>To avoid correlation between samples, (Mnih et al. 2015) proposed to store the <span class="math notranslate nohighlight">\((s, a, r, s')\)</span> transitions in a huge <strong>experience replay memory</strong> or <strong>replay buffer</strong>  <span class="math notranslate nohighlight">\(\mathcal{D}\)</span> (e.g. 1 million transitions).</p>
+<div class="figure align-default" id="id22">
+<a class="reference internal image-reference" href="../_images/ERM.svg"><img alt="../_images/ERM.svg" src="../_images/ERM.svg" width="60%" /></a>
+<p class="caption"><span class="caption-number">Fig. 1.51 </span><span class="caption-text">Experience replay memory / replay buffer.</span><a class="headerlink" href="#id22" title="Permalink to this image">¶</a></p>
+</div>
+<p>When the buffer is full, we simply overwrite old transitions. The Q-learning update is only applied on a <strong>random minibatch</strong> of those past experiences, not the last transitions. This ensure the independence of the samples (non-correlated samples).</p>
+<div class="admonition-naive-deep-q-learning-with-experience-replay-memory admonition">
+<p class="admonition-title">Naive deep Q-learning with experience replay memory</p>
+<ul>
+<li><p>Initialize value network <span class="math notranslate nohighlight">\(Q_{\theta}\)</span>.</p></li>
+<li><p>Initialize experience replay memory <span class="math notranslate nohighlight">\(\mathcal{D}\)</span> of maximal size <span class="math notranslate nohighlight">\(N\)</span>.</p></li>
+<li><p>for <span class="math notranslate nohighlight">\(t \in [0, T_\text{total}]\)</span>:</p>
+<ul>
+<li><p>Select an action <span class="math notranslate nohighlight">\(a_t\)</span> based on <span class="math notranslate nohighlight">\(Q_\theta(s_t, a)\)</span>, observe <span class="math notranslate nohighlight">\(s_{t+1}\)</span> and <span class="math notranslate nohighlight">\(r_{t+1}\)</span>.</p></li>
+<li><p>Store <span class="math notranslate nohighlight">\((s_t, a_t, r_{t+1}, s_{t+1})\)</span> in the experience replay memory.</p></li>
+<li><p>Every <span class="math notranslate nohighlight">\(T_\text{train}\)</span> steps:</p>
+<ul class="simple">
+<li><p>Sample a minibatch <span class="math notranslate nohighlight">\(\mathcal{D}_s\)</span> randomly from <span class="math notranslate nohighlight">\(\mathcal{D}\)</span>.</p></li>
+<li><p>For each transition <span class="math notranslate nohighlight">\((s_k, a_k, r_k, s'_k)\)</span> in the minibatch:</p>
+<ul>
+<li><p>Compute the target value <span class="math notranslate nohighlight">\(t_k = r_k + \gamma \, \max_{a'} Q_{\theta}(s'_k, a')\)</span></p></li>
+</ul>
+</li>
+<li><p>Update the value network <span class="math notranslate nohighlight">\(Q_{\theta}\)</span> on <span class="math notranslate nohighlight">\(\mathcal{D}_s\)</span> to minimize:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[\mathcal{L}(\theta) = \mathbb{E}_{\mathcal{D}_s}[(t_k - Q_\theta(s_k, a_k))^2]\]</div>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<p>But wait! The samples of the minibatch are still not i.i.d, as they are not <strong>identically distributed</strong>:</p>
+<ul class="simple">
+<li><p>Some samples were generated with a very old policy <span class="math notranslate nohighlight">\(\pi_{\theta_0}\)</span>.</p></li>
+<li><p>Some samples have been generated recently by the current policy <span class="math notranslate nohighlight">\(\pi_\theta\)</span>.</p></li>
+</ul>
+<p>The samples of the minibatch do not come from the same distribution, so this should not work, except if you use an <strong>off-policy</strong> algorithm, such as Q-learning!</p>
+<div class="math notranslate nohighlight">
+\[Q^\pi(s, a) = \mathbb{E}_{s_t \sim \rho_b, a_t \sim b}[ r_{t+1} + \gamma \, \max_a Q^\pi(s_{t+1}, a) | s_t = s, a_t=a]\]</div>
+<p>In Q-learning, you can take samples from <strong>any</strong> behavior policy <span class="math notranslate nohighlight">\(b\)</span>, as long as the coverage assumption stands:</p>
+<div class="math notranslate nohighlight">
+\[ \pi(s,a) &gt; 0 \Rightarrow b(s,a) &gt; 0\]</div>
+<p>Here, the behavior policy <span class="math notranslate nohighlight">\(b\)</span> is a kind of “superset” of all past policies <span class="math notranslate nohighlight">\(\pi\)</span> used to fill the ERM, so it “covers” the current policy.</p>
+<div class="math notranslate nohighlight">
+\[b = \{\pi_{\theta_0}, \pi_{\theta_1}, \ldots, \pi_{\theta_t}\}\]</div>
+<p>Samples from <span class="math notranslate nohighlight">\(b\)</span> are i.i.d, so Q-learning is going to work.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><strong>It is not possible to use an experience replay memory with on-policy algorithms.</strong></p>
+<div class="math notranslate nohighlight">
+\[Q^\pi(s, a) = \mathbb{E}_{s_t \sim \rho_\pi, a_t \sim \pi}[ r_{t+1} + \gamma \, Q^\pi(s_{t+1}, a_{t+1}) | s_t = s, a_t=a]\]</div>
+<p><span class="math notranslate nohighlight">\(a_{t+1} \sim \pi_\theta\)</span> would not be the same between <span class="math notranslate nohighlight">\(\pi_{\theta_0}\)</span> (which generated the sample) and <span class="math notranslate nohighlight">\(\pi_{\theta_t}\)</span> (the current policy).</p>
+</div>
+</div>
+<div class="section" id="target-network">
+<h3><span class="section-number">1.2.2. </span>Target network<a class="headerlink" href="#target-network" title="Permalink to this headline">¶</a></h3>
+<p>The second problem when using DNN for RL is that the target is <strong>non-stationary</strong>, i.e. it changes over time: as the network becomes better, the Q-values have to increase.</p>
+<p>In DQN, the target for the update is not computed from the current deep network <span class="math notranslate nohighlight">\(\theta\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[
+    r + \gamma \, \max_{a'} Q_\theta(s', a')
+\]</div>
+<p>but from a <strong>target network</strong> <span class="math notranslate nohighlight">\(\theta´\)</span> updated only every few thousands of iterations.</p>
+<div class="math notranslate nohighlight">
+\[
+    r + \gamma \, \max_{a'} Q_{\theta'}(s', a')
+\]</div>
+<p><span class="math notranslate nohighlight">\(\theta'\)</span> is simply a copy of <span class="math notranslate nohighlight">\(\theta\)</span> from the past.</p>
+<div class="figure align-default" id="id23">
+<a class="reference internal image-reference" href="../_images/targetnetwork.png"><img alt="../_images/targetnetwork.png" src="../_images/targetnetwork.png" style="width: 60%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 1.52 </span><span class="caption-text">Target network.</span><a class="headerlink" href="#id23" title="Permalink to this image">¶</a></p>
+</div>
+<p>The DQN loss function becomes:</p>
+<div class="math notranslate nohighlight">
+\[
+    \mathcal{L}(\theta) = \mathbb{E}_\mathcal{D} [(r + \gamma \, \max_{a'} Q_{\theta'}(s', a')) - Q_\theta(s, a))^2]
+\]</div>
+<p>This allows the target <span class="math notranslate nohighlight">\(r + \gamma \, \max_{a'} Q_{\theta'}(s', a')\)</span> to be <strong>stationary</strong> between two updates. It leaves time for the trained network to catch up with the targets.</p>
+<div class="figure align-default" id="id24">
+<a class="reference internal image-reference" href="../_images/nonstationarity2.svg"><img alt="../_images/nonstationarity2.svg" src="../_images/nonstationarity2.svg" width="80%" /></a>
+<p class="caption"><span class="caption-number">Fig. 1.53 </span><span class="caption-text">The target network keeps the target constant long enough for the DNN to catch up.</span><a class="headerlink" href="#id24" title="Permalink to this image">¶</a></p>
+</div>
+<p>The target network is updated by simply replacing the parameters <span class="math notranslate nohighlight">\(\theta'\)</span> with the current trained parameters <span class="math notranslate nohighlight">\(\theta\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[\theta' \leftarrow \theta\]</div>
+<p>The value network <span class="math notranslate nohighlight">\(\theta\)</span> basically learns using an older version of itself…</p>
+</div>
+<div class="section" id="dqn-algorithm">
+<h3><span class="section-number">1.2.3. </span>DQN algorithm<a class="headerlink" href="#dqn-algorithm" title="Permalink to this headline">¶</a></h3>
+<div class="admonition-dqn-deep-q-network-algorithm admonition">
+<p class="admonition-title">DQN: Deep Q-network algorithm</p>
+<ul>
+<li><p>Initialize value network <span class="math notranslate nohighlight">\(Q_{\theta}\)</span> and target network <span class="math notranslate nohighlight">\(Q_{\theta'}\)</span>.</p></li>
+<li><p>Initialize experience replay memory <span class="math notranslate nohighlight">\(\mathcal{D}\)</span> of maximal size <span class="math notranslate nohighlight">\(N\)</span>.</p></li>
+<li><p>for <span class="math notranslate nohighlight">\(t \in [0, T_\text{total}]\)</span>:</p>
+<ul>
+<li><p>Select an action <span class="math notranslate nohighlight">\(a_t\)</span> based on <span class="math notranslate nohighlight">\(Q_\theta(s_t, a)\)</span>, observe <span class="math notranslate nohighlight">\(s_{t+1}\)</span> and <span class="math notranslate nohighlight">\(r_{t+1}\)</span>.</p></li>
+<li><p>Store <span class="math notranslate nohighlight">\((s_t, a_t, r_{t+1}, s_{t+1})\)</span> in the experience replay memory.</p></li>
+<li><p>Every <span class="math notranslate nohighlight">\(T_\text{train}\)</span> steps:</p>
+<ul class="simple">
+<li><p>Sample a minibatch <span class="math notranslate nohighlight">\(\mathcal{D}_s\)</span> randomly from <span class="math notranslate nohighlight">\(\mathcal{D}\)</span>.</p></li>
+<li><p>For each transition <span class="math notranslate nohighlight">\((s_k, a_k, r_k, s'_k)\)</span> in the minibatch:</p>
+<ul>
+<li><p>Compute the target value <span class="math notranslate nohighlight">\(t_k = r_k + \gamma \, \max_{a'} Q_{\theta'}(s'_k, a')\)</span> using the target network.</p></li>
+</ul>
+</li>
+<li><p>Update the value network <span class="math notranslate nohighlight">\(Q_{\theta}\)</span> on <span class="math notranslate nohighlight">\(\mathcal{D}_s\)</span> to minimize:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[\mathcal{L}(\theta) = \mathbb{E}_{\mathcal{D}_s}[(t_k - Q_\theta(s_k, a_k))^2]\]</div>
+</li>
+<li><p>Every <span class="math notranslate nohighlight">\(T_\text{target}\)</span> steps:</p>
+<ul class="simple">
+<li><p>Update target network: <span class="math notranslate nohighlight">\(\theta' \leftarrow \theta\)</span>.</p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<p>The deep network can be anything. Deep RL is only about defining the loss function adequately. For pixel-based problems (e.g. video games), convolutional neural networks (without max-pooling) are the weapon of choice.</p>
+<div class="figure align-default" id="id25">
+<a class="reference internal image-reference" href="../_images/DeepQNetwork.jpg"><img alt="../_images/DeepQNetwork.jpg" src="../_images/DeepQNetwork.jpg" style="width: 100%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 1.54 </span><span class="caption-text">Architecture of DQN <a class="bibtex reference internal" href="../zreferences.html#mnih2013" id="id2">[MKS+13]</a>.</span><a class="headerlink" href="#id25" title="Permalink to this image">¶</a></p>
+</div>
+<p>Why no max-pooling? The goal of max-pooling is to get rid of the spatial information in the image. For object recognition, you do not care whether the object is in the center or on the side of the image. Max-pooling brings <strong>spatial invariance</strong>. In video games, you <strong>want</strong> to keep the spatial information: the optimal action depends on where the ball is relative to the paddle.</p>
+<p>Are individual frames good representations of states? Using video frames as states breaks the Markov property: the speed and direction of the ball is a very relevant information for the task, but not contained in a single frame. This characterizes a <strong>Partially-observable Markov Decision Process</strong> (POMDP).</p>
+<p>The simple solution retained in the original DQN paper is to <strong>stack</strong> the last four frames to form the state representation. Having the previous positions of the ball, the network can <strong>learn</strong> to infer its direction of movement.</p>
+<div class="admonition-dqn-code-in-keras admonition">
+<p class="admonition-title">DQN code in Keras</p>
+<ul class="simple">
+<li><p>Creating the CNN in keras / tensorflow / pytorch is straightforward:</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">Sequential</span><span class="p">()</span>
+
+<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Input</span><span class="p">((</span><span class="mi">4</span><span class="p">,</span> <span class="mi">84</span><span class="p">,</span> <span class="mi">84</span><span class="p">)))</span>
+
+<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Conv2D</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">8</span><span class="p">),</span> <span class="n">strides</span><span class="o">=</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">)),</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;relu&#39;</span><span class="p">))</span>
+
+<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Conv2D</span><span class="p">(</span><span class="mi">32</span><span class="p">,</span> <span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="n">strides</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;relu&#39;</span><span class="p">))</span>
+
+<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Flatten</span><span class="p">())</span>
+
+<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dense</span><span class="p">(</span><span class="mi">256</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;relu&#39;</span><span class="p">))</span>
+
+<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dense</span><span class="p">(</span><span class="n">nb_actions</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span><span class="p">))</span>
+
+<span class="n">optimizer</span> <span class="o">=</span> <span class="n">RMSprop</span><span class="p">(</span><span class="n">lr</span><span class="o">=</span><span class="mf">0.00025</span><span class="p">,</span> <span class="n">rho</span><span class="o">=</span><span class="mf">0.95</span><span class="p">,</span> <span class="n">epsilon</span><span class="o">=</span><span class="mf">0.01</span><span class="p">)</span>
+
+<span class="n">model</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">optimizer</span><span class="p">,</span> <span class="n">loss</span><span class="o">=</span><span class="s1">&#39;mse&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Each step of the algorithm follows the GPI approach:</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">q_iteration</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">memory</span><span class="p">):</span>
+    <span class="c1"># Choose the action with epsilon-greedy</span>
+    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">epsilon</span><span class="p">:</span>
+        <span class="n">action</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">action_space</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># Predict the Q-values for the current state and take the greedy action</span>
+        <span class="n">values</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">([</span><span class="n">state</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">action</span> <span class="o">=</span> <span class="n">values</span><span class="o">.</span><span class="n">argmax</span><span class="p">()</span>
+
+    <span class="c1"># Play one game iteration</span>
+    <span class="n">new_state</span><span class="p">,</span> <span class="n">reward</span><span class="p">,</span> <span class="n">done</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>
+
+    <span class="c1"># Append the transition to the replay buffer </span>
+    <span class="n">memory</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">action</span><span class="p">,</span> <span class="n">new_state</span><span class="p">,</span> <span class="n">reward</span><span class="p">,</span> <span class="n">done</span><span class="p">)</span>
+
+    <span class="c1"># Sample a minibatch from the memory and fit the DQN</span>
+    <span class="n">s</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">s_</span><span class="p">,</span> <span class="n">d</span> <span class="o">=</span> <span class="n">memory</span><span class="o">.</span><span class="n">sample_batch</span><span class="p">(</span><span class="mi">32</span><span class="p">)</span>
+    <span class="n">fit_batch</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">s_</span><span class="p">,</span> <span class="n">d</span><span class="p">)</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>The only slight difficulty is actually to compute the targets for learning:</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">fit_batch</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">states</span><span class="p">,</span> <span class="n">actions</span><span class="p">,</span> <span class="n">rewards</span><span class="p">,</span> <span class="n">next_states</span><span class="p">,</span> <span class="n">dones</span><span class="p">)</span>
+
+    <span class="c1"># Predict the Q-values in the current state</span>
+    <span class="n">Q_values</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">states</span><span class="p">)</span>
+    
+    <span class="c1"># Predict the Q-values in the next state using the target model</span>
+    <span class="n">next_Q_value</span> <span class="o">=</span> <span class="n">target_model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">next_states</span><span class="p">)</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    
+    <span class="c1"># Terminal states have a value of 0</span>
+    <span class="n">next_Q_value</span><span class="p">[</span><span class="n">dones</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span>
+    
+    <span class="c1"># Compute the target</span>
+    <span class="n">targets</span> <span class="o">=</span> <span class="n">Q_values</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">batch_size</span><span class="p">):</span>
+        <span class="n">targets</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">actions</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">=</span> <span class="n">rewards</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">gamma</span> <span class="o">*</span> <span class="n">next_Q_value</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        
+    <span class="c1"># Train the model on the minibatch</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">states</span><span class="p">,</span> <span class="n">targets</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="dqn-results">
+<h3><span class="section-number">1.2.4. </span>DQN results<a class="headerlink" href="#dqn-results" title="Permalink to this headline">¶</a></h3>
+<p>DQN was trained using 50M frames (38 days of game experience) per game. Replay buffer of 1M frames. Action selection: <span class="math notranslate nohighlight">\(\epsilon\)</span>-greedy with <span class="math notranslate nohighlight">\(\epsilon = 0.1\)</span> and annealing. Optimizer: RMSprop with a batch size of 32.</p>
+<p>The DQN network was trained to solve 49 different Atari 2600 games <strong>with the same architecture and hyperparameters</strong>. In most of the games, the network reaches <strong>super-human</strong> performance. Some games are still badly performed (e.g. Montezuma’s revenge), as they require long-term planning. It was the first RL algorithm able to learn different tasks (no free lunch theorem). The 2015 paper in Nature started the hype for deep RL.</p>
+<div class="figure align-default" id="id26">
+<a class="reference internal image-reference" href="../_images/dqn-results.png"><img alt="../_images/dqn-results.png" src="../_images/dqn-results.png" style="width: 100%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 1.55 </span><span class="caption-text">Training curves of DQN <a class="bibtex reference internal" href="../zreferences.html#mnih2013" id="id3">[MKS+13]</a>.</span><a class="headerlink" href="#id26" title="Permalink to this image">¶</a></p>
+</div>
+<div class="figure align-default" id="id27">
+<a class="reference internal image-reference" href="../_images/atari-results.png"><img alt="../_images/atari-results.png" src="../_images/atari-results.png" style="width: 70%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 1.56 </span><span class="caption-text">Performance of DQN on Atari games <a class="bibtex reference internal" href="../zreferences.html#mnih2013" id="id4">[MKS+13]</a>.</span><a class="headerlink" href="#id27" title="Permalink to this image">¶</a></p>
+</div>
+</div>
+</div>
+<div class="section" id="dqn-variants">
+<h2><span class="section-number">1.3. </span>DQN variants<a class="headerlink" href="#dqn-variants" title="Permalink to this headline">¶</a></h2>
+<div class='embed-container'><iframe src='https://www.youtube.com/embed/VM28-5YyLJk' frameborder='0' allowfullscreen></iframe></div>
+<div class="section" id="double-dqn">
+<h3><span class="section-number">1.3.1. </span>Double DQN<a class="headerlink" href="#double-dqn" title="Permalink to this headline">¶</a></h3>
+<p>Q-learning methods, including DQN, tend to <strong>overestimate</strong> Q-values, especially for the non-greedy actions:</p>
+<div class="math notranslate nohighlight">
+\[Q_\theta(s, a) &gt; Q^\pi(s, a)\]</div>
+<p>This does not matter much in action selection, as we apply <span class="math notranslate nohighlight">\(\epsilon\)</span>-greedy or softmax on the Q-values anyway, but it may make learning slower (sample complexity) and less optimal.</p>
+<div class="figure align-default" id="id28">
+<a class="reference internal image-reference" href="../_images/ddqn-results1.png"><img alt="../_images/ddqn-results1.png" src="../_images/ddqn-results1.png" style="width: 100%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 1.57 </span><span class="caption-text">Q-learning methods overstimate Q-values <a class="bibtex reference internal" href="../zreferences.html#vanhasselt2015" id="id5">[vanHasseltGS15]</a>.</span><a class="headerlink" href="#id28" title="Permalink to this image">¶</a></p>
+</div>
+<p>To avoid optimistic estimations, the target is computed by both the value network <span class="math notranslate nohighlight">\(\theta\)</span> and the target network <span class="math notranslate nohighlight">\(\theta'\)</span>:</p>
+<ul class="simple">
+<li><p><strong>Action selection</strong>: The next greedy action <span class="math notranslate nohighlight">\(a^*\)</span> is calculated by the <strong>value network</strong> <span class="math notranslate nohighlight">\(\theta\)</span> (current policy):</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[a^* =\text{argmax}_{a'} Q_{\theta}(s', a')\]</div>
+<ul class="simple">
+<li><p><strong>Action evaluation</strong>: Its Q-value for the target is calculated using the <strong>target network</strong> <span class="math notranslate nohighlight">\(\theta'\)</span> (older values):</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[t = r + \gamma \, Q_{\theta'}(s´, a^*)\]</div>
+<p>This gives the following loss function for <strong>double DQN</strong> (DDQN, <a class="bibtex reference internal" href="../zreferences.html#vanhasselt2015" id="id6">[vanHasseltGS15]</a>):</p>
+<div class="math notranslate nohighlight">
+\[
+    \mathcal{L}(\theta) = \mathbb{E}_\mathcal{D} [(r + \gamma \, Q_{\theta'}(s´, \text{argmax}_{a'} Q_{\theta}(s', a')) - Q_\theta(s, a))^2]
+\]</div>
+<div class="figure align-default" id="id29">
+<a class="reference internal image-reference" href="../_images/ddqn-results1.png"><img alt="../_images/ddqn-results1.png" src="../_images/ddqn-results1.png" style="width: 100%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 1.58 </span><span class="caption-text">Estimated Q-values by Double DQN compared to DQN and the ground truth <a class="bibtex reference internal" href="../zreferences.html#vanhasselt2015" id="id7">[vanHasseltGS15]</a>.</span><a class="headerlink" href="#id29" title="Permalink to this image">¶</a></p>
+</div>
+</div>
+<div class="section" id="prioritized-experience-replay">
+<h3><span class="section-number">1.3.2. </span>Prioritized Experience Replay<a class="headerlink" href="#prioritized-experience-replay" title="Permalink to this headline">¶</a></h3>
+<p>The <strong>experience replay memory</strong> or <strong>replay buffer</strong> is used to store the last 1M or so transitions <span class="math notranslate nohighlight">\((s, a, r, s')\)</span>. The learning algorithm <strong>uniformly samples</strong> a minibatch of size <span class="math notranslate nohighlight">\(K\)</span> to update its parameters.</p>
+<p>Not all transitions are interesting:</p>
+<ul class="simple">
+<li><p>Some transitions were generated by a very old policy, the current policy won’t take them anymore.</p></li>
+<li><p>Some transitions are already well predicted: the TD error is small, there is nothing to learn from.</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[\delta_t = r_{t+1} + \gamma \, \max_{a'} Q_\theta(s_{t+1}, a_{t+1}) - Q_\theta(s_t, a_t) \approx 0\]</div>
+<p>The experience replay memory makes learning very <strong>slow</strong>, as we need a lot of samples to learn something useful: high <strong>sample complexity</strong>. We need a smart mechanism to preferentially pick the transitions that will boost learning the most, without introducing a bias.</p>
+<p><strong>Prioritized sweeping</strong> is actually a quite old idea <a class="bibtex reference internal" href="../zreferences.html#moore1993" id="id8">[MA93]</a>. The idea of <strong>prioritized experience replay</strong> (PER, <a class="bibtex reference internal" href="../zreferences.html#schaul2015" id="id9">[SQAS15]</a>) is to sample in priority those transitions whose TD error is the highest:</p>
+<div class="math notranslate nohighlight">
+\[\delta_t = r_{t+1} + \gamma \, \max_{a'} Q_\theta(s_{t+1}, a_{t+1}) - Q_\theta(s_t, a_t)\]</div>
+<p>In practice, we insert the transition <span class="math notranslate nohighlight">\((s, a, r, s', \delta)\)</span> into the replay buffer. To create a minibatch, the sampling algorithm select a transition <span class="math notranslate nohighlight">\(k\)</span> based on the probability:</p>
+<div class="math notranslate nohighlight">
+\[P(k) = \frac{(|\delta_k| + \epsilon)^\alpha}{\sum_k (|\delta_k| + \epsilon)^\alpha}\]</div>
+<p><span class="math notranslate nohighlight">\(\epsilon\)</span> is a small parameter ensuring that transition with no TD error still get sampled from time to time. <span class="math notranslate nohighlight">\(\alpha\)</span> allows to change the behavior from uniform sampling (<span class="math notranslate nohighlight">\(\alpha=0\)</span>, as in DQN) to fully prioritized sampling (<span class="math notranslate nohighlight">\(\alpha=1\)</span>). <span class="math notranslate nohighlight">\(\alpha\)</span> should be annealed from 0 to 1 during training. Think of it as a “kind of” <strong>softmax</strong> over the TD errors. After the samples have been used for learning, their TD error <span class="math notranslate nohighlight">\(\delta\)</span> is updated in the PER.</p>
+<p>The main drawback is that inserting and sampling can be computationally expensive is we simply sort the transitions based on <span class="math notranslate nohighlight">\((|\delta_k| + \epsilon)^\alpha\)</span>:</p>
+<ul class="simple">
+<li><p>Insertion: <span class="math notranslate nohighlight">\(\mathcal{O}(N \, \log N)\)</span>.</p></li>
+<li><p>Sampling: <span class="math notranslate nohighlight">\(\mathcal{O}(N)\)</span>.</p></li>
+</ul>
+<div class="figure align-default" id="id30">
+<a class="reference internal image-reference" href="../_images/per_bar_1.png"><img alt="../_images/per_bar_1.png" src="../_images/per_bar_1.png" style="width: 90%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 1.59 </span><span class="caption-text">Sorting transitions w.r.t their advantage is expensive. Source: <a class="reference external" href="https://jaromiru.com/2016/11/07/lets-make-a-dqn-double-learning-and-prioritized-experience-replay/">https://jaromiru.com/2016/11/07/lets-make-a-dqn-double-learning-and-prioritized-experience-replay/</a></span><a class="headerlink" href="#id30" title="Permalink to this image">¶</a></p>
+</div>
+<p>Using binary <strong>sumtrees</strong> instead of a linear queue, prioritized experience replay can be made efficient in both insertion (<span class="math notranslate nohighlight">\(\mathcal{O}(\log N)\)</span>) and sampling (<span class="math notranslate nohighlight">\(\mathcal{O}(1)\)</span>).</p>
+<div class="figure align-default" id="id31">
+<a class="reference internal image-reference" href="../_images/per_tree.png"><img alt="../_images/per_tree.png" src="../_images/per_tree.png" style="width: 70%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 1.60 </span><span class="caption-text">Sumtrees allow efficient insertion and sampling of the PER. Source: <a class="reference external" href="https://www.freecodecamp.org/news/improvements-in-deep-q-learning-dueling-double-dqn-prioritized-experience-replay-and-fixed-58b130cc5682">https://www.freecodecamp.org/news/improvements-in-deep-q-learning-dueling-double-dqn-prioritized-experience-replay-and-fixed-58b130cc5682</a></span><a class="headerlink" href="#id31" title="Permalink to this image">¶</a></p>
+</div>
+<div class="figure align-default" id="id32">
+<a class="reference internal image-reference" href="../_images/per_results1.png"><img alt="../_images/per_results1.png" src="../_images/per_results1.png" style="width: 100%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 1.61 </span><span class="caption-text">DQN with PER outperforms DQN <a class="bibtex reference internal" href="../zreferences.html#schaul2015" id="id10">[SQAS15]</a>.</span><a class="headerlink" href="#id32" title="Permalink to this image">¶</a></p>
+</div>
+<div class="figure align-default" id="id33">
+<a class="reference internal image-reference" href="../_images/per_results2.png"><img alt="../_images/per_results2.png" src="../_images/per_results2.png" style="width: 100%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 1.62 </span><span class="caption-text">DQN with PER outperforms DQN <a class="bibtex reference internal" href="../zreferences.html#schaul2015" id="id11">[SQAS15]</a>.</span><a class="headerlink" href="#id33" title="Permalink to this image">¶</a></p>
+</div>
+</div>
+<div class="section" id="dueling-networks">
+<h3><span class="section-number">1.3.3. </span>Dueling networks<a class="headerlink" href="#dueling-networks" title="Permalink to this headline">¶</a></h3>
+<p>DQN and its variants learn to predict directly the Q-value of each available action.</p>
+<div class="figure align-default" id="id34">
+<a class="reference internal image-reference" href="../_images/duelling1.png"><img alt="../_images/duelling1.png" src="../_images/duelling1.png" style="width: 60%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 1.63 </span><span class="caption-text">DQN predicts directly the Q-values. Source: <a class="bibtex reference internal" href="../zreferences.html#wang2016" id="id12">[WSH+16]</a>.</span><a class="headerlink" href="#id34" title="Permalink to this image">¶</a></p>
+</div>
+<p>There are several problems with predicting Q-values with a DNN:</p>
+<ul class="simple">
+<li><p>The Q-values can take high values, especially with different values of <span class="math notranslate nohighlight">\(\gamma\)</span>.</p></li>
+<li><p>The Q-values have a high variance, between the minimum and maximum returns obtained during training.</p></li>
+<li><p>For a transition <span class="math notranslate nohighlight">\((s_t, a_t, s_{t+1})\)</span>, a single Q-value is updated, not all actions in <span class="math notranslate nohighlight">\(s_t\)</span>.</p></li>
+</ul>
+<div class="figure align-default" id="id35">
+<a class="reference internal image-reference" href="../_images/dueling-principle.svg"><img alt="../_images/dueling-principle.svg" src="../_images/dueling-principle.svg" width="60%" /></a>
+<p class="caption"><span class="caption-number">Fig. 1.64 </span><span class="caption-text">The variance of the Q-values between good and bad states is high.</span><a class="headerlink" href="#id35" title="Permalink to this image">¶</a></p>
+</div>
+<p>The exact Q-values of all actions are not equally important.</p>
+<ul class="simple">
+<li><p>In <strong>bad</strong> states (low <span class="math notranslate nohighlight">\(V^\pi(s)\)</span>), you can do whatever you want, you will lose.</p></li>
+<li><p>In neutral states, you can do whatever you want, nothing happens.</p></li>
+<li><p>In <strong>good</strong> states (high <span class="math notranslate nohighlight">\(V^\pi(s)\)</span>), you need to select the right action to get rewards, otherwise you lose.</p></li>
+</ul>
+<p>An important notion is the <strong>advantage</strong> <span class="math notranslate nohighlight">\(A^\pi(s, a)\)</span> of an action:</p>
+<div class="math notranslate nohighlight">
+\[
+    A^\pi(s, a) = Q^\pi(s, a) - V^\pi(s)
+\]</div>
+<p>It tells how much return can be expected by taking the action <span class="math notranslate nohighlight">\(a\)</span> in the state <span class="math notranslate nohighlight">\(s\)</span>, <strong>compared</strong> to what is usually obtained in <span class="math notranslate nohighlight">\(s\)</span> with the current policy. If a policy <span class="math notranslate nohighlight">\(\pi\)</span> is deterministic and always selects <span class="math notranslate nohighlight">\(a^*\)</span> in <span class="math notranslate nohighlight">\(s\)</span>, we have:</p>
+<div class="math notranslate nohighlight">
+\[
+    A^\pi(s, a^*) = 0
+\]</div>
+<div class="math notranslate nohighlight">
+\[
+    A^\pi(s, a \neq a^*) &lt; 0
+\]</div>
+<p>This is particularly true for the optimal policy. But if we have separate estimates <span class="math notranslate nohighlight">\(V_\varphi(s)\)</span> and <span class="math notranslate nohighlight">\(Q_\theta(s, a)\)</span>, some actions may have a positive advantage. Advantages have <strong>less variance</strong> than Q-values.</p>
+<div class="figure align-default" id="id36">
+<a class="reference internal image-reference" href="../_images/dueling-principle2.svg"><img alt="../_images/dueling-principle2.svg" src="../_images/dueling-principle2.svg" width="60%" /></a>
+<p class="caption"><span class="caption-number">Fig. 1.65 </span><span class="caption-text">The variance of the advantages is much lower.</span><a class="headerlink" href="#id36" title="Permalink to this image">¶</a></p>
+</div>
+<p>In <strong>dueling networks</strong> <a class="bibtex reference internal" href="../zreferences.html#wang2016" id="id13">[WSH+16]</a>, the network is forced to decompose the estimated Q-value <span class="math notranslate nohighlight">\(Q_\theta(s, a)\)</span> into a state value <span class="math notranslate nohighlight">\(V_\alpha(s)\)</span> and an advantage function <span class="math notranslate nohighlight">\(A_\beta(s, a)\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[
+    Q_\theta(s, a) = V_\alpha(s) + A_\beta(s, a)
+\]</div>
+<div class="figure align-default" id="id37">
+<a class="reference internal image-reference" href="../_images/duelling2.png"><img alt="../_images/duelling2.png" src="../_images/duelling2.png" style="width: 60%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 1.66 </span><span class="caption-text">Dueling DQN decomposes the Q-values as the sum of the V-value and the advantage of the action. Source: <a class="bibtex reference internal" href="../zreferences.html#wang2016" id="id14">[WSH+16]</a>.</span><a class="headerlink" href="#id37" title="Permalink to this image">¶</a></p>
+</div>
+<p>The parameters <span class="math notranslate nohighlight">\(\alpha\)</span> and <span class="math notranslate nohighlight">\(\beta\)</span> are just two shared subparts of the NN <span class="math notranslate nohighlight">\(\theta\)</span>. The loss function</p>
+<div class="math notranslate nohighlight">
+\[\mathcal{L}(\theta) = \mathbb{E}_\mathcal{D} [(r + \gamma \, Q_{\theta'}(s´, \text{argmax}_{a'} Q_{\theta}(s', a')) - Q_\theta(s, a))^2]\]</div>
+<p>is exactly the same as in (D)DQN: only the internal structure of the NN changes.</p>
+<p>The Q-values are the sum of two functions:</p>
+<div class="math notranslate nohighlight">
+\[
+    Q_\theta(s, a) = V_\alpha(s) + A_\beta(s, a)
+\]</div>
+<p>However, this sum is <strong>unidentifiable</strong>:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{aligned}
+Q_\theta(s, a) = 10 &amp; = 1 + 9 \\
+                    &amp; = 2 + 8 \\
+                    &amp; = 3 + 7 \\
+\end{aligned}
+\end{split}\]</div>
+<p>To constrain the sum, (Wang et al. 2016) propose that the greedy action w.r.t the advantages should have an advantage of 0:</p>
+<div class="math notranslate nohighlight">
+\[
+    Q_\theta(s, a) = V_\alpha(s) + (A_\beta(s, a) - \max_{a'} A_\beta(s, a'))
+\]</div>
+<p>This way, there is only one solution to the addition. The operation is differentiable, so backpropagation will work. (Wang et al. 2016) show that subtracting the mean advantage works better in practice:</p>
+<div class="math notranslate nohighlight">
+\[
+    Q_\theta(s, a) = V_\alpha(s) + (A_\beta(s, a) - \frac{1}{|\mathcal{A}|} \, \sum_{a'} A_\beta(s, a'))
+\]</div>
+<div class="figure align-default" id="id38">
+<a class="reference internal image-reference" href="../_images/dueling-result.png"><img alt="../_images/dueling-result.png" src="../_images/dueling-result.png" style="width: 80%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 1.67 </span><span class="caption-text">Dueling DQN network improves over double DQN with PER on most Atari games. Source: <a class="bibtex reference internal" href="../zreferences.html#wang2016" id="id15">[WSH+16]</a>.</span><a class="headerlink" href="#id38" title="Permalink to this image">¶</a></p>
+</div>
+<div class="admonition-summary-of-dqn-algorithms admonition">
+<p class="admonition-title">Summary of DQN algorithms</p>
+<div class="figure align-default" id="id39">
+<a class="reference internal image-reference" href="../_images/DeepQNetwork.jpg"><img alt="../_images/DeepQNetwork.jpg" src="../_images/DeepQNetwork.jpg" style="width: 100%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 1.68 </span><span class="caption-text">Architecture of DQN <a class="bibtex reference internal" href="../zreferences.html#mnih2013" id="id16">[MKS+13]</a>.</span><a class="headerlink" href="#id39" title="Permalink to this image">¶</a></p>
+</div>
+<p>DQN and its early variants (double duelling DQN with PER) are an example of <strong>value-based deep RL</strong>. The value <span class="math notranslate nohighlight">\(Q_\theta(s, a)\)</span> of each possible action in a given state is approximated by a convolutional neural network. The NN has to minimize the mse between the predicted Q-values and the target value corresponding to the Bellman equation:</p>
+<div class="math notranslate nohighlight">
+\[\mathcal{L}(\theta) = \mathbb{E}_\mathcal{D} [(r + \gamma \, Q_{\theta'}(s´, \text{argmax}_{a'} Q_{\theta}(s', a')) - Q_\theta(s, a))^2]\]</div>
+<p>The use of an <strong>experience replay memory</strong> and of <strong>target networks</strong> allows to stabilize learning and avoid suboptimal policies. The main drawback of DQN is <strong>sample complexity</strong>: it needs huge amounts of experienced transitions to find a correct policy. The sample complexity come from the deep network itself (gradient descent is iterative and slow), but also from the ERM: it contains 1M transitions, most of which are outdated.
+Value-based algorithms only work for <strong>small and discrete action spaces</strong> (one output neuron per action).</p>
+</div>
+</div>
+</div>
+</div>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./3-MF"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+        </div>
+    </div>
+    
+    
+    <div class='prev-next-bottom'>
+        
+    <a class='left-prev' id="prev-link" href="../2-tabular/7-NN.html" title="previous page"><span class="section-number">7. </span>Deep learning</a>
+    <a class='right-next' id="next-link" href="../5-exercises/ex1-Python.html" title="next page"><span class="section-number">1. </span>Introduction to Python</a>
+
+    </div>
+    <footer class="footer mt-5 mt-md-0">
+    <div class="container">
+      <p>
+        
+          By Julien Vitay - julien.vitay@informatik.tu-chemnitz.de<br/>
+        
+            &copy; Copyright 2020.<br/>
+          <div class="extra_footer">
+            Technische Universität Chemnitz - Faculty of Computer Science - Professorship for Artificial Intelligence
+          </div>
+      </p>
+    </div>
+  </footer>
+</main>
+
+
+      </div>
+    </div>
+
+    <script src="../_static/js/index.js"></script>
+    
+  </body>
+</html>
