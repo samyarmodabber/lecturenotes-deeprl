@@ -17,6 +17,9 @@
     - file: 2-tabular/6-FA
     - file: 2-tabular/7-NN
 
+- part: Model-free RL
+  chapters:
+    - file: 3-MF/1-DQN
 
 - part: Exercises
   chapters:
@@ -61,6 +64,13 @@
         - file: 5-exercises/6-DP
           title: Notebook
         - file: 5-exercises/6-DP-solution
+          title: Solution
+
+    - file: 5-exercises/ex7-Gym
+      sections:
+        - file: 5-exercises/7-Gym
+          title: Notebook
+        - file: 5-exercises/7-Gym-solution
           title: Solution
 
 

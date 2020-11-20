@@ -1,9 +1,10 @@
 all: build
 
 build:
+	touch deeprl/zreferences.md
 	jupyter-book build deeprl
 
-export:
+export: build
 	git add deeprl/_build/html
 	git commit -a -m "Rebuilding site `date`"
 	git push origin master
