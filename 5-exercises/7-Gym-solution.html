@@ -6,7 +6,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Gym environments &#8212; Deep Reinforcement Learning</title>
+    <title>7.2.2. Gym environments &#8212; Deep Reinforcement Learning</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" integrity="sha384-KA6wR/X5RY4zFAHpv/CnoG2UW1uogYfdnP67Uv7eULvTveboZJg0qUpmJZb5VqzN" crossorigin="anonymous">
     <link href="../_static/css/index.css" rel="stylesheet">
     <link rel="stylesheet" href="../_static/sphinx-book-theme.css" type="text/css" />
@@ -40,6 +40,8 @@
     <link rel="canonical" href="https://julien-vitay.net/lecturenotes-deeprl/5-exercises/7-Gym-solution.html" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="1. Bibliography" href="../zreferences.html" />
+    <link rel="prev" title="7.2.1. Gym environments" href="7-Gym.html" />
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="docsearch:language" content="en">
@@ -149,10 +151,22 @@
 </ul>
 <p class="caption">
  <span class="caption-text">
-  Exercises
+  Model-free RL
  </span>
 </p>
 <ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../3-MF/1-DQN.html">
+   1. Deep Q-Learning
+  </a>
+ </li>
+</ul>
+<p class="caption">
+ <span class="caption-text">
+  Exercises
+ </span>
+</p>
+<ul class="current nav sidenav_l1">
  <li class="toctree-l1">
   <a class="reference internal" href="ex1-Python.html">
    1. Introduction to Python
@@ -182,6 +196,23 @@
   <a class="reference internal" href="ex6-DP.html">
    6. Dynamic programming
   </a>
+ </li>
+ <li class="toctree-l1 current active">
+  <a class="reference internal" href="ex7-Gym.html">
+   7. Gym environments
+  </a>
+  <ul class="current">
+   <li class="toctree-l2">
+    <a class="reference internal" href="7-Gym.html">
+     7.2.1. Notebook
+    </a>
+   </li>
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
+     7.2.2. Solution
+    </a>
+   </li>
+  </ul>
  </li>
 </ul>
 <p class="caption">
@@ -289,17 +320,29 @@
             <ul class="nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#installing-gym">
-   Installing gym
+   7.2.2.1. Installing gym
   </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#on-your-computer">
+     7.2.2.1.1. On your computer
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#on-colab">
+     7.2.2.1.2. On Colab
+    </a>
+   </li>
+  </ul>
  </li>
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#gym-interface">
-   Gym interface
+   7.2.2.2. Gym interface
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#recycling-robot">
-   Recycling robot
+   7.2.2.3. Recycling robot
   </a>
  </li>
 </ul>
@@ -313,25 +356,43 @@
               <div>
                 
   <div class="section" id="gym-environments">
-<h1>Gym environments<a class="headerlink" href="#gym-environments" title="Permalink to this headline">¶</a></h1>
+<h1><span class="section-number">7.2.2. </span>Gym environments<a class="headerlink" href="#gym-environments" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="installing-gym">
-<h2>Installing gym<a class="headerlink" href="#installing-gym" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">7.2.2.1. </span>Installing gym<a class="headerlink" href="#installing-gym" title="Permalink to this headline">¶</a></h2>
 <p>In this course, we will mostly address RL environments available in the <strong>OpenAI Gym</strong> framework:</p>
 <p><a class="reference external" href="https://gym.openai.com">https://gym.openai.com</a></p>
 <p>It provides a multitude of RL problems, from simple text-based problems with a few dozens of states (Gridworld, Taxi) to continuous control problems (Cartpole, Pendulum) to Atari games (Breakout, Space Invaders) to complex robotics simulators (Mujoco, but the license is expensive):</p>
 <p><a class="reference external" href="https://gym.openai.com/envs">https://gym.openai.com/envs</a></p>
-<p>We start by installing gym and its dependencies. Unfortunately, gym does not work out-of-the-box on colab, as gym opens graphical windows on some environments, what is not possible by default on colab.</p>
-<p>On your computer, you only need to pip install gym (and atari_py if you want to play Atari games):</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">atari_py</span> <span class="n">gym</span><span class="p">[</span><span class="n">atari</span><span class="p">]</span>
+<p>We start by installing gym and its dependencies. Unfortunately, gym only works fully under Linux or MacOS. You can <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">gym</span></code> on Windows, but will be limited to the most simple environments, excluding for example Atari games (but you can try these instructions: <a class="reference external" href="https://towardsdatascience.com/how-to-install-openai-gym-in-a-windows-environment-338969e24d30">https://towardsdatascience.com/how-to-install-openai-gym-in-a-windows-environment-338969e24d30</a>). This isn’t a big issue as we will only use the simple environments in the exercises, but less fun.</p>
+<p>Moreover, it does not work out-of-the-box on colab, as gym opens graphical windows for some environments (e.g. Atari games), what is not possible in the browser. The first cell provides a workaround.</p>
+<div class="section" id="on-your-computer">
+<h3><span class="section-number">7.2.2.1.1. </span>On your computer<a class="headerlink" href="#on-your-computer" title="Permalink to this headline">¶</a></h3>
+<p>On your computer, you first need to make sure you have the right dependencies, especially <code class="docutils literal notranslate"><span class="pre">cmake</span></code>:</p>
+<p><strong>Ubuntu Linux:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>apt-get install -y cmake swig
 </pre></div>
 </div>
-<p>You can then import gym easily.</p>
+<p><strong>MacOSX:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>brew install cmake swig
+</pre></div>
+</div>
+<p>On Windows, you may have to have Microsoft Visual C++ build tools installed. The link <a class="reference external" href="https://towardsdatascience.com/how-to-install-openai-gym-in-a-windows-environment-338969e24d30">https://towardsdatascience.com/how-to-install-openai-gym-in-a-windows-environment-338969e24d30</a> suggests the 2017 version, but Visual C++ 2015-2019 Redistributable seems to also work.</p>
+<p>You can then install gym in two steps, installing the <code class="docutils literal notranslate"><span class="pre">atari_py</span></code> dependency in between to be able to play Atari games.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip install gym
+pip install atari_py
+pip install gym<span class="o">[</span>atari<span class="o">]</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="on-colab">
+<h3><span class="section-number">7.2.2.1.2. </span>On Colab<a class="headerlink" href="#on-colab" title="Permalink to this headline">¶</a></h3>
 <p>On Colab, we need to install a bunch of dependencies (Colab runs a Debian VM under the hood) and define a visualization function that can be called at the end of an episode to visualize it.</p>
 <p>The following cell detects whether you run this notebook on colab or not, and imports lots of additional stuff if needed.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">time</span>
     
 <span class="k">try</span><span class="p">:</span>
     <span class="kn">import</span> <span class="nn">google.colab</span>
@@ -385,8 +446,9 @@
 </div>
 </div>
 </div>
+</div>
 <div class="section" id="gym-interface">
-<h2>Gym interface<a class="headerlink" href="#gym-interface" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">7.2.2.2. </span>Gym interface<a class="headerlink" href="#gym-interface" title="Permalink to this headline">¶</a></h2>
 <p>The main interest of gym is that all problems have a common interface defined by the class <code class="docutils literal notranslate"><span class="pre">gym.Env</span></code>. There are only three methods that have to be implemented and used when creating a new environment:</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">state</span> <span class="pre">=</span> <span class="pre">env.reset()</span></code> restarts the environment and returns an initial state <span class="math notranslate nohighlight">\(s_0\)</span>.</p></li>
@@ -462,7 +524,7 @@
 <li><p>We pick an initial state with <code class="docutils literal notranslate"><span class="pre">reset()</span></code>.</p></li>
 <li><p>For a fixed number of steps (or until the episode terminates):</p>
 <ul>
-<li><p>We render the curent state with <code class="docutils literal notranslate"><span class="pre">render()</span></code>.</p></li>
+<li><p>We render the current state with <code class="docutils literal notranslate"><span class="pre">render()</span></code>.</p></li>
 <li><p>We select an action using our RL algorithm or randomly.</p></li>
 <li><p>We take that action (<code class="docutils literal notranslate"><span class="pre">step()</span></code>), observe the new state and the reward.</p></li>
 <li><p>We go into the new state.</p></li>
@@ -498,16 +560,16 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>5
-5
-7
-7
-5
-4
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1
+0
 9
-5
+9
+8
+0
 6
 2
+6
+6
 </pre></div>
 </div>
 </div>
@@ -518,9 +580,14 @@
 </div>
 <p>if you want to interact with the Cartpole environment. <code class="docutils literal notranslate"><span class="pre">wrap_env()</span></code> is obligatory on Colab, otherwise you will not be able to visualize it. You can omit it on your computer. For text-based environments such as <code class="docutils literal notranslate"><span class="pre">FooEnv</span></code>, you do not need to wrap the environment.</p>
 <p>Each environment has a unique key, with a version number (<code class="docutils literal notranslate"><span class="pre">v0</span></code>). To have a list of the available environments, call:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">envs</span> <span class="o">=</span> <span class="n">gym</span><span class="o">.</span><span class="n">envs</span><span class="o">.</span><span class="n">registry</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">envs</span><span class="p">)</span>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">envs</span> <span class="o">=</span> <span class="n">gym</span><span class="o">.</span><span class="n">envs</span><span class="o">.</span><span class="n">registry</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">env</span> <span class="ow">in</span> <span class="n">envs</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
 </pre></div>
+</div>
+</div>
 </div>
 <p><strong>Q:</strong> Interact randomly with many gym environments (Cartpole, Pendulum, Breakout, SpaceInvaders, etc). Print the rewards you obtain.</p>
 <p><em>Note 1:</em> If you run a fixed number of steps, you should reset the environment when a terminal state is encountered, other wise you will be stuck in that terminal state:</p>
@@ -575,9 +642,7 @@
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">time</span>
-
-<span class="c1"># Create the environment</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create the environment</span>
 <span class="n">env</span> <span class="o">=</span> <span class="n">wrap_env</span><span class="p">(</span><span class="n">gym</span><span class="o">.</span><span class="n">make</span><span class="p">(</span><span class="s1">&#39;SpaceInvaders-v0&#39;</span><span class="p">))</span>
 
 <span class="c1"># Sample the initial state</span>
@@ -612,7 +677,7 @@
 </div>
 </div>
 <div class="section" id="recycling-robot">
-<h2>Recycling robot<a class="headerlink" href="#recycling-robot" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">7.2.2.3. </span>Recycling robot<a class="headerlink" href="#recycling-robot" title="Permalink to this headline">¶</a></h2>
 <p><strong>Q:</strong> Create a <code class="docutils literal notranslate"><span class="pre">RecyclingRobot</span></code> gym-like environment using last week’s exercise.</p>
 <p>The parameters <code class="docutils literal notranslate"><span class="pre">alpha</span></code>, <code class="docutils literal notranslate"><span class="pre">beta</span></code>, <code class="docutils literal notranslate"><span class="pre">r_wait</span></code> and <code class="docutils literal notranslate"><span class="pre">r_search</span></code> should be passed to the constructor of the environment and saved as attributes.</p>
 <p>The state space is discrete, with two states <code class="docutils literal notranslate"><span class="pre">high</span></code> and <code class="docutils literal notranslate"><span class="pre">low</span></code> which will have indices 0 and 1. The three discrete actions <code class="docutils literal notranslate"><span class="pre">search</span></code>, <code class="docutils literal notranslate"><span class="pre">wait</span></code> and <code class="docutils literal notranslate"><span class="pre">recharge</span></code> have indices 0, 1, and 2.</p>
@@ -728,25 +793,25 @@
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>high
-high + wait -&gt; high : 2.8695706939505916
+high + recharge -&gt; high : 0.0
+high
+high + search -&gt; low : 6.6118721135640826
+low
+low + search -&gt; high : -3.0
+high
+high + wait -&gt; high : 1.1480821866278401
 high
 high + recharge -&gt; high : 0.0
 high
-high + wait -&gt; high : 1.65838381260252
-high
 high + recharge -&gt; high : 0.0
 high
-high + search -&gt; high : 5.705638292029017
+high + wait -&gt; high : 2.0195456426113845
 high
-high + recharge -&gt; high : 0.0
+high + search -&gt; high : 6.771869747290772
 high
-high + search -&gt; high : 6.027010146450993
+high + search -&gt; high : 5.87638732830117
 high
-high + wait -&gt; high : 3.009071677134676
-high
-high + recharge -&gt; high : 0.0
-high
-high + search -&gt; low : 5.906189632998842
+high + wait -&gt; high : 1.9505921613705735
 </pre></div>
 </div>
 </div>
@@ -783,9 +848,9 @@ high + search -&gt; low : 5.906189632998842
         <span class="k">return</span> <span class="n">rewards</span>
 </pre></div>
 </div>
-<p>The environemnt is passed to the constructor. <code class="docutils literal notranslate"><span class="pre">act(state)</span></code> should sample a random action. <code class="docutils literal notranslate"><span class="pre">update(state,</span> <span class="pre">action,</span> <span class="pre">reward,</span> <span class="pre">next_state)</span></code> does nothing for the random agent (<code class="docutils literal notranslate"><span class="pre">pass</span></code> is a Python command doing nothing), but we will implement it in the next exercises.</p>
-<p><code class="docutils literal notranslate"><span class="pre">train(nb_steps)</span></code> implements the interaction loop between the agent and the environment for a fixed number of steps. It should return the list of obtained rewards. You can use the flag <code class="docutils literal notranslate"><span class="pre">render</span></code> to switch rendering or printing on and off.</p>
-<p><strong>Q:</strong> Implement the random agent and have it interct with the environment for a fixed number of steps.</p>
+<p>The environment is passed to the constructor. <code class="docutils literal notranslate"><span class="pre">act(state)</span></code> should sample a random action. <code class="docutils literal notranslate"><span class="pre">update(state,</span> <span class="pre">action,</span> <span class="pre">reward,</span> <span class="pre">next_state)</span></code> does nothing for the random agent (<code class="docutils literal notranslate"><span class="pre">pass</span></code> is a Python command doing nothing), but we will implement it in the next exercises.</p>
+<p><code class="docutils literal notranslate"><span class="pre">train(nb_steps,</span> <span class="pre">render)</span></code> implements the interaction loop between the agent and the environment for a fixed number of steps. It should return the list of obtained rewards. You can use the flag <code class="docutils literal notranslate"><span class="pre">render</span></code> to switch rendering or printing on and off.</p>
+<p><strong>Q:</strong> Implement the random agent and have it interact with the environment for a fixed number of steps.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">RandomAgent</span><span class="p">:</span>
@@ -801,7 +866,7 @@ high + search -&gt; low : 5.906189632998842
     
     <span class="k">def</span> <span class="nf">act</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
         <span class="s2">&quot;Returns a random action by sampling the action space.&quot;</span>
-        <span class="k">return</span> <span class="n">env</span><span class="o">.</span><span class="n">action_space</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">action_space</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span>
     
     <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">action</span><span class="p">,</span> <span class="n">reward</span><span class="p">,</span> <span class="n">next_state</span><span class="p">):</span>
         <span class="s2">&quot;Updates the agent using the transition (s, a, r, s&#39;).&quot;</span>
@@ -811,7 +876,7 @@ high + search -&gt; low : 5.906189632998842
         <span class="s2">&quot;Runs the agent on the environment for nb_steps. Returns the list of obtained rewards.&quot;</span>
 
         <span class="c1"># Sample the initial state</span>
-        <span class="n">state</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+        <span class="n">state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
         
         <span class="c1"># List of rewards</span>
         <span class="n">rewards</span> <span class="o">=</span> <span class="p">[]</span>
@@ -863,34 +928,36 @@ high + search -&gt; low : 5.906189632998842
 <span class="c1"># Plot the rewards</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">rewards</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Steps&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Reward&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>high
-high + wait -&gt; high : 1.8721682111545879
+high + wait -&gt; high : 1.184077553777401
 high
-high + recharge -&gt; high : 0.0
+high + search -&gt; high : 6.316602781044177
 high
-high + search -&gt; low : 5.704657704816416
+high + search -&gt; low : 5.92799122670519
 low
 low + search -&gt; high : -3.0
 high
-high + search -&gt; low : 6.234439217127732
-low
-low + recharge -&gt; high : 0.0
+high + search -&gt; high : 5.749478044656084
 high
-high + search -&gt; low : 5.973681827463211
-low
-low + wait -&gt; low : 1.5944410654943113
-low
-low + wait -&gt; low : 1.3521126625912974
-low
-low + wait -&gt; low : 2.092444414995317
+high + search -&gt; high : 5.859124009288839
+high
+high + search -&gt; high : 6.121886291580505
+high
+high + search -&gt; high : 5.896227740772887
+high
+high + recharge -&gt; high : 0.0
+high
+high + wait -&gt; high : 2.892363742574329
 </pre></div>
 </div>
-<img alt="../_images/7-Gym-solution_15_1.png" src="../_images/7-Gym-solution_15_1.png" />
+<img alt="../_images/7-Gym-solution_17_1.png" src="../_images/7-Gym-solution_17_1.png" />
 </div>
 </div>
 <p>That’s it! We now “only” need to define classes for all the sampling-based RL algorithms (MC, TD, deep RL) and we can interact with any environment using the previous cell!</p>
@@ -925,6 +992,8 @@ low + wait -&gt; low : 2.092444414995317
     
     <div class='prev-next-bottom'>
         
+    <a class='left-prev' id="prev-link" href="7-Gym.html" title="previous page"><span class="section-number">7.2.1. </span>Gym environments</a>
+    <a class='right-next' id="next-link" href="../zreferences.html" title="next page"><span class="section-number">1. </span>Bibliography</a>
 
     </div>
     <footer class="footer mt-5 mt-md-0">
