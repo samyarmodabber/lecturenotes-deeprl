@@ -20,6 +20,7 @@
 - part: Model-free RL
   chapters:
     - file: 3-MF/1-DQN
+    - file: 3-MF/2-BeyondDQN
 
 - part: Exercises
   chapters:
@@ -71,6 +72,21 @@
         - file: 5-exercises/7-Gym
           title: Notebook
         - file: 5-exercises/7-Gym-solution
+          title: Solution
+
+
+    - file: 5-exercises/ex8-MC
+      sections:
+        - file: 5-exercises/8-MonteCarlo
+          title: Notebook
+        - file: 5-exercises/8-MonteCarlo-solution
+          title: Solution
+
+    - file: 5-exercises/ex9-TD
+      sections:
+        - file: 5-exercises/9-TD
+          title: Notebook
+        - file: 5-exercises/9-TD-solution
           title: Solution
 
 

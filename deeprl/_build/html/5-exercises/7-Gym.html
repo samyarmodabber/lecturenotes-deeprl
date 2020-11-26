@@ -6,7 +6,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>7.2.1. Gym environments &#8212; Deep Reinforcement Learning</title>
+    <title>7.1. Gym environments &#8212; Deep Reinforcement Learning</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" integrity="sha384-KA6wR/X5RY4zFAHpv/CnoG2UW1uogYfdnP67Uv7eULvTveboZJg0qUpmJZb5VqzN" crossorigin="anonymous">
     <link href="../_static/css/index.css" rel="stylesheet">
     <link rel="stylesheet" href="../_static/sphinx-book-theme.css" type="text/css" />
@@ -40,7 +40,7 @@
     <link rel="canonical" href="https://julien-vitay.net/lecturenotes-deeprl/5-exercises/7-Gym.html" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="7.2.2. Gym environments" href="7-Gym-solution.html" />
+    <link rel="next" title="7.2. Gym environments" href="7-Gym-solution.html" />
     <link rel="prev" title="7. Gym environments" href="ex7-Gym.html" />
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -160,6 +160,11 @@
    1. Deep Q-Learning
   </a>
  </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../3-MF/2-BeyondDQN.html">
+   2. Beyond DQN
+  </a>
+ </li>
 </ul>
 <p class="caption">
  <span class="caption-text">
@@ -204,15 +209,25 @@
   <ul class="current">
    <li class="toctree-l2 current active">
     <a class="current reference internal" href="#">
-     7.2.1. Notebook
+     7.1. Notebook
     </a>
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="7-Gym-solution.html">
-     7.2.2. Solution
+     7.2. Solution
     </a>
    </li>
   </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="ex8-MC.html">
+   8. Monte-Carlo control
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="ex9-TD.html">
+   9. Q-learning
+  </a>
  </li>
 </ul>
 <p class="caption">
@@ -320,29 +335,29 @@
             <ul class="nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#installing-gym">
-   7.2.1.1. Installing gym
+   7.1.1. Installing gym
   </a>
   <ul class="nav section-nav flex-column">
    <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#on-your-computer">
-     7.2.1.1.1. On your computer
+     7.1.1.1. On your computer
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#on-colab">
-     7.2.1.1.2. On Colab
+     7.1.1.2. On Colab
     </a>
    </li>
   </ul>
  </li>
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#gym-interface">
-   7.2.1.2. Gym interface
+   7.1.2. Gym interface
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#recycling-robot">
-   7.2.1.3. Recycling robot
+   7.1.3. Recycling robot
   </a>
  </li>
 </ul>
@@ -356,9 +371,9 @@
               <div>
                 
   <div class="section" id="gym-environments">
-<h1><span class="section-number">7.2.1. </span>Gym environments<a class="headerlink" href="#gym-environments" title="Permalink to this headline">¶</a></h1>
+<h1><span class="section-number">7.1. </span>Gym environments<a class="headerlink" href="#gym-environments" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="installing-gym">
-<h2><span class="section-number">7.2.1.1. </span>Installing gym<a class="headerlink" href="#installing-gym" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">7.1.1. </span>Installing gym<a class="headerlink" href="#installing-gym" title="Permalink to this headline">¶</a></h2>
 <p>In this course, we will mostly address RL environments available in the <strong>OpenAI Gym</strong> framework:</p>
 <p><a class="reference external" href="https://gym.openai.com">https://gym.openai.com</a></p>
 <p>It provides a multitude of RL problems, from simple text-based problems with a few dozens of states (Gridworld, Taxi) to continuous control problems (Cartpole, Pendulum) to Atari games (Breakout, Space Invaders) to complex robotics simulators (Mujoco, but the license is expensive):</p>
@@ -366,7 +381,7 @@
 <p>We start by installing gym and its dependencies. Unfortunately, gym only works fully under Linux or MacOS. You can <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">gym</span></code> on Windows, but will be limited to the most simple environments, excluding for example Atari games (but you can try these instructions: <a class="reference external" href="https://towardsdatascience.com/how-to-install-openai-gym-in-a-windows-environment-338969e24d30">https://towardsdatascience.com/how-to-install-openai-gym-in-a-windows-environment-338969e24d30</a>). This isn’t a big issue as we will only use the simple environments in the exercises, but less fun.</p>
 <p>Moreover, it does not work out-of-the-box on colab, as gym opens graphical windows for some environments (e.g. Atari games), what is not possible in the browser. The first cell provides a workaround.</p>
 <div class="section" id="on-your-computer">
-<h3><span class="section-number">7.2.1.1.1. </span>On your computer<a class="headerlink" href="#on-your-computer" title="Permalink to this headline">¶</a></h3>
+<h3><span class="section-number">7.1.1.1. </span>On your computer<a class="headerlink" href="#on-your-computer" title="Permalink to this headline">¶</a></h3>
 <p>On your computer, you first need to make sure you have the right dependencies, especially <code class="docutils literal notranslate"><span class="pre">cmake</span></code>:</p>
 <p><strong>Ubuntu Linux:</strong></p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>apt-get install -y cmake swig
@@ -385,7 +400,7 @@ pip install gym<span class="o">[</span>atari<span class="o">]</span>
 </div>
 </div>
 <div class="section" id="on-colab">
-<h3><span class="section-number">7.2.1.1.2. </span>On Colab<a class="headerlink" href="#on-colab" title="Permalink to this headline">¶</a></h3>
+<h3><span class="section-number">7.1.1.2. </span>On Colab<a class="headerlink" href="#on-colab" title="Permalink to this headline">¶</a></h3>
 <p>On Colab, we need to install a bunch of dependencies (Colab runs a Debian VM under the hood) and define a visualization function that can be called at the end of an episode to visualize it.</p>
 <p>The following cell detects whether you run this notebook on colab or not, and imports lots of additional stuff if needed.</p>
 <div class="cell docutils container">
@@ -448,7 +463,7 @@ pip install gym<span class="o">[</span>atari<span class="o">]</span>
 </div>
 </div>
 <div class="section" id="gym-interface">
-<h2><span class="section-number">7.2.1.2. </span>Gym interface<a class="headerlink" href="#gym-interface" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">7.1.2. </span>Gym interface<a class="headerlink" href="#gym-interface" title="Permalink to this headline">¶</a></h2>
 <p>The main interest of gym is that all problems have a common interface defined by the class <code class="docutils literal notranslate"><span class="pre">gym.Env</span></code>. There are only three methods that have to be implemented and used when creating a new environment:</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">state</span> <span class="pre">=</span> <span class="pre">env.reset()</span></code> restarts the environment and returns an initial state <span class="math notranslate nohighlight">\(s_0\)</span>.</p></li>
@@ -594,7 +609,7 @@ pip install gym<span class="o">[</span>atari<span class="o">]</span>
 <p><em>Note 4:</em> On Colab, <code class="docutils literal notranslate"><span class="pre">env.render()</span></code> will do nothing. You need to call <code class="docutils literal notranslate"><span class="pre">show_video()</span></code> after <code class="docutils literal notranslate"><span class="pre">env.close()</span></code> to see the movie of what happened.</p>
 </div>
 <div class="section" id="recycling-robot">
-<h2><span class="section-number">7.2.1.3. </span>Recycling robot<a class="headerlink" href="#recycling-robot" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">7.1.3. </span>Recycling robot<a class="headerlink" href="#recycling-robot" title="Permalink to this headline">¶</a></h2>
 <p><strong>Q:</strong> Create a <code class="docutils literal notranslate"><span class="pre">RecyclingRobot</span></code> gym-like environment using last week’s exercise.</p>
 <p>The parameters <code class="docutils literal notranslate"><span class="pre">alpha</span></code>, <code class="docutils literal notranslate"><span class="pre">beta</span></code>, <code class="docutils literal notranslate"><span class="pre">r_wait</span></code> and <code class="docutils literal notranslate"><span class="pre">r_search</span></code> should be passed to the constructor of the environment and saved as attributes.</p>
 <p>The state space is discrete, with two states <code class="docutils literal notranslate"><span class="pre">high</span></code> and <code class="docutils literal notranslate"><span class="pre">low</span></code> which will have indices 0 and 1. The three discrete actions <code class="docutils literal notranslate"><span class="pre">search</span></code>, <code class="docutils literal notranslate"><span class="pre">wait</span></code> and <code class="docutils literal notranslate"><span class="pre">recharge</span></code> have indices 0, 1, and 2.</p>
@@ -671,7 +686,7 @@ pip install gym<span class="o">[</span>atari<span class="o">]</span>
     <div class='prev-next-bottom'>
         
     <a class='left-prev' id="prev-link" href="ex7-Gym.html" title="previous page"><span class="section-number">7. </span>Gym environments</a>
-    <a class='right-next' id="next-link" href="7-Gym-solution.html" title="next page"><span class="section-number">7.2.2. </span>Gym environments</a>
+    <a class='right-next' id="next-link" href="7-Gym-solution.html" title="next page"><span class="section-number">7.2. </span>Gym environments</a>
 
     </div>
     <footer class="footer mt-5 mt-md-0">

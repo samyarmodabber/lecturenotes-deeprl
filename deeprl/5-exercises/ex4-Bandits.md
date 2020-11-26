@@ -6,13 +6,13 @@ The goal of this exercise is to implement simple action selection mechanisms for
 * $\epsilon$-greedy action selection
 * Softmax action selection
 
-## Presentation
+**Presentation**
 
 <div class="embed-container">
   <iframe src="https://www.youtube.com/embed/pYxphhdmrD4" frameborder="0" allowfullscreen></iframe>
 </div>
 
-## Commented solution
+**Commented solution**
 
 <div class="embed-container">
   <iframe src="https://www.youtube.com/embed/x60ffQE59Eo" frameborder="0" allowfullscreen></iframe>

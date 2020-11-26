@@ -40,7 +40,7 @@
     <link rel="canonical" href="https://julien-vitay.net/lecturenotes-deeprl/zreferences.html" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="prev" title="7.2.2. Gym environments" href="5-exercises/7-Gym-solution.html" />
+    <link rel="prev" title="9.2. Q-learning" href="5-exercises/9-TD-solution.html" />
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="docsearch:language" content="en">
@@ -159,6 +159,11 @@
    1. Deep Q-Learning
   </a>
  </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="3-MF/2-BeyondDQN.html">
+   2. Beyond DQN
+  </a>
+ </li>
 </ul>
 <p class="caption">
  <span class="caption-text">
@@ -199,6 +204,16 @@
  <li class="toctree-l1">
   <a class="reference internal" href="5-exercises/ex7-Gym.html">
    7. Gym environments
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="5-exercises/ex8-MC.html">
+   8. Monte-Carlo control
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="5-exercises/ex9-TD.html">
+   9. Q-learning
   </a>
  </li>
 </ul>
@@ -297,14 +312,47 @@
 <dt class="bibtex label" id="agarwal2014"><span class="brackets">AHK+14</span></dt>
 <dd><p>Alekh Agarwal, Daniel Hsu, Satyen Kale, John Langford, Lihong Li, and Robert E Schapire. Taming the Monster: A Fast and Simple Algorithm for Contextual Bandits. In <em>Proceedings of the 31 St International Conference on Machine Learning</em>, 9. Beijing, China, 2014.</p>
 </dd>
+<dt class="bibtex label" id="bellemare2017"><span class="brackets">BDM17</span></dt>
+<dd><p>Marc G. Bellemare, Will Dabney, and Rémi Munos. A Distributional Perspective on Reinforcement Learning. <em>arXiv:1707.06887 [cs]</em>, July 2017. URL: <a class="reference external" href="http://arxiv.org/abs/1707.06887">http://arxiv.org/abs/1707.06887</a>, <a class="reference external" href="https://arxiv.org/abs/1707.06887">arXiv:1707.06887</a>.</p>
+</dd>
+<dt class="bibtex label" id="dabney2018"><span class="brackets">DOSM18</span></dt>
+<dd><p>Will Dabney, Georg Ostrovski, David Silver, and Rémi Munos. Implicit Quantile Networks for Distributional Reinforcement Learning. <em>arXiv:1806.06923 [cs, stat]</em>, June 2018. URL: <a class="reference external" href="http://arxiv.org/abs/1806.06923">http://arxiv.org/abs/1806.06923</a>, <a class="reference external" href="https://arxiv.org/abs/1806.06923">arXiv:1806.06923</a>.</p>
+</dd>
+<dt class="bibtex label" id="dabney2017"><span class="brackets">DRBM17</span></dt>
+<dd><p>Will Dabney, Mark Rowland, Marc G. Bellemare, and Rémi Munos. Distributional Reinforcement Learning with Quantile Regression. <em>arXiv:1710.10044 [cs, stat]</em>, October 2017. URL: <a class="reference external" href="http://arxiv.org/abs/1710.10044">http://arxiv.org/abs/1710.10044</a>, <a class="reference external" href="https://arxiv.org/abs/1710.10044">arXiv:1710.10044</a>.</p>
+</dd>
+<dt class="bibtex label" id="fortunato2017"><span class="brackets">FAP+17</span></dt>
+<dd><p>Meire Fortunato, Mohammad Gheshlaghi Azar, Bilal Piot, Jacob Menick, Ian Osband, Alex Graves, Vlad Mnih, Remi Munos, Demis Hassabis, Olivier Pietquin, Charles Blundell, and Shane Legg. Noisy Networks for Exploration. <em>arXiv:1706.10295 [cs, stat]</em>, June 2017. URL: <a class="reference external" href="http://arxiv.org/abs/1706.10295">http://arxiv.org/abs/1706.10295</a>, <a class="reference external" href="https://arxiv.org/abs/1706.10295">arXiv:1706.10295</a>.</p>
+</dd>
 <dt class="bibtex label" id="goodfellow2016"><span class="brackets">GBC16</span></dt>
 <dd><p>Ian Goodfellow, Yoshua Bengio, and Aaron Courville. <em>Deep Learning</em>. MIT Press, 2016. URL: <a class="reference external" href="http://www.deeplearningbook.org">http://www.deeplearningbook.org</a>.</p>
+</dd>
+<dt class="bibtex label" id="gruslys2017"><span class="brackets">GDA+17</span></dt>
+<dd><p>Audrunas Gruslys, Will Dabney, Mohammad Gheshlaghi Azar, Bilal Piot, Marc Bellemare, and Remi Munos. The Reactor: A fast and sample-efficient Actor-Critic agent for Reinforcement Learning. <em>arXiv:1704.04651 [cs]</em>, April 2017. URL: <a class="reference external" href="http://arxiv.org/abs/1704.04651">http://arxiv.org/abs/1704.04651</a>, <a class="reference external" href="https://arxiv.org/abs/1704.04651">arXiv:1704.04651</a>.</p>
+</dd>
+<dt class="bibtex label" id="hausknecht2015"><span class="brackets">HS15</span></dt>
+<dd><p>Matthew Hausknecht and Peter Stone. Deep Recurrent Q-Learning for Partially Observable MDPs. <em>arXiv:1507.06527 [cs]</em>, July 2015. URL: <a class="reference external" href="http://arxiv.org/abs/1507.06527">http://arxiv.org/abs/1507.06527</a>, <a class="reference external" href="https://arxiv.org/abs/1507.06527">arXiv:1507.06527</a>.</p>
+</dd>
+<dt class="bibtex label" id="hessel2017"><span class="brackets">HMvanHasselt+17</span></dt>
+<dd><p>Matteo Hessel, Joseph Modayil, Hado van Hasselt, Tom Schaul, Georg Ostrovski, Will Dabney, Dan Horgan, Bilal Piot, Mohammad Azar, and David Silver. Rainbow: Combining Improvements in Deep Reinforcement Learning. <em>arXiv:1707.06887 [cs]</em>, October 2017. URL: <a class="reference external" href="http://arxiv.org/abs/1710.02298">http://arxiv.org/abs/1710.02298</a>, <a class="reference external" href="https://arxiv.org/abs/1707.06887">arXiv:1707.06887</a>.</p>
+</dd>
+<dt class="bibtex label" id="horgan2018"><span class="brackets">HQB+18</span></dt>
+<dd><p>Dan Horgan, John Quan, David Budden, Gabriel Barth-Maron, Matteo Hessel, Hado van Hasselt, and David Silver. Distributed Prioritized Experience Replay. <em>arXiv:1803.00933 [cs]</em>, March 2018. URL: <a class="reference external" href="http://arxiv.org/abs/1803.00933">http://arxiv.org/abs/1803.00933</a>, <a class="reference external" href="https://arxiv.org/abs/1803.00933">arXiv:1803.00933</a>.</p>
+</dd>
+<dt class="bibtex label" id="kapturowski2019"><span class="brackets">KOQ+19</span></dt>
+<dd><p>Steven Kapturowski, Georg Ostrovski, John Quan, Remi Munos, and Will Dabney. Recurrent experience replay in distributed reinforcement learning. In <em>ICLR</em>, 19. 2019.</p>
 </dd>
 <dt class="bibtex label" id="mnih2013"><span class="brackets">MKS+13</span></dt>
 <dd><p>Volodymyr Mnih, Koray Kavukcuoglu, David Silver, Alex Graves, Ioannis Antonoglou, Daan Wierstra, and Martin Riedmiller. Playing Atari with Deep Reinforcement Learning. <em>arXiv:1312.5602 [cs]</em>, December 2013. URL: <a class="reference external" href="http://arxiv.org/abs/1312.5602">http://arxiv.org/abs/1312.5602</a>, <a class="reference external" href="https://arxiv.org/abs/1312.5602">arXiv:1312.5602</a>.</p>
 </dd>
 <dt class="bibtex label" id="moore1993"><span class="brackets">MA93</span></dt>
 <dd><p>Andrew W. Moore and Christopher G. Atkeson. Prioritized sweeping: Reinforcement learning with less data and less time. <em>Machine Learning</em>, 13(1):103–130, October 1993. URL: <a class="reference external" href="https://doi.org/10.1007/BF00993104">https://doi.org/10.1007/BF00993104</a>, <a class="reference external" href="https://doi.org/10.1007/BF00993104">doi:10.1007/BF00993104</a>.</p>
+</dd>
+<dt class="bibtex label" id="nair2015"><span class="brackets">NSB+15</span></dt>
+<dd><p>Arun Nair, Praveen Srinivasan, Sam Blackwell, Cagdas Alcicek, Rory Fearon, Alessandro De Maria, Vedavyas Panneershelvam, Mustafa Suleyman, Charles Beattie, Stig Petersen, Shane Legg, Volodymyr Mnih, Koray Kavukcuoglu, and David Silver. Massively Parallel Methods for Deep Reinforcement Learning. <em>arXiv:1507.04296 [cs]</em>, 2015. URL: <a class="reference external" href="https://arxiv.org/pdf/1507.04296.pdf">https://arxiv.org/pdf/1507.04296.pdf</a>, <a class="reference external" href="https://arxiv.org/abs/1507.04296">arXiv:1507.04296</a>.</p>
+</dd>
+<dt class="bibtex label" id="plappert2018"><span class="brackets">PHD+18</span></dt>
+<dd><p>Matthias Plappert, Rein Houthooft, Prafulla Dhariwal, Szymon Sidor, Richard Y. Chen, Xi Chen, Tamim Asfour, Pieter Abbeel, and Marcin Andrychowicz. Parameter Space Noise for Exploration. <em>arXiv:1706.01905 [cs, stat]</em>, January 2018. URL: <a class="reference external" href="http://arxiv.org/abs/1706.01905">http://arxiv.org/abs/1706.01905</a>, <a class="reference external" href="https://arxiv.org/abs/1706.01905">arXiv:1706.01905</a>.</p>
 </dd>
 <dt class="bibtex label" id="schaul2015"><span class="brackets">SQAS15</span></dt>
 <dd><p>Tom Schaul, John Quan, Ioannis Antonoglou, and David Silver. Prioritized Experience Replay. <em>arXiv:1511.05952 [cs]</em>, November 2015. URL: <a class="reference external" href="http://arxiv.org/abs/1511.05952">http://arxiv.org/abs/1511.05952</a>, <a class="reference external" href="https://arxiv.org/abs/1511.05952">arXiv:1511.05952</a>.</p>
@@ -359,7 +407,7 @@
     
     <div class='prev-next-bottom'>
         
-    <a class='left-prev' id="prev-link" href="5-exercises/7-Gym-solution.html" title="previous page"><span class="section-number">7.2.2. </span>Gym environments</a>
+    <a class='left-prev' id="prev-link" href="5-exercises/9-TD-solution.html" title="previous page"><span class="section-number">9.2. </span>Q-learning</a>
 
     </div>
     <footer class="footer mt-5 mt-md-0">

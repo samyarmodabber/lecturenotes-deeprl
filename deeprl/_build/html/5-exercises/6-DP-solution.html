@@ -6,7 +6,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>6.2.2. Dynamic programming &#8212; Deep Reinforcement Learning</title>
+    <title>6.2. Dynamic programming &#8212; Deep Reinforcement Learning</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" integrity="sha384-KA6wR/X5RY4zFAHpv/CnoG2UW1uogYfdnP67Uv7eULvTveboZJg0qUpmJZb5VqzN" crossorigin="anonymous">
     <link href="../_static/css/index.css" rel="stylesheet">
     <link rel="stylesheet" href="../_static/sphinx-book-theme.css" type="text/css" />
@@ -41,7 +41,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="7. Gym environments" href="ex7-Gym.html" />
-    <link rel="prev" title="6.2.1. Dynamic programming" href="6-DP.html" />
+    <link rel="prev" title="6.1. Dynamic programming" href="6-DP.html" />
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="docsearch:language" content="en">
@@ -160,6 +160,11 @@
    1. Deep Q-Learning
   </a>
  </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../3-MF/2-BeyondDQN.html">
+   2. Beyond DQN
+  </a>
+ </li>
 </ul>
 <p class="caption">
  <span class="caption-text">
@@ -199,12 +204,12 @@
   <ul class="current">
    <li class="toctree-l2">
     <a class="reference internal" href="6-DP.html">
-     6.2.1. Notebook
+     6.1. Notebook
     </a>
    </li>
    <li class="toctree-l2 current active">
     <a class="current reference internal" href="#">
-     6.2.2. Solution
+     6.2. Solution
     </a>
    </li>
   </ul>
@@ -212,6 +217,16 @@
  <li class="toctree-l1">
   <a class="reference internal" href="ex7-Gym.html">
    7. Gym environments
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="ex8-MC.html">
+   8. Monte-Carlo control
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="ex9-TD.html">
+   9. Q-learning
   </a>
  </li>
 </ul>
@@ -320,24 +335,24 @@
             <ul class="nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#policy-iteration">
-   6.2.2.1. Policy Iteration
+   6.2.1. Policy Iteration
   </a>
   <ul class="nav section-nav flex-column">
    <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#iterative-policy-evaluation">
-     6.2.2.1.1. Iterative policy evaluation
+     6.2.1.1. Iterative policy evaluation
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#id1">
-     6.2.2.1.2. Policy iteration
+     6.2.1.2. Policy iteration
     </a>
    </li>
   </ul>
  </li>
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#value-iteration">
-   6.2.2.2. Value iteration
+   6.2.2. Value iteration
   </a>
  </li>
 </ul>
@@ -351,7 +366,7 @@
               <div>
                 
   <div class="section" id="dynamic-programming">
-<h1><span class="section-number">6.2.2. </span>Dynamic programming<a class="headerlink" href="#dynamic-programming" title="Permalink to this headline">¶</a></h1>
+<h1><span class="section-number">6.2. </span>Dynamic programming<a class="headerlink" href="#dynamic-programming" title="Permalink to this headline">¶</a></h1>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -478,10 +493,10 @@
 <div class="math notranslate nohighlight">
 \[V^\pi(\text{low}) = \pi(\text{low}, \text{search}) \, Q^\pi(\text{low}, \text{search}) +  \pi(\text{low}, \text{wait}) \, Q^\pi(\text{low}, \text{wait}) + \pi(\text{low}, \text{recharge}) \,  Q^\pi(\text{low}, \text{recharge})\]</div>
 <div class="section" id="policy-iteration">
-<h2><span class="section-number">6.2.2.1. </span>Policy Iteration<a class="headerlink" href="#policy-iteration" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">6.2.1. </span>Policy Iteration<a class="headerlink" href="#policy-iteration" title="Permalink to this headline">¶</a></h2>
 <p>Now that we have the Bellman equations for the two states high and low, we can solve them using <strong>iterative policy evaluation</strong> for a fixed policy <span class="math notranslate nohighlight">\(\pi\)</span>.</p>
 <div class="section" id="iterative-policy-evaluation">
-<h3><span class="section-number">6.2.2.1.1. </span>Iterative policy evaluation<a class="headerlink" href="#iterative-policy-evaluation" title="Permalink to this headline">¶</a></h3>
+<h3><span class="section-number">6.2.1.1. </span>Iterative policy evaluation<a class="headerlink" href="#iterative-policy-evaluation" title="Permalink to this headline">¶</a></h3>
 <p>Let’s start by setting the parameters of the MDP. In the rest of the exercise, you will modify these parameters to investigate how it changes the optimal policy.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -606,7 +621,7 @@
 </ul>
 </div>
 <div class="section" id="id1">
-<h3><span class="section-number">6.2.2.1.2. </span>Policy iteration<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<h3><span class="section-number">6.2.1.2. </span>Policy iteration<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
 <p>Improving the policy is now straightforward. We just to look at the Q-values in each state, and change the policy so that it takes the action with the maximal Q-value. If this does not change the policy (we still take the same actions), we have found the optimal policy, we can stop.</p>
 <p><strong>Q:</strong> Implement policy iteration.</p>
 <p>Do not forget to reset the V and Q arrays at the beginning of the cell, as well as the original policy.</p>
@@ -696,7 +711,7 @@ pi(low)= 2
 </div>
 </div>
 <div class="section" id="value-iteration">
-<h2><span class="section-number">6.2.2.2. </span>Value iteration<a class="headerlink" href="#value-iteration" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">6.2.2. </span>Value iteration<a class="headerlink" href="#value-iteration" title="Permalink to this headline">¶</a></h2>
 <p>In value iteration, we merge the policy evaluation and improvement in a single update rule:</p>
 <div class="math notranslate nohighlight">
 \[
@@ -1090,7 +1105,7 @@ Q= [[28.03236199 24.62265325  0.        ]
     
     <div class='prev-next-bottom'>
         
-    <a class='left-prev' id="prev-link" href="6-DP.html" title="previous page"><span class="section-number">6.2.1. </span>Dynamic programming</a>
+    <a class='left-prev' id="prev-link" href="6-DP.html" title="previous page"><span class="section-number">6.1. </span>Dynamic programming</a>
     <a class='right-next' id="next-link" href="ex7-Gym.html" title="next page"><span class="section-number">7. </span>Gym environments</a>
 
     </div>
