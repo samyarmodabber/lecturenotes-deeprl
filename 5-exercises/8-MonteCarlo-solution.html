@@ -658,11 +658,11 @@ FILE
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>+---------+
-|<span class=" -Color -Color-Magenta">R</span>: | : :G|
-| : |<span class=" -Color -Color-BGYellow"> </span>: : |
+|R: | : :<span class=" -Color -Color-Bold -Color-Bold-Blue -Color-Bold-Blue-BGYellow">G</span>|
+| : | : : |
 | : : : : |
 | | : | : |
-|Y| : |<span class=" -Color -Color-Bold -Color-Bold-Blue">B</span>: |
+|<span class=" -Color -Color-Magenta">Y</span>| : |B: |
 +---------+
 </pre></div>
 </div>
@@ -802,7 +802,7 @@ State: [3, 1, 2, 0]
                 <span class="k">if</span> <span class="n">render</span><span class="p">:</span>
                     <span class="n">clear_output</span><span class="p">(</span><span class="n">wait</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">render</span><span class="p">()</span>
-                    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.01</span><span class="p">)</span>
+                    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>
 
                 <span class="c1"># Select an action </span>
                 <span class="n">action</span> <span class="o">=</span> <span class="n">agent</span><span class="o">.</span><span class="n">act</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
@@ -845,23 +845,23 @@ State: [3, 1, 2, 0]
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>+---------+
-|R: | : :<span class=" -Color -Color-Magenta">G</span>|
+|<span class=" -Color -Color-Magenta">R</span>: | : :G|
 | : | : : |
-|<span class=" -Color -Color-BGGreen">_</span>: : : : |
-| | : | : |
-|Y| : |B: |
+| : : : : |
+| |<span class=" -Color -Color-BGYellow"> </span>: | : |
+|<span class=" -Color -Color-Bold -Color-Bold-Blue">Y</span>| : |B: |
 +---------+
-  (South)
-Episode 1 : return -740.0
-Episode 2 : return -776.0
-Episode 3 : return -677.0
-Episode 4 : return -731.0
-Episode 5 : return -749.0
-Episode 6 : return -731.0
-Episode 7 : return -884.0
-Episode 8 : return -210.0
-Episode 9 : return -776.0
-Episode 10 : return -776.0
+  (North)
+Episode 1 : return -704.0
+Episode 2 : return -583.0
+Episode 3 : return -956.0
+Episode 4 : return -767.0
+Episode 5 : return -776.0
+Episode 6 : return -866.0
+Episode 7 : return -785.0
+Episode 8 : return -767.0
+Episode 9 : return -812.0
+Episode 10 : return -839.0
 </pre></div>
 </div>
 </div>
@@ -1004,7 +1004,7 @@ Episode 10 : return -776.0
                 <span class="k">if</span> <span class="n">render</span><span class="p">:</span>
                     <span class="n">clear_output</span><span class="p">(</span><span class="n">wait</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">render</span><span class="p">()</span>
-                    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.01</span><span class="p">)</span>
+                    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>
 
                 <span class="c1"># Select an action </span>
                 <span class="n">action</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">act</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
@@ -1547,7 +1547,7 @@ Number of steps [20, 14, 18, 9, 18]
                 <span class="k">if</span> <span class="n">render</span><span class="p">:</span>
                     <span class="n">clear_output</span><span class="p">(</span><span class="n">wait</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">render</span><span class="p">()</span>
-                    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.01</span><span class="p">)</span>
+                    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>
 
                 <span class="c1"># Select an action </span>
                 <span class="n">action</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">act</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
