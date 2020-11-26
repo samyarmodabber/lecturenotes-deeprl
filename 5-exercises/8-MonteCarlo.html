@@ -1,0 +1,927 @@
+
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>8.1. Monte-Carlo control &#8212; Deep Reinforcement Learning</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" integrity="sha384-KA6wR/X5RY4zFAHpv/CnoG2UW1uogYfdnP67Uv7eULvTveboZJg0qUpmJZb5VqzN" crossorigin="anonymous">
+    <link href="../_static/css/index.css" rel="stylesheet">
+    <link rel="stylesheet" href="../_static/sphinx-book-theme.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/style.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-dropdown.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/sphinx-book-theme.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/togglebutton.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/sphinx-book-theme.js"></script>
+    <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processRefs": false, "processEnvironments": false}})</script>
+    <script async="async" src="https://unpkg.com/thebelab@latest/lib/index.js"></script>
+    <script >
+        const thebe_selector = ".thebe"
+        const thebe_selector_input = "pre"
+        const thebe_selector_output = ".output"
+    </script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <link rel="canonical" href="https://julien-vitay.net/lecturenotes-deeprl/5-exercises/8-MonteCarlo.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="8.2. Monte-Carlo control" href="8-MonteCarlo-solution.html" />
+    <link rel="prev" title="8. Monte-Carlo control" href="ex8-MC.html" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="docsearch:language" content="en">
+
+
+<!-- Opengraph tags -->
+<meta property="og:url"         content="https://julien-vitay.net/lecturenotes-deeprl/5-exercises/8-MonteCarlo.html" />
+<meta property="og:type"        content="article" />
+<meta property="og:title"       content="Monte-Carlo control" />
+<meta property="og:description" content="Monte-Carlo control  We start by importing gym. The environment we will use is text-based, so there is no need for all the boilerplate of last exercise: we simp" />
+<meta property="og:image"       content="https://julien-vitay.net/lecturenotes-deeprl/_static/tuc.svg" />
+
+<meta name="twitter:card" content="summary" />
+
+
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
+<a class="navbar-brand text-wrap" href="../index.html">
+  
+  <img src="../_static/tuc.svg" class="logo" alt="logo">
+  
+  
+  <h1 class="site-logo" id="site-title">Deep Reinforcement Learning</h1>
+  
+</a>
+</div>
+
+<form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form>
+
+<nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+  <ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../intro.html">
+   Deep Reinforcement Learning
+  </a>
+ </li>
+</ul>
+<p class="caption">
+ <span class="caption-text">
+  Introduction
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../1-intro/1-Introduction.html">
+   1. Introduction
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../1-intro/2-Math.html">
+   2. Math basics
+  </a>
+ </li>
+</ul>
+<p class="caption">
+ <span class="caption-text">
+  Tabular RL
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../2-tabular/1-Bandits.html">
+   1. Bandits
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../2-tabular/2-MDP.html">
+   2. Markov Decision Processes
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../2-tabular/3-DP.html">
+   3. Dynamic Programming
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../2-tabular/4-MC.html">
+   4. Monte-Carlo (MC) methods
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../2-tabular/5-TD.html">
+   5. Temporal Difference learning
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../2-tabular/6-FA.html">
+   6. Function approximation
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../2-tabular/7-NN.html">
+   7. Deep learning
+  </a>
+ </li>
+</ul>
+<p class="caption">
+ <span class="caption-text">
+  Model-free RL
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../3-MF/1-DQN.html">
+   1. Deep Q-Learning
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../3-MF/2-BeyondDQN.html">
+   2. Beyond DQN
+  </a>
+ </li>
+</ul>
+<p class="caption">
+ <span class="caption-text">
+  Exercises
+ </span>
+</p>
+<ul class="current nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="ex1-Python.html">
+   1. Introduction to Python
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="ex2-Numpy.html">
+   2. Numpy and Matplotlib
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="ex3-Sampling.html">
+   3. Sampling
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="ex4-Bandits.html">
+   4. Bandits (part 1)
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="ex5-Bandits2.html">
+   5. Bandits (part 2)
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="ex6-DP.html">
+   6. Dynamic programming
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="ex7-Gym.html">
+   7. Gym environments
+  </a>
+ </li>
+ <li class="toctree-l1 current active">
+  <a class="reference internal" href="ex8-MC.html">
+   8. Monte-Carlo control
+  </a>
+  <ul class="current">
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
+     8.1. Notebook
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="8-MonteCarlo-solution.html">
+     8.2. Solution
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="ex9-TD.html">
+   9. Q-learning
+  </a>
+ </li>
+</ul>
+<p class="caption">
+ <span class="caption-text">
+  References
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../zreferences.html">
+   1. Bibliography
+  </a>
+ </li>
+</ul>
+
+</nav>
+
+ <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="row topbar fixed-top container-xl">
+    <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show">
+    </div>
+    <div class="col pl-2 topbar-main">
+        
+        <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+            data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+            aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+            title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+            <i class="fas fa-bars"></i>
+            <i class="fas fa-arrow-left"></i>
+            <i class="fas fa-arrow-up"></i>
+        </button>
+        
+        <div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="../_sources/5-exercises/8-MonteCarlo.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.ipynb</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+    
+</div>
+        <!-- Source interaction buttons -->
+
+
+        <!-- Full screen (wrap in <a> to have style consistency -->
+        <a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+                data-placement="bottom" onclick="toggleFullScreen()" title="Fullscreen mode"><i
+                    class="fas fa-expand"></i></button></a>
+
+        <!-- Launch buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
+    <div class="dropdown-buttons">
+        
+        <a class="binder-button" href="https://mybinder.org/v2/gh/vitay/lecturenotes-deeprl/master?urlpath=tree/deeprl/5-exercises/8-MonteCarlo.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
+                data-placement="left"><img class="binder-button-logo"
+                    src="../_static/images/logo_binder.svg"
+                    alt="Interact on binder">Binder</button></a>
+        
+        
+        
+        <a class="colab-button" href="https://colab.research.google.com/github/vitay/lecturenotes-deeprl/blob/master/deeprl/5-exercises/8-MonteCarlo.ipynb"><button type="button" class="btn btn-secondary topbarbtn"
+                title="Launch Colab" data-toggle="tooltip" data-placement="left"><img class="colab-button-logo"
+                    src="../_static/images/logo_colab.png"
+                    alt="Interact on Colab">Colab</button></a>
+        
+        
+    </div>
+</div>
+
+    </div>
+
+    <!-- Table of contents -->
+    <div class="d-none d-md-block col-md-2 bd-toc show">
+        <div class="tocsection onthispage pt-5 pb-3">
+            <i class="fas fa-list"></i> Contents
+        </div>
+        <nav id="bd-toc-nav">
+            <ul class="nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#the-taxi-environment">
+   8.1.1. The taxi environment
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#random-agent">
+   8.1.2. Random agent
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#on-policy-monte-carlo-control">
+   8.1.3. On-policy Monte-Carlo control
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#experiments">
+   8.1.4. Experiments
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#early-stopping">
+     8.1.4.1. Early stopping
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#discount-rate">
+     8.1.4.2. Discount rate
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#learning-rate">
+     8.1.4.3. Learning rate
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#exploration-parameter">
+     8.1.4.4. Exploration parameter
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#exploration-scheduling">
+     8.1.4.5. Exploration scheduling
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+        </nav>
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+        
+              <div>
+                
+  <div class="section" id="monte-carlo-control">
+<h1><span class="section-number">8.1. </span>Monte-Carlo control<a class="headerlink" href="#monte-carlo-control" title="Permalink to this headline">¶</a></h1>
+<p>We start by importing gym. The environment we will use is text-based, so there is no need for all the boilerplate of last exercise: we simply pip install gym if we are on Colab.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="n">rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">()</span>
+<span class="kn">import</span> <span class="nn">time</span>
+
+<span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">clear_output</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">google.colab</span>
+    <span class="n">IN_COLAB</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="k">except</span><span class="p">:</span>
+    <span class="n">IN_COLAB</span> <span class="o">=</span> <span class="kc">False</span>
+
+<span class="k">if</span> <span class="n">IN_COLAB</span><span class="p">:</span>
+    <span class="o">!</span>pip install gym &gt; /dev/null <span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span>
+    
+<span class="kn">import</span> <span class="nn">gym</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="the-taxi-environment">
+<h2><span class="section-number">8.1.1. </span>The taxi environment<a class="headerlink" href="#the-taxi-environment" title="Permalink to this headline">¶</a></h2>
+<p>In this exercise, we are going to apply <strong>on-policy Monte-Carlo control</strong> on the Taxi environment available in gym:</p>
+<p><a class="reference external" href="https://gym.openai.com/envs/Taxi-v3/">https://gym.openai.com/envs/Taxi-v3/</a></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">gym.envs.toy_text.taxi</span>
+<span class="n">help</span><span class="p">(</span><span class="n">gym</span><span class="o">.</span><span class="n">envs</span><span class="o">.</span><span class="n">toy_text</span><span class="o">.</span><span class="n">taxi</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Help on module gym.envs.toy_text.taxi in gym.envs.toy_text:
+
+NAME
+    gym.envs.toy_text.taxi
+
+CLASSES
+    gym.envs.toy_text.discrete.DiscreteEnv(gym.core.Env)
+        TaxiEnv
+    
+    class TaxiEnv(gym.envs.toy_text.discrete.DiscreteEnv)
+     |  The Taxi Problem
+     |  from &quot;Hierarchical Reinforcement Learning with the MAXQ Value Function Decomposition&quot;
+     |  by Tom Dietterich
+     |  
+     |  Description:
+     |  There are four designated locations in the grid world indicated by R(ed), G(reen), Y(ellow), and B(lue). When the episode starts, the taxi starts off at a random square and the passenger is at a random location. The taxi drives to the passenger&#39;s location, picks up the passenger, drives to the passenger&#39;s destination (another one of the four specified locations), and then drops off the passenger. Once the passenger is dropped off, the episode ends.
+     |  
+     |  Observations: 
+     |  There are 500 discrete states since there are 25 taxi positions, 5 possible locations of the passenger (including the case when the passenger is in the taxi), and 4 destination locations. 
+     |  
+     |  Passenger locations:
+     |  - 0: R(ed)
+     |  - 1: G(reen)
+     |  - 2: Y(ellow)
+     |  - 3: B(lue)
+     |  - 4: in taxi
+     |  
+     |  Destinations:
+     |  - 0: R(ed)
+     |  - 1: G(reen)
+     |  - 2: Y(ellow)
+     |  - 3: B(lue)
+     |      
+     |  Actions:
+     |  There are 6 discrete deterministic actions:
+     |  - 0: move south
+     |  - 1: move north
+     |  - 2: move east 
+     |  - 3: move west 
+     |  - 4: pickup passenger
+     |  - 5: dropoff passenger
+     |  
+     |  Rewards: 
+     |  There is a default per-step reward of -1,
+     |  except for delivering the passenger, which is +20,
+     |  or executing &quot;pickup&quot; and &quot;drop-off&quot; actions illegally, which is -10.
+     |  
+     |  
+     |  Rendering:
+     |  - blue: passenger
+     |  - magenta: destination
+     |  - yellow: empty taxi
+     |  - green: full taxi
+     |  - other letters (R, G, Y and B): locations for passengers and destinations
+     |  
+     |  
+     |  state space is represented by:
+     |      (taxi_row, taxi_col, passenger_location, destination)
+     |  
+     |  Method resolution order:
+     |      TaxiEnv
+     |      gym.envs.toy_text.discrete.DiscreteEnv
+     |      gym.core.Env
+     |      builtins.object
+     |  
+     |  Methods defined here:
+     |  
+     |  __init__(self)
+     |      Initialize self.  See help(type(self)) for accurate signature.
+     |  
+     |  decode(self, i)
+     |  
+     |  encode(self, taxi_row, taxi_col, pass_loc, dest_idx)
+     |  
+     |  render(self, mode=&#39;human&#39;)
+     |      Renders the environment.
+     |      
+     |      The set of supported modes varies per environment. (And some
+     |      environments do not support rendering at all.) By convention,
+     |      if mode is:
+     |      
+     |      - human: render to the current display or terminal and
+     |        return nothing. Usually for human consumption.
+     |      - rgb_array: Return an numpy.ndarray with shape (x, y, 3),
+     |        representing RGB values for an x-by-y pixel image, suitable
+     |        for turning into a video.
+     |      - ansi: Return a string (str) or StringIO.StringIO containing a
+     |        terminal-style text representation. The text can include newlines
+     |        and ANSI escape sequences (e.g. for colors).
+     |      
+     |      Note:
+     |          Make sure that your class&#39;s metadata &#39;render.modes&#39; key includes
+     |            the list of supported modes. It&#39;s recommended to call super()
+     |            in implementations to use the functionality of this method.
+     |      
+     |      Args:
+     |          mode (str): the mode to render with
+     |      
+     |      Example:
+     |      
+     |      class MyEnv(Env):
+     |          metadata = {&#39;render.modes&#39;: [&#39;human&#39;, &#39;rgb_array&#39;]}
+     |      
+     |          def render(self, mode=&#39;human&#39;):
+     |              if mode == &#39;rgb_array&#39;:
+     |                  return np.array(...) # return RGB frame suitable for video
+     |              elif mode == &#39;human&#39;:
+     |                  ... # pop up a window and render
+     |              else:
+     |                  super(MyEnv, self).render(mode=mode) # just raise an exception
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data and other attributes defined here:
+     |  
+     |  metadata = {&#39;render.modes&#39;: [&#39;human&#39;, &#39;ansi&#39;]}
+     |  
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from gym.envs.toy_text.discrete.DiscreteEnv:
+     |  
+     |  reset(self)
+     |      Resets the environment to an initial state and returns an initial
+     |      observation.
+     |      
+     |      Note that this function should not reset the environment&#39;s random
+     |      number generator(s); random variables in the environment&#39;s state should
+     |      be sampled independently between multiple calls to `reset()`. In other
+     |      words, each call of `reset()` should yield an environment suitable for
+     |      a new episode, independent of previous episodes.
+     |      
+     |      Returns:
+     |          observation (object): the initial observation.
+     |  
+     |  seed(self, seed=None)
+     |      Sets the seed for this env&#39;s random number generator(s).
+     |      
+     |      Note:
+     |          Some environments use multiple pseudorandom number generators.
+     |          We want to capture all such seeds used in order to ensure that
+     |          there aren&#39;t accidental correlations between multiple generators.
+     |      
+     |      Returns:
+     |          list&lt;bigint&gt;: Returns the list of seeds used in this env&#39;s random
+     |            number generators. The first value in the list should be the
+     |            &quot;main&quot; seed, or the value which a reproducer should pass to
+     |            &#39;seed&#39;. Often, the main seed equals the provided &#39;seed&#39;, but
+     |            this won&#39;t be true if seed=None, for example.
+     |  
+     |  step(self, a)
+     |      Run one timestep of the environment&#39;s dynamics. When end of
+     |      episode is reached, you are responsible for calling `reset()`
+     |      to reset this environment&#39;s state.
+     |      
+     |      Accepts an action and returns a tuple (observation, reward, done, info).
+     |      
+     |      Args:
+     |          action (object): an action provided by the agent
+     |      
+     |      Returns:
+     |          observation (object): agent&#39;s observation of the current environment
+     |          reward (float) : amount of reward returned after previous action
+     |          done (bool): whether the episode has ended, in which case further step() calls will return undefined results
+     |          info (dict): contains auxiliary diagnostic information (helpful for debugging, and sometimes learning)
+     |  
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from gym.core.Env:
+     |  
+     |  __enter__(self)
+     |      Support with-statement for the environment.
+     |  
+     |  __exit__(self, *args)
+     |      Support with-statement for the environment.
+     |  
+     |  __str__(self)
+     |      Return str(self).
+     |  
+     |  close(self)
+     |      Override close in your subclass to perform any necessary cleanup.
+     |      
+     |      Environments will automatically close() themselves when
+     |      garbage collected or when the program exits.
+     |  
+     |  ----------------------------------------------------------------------
+     |  Readonly properties inherited from gym.core.Env:
+     |  
+     |  unwrapped
+     |      Completely unwrap this env.
+     |      
+     |      Returns:
+     |          gym.Env: The base non-wrapped gym.Env instance
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data descriptors inherited from gym.core.Env:
+     |  
+     |  __dict__
+     |      dictionary for instance variables (if defined)
+     |  
+     |  __weakref__
+     |      list of weak references to the object (if defined)
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data and other attributes inherited from gym.core.Env:
+     |  
+     |  action_space = None
+     |  
+     |  observation_space = None
+     |  
+     |  reward_range = (-inf, inf)
+     |  
+     |  spec = None
+
+DATA
+    MAP = [&#39;+---------+&#39;, &#39;|R: | : :G|&#39;, &#39;| : | : : |&#39;, &#39;| : : : : |&#39;, &#39;| ...
+
+FILE
+    /usr/lib/python3.8/site-packages/gym/envs/toy_text/taxi.py
+</pre></div>
+</div>
+</div>
+</div>
+<p>Let’s create the environment, initialize it  and render the first state:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">env</span> <span class="o">=</span> <span class="n">gym</span><span class="o">.</span><span class="n">make</span><span class="p">(</span><span class="s2">&quot;Taxi-v3&quot;</span><span class="p">)</span>
+<span class="n">state</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+<span class="n">env</span><span class="o">.</span><span class="n">render</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>+---------+
+|R: | : :<span class=" -Color -Color-Magenta">G</span>|
+| : | : : |
+| : : : : |
+|<span class=" -Color -Color-BGYellow"> </span>| : | : |
+|<span class=" -Color -Color-Bold -Color-Bold-Blue">Y</span>| : |B: |
++---------+
+</pre></div>
+</div>
+</div>
+</div>
+<p>The agent is the yellow square. It can move up, down, left or right if there is no wall (the pipes and dashes). Its goal is to pick clients at the blue location and drop them off at the pink location. These locations are fixed (R, G, B, Y), but which one is the pick-up location and which one is the drop-off destination changes between each episode.</p>
+<p><strong>Q:</strong> Re-run the previous cell multiple times to observe the diversity of initial states.</p>
+<p>The following cell prints the action space of the environment:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Action Space&quot;</span><span class="p">,</span> <span class="n">env</span><span class="o">.</span><span class="n">action_space</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Number of actions&quot;</span><span class="p">,</span> <span class="n">env</span><span class="o">.</span><span class="n">action_space</span><span class="o">.</span><span class="n">n</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Action Space Discrete(6)
+Number of actions 6
+</pre></div>
+</div>
+</div>
+</div>
+<p>There are 6 discrete actions: south, north, east, west, pickup, dropoff.</p>
+<p>Let’s now look at the observation space (state space):</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;State Space&quot;</span><span class="p">,</span> <span class="n">env</span><span class="o">.</span><span class="n">observation_space</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Number of states&quot;</span><span class="p">,</span> <span class="n">env</span><span class="o">.</span><span class="n">observation_space</span><span class="o">.</span><span class="n">n</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>State Space Discrete(500)
+Number of states 500
+</pre></div>
+</div>
+</div>
+</div>
+<p>There are 500 discrete states. What are they?</p>
+<ul class="simple">
+<li><p>The taxi can be anywhere in the 5x5 grid, giving 25 different locations.</p></li>
+<li><p>The passenger can be at any of the four locations R, G, B, Y or in the taxi: 5 values.</p></li>
+<li><p>The destination can be any of the four locations: 4 values.</p></li>
+</ul>
+<p>This gives indeed 25x5x4 = 500 different combinations.</p>
+<p>The internal representation of a state is a number between 0 and 499. You can use the <code class="docutils literal notranslate"><span class="pre">encode</span></code> and <code class="docutils literal notranslate"><span class="pre">decode</span></code> methods of the environment to relate it to the state variables.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">state</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="c1"># (taxi row, taxi column, passenger index, destination index)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;State:&quot;</span><span class="p">,</span> <span class="n">state</span><span class="p">)</span>
+
+<span class="n">state</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="mi">328</span><span class="p">)</span> 
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;State:&quot;</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="n">state</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>State: 224
+State: [3, 1, 2, 0]
+</pre></div>
+</div>
+</div>
+</div>
+<p>The reward function is simple:</p>
+<ul class="simple">
+<li><p>r = 20 when delivering the client at the correct location.</p></li>
+<li><p>r = -10 when picking or dropping a client illegally (picking where there is no client, dropping a client somewhere else, etc)</p></li>
+<li><p>r = -1 for all other transitions in order to incent the agent to be as fast as possible.</p></li>
+</ul>
+<p>The actions pickup and dropoff are very dangerous: take them at the wrong time and your return will be very low. The navigation actions are less critical.</p>
+<p>Depending on the initial state, the taxi will need at least 10 steps to deliver the client, so the maximal return you can expect is around 10 (+20 for the success, -1 for all the steps).</p>
+<p>The task is episodic: if you have not delivered the client within 200 steps, the episode stops (no particular reward).</p>
+</div>
+<div class="section" id="random-agent">
+<h2><span class="section-number">8.1.2. </span>Random agent<a class="headerlink" href="#random-agent" title="Permalink to this headline">¶</a></h2>
+<p>Let’s now define a random agent that just samples the action space.</p>
+<p><strong>Q:</strong> Modify the random agent of last time, so that the agent performs a fixed number of <strong>episodes</strong>, not steps. Make sure to use the <code class="docutils literal notranslate"><span class="pre">done</span></code> flag to break the for loop and start in a new state. Optionally render the state of the agent at every step. At the end of each episode, compute its return using <span class="math notranslate nohighlight">\(\gamma = 1.0\)</span> (i.e. simply sum the obtained rewards) and print the list in the end.</p>
+<p><em>Tip:</em> If you render the state at every step, they will be printed one after the other. To have an animation, you can clear the output of the cell using:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">clear_output</span> <span class="c1"># already imported</span>
+
+<span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">episode</span><span class="p">:</span> 
+    <span class="c1"># ...</span>
+    <span class="n">clear_output</span><span class="p">(</span><span class="n">wait</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">env</span><span class="o">.</span><span class="n">render</span><span class="p">()</span>
+    <span class="c1"># ...</span>
+</pre></div>
+</div>
+<p><em>Tip:</em> The animation may be too fast to visualize anything. To force the framerate to be low enough, you can make Python “sleep” (do nothing) for a few milliseconds after each rendering:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">time</span> <span class="c1"># already imported</span>
+
+<span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">episode</span><span class="p">:</span> 
+    <span class="n">clear_output</span><span class="p">(</span><span class="n">wait</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">env</span><span class="o">.</span><span class="n">render</span><span class="p">()</span>
+    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span> <span class="c1"># sleep for 100 milliseconds</span>
+</pre></div>
+</div>
+<p><strong>Q:</strong> What do you think of the returns obtained by the random agent? Conclude on the difficulty of the task.</p>
+</div>
+<div class="section" id="on-policy-monte-carlo-control">
+<h2><span class="section-number">8.1.3. </span>On-policy Monte-Carlo control<a class="headerlink" href="#on-policy-monte-carlo-control" title="Permalink to this headline">¶</a></h2>
+<p>Now let’s apply on-policy MC control on the Taxi environment. As a reminder, here the meta-algorithm:</p>
+<ul>
+<li><p><strong>while</strong> True:</p>
+<ol class="simple">
+<li><p>Generate an episode <span class="math notranslate nohighlight">\(\tau = (s_0, a_0, r_1, \ldots, s_T)\)</span> using the current <strong>stochastic</strong> policy <span class="math notranslate nohighlight">\(\pi\)</span>.</p></li>
+<li><p>For each state-action pair <span class="math notranslate nohighlight">\((s_t, a_t)\)</span> in the episode, update the estimated Q-value:</p></li>
+</ol>
+<div class="math notranslate nohighlight">
+\[
+        Q(s_t, a_t) = Q(s_t, a_t) + \alpha \, (R_t - Q(s_t, a_t))
+    \]</div>
+<ol class="simple">
+<li><p>For each state <span class="math notranslate nohighlight">\(s_t\)</span> in the episode, improve the policy (e.g. <span class="math notranslate nohighlight">\(\epsilon\)</span>-greedy):</p></li>
+</ol>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+        \pi(s_t, a) = \begin{cases}
+                        1 - \epsilon \; \text{if} \; a = a^* \\
+                        \frac{\epsilon}{|\mathcal{A(s_t)}-1|} \; \text{otherwise.} \\
+                      \end{cases}
+    \end{split}\]</div>
+</li>
+</ul>
+<p>In practice, we will need:</p>
+<ul class="simple">
+<li><p>a <strong>Q-table</strong> storing the estimated Q-value of each state-action pair: its size will be (500, 6).</p></li>
+<li><p>an <span class="math notranslate nohighlight">\(\epsilon\)</span>-greedy action selection to select actions in the current state.</p></li>
+<li><p>an learning mechanism allowing to update the Q-value of all state-action pairs encountered in the episode.</p></li>
+</ul>
+<p><strong>Q:</strong> Create a <code class="docutils literal notranslate"><span class="pre">MonteCarloAgent</span></code> agent implementing on-policy MC for the Taxi environment. Use <span class="math notranslate nohighlight">\(\gamma = 0.9\)</span>, <span class="math notranslate nohighlight">\(\epsilon = 0.1\)</span> and <span class="math notranslate nohighlight">\(\alpha=0.01\)</span> (pass these parameters to the constructor of the agent and store them). Train the agent for 20000 episodes (yes, 20000… Start with one episode to debug everything and then launch the simulation. It should take around one minute). Save the return of each episode in a list and plot them in the end.</p>
+<p>Implementing the action selection should not be a problem, it is the same as for bandits. Little trick (not obligatory): you can implement <span class="math notranslate nohighlight">\(\epsilon\)</span>-greedy as:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">action</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Q</span><span class="p">[</span><span class="n">state</span><span class="p">,</span> <span class="p">:]</span><span class="o">.</span><span class="n">argmax</span><span class="p">()</span>
+<span class="k">if</span> <span class="n">rng</span><span class="o">.</span><span class="n">random</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">epsilon</span><span class="p">:</span>
+    <span class="n">action</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">action_space</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>This is not exactly <span class="math notranslate nohighlight">\(\epsilon\)</span>-greedy, as <code class="docutils literal notranslate"><span class="pre">env.action_space.sample()</span></code> may select the greedy action again. In practice it does not matter, it only changes the meaning of <span class="math notranslate nohighlight">\(\epsilon\)</span>, but the action selection stays similar. It is better to rely on <code class="docutils literal notranslate"><span class="pre">env.action_space.sample()</span></code> for the exploration, as some Gym problem work better with a normal distribution for the exploration than with uniform (e.g. continuous problems).</p>
+<p>Do not select the greedy action with <code class="docutils literal notranslate"><span class="pre">self.Q[state,</span> <span class="pre">:].argmax()</span></code> but <code class="docutils literal notranslate"><span class="pre">rng.random.choice(np.where(self.Q[state,</span> <span class="pre">:]</span> <span class="pre">==</span> <span class="pre">self.Q[state,</span> <span class="pre">:].max())[0])</span></code>: at the beginning of learning, where the Q-values are all 0, you would otherwise always take the first action (south).</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">update()</span></code> method should take a complete episode as argument, using a list of (state, action, reward) transitions. It should be called at the end of an episode only, not after every step.</p>
+<p>A bit tricky is the calculation of the returns for each visited state. The naive approach would look like:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">T</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">episode</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">T</span><span class="p">):</span>
+    <span class="n">state</span><span class="p">,</span> <span class="n">action</span><span class="p">,</span> <span class="n">reward</span> <span class="o">=</span> <span class="n">episode</span><span class="p">[</span><span class="n">t</span><span class="p">]</span>
+    <span class="n">return_state</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">T</span><span class="p">):</span> <span class="c1"># rewards coming after t</span>
+        <span class="n">next_state</span><span class="p">,</span> <span class="n">next_action</span><span class="p">,</span> <span class="n">next_reward</span> <span class="o">=</span> <span class="n">episode</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+        <span class="n">return_state</span> <span class="o">+=</span> <span class="n">gamma</span><span class="o">**</span><span class="n">k</span> <span class="o">*</span> <span class="n">reward</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">Q</span><span class="p">[</span><span class="n">state</span><span class="p">,</span> <span class="n">action</span><span class="p">]</span> <span class="o">+=</span> <span class="n">alpha</span> <span class="o">*</span> <span class="p">(</span><span class="n">return_state</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">Q</span><span class="p">[</span><span class="n">state</span><span class="p">,</span> <span class="n">action</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>The double for loop can be computationally expensive for long episodes (complexity T log T). It is much more efficient to iterate <strong>backwards</strong> on the episode, starting from the last transition and iterating until the first one, and using the fact that:</p>
+<div class="math notranslate nohighlight">
+\[R_{t} = r_{t+1} + \gamma \, R_{t+1}\]</div>
+<p>The terminal state <span class="math notranslate nohighlight">\(s_T\)</span> has a return of 0 by definition. The last transition <span class="math notranslate nohighlight">\(s_{T-1} \rightarrow s_{T}\)</span> has therefore a return of <span class="math notranslate nohighlight">\(R_{T-1} = r_T\)</span>. The transition before that has a return of <span class="math notranslate nohighlight">\(R_{T-2} = r_{T-1}  + \gamma \, R_{T-1}\)</span>, and so on. You can then compute the returns of each action taken in the episode (and update its Q-value) in <strong>linear time</strong>.</p>
+<p>To iterate backwards over the list of transitions, use the <code class="docutils literal notranslate"><span class="pre">reversed()</span></code> operator:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">l</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">10</span><span class="p">]</span>
+
+<span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="n">l</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>As you may observe, the returns have a huge variance due to the exploration, what makes the plot quite ugly and unreadable. The following function allows to smooth the returns using a sliding average over the last <span class="math notranslate nohighlight">\(N\)</span> epochs:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">running_average</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">N</span><span class="p">):</span>
+    <span class="n">cumsum</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span> 
+    <span class="k">return</span> <span class="p">(</span><span class="n">cumsum</span><span class="p">[</span><span class="n">N</span><span class="p">:]</span> <span class="o">-</span> <span class="n">cumsum</span><span class="p">[:</span><span class="o">-</span><span class="n">N</span><span class="p">])</span> <span class="o">/</span> <span class="n">N</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>Q:</strong> Plot the returns as well as their sliding average. Comment on the influence of exploration.</p>
+<p><strong>Q:</strong> Extend the agent with a <code class="docutils literal notranslate"><span class="pre">test(self,</span> <span class="pre">render)</span></code> method that performs a single episode on the environment without exploration, optionally renders each state but does <strong>not</strong> learn. You will have to re-train the agent, because the definition of its class has changed. Backup the previous value of <code class="docutils literal notranslate"><span class="pre">epsilon</span></code> in a temporary variable and reset it at the end of the episode. Have the method return the <strong>undiscounted</strong> sum of rewards in the episode, as well as the number of steps until termination.</p>
+<p>After training (you can reduce the number of episodes), first observe a couple of test episodes with rendering on. Is the policy any good?</p>
+<p>Perform 1000 test episodes without rendering and report the mean return over these 1000 episodes as the final performance of your agent.</p>
+</div>
+<div class="section" id="experiments">
+<h2><span class="section-number">8.1.4. </span>Experiments<a class="headerlink" href="#experiments" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="early-stopping">
+<h3><span class="section-number">8.1.4.1. </span>Early stopping<a class="headerlink" href="#early-stopping" title="Permalink to this headline">¶</a></h3>
+<p><strong>Q:</strong> Train the agent for the smallest number of episodes where the returns seem to have stabilized (e.g. 2000 episodes). Test the agent. Does it work? Why?</p>
+</div>
+<div class="section" id="discount-rate">
+<h3><span class="section-number">8.1.4.2. </span>Discount rate<a class="headerlink" href="#discount-rate" title="Permalink to this headline">¶</a></h3>
+<p><strong>Q:</strong> Change the value of the discount factor <span class="math notranslate nohighlight">\(\gamma\)</span>. As the task is episodic (maximum 200 steps), try a discount rate of 1. What happens? Conclude.</p>
+</div>
+<div class="section" id="learning-rate">
+<h3><span class="section-number">8.1.4.3. </span>Learning rate<a class="headerlink" href="#learning-rate" title="Permalink to this headline">¶</a></h3>
+<p><strong>Q:</strong> Vary the learning rate <code class="docutils literal notranslate"><span class="pre">alpha</span></code>. What happens?</p>
+</div>
+<div class="section" id="exploration-parameter">
+<h3><span class="section-number">8.1.4.4. </span>Exploration parameter<a class="headerlink" href="#exploration-parameter" title="Permalink to this headline">¶</a></h3>
+<p><strong>Q:</strong> Vary the exploration parameter <code class="docutils literal notranslate"><span class="pre">epsilon</span></code> and observe its impact on learning.</p>
+</div>
+<div class="section" id="exploration-scheduling">
+<h3><span class="section-number">8.1.4.5. </span>Exploration scheduling<a class="headerlink" href="#exploration-scheduling" title="Permalink to this headline">¶</a></h3>
+<p>Even with a good learning rate (0.01) and a discount factor of 0.9, the exploration parameter as a huge impact on the performance: too low and the agent does not find the optimal policy, too high and the agent is inefficient at the end of learning.</p>
+<p><strong>Q:</strong> Implement scheduling for epsilon. You can use exponential scheduling as in the bandits exercise:</p>
+<div class="math notranslate nohighlight">
+\[\epsilon = \epsilon \times (1 - \epsilon_\text{decay})\]</div>
+<p>at the end of each episode, with <span class="math notranslate nohighlight">\(\epsilon_\text{decay}\)</span> being a small decay parameter (<code class="docutils literal notranslate"><span class="pre">1e-5</span></code> or so).</p>
+<p>Find a correct value for <span class="math notranslate nohighlight">\(\epsilon_\text{decay}\)</span>. Do not hesitate to fine-tune alpha at the same time.</p>
+<p><em>Tip:</em> Prepare and visualize the scheduling in a different cell, and use the initial value of <span class="math notranslate nohighlight">\(\epsilon\)</span> and <span class="math notranslate nohighlight">\(\epsilon_\text{decay}\)</span> that seem to make sense.</p>
+</div>
+</div>
+</div>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./5-exercises"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+        </div>
+    </div>
+    
+    
+    <div class='prev-next-bottom'>
+        
+    <a class='left-prev' id="prev-link" href="ex8-MC.html" title="previous page"><span class="section-number">8. </span>Monte-Carlo control</a>
+    <a class='right-next' id="next-link" href="8-MonteCarlo-solution.html" title="next page"><span class="section-number">8.2. </span>Monte-Carlo control</a>
+
+    </div>
+    <footer class="footer mt-5 mt-md-0">
+    <div class="container">
+      <p>
+        
+          By Julien Vitay - julien.vitay@informatik.tu-chemnitz.de<br/>
+        
+            &copy; Copyright 2020.<br/>
+          <div class="extra_footer">
+            Technische Universität Chemnitz - Faculty of Computer Science - Professorship for Artificial Intelligence
+          </div>
+      </p>
+    </div>
+  </footer>
+</main>
+
+
+      </div>
+    </div>
+
+    <script src="../_static/js/index.js"></script>
+    
+  </body>
+</html>

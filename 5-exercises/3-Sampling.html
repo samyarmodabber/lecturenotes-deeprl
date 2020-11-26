@@ -6,7 +6,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>3.2.1. Sampling &#8212; Deep Reinforcement Learning</title>
+    <title>3.1. Sampling &#8212; Deep Reinforcement Learning</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" integrity="sha384-KA6wR/X5RY4zFAHpv/CnoG2UW1uogYfdnP67Uv7eULvTveboZJg0qUpmJZb5VqzN" crossorigin="anonymous">
     <link href="../_static/css/index.css" rel="stylesheet">
     <link rel="stylesheet" href="../_static/sphinx-book-theme.css" type="text/css" />
@@ -40,7 +40,7 @@
     <link rel="canonical" href="https://julien-vitay.net/lecturenotes-deeprl/5-exercises/3-Sampling.html" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="3.2.2. Sampling" href="3-Sampling-solution.html" />
+    <link rel="next" title="3.2. Sampling" href="3-Sampling-solution.html" />
     <link rel="prev" title="3. Sampling" href="ex3-Sampling.html" />
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -160,6 +160,11 @@
    1. Deep Q-Learning
   </a>
  </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../3-MF/2-BeyondDQN.html">
+   2. Beyond DQN
+  </a>
+ </li>
 </ul>
 <p class="caption">
  <span class="caption-text">
@@ -184,12 +189,12 @@
   <ul class="current">
    <li class="toctree-l2 current active">
     <a class="current reference internal" href="#">
-     3.2.1. Notebook
+     3.1. Notebook
     </a>
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="3-Sampling-solution.html">
-     3.2.2. Solution
+     3.2. Solution
     </a>
    </li>
   </ul>
@@ -212,6 +217,16 @@
  <li class="toctree-l1">
   <a class="reference internal" href="ex7-Gym.html">
    7. Gym environments
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="ex8-MC.html">
+   8. Monte-Carlo control
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="ex9-TD.html">
+   9. Q-learning
   </a>
  </li>
 </ul>
@@ -320,12 +335,12 @@
             <ul class="nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#sampling-a-n-armed-bandit">
-   3.2.1.1. Sampling a n-armed bandit
+   3.1.1. Sampling a n-armed bandit
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#bandit-environment">
-   3.2.1.2. Bandit environment
+   3.1.2. Bandit environment
   </a>
  </li>
 </ul>
@@ -339,7 +354,7 @@
               <div>
                 
   <div class="section" id="sampling">
-<h1><span class="section-number">3.2.1. </span>Sampling<a class="headerlink" href="#sampling" title="Permalink to this headline">¶</a></h1>
+<h1><span class="section-number">3.1. </span>Sampling<a class="headerlink" href="#sampling" title="Permalink to this headline">¶</a></h1>
 <p>In this first exercise, we will investigate how to evaluate the Q-value of each action available in a 5-armed bandit. It is mostly to give you intuition about the limits of sampling and the central limit theorem.</p>
 <p>Let’s start with importing numpy and matplotlib:</p>
 <div class="cell docutils container">
@@ -351,7 +366,7 @@
 </div>
 </div>
 <div class="section" id="sampling-a-n-armed-bandit">
-<h2><span class="section-number">3.2.1.1. </span>Sampling a n-armed bandit<a class="headerlink" href="#sampling-a-n-armed-bandit" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">3.1.1. </span>Sampling a n-armed bandit<a class="headerlink" href="#sampling-a-n-armed-bandit" title="Permalink to this headline">¶</a></h2>
 <p>Let’s now create the n-armed bandit. The only thing we need to do is to randomly choose 5 true Q-values <span class="math notranslate nohighlight">\(Q^*(a)\)</span>.</p>
 <p><img alt="" src="../_images/bandit-example1.png" /></p>
 <p>To be generic, let’s define <code class="docutils literal notranslate"><span class="pre">nb_actions=5</span></code> and create an array corresponding to the index of each action (0, 1, 2, 3, 4) for plotting purpose.</p>
@@ -390,7 +405,7 @@
 <p><strong>Q:</strong> Vary the variance of the reward distribution (as an argument to <code class="docutils literal notranslate"><span class="pre">get_reward</span></code>) and re-run the previous experiment. Do not hesitate to take more samples.  Conclude.</p>
 </div>
 <div class="section" id="bandit-environment">
-<h2><span class="section-number">3.2.1.2. </span>Bandit environment<a class="headerlink" href="#bandit-environment" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">3.1.2. </span>Bandit environment<a class="headerlink" href="#bandit-environment" title="Permalink to this headline">¶</a></h2>
 <p>In order to prepare the next exercise, let’s now implement the n-armed bandit in a Python class. As reminded in the tutorial on Python, a class is defined using this structure:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">MyClass</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -465,7 +480,7 @@
     <div class='prev-next-bottom'>
         
     <a class='left-prev' id="prev-link" href="ex3-Sampling.html" title="previous page"><span class="section-number">3. </span>Sampling</a>
-    <a class='right-next' id="next-link" href="3-Sampling-solution.html" title="next page"><span class="section-number">3.2.2. </span>Sampling</a>
+    <a class='right-next' id="next-link" href="3-Sampling-solution.html" title="next page"><span class="section-number">3.2. </span>Sampling</a>
 
     </div>
     <footer class="footer mt-5 mt-md-0">
