@@ -2,6 +2,7 @@
 
 Slides: [pdf](https://www.tu-chemnitz.de/informatik/KI/edu/deeprl/lectures/pdf/3.2-BeyondDQN.pdf)
 
+
 ## Distributional learning : Categorical DQN
 
 <div class='embed-container'><iframe src='https://www.youtube.com/embed/PrpYGb8p4tI' frameborder='0' allowfullscreen></iframe></div>
@@ -309,27 +310,27 @@ Noisy networks outperform their $\epsilon$-soft variants. Source: {cite}`Fortuna
 
 We have seen various improvements over a few years (2013-2017):
 
-* Original DQN (Mnih et al., 2013 {cite}`Mnih2013`)
+* Original DQN {cite}`Mnih2013`
 
 $$\mathcal{L}(\theta) = \mathbb{E}_\mathcal{D} [(r + \gamma \, Q_{\theta'}(s´, \text{argmax}_{a'} Q_{\theta'}(s', a')) - Q_\theta(s, a))^2]$$
 
-* Double DQN (van Hasselt, Guez and Silver, 2015 {cite}`vanHasselt2015`)
+* Double DQN {cite}`vanHasselt2015`
 
 $$\mathcal{L}(\theta) = \mathbb{E}_\mathcal{D} [(r + \gamma \, Q_{\theta'}(s´, \text{argmax}_{a'} Q_{\theta}(s', a')) - Q_\theta(s, a))^2]$$
 
-* Prioritized Experience Replay (Schaul et al., 2015 {cite}`Schaul2015`)
+* Prioritized Experience Replay  {cite}`Schaul2015`
 
 $$P(k) = \frac{(|\delta_k| + \epsilon)^\alpha}{\sum_k (|\delta_k| + \epsilon)^\alpha}$$
 
-* Dueling DQN (Wang et al., 2016 {cite}`Wang2016`)
+* Dueling DQN {cite}`Wang2016`
 
 $$Q_\theta(s, a) = V_\alpha(s) + A_\beta(s, a)$$
 
-* Categorical DQN (Bellemare, Dabney and Munos, 2017 {cite}`Bellemare2017`)
+* Categorical DQN {cite}`Bellemare2017`
 
 $$\mathcal{L}(\theta) = \mathbb{E}_{\mathcal{D}_s}[ - \mathbf{t}_k \, \log Z_\theta(s_k, a_k)]$$
 
-* NoisyNet (Fortunato et al.,  2017 {cite}`Fortunato2017`)
+* NoisyNet {cite}`Fortunato2017`
 
 $$\theta = \mu_\theta + \sigma_\theta \, \epsilon$$
 

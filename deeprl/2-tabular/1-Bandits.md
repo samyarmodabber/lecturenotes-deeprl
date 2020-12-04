@@ -1,13 +1,11 @@
 # Bandits
 
-
 Slides: [pdf](https://www.tu-chemnitz.de/informatik/KI/edu/deeprl/lectures/pdf/2.1-Bandits.pdf)
 
 
 ## n-armed bandits
 
 <div class='embed-container'><iframe src='https://www.youtube.com/embed/PVKWm3rrIOc' frameborder='0' allowfullscreen></iframe></div>
-
 
 RL evaluates actions through **trial-and-error** rather than comparing its predictions to the correct actions. This is called **evaluative feedback**, as the feedback depends completely on the action taken. Oppositely, supervised learning is a form of **instructive feedback**, as the targets (labels / ground truth) do not depend at all on the prediction. 
 

@@ -1,5 +1,5 @@
 # Bibliography
 
 ```{bibliography} ReinforcementLearning.bib
-:style: alpha
+:style: apa
 ```

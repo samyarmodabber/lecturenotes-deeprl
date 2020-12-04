@@ -9,8 +9,8 @@
     <title>6. Function approximation &#8212; Deep Reinforcement Learning</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" integrity="sha384-KA6wR/X5RY4zFAHpv/CnoG2UW1uogYfdnP67Uv7eULvTveboZJg0qUpmJZb5VqzN" crossorigin="anonymous">
     <link href="../_static/css/index.css" rel="stylesheet">
-    <link rel="stylesheet" href="../_static/sphinx-book-theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/sphinx-book-theme.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
@@ -157,12 +157,17 @@
 <ul class="nav sidenav_l1">
  <li class="toctree-l1">
   <a class="reference internal" href="../3-MF/1-DQN.html">
-   1. Deep Q-Learning
+   1. Deep Q-Learning (DQN)
   </a>
  </li>
  <li class="toctree-l1">
   <a class="reference internal" href="../3-MF/2-BeyondDQN.html">
    2. Beyond DQN
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../3-MF/3-PG.html">
+   3. Policy gradient
   </a>
  </li>
 </ul>
@@ -709,17 +714,17 @@ Semi-gradient TD has less variance, but a significant bias as <span class="math 
 <p>The Fourier theorem tells us that, if we take enough frequencies, we can reconstruct the signal <span class="math notranslate nohighlight">\(V_\varphi(s)\)</span> perfectly.</p>
 <div class="figure align-default" id="id19">
 <a class="reference internal image-reference" href="../_images/featurecoding-fourier1.png"><img alt="../_images/featurecoding-fourier1.png" src="../_images/featurecoding-fourier1.png" style="width: 100%;" /></a>
-<p class="caption"><span class="caption-number">Fig. 6.12 </span><span class="caption-text">Fourier transform in 1D. Source: <a class="bibtex reference internal" href="../zreferences.html#sutton1998" id="id2">[SB98]</a>.</span><a class="headerlink" href="#id19" title="Permalink to this image">¶</a></p>
+<p class="caption"><span class="caption-number">Fig. 6.12 </span><span class="caption-text">Fourier transform in 1D. Source: <a class="bibtex reference internal" href="../zreferences.html#sutton1998" id="id2">[Sutton &amp; Barto, 1998]</a>.</span><a class="headerlink" href="#id19" title="Permalink to this image">¶</a></p>
 </div>
 <p>It is just a change of basis, the problem stays a linear regression to find <span class="math notranslate nohighlight">\(w_0, w_1, w_2\)</span>, etc.</p>
 <p>Fourier transforms can be applied on multivariate functions as well.</p>
 <div class="figure align-default" id="id20">
 <a class="reference internal image-reference" href="../_images/featurecoding-fourier2.png"><img alt="../_images/featurecoding-fourier2.png" src="../_images/featurecoding-fourier2.png" style="width: 100%;" /></a>
-<p class="caption"><span class="caption-number">Fig. 6.13 </span><span class="caption-text">Fourier transform in 2D. Source: <a class="bibtex reference internal" href="../zreferences.html#sutton1998" id="id3">[SB98]</a>.</span><a class="headerlink" href="#id20" title="Permalink to this image">¶</a></p>
+<p class="caption"><span class="caption-number">Fig. 6.13 </span><span class="caption-text">Fourier transform in 2D. Source: <a class="bibtex reference internal" href="../zreferences.html#sutton1998" id="id3">[Sutton &amp; Barto, 1998]</a>.</span><a class="headerlink" href="#id20" title="Permalink to this image">¶</a></p>
 </div>
 <div class="figure align-default" id="id21">
 <a class="reference internal image-reference" href="../_images/featurecoding-fourier3.png"><img alt="../_images/featurecoding-fourier3.png" src="../_images/featurecoding-fourier3.png" style="width: 100%;" /></a>
-<p class="caption"><span class="caption-number">Fig. 6.14 </span><span class="caption-text">Comparison of polynomial and Fourier features. Source: <a class="bibtex reference internal" href="../zreferences.html#sutton1998" id="id4">[SB98]</a>.</span><a class="headerlink" href="#id21" title="Permalink to this image">¶</a></p>
+<p class="caption"><span class="caption-number">Fig. 6.14 </span><span class="caption-text">Comparison of polynomial and Fourier features. Source: <a class="bibtex reference internal" href="../zreferences.html#sutton1998" id="id4">[Sutton &amp; Barto, 1998]</a>.</span><a class="headerlink" href="#id21" title="Permalink to this image">¶</a></p>
 </div>
 <p>A Fourier basis tends to work better than a polynomial basis. The main problem is that the number of features increases very fast with the number of input dimensions and  the desired precision (higher-order polynomials, more frequencies).</p>
 </div>
@@ -740,7 +745,7 @@ Semi-gradient TD has less variance, but a significant bias as <span class="math 
 <p>A more efficient solution is <strong>coarse coding</strong>. The tiles (rectangles, circles, or what you need) need to <strong>overlap</strong>.</p>
 <div class="figure align-default" id="id23">
 <a class="reference internal image-reference" href="../_images/featurecoding-tile2.png"><img alt="../_images/featurecoding-tile2.png" src="../_images/featurecoding-tile2.png" style="width: 60%;" /></a>
-<p class="caption"><span class="caption-number">Fig. 6.16 </span><span class="caption-text">Coarse coding uses overlapping tiles. Source: <a class="bibtex reference internal" href="../zreferences.html#sutton1998" id="id5">[SB98]</a>.</span><a class="headerlink" href="#id23" title="Permalink to this image">¶</a></p>
+<p class="caption"><span class="caption-number">Fig. 6.16 </span><span class="caption-text">Coarse coding uses overlapping tiles. Source: <a class="bibtex reference internal" href="../zreferences.html#sutton1998" id="id5">[Sutton &amp; Barto, 1998]</a>.</span><a class="headerlink" href="#id23" title="Permalink to this image">¶</a></p>
 </div>
 <p>A state <span class="math notranslate nohighlight">\(s\)</span> is encoded by a <strong>binary vector</strong>, but with several 1, for each tile it belongs.</p>
 <div class="math notranslate nohighlight">
@@ -748,7 +753,7 @@ Semi-gradient TD has less variance, but a significant bias as <span class="math 
 <p>This allows generalization inside a tile, but also <strong>across tiles</strong>. The size and shape of the <strong>“receptive field”</strong> influences the generalization properties.</p>
 <div class="figure align-default" id="id24">
 <a class="reference internal image-reference" href="../_images/featurecoding-tile4.png"><img alt="../_images/featurecoding-tile4.png" src="../_images/featurecoding-tile4.png" style="width: 90%;" /></a>
-<p class="caption"><span class="caption-number">Fig. 6.17 </span><span class="caption-text">The overlap between tiles defines the generalization. Source: <a class="bibtex reference internal" href="../zreferences.html#sutton1998" id="id6">[SB98]</a>.</span><a class="headerlink" href="#id24" title="Permalink to this image">¶</a></p>
+<p class="caption"><span class="caption-number">Fig. 6.17 </span><span class="caption-text">The overlap between tiles defines the generalization. Source: <a class="bibtex reference internal" href="../zreferences.html#sutton1998" id="id6">[Sutton &amp; Barto, 1998]</a>.</span><a class="headerlink" href="#id24" title="Permalink to this image">¶</a></p>
 </div>
 </div>
 <div class="section" id="tile-coding">
@@ -756,7 +761,7 @@ Semi-gradient TD has less variance, but a significant bias as <span class="math 
 <p>A simple way to ensure that tiles overlap is to use several regular grids with an <strong>offset</strong>. Each tiling will be <strong>coarse</strong>, but the location of a state will be quite precise as it may belong to many tiles.</p>
 <div class="figure align-default" id="id25">
 <a class="reference internal image-reference" href="../_images/featurecoding-tile3.png"><img alt="../_images/featurecoding-tile3.png" src="../_images/featurecoding-tile3.png" style="width: 100%;" /></a>
-<p class="caption"><span class="caption-number">Fig. 6.18 </span><span class="caption-text">Tile coding. Source: <a class="bibtex reference internal" href="../zreferences.html#sutton1998" id="id7">[SB98]</a>.</span><a class="headerlink" href="#id25" title="Permalink to this image">¶</a></p>
+<p class="caption"><span class="caption-number">Fig. 6.18 </span><span class="caption-text">Tile coding. Source: <a class="bibtex reference internal" href="../zreferences.html#sutton1998" id="id7">[Sutton &amp; Barto, 1998]</a>.</span><a class="headerlink" href="#id25" title="Permalink to this image">¶</a></p>
 </div>
 <p>This helps against the curse of dimensionality: high precision, but the number of tiles does not grow exponentially.</p>
 </div>

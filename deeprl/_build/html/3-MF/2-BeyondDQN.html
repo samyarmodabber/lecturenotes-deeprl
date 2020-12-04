@@ -9,8 +9,8 @@
     <title>2. Beyond DQN &#8212; Deep Reinforcement Learning</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" integrity="sha384-KA6wR/X5RY4zFAHpv/CnoG2UW1uogYfdnP67Uv7eULvTveboZJg0qUpmJZb5VqzN" crossorigin="anonymous">
     <link href="../_static/css/index.css" rel="stylesheet">
-    <link rel="stylesheet" href="../_static/sphinx-book-theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/sphinx-book-theme.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
@@ -40,8 +40,8 @@
     <link rel="canonical" href="https://julien-vitay.net/lecturenotes-deeprl/3-MF/2-BeyondDQN.html" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="1. Introduction to Python" href="../5-exercises/ex1-Python.html" />
-    <link rel="prev" title="1. Deep Q-Learning" href="1-DQN.html" />
+    <link rel="next" title="3. Policy gradient" href="3-PG.html" />
+    <link rel="prev" title="1. Deep Q-Learning (DQN)" href="1-DQN.html" />
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="docsearch:language" content="en">
@@ -157,12 +157,17 @@
 <ul class="current nav sidenav_l1">
  <li class="toctree-l1">
   <a class="reference internal" href="1-DQN.html">
-   1. Deep Q-Learning
+   1. Deep Q-Learning (DQN)
   </a>
  </li>
  <li class="toctree-l1 current active">
   <a class="current reference internal" href="#">
    2. Beyond DQN
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="3-PG.html">
+   3. Policy gradient
   </a>
  </li>
 </ul>
@@ -418,7 +423,7 @@
 <p>Note that we can always obtain the Q-values back:</p>
 <div class="math notranslate nohighlight">
 \[Q^\pi(s, a) = \mathbb{E}_\pi [\mathcal{Z}^\pi(s, a)]\]</div>
-<p>In categorical DQN <a class="bibtex reference internal" href="../zreferences.html#bellemare2017" id="id1">[BDM17]</a>, they model the distribution of returns as a <strong>discrete probability distribution</strong>: the <strong>categorical</strong> or <strong>multinouilli</strong> distribution. One first needs to identify the minimum and maximum returns <span class="math notranslate nohighlight">\(R_\text{min}\)</span> and <span class="math notranslate nohighlight">\(R_\text{max}\)</span> possible in the problem.
+<p>In categorical DQN <a class="bibtex reference internal" href="../zreferences.html#bellemare2017" id="id1">[Bellemare et al., 2017]</a>, they model the distribution of returns as a <strong>discrete probability distribution</strong>: the <strong>categorical</strong> or <strong>multinouilli</strong> distribution. One first needs to identify the minimum and maximum returns <span class="math notranslate nohighlight">\(R_\text{min}\)</span> and <span class="math notranslate nohighlight">\(R_\text{max}\)</span> possible in the problem.
 One then splits the range <span class="math notranslate nohighlight">\([R_\text{min}, R_\text{max}]\)</span> in <span class="math notranslate nohighlight">\(n\)</span> <strong>discrete bins</strong> centered on the atoms <span class="math notranslate nohighlight">\(\{z_i\}_{i=1}^N\)</span>.</p>
 <p>The probability that the return obtained the action <span class="math notranslate nohighlight">\((s, a)\)</span> lies in the bin of the atom <span class="math notranslate nohighlight">\(z_i\)</span> is noted <span class="math notranslate nohighlight">\(p_i(s, a)\)</span>. It can be approximated by a neural network <span class="math notranslate nohighlight">\(F\)</span> with parameters <span class="math notranslate nohighlight">\(\theta\)</span>, using a <strong>softmax output layer</strong>:</p>
 <div class="math notranslate nohighlight">
@@ -537,10 +542,10 @@ One then splits the range <span class="math notranslate nohighlight">\([R_\text{
 </li>
 </ul>
 </div>
-<p>In practice, the computation of the cross-entropy loss is described in <a class="bibtex reference internal" href="../zreferences.html#bellemare2017" id="id2">[BDM17]</a>:</p>
+<p>In practice, the computation of the cross-entropy loss is described in <a class="bibtex reference internal" href="../zreferences.html#bellemare2017" id="id2">[Bellemare et al., 2017]</a>:</p>
 <div class="figure align-default" id="id37">
 <a class="reference internal image-reference" href="../_images/categorical-dqn-algo.png"><img alt="../_images/categorical-dqn-algo.png" src="../_images/categorical-dqn-algo.png" style="width: 70%;" /></a>
-<p class="caption"><span class="caption-number">Fig. 2.39 </span><span class="caption-text">Computation of the cross-entropy loss in <a class="bibtex reference internal" href="../zreferences.html#bellemare2017" id="id3">[BDM17]</a>.</span><a class="headerlink" href="#id37" title="Permalink to this image">¶</a></p>
+<p class="caption"><span class="caption-number">Fig. 2.39 </span><span class="caption-text">Computation of the cross-entropy loss in <a class="bibtex reference internal" href="../zreferences.html#bellemare2017" id="id3">[Bellemare et al., 2017]</a>.</span><a class="headerlink" href="#id37" title="Permalink to this image">¶</a></p>
 </div>
 <p>Having the full distribution of returns allow to deal with <strong>uncertainty</strong>. For certain actions in critical states, one could get a high return (killing an enemy) or no return (death). The distribution reflects that the agent is not certain of the goodness of the action. Expectations would not provide this information.</p>
 <div class="figure align-default" id="id38">
@@ -549,19 +554,19 @@ One then splits the range <span class="math notranslate nohighlight">\([R_\text{
 </div>
 <div class="figure align-default" id="id39">
 <a class="reference internal image-reference" href="../_images/categorical-dqn-results1.png"><img alt="../_images/categorical-dqn-results1.png" src="../_images/categorical-dqn-results1.png" style="width: 70%;" /></a>
-<p class="caption"><span class="caption-number">Fig. 2.41 </span><span class="caption-text">C51 outperforms both DQN and humans on Atari games. Source <a class="bibtex reference internal" href="../zreferences.html#bellemare2017" id="id4">[BDM17]</a>.</span><a class="headerlink" href="#id39" title="Permalink to this image">¶</a></p>
+<p class="caption"><span class="caption-number">Fig. 2.41 </span><span class="caption-text">C51 outperforms both DQN and humans on Atari games. Source <a class="bibtex reference internal" href="../zreferences.html#bellemare2017" id="id4">[Bellemare et al., 2017]</a>.</span><a class="headerlink" href="#id39" title="Permalink to this image">¶</a></p>
 </div>
 <div class="figure align-default" id="id40">
 <a class="reference internal image-reference" href="../_images/categorical-dqn-results2.png"><img alt="../_images/categorical-dqn-results2.png" src="../_images/categorical-dqn-results2.png" style="width: 80%;" /></a>
-<p class="caption"><span class="caption-number">Fig. 2.42 </span><span class="caption-text">C51 outperforms double DQN on most games. Source <a class="bibtex reference internal" href="../zreferences.html#bellemare2017" id="id5">[BDM17]</a>.</span><a class="headerlink" href="#id40" title="Permalink to this image">¶</a></p>
+<p class="caption"><span class="caption-number">Fig. 2.42 </span><span class="caption-text">C51 outperforms double DQN on most games. Source <a class="bibtex reference internal" href="../zreferences.html#bellemare2017" id="id5">[Bellemare et al., 2017]</a>.</span><a class="headerlink" href="#id40" title="Permalink to this image">¶</a></p>
 </div>
 <div class='embed-container'><iframe src='https://www.youtube.com/embed/yFBwyPuO2Vg' frameborder='0' allowfullscreen></iframe></div>
 <div class='embed-container'><iframe src='https://www.youtube.com/embed/d1yz4PNFUjI' frameborder='0' allowfullscreen></iframe></div>
 <p>Other variants of distributional learning include:</p>
 <ul class="simple">
-<li><p><strong>QR-DQN</strong> Distributional Reinforcement Learning with Quantile Regression <a class="bibtex reference internal" href="../zreferences.html#dabney2017" id="id6">[DRBM17]</a>.</p></li>
-<li><p><strong>IQN</strong> Implicit Quantile Networks for Distributional Reinforcement Learning <a class="bibtex reference internal" href="../zreferences.html#dabney2018" id="id7">[DOSM18]</a>.</p></li>
-<li><p><strong>The Reactor:</strong> A fast and sample-efficient Actor-Critic agent for Reinforcement Learning <a class="bibtex reference internal" href="../zreferences.html#gruslys2017" id="id8">[GDA+17]</a>.</p></li>
+<li><p><strong>QR-DQN</strong> Distributional Reinforcement Learning with Quantile Regression <a class="bibtex reference internal" href="../zreferences.html#dabney2017" id="id6">[Dabney et al., 2017]</a>.</p></li>
+<li><p><strong>IQN</strong> Implicit Quantile Networks for Distributional Reinforcement Learning <a class="bibtex reference internal" href="../zreferences.html#dabney2018" id="id7">[Dabney et al., 2018]</a>.</p></li>
+<li><p><strong>The Reactor:</strong> A fast and sample-efficient Actor-Critic agent for Reinforcement Learning <a class="bibtex reference internal" href="../zreferences.html#gruslys2017" id="id8">[Gruslys et al., 2017]</a>.</p></li>
 </ul>
 </div>
 </div>
@@ -580,7 +585,7 @@ One then splits the range <span class="math notranslate nohighlight">\([R_\text{
 </div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>A very similar idea was proposed by OpenAI at the same ICLR conference: <a class="bibtex reference internal" href="../zreferences.html#plappert2018" id="id9">[PHD+18]</a></p>
+<p>A very similar idea was proposed by OpenAI at the same ICLR conference: <a class="bibtex reference internal" href="../zreferences.html#plappert2018" id="id9">[Plappert et al., 2018]</a></p>
 </div>
 <p>Parameter noise builds on the idea of <strong>Bayesian deep learning</strong>. Instead of learning a single value of the parameters:</p>
 <div class="math notranslate nohighlight">
@@ -601,10 +606,10 @@ One then splits the range <span class="math notranslate nohighlight">\([R_\text{
 </div>
 <p>As the random variables <span class="math notranslate nohighlight">\(\epsilon_i  \sim \mathcal{N}(0, 1)\)</span> are not correlated with anything, the variances <span class="math notranslate nohighlight">\(\sigma_\theta^2\)</span> should decay to 0. The variances <span class="math notranslate nohighlight">\(\sigma_\theta^2\)</span> represent the <strong>uncertainty</strong> about the prediction <span class="math notranslate nohighlight">\(y\)</span>.</p>
 <p>Applied to DQN, this means that a state which has not been visited very often will have a high uncertainty: The predicted Q-values will change a lot between two evaluations, so the greedy action might change: <strong>exploration</strong>. Conversely, a well-explored state will have a low uncertainty: The greedy action stays the same: <strong>exploitation</strong>.</p>
-<p>Noisy DQN <a class="bibtex reference internal" href="../zreferences.html#fortunato2017" id="id10">[FAP+17]</a> uses <strong>greedy action selection</strong> over noisy Q-values. The level of exploration is <strong>learned</strong> by the network on a per-state basis. No need for scheduling! <strong>Parameter noise</strong> improves the performance of <span class="math notranslate nohighlight">\(\epsilon\)</span>-greedy-based methods, including DQN, dueling DQN, A3C, DDPG (see later), etc.</p>
+<p>Noisy DQN <a class="bibtex reference internal" href="../zreferences.html#fortunato2017" id="id10">[Fortunato et al., 2017]</a> uses <strong>greedy action selection</strong> over noisy Q-values. The level of exploration is <strong>learned</strong> by the network on a per-state basis. No need for scheduling! <strong>Parameter noise</strong> improves the performance of <span class="math notranslate nohighlight">\(\epsilon\)</span>-greedy-based methods, including DQN, dueling DQN, A3C, DDPG (see later), etc.</p>
 <div class="figure align-default" id="id44">
 <a class="reference internal image-reference" href="../_images/noisydqn2.png"><img alt="../_images/noisydqn2.png" src="../_images/noisydqn2.png" style="width: 100%;" /></a>
-<p class="caption"><span class="caption-number">Fig. 2.46 </span><span class="caption-text">Noisy networks outperform their <span class="math notranslate nohighlight">\(\epsilon\)</span>-soft variants. Source: <a class="bibtex reference internal" href="../zreferences.html#fortunato2017" id="id11">[FAP+17]</a>.</span><a class="headerlink" href="#id44" title="Permalink to this image">¶</a></p>
+<p class="caption"><span class="caption-number">Fig. 2.46 </span><span class="caption-text">Noisy networks outperform their <span class="math notranslate nohighlight">\(\epsilon\)</span>-soft variants. Source: <a class="bibtex reference internal" href="../zreferences.html#fortunato2017" id="id11">[Fortunato et al., 2017]</a>.</span><a class="headerlink" href="#id44" title="Permalink to this image">¶</a></p>
 </div>
 </div>
 <div class="section" id="rainbow-network">
@@ -612,41 +617,41 @@ One then splits the range <span class="math notranslate nohighlight">\([R_\text{
 <div class='embed-container'><iframe src='https://www.youtube.com/embed/Buesu_jGg8Y' frameborder='0' allowfullscreen></iframe></div>
 <p>We have seen various improvements over a few years (2013-2017):</p>
 <ul class="simple">
-<li><p>Original DQN (Mnih et al., 2013 <a class="bibtex reference internal" href="../zreferences.html#mnih2013" id="id12">[MKS+13]</a>)</p></li>
+<li><p>Original DQN <a class="bibtex reference internal" href="../zreferences.html#mnih2013" id="id12">[Mnih et al., 2013]</a></p></li>
 </ul>
 <div class="math notranslate nohighlight">
 \[\mathcal{L}(\theta) = \mathbb{E}_\mathcal{D} [(r + \gamma \, Q_{\theta'}(s´, \text{argmax}_{a'} Q_{\theta'}(s', a')) - Q_\theta(s, a))^2]\]</div>
 <ul class="simple">
-<li><p>Double DQN (van Hasselt, Guez and Silver, 2015 <a class="bibtex reference internal" href="../zreferences.html#vanhasselt2015" id="id13">[vanHasseltGS15]</a>)</p></li>
+<li><p>Double DQN <a class="bibtex reference internal" href="../zreferences.html#vanhasselt2015" id="id13">[van Hasselt et al., 2015]</a></p></li>
 </ul>
 <div class="math notranslate nohighlight">
 \[\mathcal{L}(\theta) = \mathbb{E}_\mathcal{D} [(r + \gamma \, Q_{\theta'}(s´, \text{argmax}_{a'} Q_{\theta}(s', a')) - Q_\theta(s, a))^2]\]</div>
 <ul class="simple">
-<li><p>Prioritized Experience Replay (Schaul et al., 2015 <a class="bibtex reference internal" href="../zreferences.html#schaul2015" id="id14">[SQAS15]</a>)</p></li>
+<li><p>Prioritized Experience Replay  <a class="bibtex reference internal" href="../zreferences.html#schaul2015" id="id14">[Schaul et al., 2015]</a></p></li>
 </ul>
 <div class="math notranslate nohighlight">
 \[P(k) = \frac{(|\delta_k| + \epsilon)^\alpha}{\sum_k (|\delta_k| + \epsilon)^\alpha}\]</div>
 <ul class="simple">
-<li><p>Dueling DQN (Wang et al., 2016 <a class="bibtex reference internal" href="../zreferences.html#wang2016" id="id15">[WSH+16]</a>)</p></li>
+<li><p>Dueling DQN <a class="bibtex reference internal" href="../zreferences.html#wang2016" id="id15">[Wang et al., 2016]</a></p></li>
 </ul>
 <div class="math notranslate nohighlight">
 \[Q_\theta(s, a) = V_\alpha(s) + A_\beta(s, a)\]</div>
 <ul class="simple">
-<li><p>Categorical DQN (Bellemare, Dabney and Munos, 2017 <a class="bibtex reference internal" href="../zreferences.html#bellemare2017" id="id16">[BDM17]</a>)</p></li>
+<li><p>Categorical DQN <a class="bibtex reference internal" href="../zreferences.html#bellemare2017" id="id16">[Bellemare et al., 2017]</a></p></li>
 </ul>
 <div class="math notranslate nohighlight">
 \[\mathcal{L}(\theta) = \mathbb{E}_{\mathcal{D}_s}[ - \mathbf{t}_k \, \log Z_\theta(s_k, a_k)]\]</div>
 <ul class="simple">
-<li><p>NoisyNet (Fortunato et al.,  2017 <a class="bibtex reference internal" href="../zreferences.html#fortunato2017" id="id17">[FAP+17]</a>)</p></li>
+<li><p>NoisyNet <a class="bibtex reference internal" href="../zreferences.html#fortunato2017" id="id17">[Fortunato et al., 2017]</a></p></li>
 </ul>
 <div class="math notranslate nohighlight">
 \[\theta = \mu_\theta + \sigma_\theta \, \epsilon\]</div>
 <p>Which of these improvements should we use?</p>
 <div class="figure align-default" id="id45">
 <a class="reference internal image-reference" href="../_images/rainbow-results1.png"><img alt="../_images/rainbow-results1.png" src="../_images/rainbow-results1.png" style="width: 80%;" /></a>
-<p class="caption"><span class="caption-number">Fig. 2.47 </span><span class="caption-text">The Rainbow network combines all DQN improvements and outperforms each of them. Source: <a class="bibtex reference internal" href="../zreferences.html#hessel2017" id="id18">[HMvanHasselt+17]</a>.</span><a class="headerlink" href="#id45" title="Permalink to this image">¶</a></p>
+<p class="caption"><span class="caption-number">Fig. 2.47 </span><span class="caption-text">The Rainbow network combines all DQN improvements and outperforms each of them. Source: <a class="bibtex reference internal" href="../zreferences.html#hessel2017" id="id18">[Hessel et al., 2017]</a>.</span><a class="headerlink" href="#id45" title="Permalink to this image">¶</a></p>
 </div>
-<p>Answer: all of them. The <strong>rainbow network</strong> <a class="bibtex reference internal" href="../zreferences.html#hessel2017" id="id19">[HMvanHasselt+17]</a> combines :</p>
+<p>Answer: all of them. The <strong>rainbow network</strong> <a class="bibtex reference internal" href="../zreferences.html#hessel2017" id="id19">[Hessel et al., 2017]</a> combines :</p>
 <ul class="simple">
 <li><p>double dueling DQN with PER.</p></li>
 <li><p>categorical learning of return distributions.</p></li>
@@ -658,7 +663,7 @@ One then splits the range <span class="math notranslate nohighlight">\([R_\text{
 <p>and outperforms any of the single improvements.</p>
 <div class="figure align-default" id="id46">
 <a class="reference internal image-reference" href="../_images/rainbow-results2.png"><img alt="../_images/rainbow-results2.png" src="../_images/rainbow-results2.png" style="width: 80%;" /></a>
-<p class="caption"><span class="caption-number">Fig. 2.48 </span><span class="caption-text">Ablation studies on the Rainbow network. Source: <a class="bibtex reference internal" href="../zreferences.html#hessel2017" id="id20">[HMvanHasselt+17]</a>.</span><a class="headerlink" href="#id46" title="Permalink to this image">¶</a></p>
+<p class="caption"><span class="caption-number">Fig. 2.48 </span><span class="caption-text">Ablation studies on the Rainbow network. Source: <a class="bibtex reference internal" href="../zreferences.html#hessel2017" id="id20">[Hessel et al., 2017]</a>.</span><a class="headerlink" href="#id46" title="Permalink to this image">¶</a></p>
 </div>
 <p>Most of these mechanisms are necessary to achieve optimal performance (<strong>ablation studies</strong>). n-step returns, PER and distributional learning are the most critical. Interestingly, double Q-learning does not have a huge effect on the Rainbow network: The other mechanisms (especially distributional learning) already ensure that Q-values are not over-estimated.</p>
 <p>You can find good implementations of Rainbow DQN on all major frameworks, for example on <code class="docutils literal notranslate"><span class="pre">rllib</span></code>:</p>
@@ -676,30 +681,30 @@ One then splits the range <span class="math notranslate nohighlight">\([R_\text{
 </ul>
 <div class="figure align-default" id="id47">
 <a class="reference internal image-reference" href="../_images/gorila1.png"><img alt="../_images/gorila1.png" src="../_images/gorila1.png" style="width: 90%;" /></a>
-<p class="caption"><span class="caption-number">Fig. 2.49 </span><span class="caption-text">The DQN value network is both an actor and a learner, as it needs to sequentially select actions and learn from the replay memory. Source: <a class="bibtex reference internal" href="../zreferences.html#nair2015" id="id21">[NSB+15]</a>.</span><a class="headerlink" href="#id47" title="Permalink to this image">¶</a></p>
+<p class="caption"><span class="caption-number">Fig. 2.49 </span><span class="caption-text">The DQN value network is both an actor and a learner, as it needs to sequentially select actions and learn from the replay memory. Source: <a class="bibtex reference internal" href="../zreferences.html#nair2015" id="id21">[Nair et al., 2015]</a>.</span><a class="headerlink" href="#id47" title="Permalink to this image">¶</a></p>
 </div>
 <p>The weights of the value network lie on the same CPU/GPU, so the two jobs have to be done sequentially: <strong>computational bottleneck</strong>. DQN cannot benefit from <strong>parallel computing</strong>: multi-core CPU, clusters of CPU/GPU, etc.</p>
-<p>The Gorila framework <a class="bibtex reference internal" href="../zreferences.html#nair2015" id="id22">[NSB+15]</a> splits DQN into <strong>multiple actors</strong> and <strong>multiple learners</strong>. Each actor (or worker) <strong>interacts</strong> with its copy of the environment and stores transitions in a distributed replay buffer. Each learner samples minibatches from the replay buffer and computes <strong>gradients</strong> w.r.t the DQN loss. The parameter server (<strong>master network</strong>) applies the gradients on the parameters and frequently <strong>synchronizes</strong> the actors and learners.</p>
+<p>The Gorila framework <a class="bibtex reference internal" href="../zreferences.html#nair2015" id="id22">[Nair et al., 2015]</a> splits DQN into <strong>multiple actors</strong> and <strong>multiple learners</strong>. Each actor (or worker) <strong>interacts</strong> with its copy of the environment and stores transitions in a distributed replay buffer. Each learner samples minibatches from the replay buffer and computes <strong>gradients</strong> w.r.t the DQN loss. The parameter server (<strong>master network</strong>) applies the gradients on the parameters and frequently <strong>synchronizes</strong> the actors and learners.</p>
 <div class="figure align-default" id="id48">
 <a class="reference internal image-reference" href="../_images/gorila2.png"><img alt="../_images/gorila2.png" src="../_images/gorila2.png" style="width: 90%;" /></a>
-<p class="caption"><span class="caption-number">Fig. 2.50 </span><span class="caption-text">The Gorila framework uses multiple actors to collect transitions and store them in the ERM. The learners sample the ERM and compute the gradients of the DQN loss function. The parameter servers collect the gradients and synchronize the parameters of the actors and learners. Source: <a class="bibtex reference internal" href="../zreferences.html#nair2015" id="id23">[NSB+15]</a>.</span><a class="headerlink" href="#id48" title="Permalink to this image">¶</a></p>
+<p class="caption"><span class="caption-number">Fig. 2.50 </span><span class="caption-text">The Gorila framework uses multiple actors to collect transitions and store them in the ERM. The learners sample the ERM and compute the gradients of the DQN loss function. The parameter servers collect the gradients and synchronize the parameters of the actors and learners. Source: <a class="bibtex reference internal" href="../zreferences.html#nair2015" id="id23">[Nair et al., 2015]</a>.</span><a class="headerlink" href="#id48" title="Permalink to this image">¶</a></p>
 </div>
 <p>Gorila allows to train DQN on parallel hardware (e.g. clusters of GPU) as long as the environment can be copied (simulation).</p>
 <div class="figure align-default" id="id49">
 <a class="reference internal image-reference" href="../_images/gorila-results1.png"><img alt="../_images/gorila-results1.png" src="../_images/gorila-results1.png" style="width: 90%;" /></a>
-<p class="caption"><span class="caption-number">Fig. 2.51 </span><span class="caption-text">The Gorila framework allows to slightly improve the performance of DQN on Atari games… Source: <a class="bibtex reference internal" href="../zreferences.html#nair2015" id="id24">[NSB+15]</a>.</span><a class="headerlink" href="#id49" title="Permalink to this image">¶</a></p>
+<p class="caption"><span class="caption-number">Fig. 2.51 </span><span class="caption-text">The Gorila framework allows to slightly improve the performance of DQN on Atari games… Source: <a class="bibtex reference internal" href="../zreferences.html#nair2015" id="id24">[Nair et al., 2015]</a>.</span><a class="headerlink" href="#id49" title="Permalink to this image">¶</a></p>
 </div>
 <p>The final performance is not incredibly better than single-GPU DQN, but obtained much faster in wall-clock time (2 days instead of 12-14 days on a single GPU).</p>
 <div class="figure align-default" id="id50">
 <a class="reference internal image-reference" href="../_images/gorila-results2.png"><img alt="../_images/gorila-results2.png" src="../_images/gorila-results2.png" style="width: 70%;" /></a>
-<p class="caption"><span class="caption-number">Fig. 2.52 </span><span class="caption-text">… but that performance is achieved in a much smaller wall-clock time. Source: <a class="bibtex reference internal" href="../zreferences.html#nair2015" id="id25">[NSB+15]</a>.</span><a class="headerlink" href="#id50" title="Permalink to this image">¶</a></p>
+<p class="caption"><span class="caption-number">Fig. 2.52 </span><span class="caption-text">… but that performance is achieved in a much smaller wall-clock time. Source: <a class="bibtex reference internal" href="../zreferences.html#nair2015" id="id25">[Nair et al., 2015]</a>.</span><a class="headerlink" href="#id50" title="Permalink to this image">¶</a></p>
 </div>
 </div>
 <div class="section" id="ape-x">
 <h3><span class="section-number">2.4.2. </span>Ape-X<a class="headerlink" href="#ape-x" title="Permalink to this headline">¶</a></h3>
 <p>With more experience, Deepmind realized that a single learner is better. Distributed SGD (computing gradients with different learners) is not very efficient. What matters is collecting transitions very quickly (multiple workers) but using <strong>prioritized experience replay</strong> to learn from the most interesting ones.</p>
 <p><img alt="" src="../_images/apex.png" /></p>
-<p>Using 360 workers (1 per CPU core), Ape-X <a class="bibtex reference internal" href="../zreferences.html#horgan2018" id="id26">[HQB+18]</a> reaches super-human performance for a fraction of the wall-clock training time.</p>
+<p>Using 360 workers (1 per CPU core), Ape-X <a class="bibtex reference internal" href="../zreferences.html#horgan2018" id="id26">[Horgan et al., 2018]</a> reaches super-human performance for a fraction of the wall-clock training time.</p>
 <p><img alt="" src="../_images/apex-results.png" /></p>
 <p>The multiple parallel workers can collect much more frames, leading to the better performance. The learner uses n-step returns and the double dueling DQN network architecture, so it is not much different from Rainbow DQN internally.</p>
 <p><img alt="" src="../_images/apex-results2.png" /></p>
@@ -713,7 +718,7 @@ One then splits the range <span class="math notranslate nohighlight">\([R_\text{
 <p>Atari games are POMDP: each frame is a <strong>partial observation</strong>, not a Markov state. One cannot infer the velocity of the ball from a single frame.</p>
 <div class="figure align-default" id="id51">
 <a class="reference internal image-reference" href="../_images/drqn3.png"><img alt="../_images/drqn3.png" src="../_images/drqn3.png" style="width: 70%;" /></a>
-<p class="caption"><span class="caption-number">Fig. 2.53 </span><span class="caption-text">Most Atari games have frames which do not respect the Markov property. Source: <a class="bibtex reference internal" href="../zreferences.html#hausknecht2015" id="id27">[HS15]</a>.</span><a class="headerlink" href="#id51" title="Permalink to this image">¶</a></p>
+<p class="caption"><span class="caption-number">Fig. 2.53 </span><span class="caption-text">Most Atari games have frames which do not respect the Markov property. Source: <a class="bibtex reference internal" href="../zreferences.html#hausknecht2015" id="id27">[Hausknecht &amp; Stone, 2015]</a>.</span><a class="headerlink" href="#id51" title="Permalink to this image">¶</a></p>
 </div>
 <p>The trick used by DQN and its variants is to <strong>stack</strong> the last four frames and provide them as inputs to the CNN. The last 4 frames have (almost) the Markov property.</p>
 <p>The alternative is to use a <strong>recurrent neural network</strong> (e.g. LSTM) to encode the <strong>history</strong> of single frames.</p>
@@ -736,7 +741,7 @@ One then splits the range <span class="math notranslate nohighlight">\([R_\text{
 \[\mathcal{L}(\theta) = \mathbb{E}_\mathcal{D} [(r + \gamma \, Q_{\theta'}(s´, \text{argmax}_{a'} Q_{\theta}(s', a')) - Q_\theta(s, a))^2]\]</div>
 <div class="figure align-default" id="id53">
 <a class="reference internal image-reference" href="../_images/drqn-architecture2.png"><img alt="../_images/drqn-architecture2.png" src="../_images/drqn-architecture2.png" style="width: 70%;" /></a>
-<p class="caption"><span class="caption-number">Fig. 2.55 </span><span class="caption-text">DRQN architecture <a class="bibtex reference internal" href="../zreferences.html#hausknecht2015" id="id28">[HS15]</a>.</span><a class="headerlink" href="#id53" title="Permalink to this image">¶</a></p>
+<p class="caption"><span class="caption-number">Fig. 2.55 </span><span class="caption-text">DRQN architecture <a class="bibtex reference internal" href="../zreferences.html#hausknecht2015" id="id28">[Hausknecht &amp; Stone, 2015]</a>.</span><a class="headerlink" href="#id53" title="Permalink to this image">¶</a></p>
 </div>
 <p>The only problem is that RNNs are trained using truncated <strong>backpropagation through time</strong> (BPTT). One needs to provide a partial history of <span class="math notranslate nohighlight">\(T = 10\)</span> inputs to the network in order to learn one output:</p>
 <div class="math notranslate nohighlight">
@@ -747,17 +752,17 @@ One then splits the range <span class="math notranslate nohighlight">\([R_\text{
 <p>Using a LSTM layer helps on certain games, where temporal dependencies are longer that 4 frames, but impairs on others.</p>
 <div class="figure align-default" id="id54">
 <a class="reference internal image-reference" href="../_images/drqn4.png"><img alt="../_images/drqn4.png" src="../_images/drqn4.png" style="width: 70%;" /></a>
-<p class="caption"><span class="caption-number">Fig. 2.56 </span><span class="caption-text">DRQN performance compared to DQN <a class="bibtex reference internal" href="../zreferences.html#hausknecht2015" id="id29">[HS15]</a>.</span><a class="headerlink" href="#id54" title="Permalink to this image">¶</a></p>
+<p class="caption"><span class="caption-number">Fig. 2.56 </span><span class="caption-text">DRQN performance compared to DQN <a class="bibtex reference internal" href="../zreferences.html#hausknecht2015" id="id29">[Hausknecht &amp; Stone, 2015]</a>.</span><a class="headerlink" href="#id54" title="Permalink to this image">¶</a></p>
 </div>
 <p>Beware: LSTMs are extremely slow to train (but not to use). Stacking frames is still a reasonable option in many cases.</p>
 <div class="figure align-default" id="id55">
 <a class="reference internal image-reference" href="../_images/drqn5.png"><img alt="../_images/drqn5.png" src="../_images/drqn5.png" style="width: 70%;" /></a>
-<p class="caption"><span class="caption-number">Fig. 2.57 </span><span class="caption-text">Training and inference times of DRQN compared to DQN <a class="bibtex reference internal" href="../zreferences.html#hausknecht2015" id="id30">[HS15]</a>.</span><a class="headerlink" href="#id55" title="Permalink to this image">¶</a></p>
+<p class="caption"><span class="caption-number">Fig. 2.57 </span><span class="caption-text">Training and inference times of DRQN compared to DQN <a class="bibtex reference internal" href="../zreferences.html#hausknecht2015" id="id30">[Hausknecht &amp; Stone, 2015]</a>.</span><a class="headerlink" href="#id55" title="Permalink to this image">¶</a></p>
 </div>
 </div>
 <div class="section" id="r2d2-recurrent-replay-distributed-dqn">
 <h3><span class="section-number">2.5.2. </span>R2D2: Recurrent Replay Distributed DQN<a class="headerlink" href="#r2d2-recurrent-replay-distributed-dqn" title="Permalink to this headline">¶</a></h3>
-<p>R2D2 <a class="bibtex reference internal" href="../zreferences.html#kapturowski2019" id="id31">[KOQ+19]</a> builds on Ape-X and DRQN:</p>
+<p>R2D2 <a class="bibtex reference internal" href="../zreferences.html#kapturowski2019" id="id31">[Kapturowski et al., 2019]</a> builds on Ape-X and DRQN:</p>
 <ul class="simple">
 <li><p>double dueling DQN with n-step returns (n=5) and prioritized experience replay.</p></li>
 <li><p>256 actors, 1 learner.</p></li>
@@ -797,8 +802,8 @@ One then splits the range <span class="math notranslate nohighlight">\([R_\text{
     
     <div class='prev-next-bottom'>
         
-    <a class='left-prev' id="prev-link" href="1-DQN.html" title="previous page"><span class="section-number">1. </span>Deep Q-Learning</a>
-    <a class='right-next' id="next-link" href="../5-exercises/ex1-Python.html" title="next page"><span class="section-number">1. </span>Introduction to Python</a>
+    <a class='left-prev' id="prev-link" href="1-DQN.html" title="previous page"><span class="section-number">1. </span>Deep Q-Learning (DQN)</a>
+    <a class='right-next' id="next-link" href="3-PG.html" title="next page"><span class="section-number">3. </span>Policy gradient</a>
 
     </div>
     <footer class="footer mt-5 mt-md-0">
