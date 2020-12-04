@@ -9,8 +9,8 @@
     <title>1. Introduction &#8212; Deep Reinforcement Learning</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" integrity="sha384-KA6wR/X5RY4zFAHpv/CnoG2UW1uogYfdnP67Uv7eULvTveboZJg0qUpmJZb5VqzN" crossorigin="anonymous">
     <link href="../_static/css/index.css" rel="stylesheet">
-    <link rel="stylesheet" href="../_static/sphinx-book-theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/sphinx-book-theme.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
@@ -157,12 +157,17 @@
 <ul class="nav sidenav_l1">
  <li class="toctree-l1">
   <a class="reference internal" href="../3-MF/1-DQN.html">
-   1. Deep Q-Learning
+   1. Deep Q-Learning (DQN)
   </a>
  </li>
  <li class="toctree-l1">
   <a class="reference internal" href="../3-MF/2-BeyondDQN.html">
    2. Beyond DQN
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../3-MF/3-PG.html">
+   3. Policy gradient
   </a>
  </li>
 </ul>
@@ -412,12 +417,12 @@
 <div class='embed-container'><iframe src='https://www.youtube.com/embed/QjhKJmFV8T4' frameborder='0' allowfullscreen></iframe></div>
 <div class="figure align-default" id="id8">
 <a class="reference internal image-reference" href="../_images/rl-agent.jpg"><img alt="../_images/rl-agent.jpg" src="../_images/rl-agent.jpg" style="width: 80%;" /></a>
-<p class="caption"><span class="caption-number">Fig. 1.1 </span><span class="caption-text">Agent-environment interface. Source: <a class="bibtex reference internal" href="../zreferences.html#sutton2017" id="id1">[SB17]</a>.</span><a class="headerlink" href="#id8" title="Permalink to this image">¶</a></p>
+<p class="caption"><span class="caption-number">Fig. 1.1 </span><span class="caption-text">Agent-environment interface. Source: <a class="bibtex reference internal" href="../zreferences.html#sutton2017" id="id1">[Sutton &amp; Barto, 2017]</a>.</span><a class="headerlink" href="#id8" title="Permalink to this image">¶</a></p>
 </div>
 <p>The agent and the environment interact at discrete time steps:  <span class="math notranslate nohighlight">\(t\)</span>=0, 1, … The agent observes its state at time t:  <span class="math notranslate nohighlight">\(s_t \in \mathcal{S}\)</span>, produces an action at time t, depending on the available actions in the current state: <span class="math notranslate nohighlight">\(a_t \in \mathcal{A}(s_t)\)</span> and  receives a reward according to this action at time t+1: <span class="math notranslate nohighlight">\(r_{t+1} \in \Re\)</span>. It then updates its state: <span class="math notranslate nohighlight">\(s_{t+1} \in \mathcal{S}\)</span>. The behavior of the agent is therefore is a sequence of <strong>state-action-reward-state</strong> <span class="math notranslate nohighlight">\((s, a, r, s')\)</span> transitions.</p>
 <div class="figure align-default" id="id9">
 <a class="reference internal image-reference" href="../_images/rl-sequence.jpg"><img alt="../_images/rl-sequence.jpg" src="../_images/rl-sequence.jpg" style="width: 100%;" /></a>
-<p class="caption"><span class="caption-number">Fig. 1.2 </span><span class="caption-text">State-action-reward-state sequences. Source: <a class="bibtex reference internal" href="../zreferences.html#sutton2017" id="id2">[SB17]</a>.</span><a class="headerlink" href="#id9" title="Permalink to this image">¶</a></p>
+<p class="caption"><span class="caption-number">Fig. 1.2 </span><span class="caption-text">State-action-reward-state sequences. Source: <a class="bibtex reference internal" href="../zreferences.html#sutton2017" id="id2">[Sutton &amp; Barto, 2017]</a>.</span><a class="headerlink" href="#id9" title="Permalink to this image">¶</a></p>
 </div>
 <p>Sequences <span class="math notranslate nohighlight">\(\tau = (s_0, a_0, r_1, s_1, a_1, \ldots, s_T)\)</span> are called <strong>episodes</strong>, <strong>trajectories</strong>, <strong>histories</strong> or <strong>rollouts</strong>.</p>
 <div class="figure align-default" id="id10">
@@ -536,14 +541,14 @@
 </div>
 <div class="section" id="backgammon">
 <h3><span class="section-number">1.4.3. </span>Backgammon<a class="headerlink" href="#backgammon" title="Permalink to this headline">¶</a></h3>
-<p>TD-Gammon <a class="bibtex reference internal" href="../zreferences.html#tesauro1995" id="id3">[Tes95]</a> was one of the first AI to beat human experts at a complex game, Backgammon.</p>
+<p>TD-Gammon <a class="bibtex reference internal" href="../zreferences.html#tesauro1995" id="id3">[Tesauro, 1995]</a> was one of the first AI to beat human experts at a complex game, Backgammon.</p>
 <div class="figure align-default" id="id16">
 <a class="reference internal image-reference" href="../_images/tdgammon.png"><img alt="../_images/tdgammon.png" src="../_images/tdgammon.png" style="width: 50%;" /></a>
-<p class="caption"><span class="caption-number">Fig. 1.9 </span><span class="caption-text">Backgammon. Source: <a class="bibtex reference internal" href="../zreferences.html#tesauro1995" id="id4">[Tes95]</a>.</span><a class="headerlink" href="#id16" title="Permalink to this image">¶</a></p>
+<p class="caption"><span class="caption-number">Fig. 1.9 </span><span class="caption-text">Backgammon. Source: <a class="bibtex reference internal" href="../zreferences.html#tesauro1995" id="id4">[Tesauro, 1995]</a>.</span><a class="headerlink" href="#id16" title="Permalink to this image">¶</a></p>
 </div>
 <div class="figure align-default" id="id17">
 <a class="reference internal image-reference" href="../_images/tdgammon2.png"><img alt="../_images/tdgammon2.png" src="../_images/tdgammon2.png" style="width: 60%;" /></a>
-<p class="caption"><span class="caption-number">Fig. 1.10 </span><span class="caption-text">TD-Gammon. Source: <a class="bibtex reference internal" href="../zreferences.html#tesauro1995" id="id5">[Tes95]</a>.</span><a class="headerlink" href="#id17" title="Permalink to this image">¶</a></p>
+<p class="caption"><span class="caption-number">Fig. 1.10 </span><span class="caption-text">TD-Gammon. Source: <a class="bibtex reference internal" href="../zreferences.html#tesauro1995" id="id5">[Tesauro, 1995]</a>.</span><a class="headerlink" href="#id17" title="Permalink to this image">¶</a></p>
 </div>
 </div>
 </div>
@@ -553,10 +558,10 @@
 <a class="reference internal image-reference" href="../_images/deeprl.jpg"><img alt="../_images/deeprl.jpg" src="../_images/deeprl.jpg" style="width: 80%;" /></a>
 <p class="caption"><span class="caption-number">Fig. 1.11 </span><span class="caption-text">In deep RL, the policy is approximated by a deep neural network.</span><a class="headerlink" href="#id18" title="Permalink to this image">¶</a></p>
 </div>
-<p>Classical tabular RL was limited to toy problems, with few states and actions. It is only when coupled with <strong>deep neural networks</strong> that interesting applications of RL became possible. Deepmind (now Google) started the deep RL hype in 2013 by learning to solve 50+ Atari games with a CNN, the <strong>deep Q-network</strong> (DQN) <a class="bibtex reference internal" href="../zreferences.html#mnih2013" id="id6">[MKS+13]</a>.</p>
+<p>Classical tabular RL was limited to toy problems, with few states and actions. It is only when coupled with <strong>deep neural networks</strong> that interesting applications of RL became possible. Deepmind (now Google) started the deep RL hype in 2013 by learning to solve 50+ Atari games with a CNN, the <strong>deep Q-network</strong> (DQN) <a class="bibtex reference internal" href="../zreferences.html#mnih2013" id="id6">[Mnih et al., 2013]</a>.</p>
 <div class="figure align-default" id="id19">
 <a class="reference internal image-reference" href="../_images/discrete.png"><img alt="../_images/discrete.png" src="../_images/discrete.png" style="width: 100%;" /></a>
-<p class="caption"><span class="caption-number">Fig. 1.12 </span><span class="caption-text">Architecture of the deep Q-network. Source: <a class="bibtex reference internal" href="../zreferences.html#mnih2013" id="id7">[MKS+13]</a>.</span><a class="headerlink" href="#id19" title="Permalink to this image">¶</a></p>
+<p class="caption"><span class="caption-number">Fig. 1.12 </span><span class="caption-text">Architecture of the deep Q-network. Source: <a class="bibtex reference internal" href="../zreferences.html#mnih2013" id="id7">[Mnih et al., 2013]</a>.</span><a class="headerlink" href="#id19" title="Permalink to this image">¶</a></p>
 </div>
 <div class='embed-container'><iframe src='https://www.youtube.com/embed/rQIShnTz1kU' frameborder='0' allowfullscreen></iframe></div>
 <p>Deep RL methods we since then improved and applied to a variety of control tasks, including simulated cars:</p>

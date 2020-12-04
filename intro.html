@@ -9,8 +9,8 @@
     <title>Deep Reinforcement Learning &#8212; Deep Reinforcement Learning</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" integrity="sha384-KA6wR/X5RY4zFAHpv/CnoG2UW1uogYfdnP67Uv7eULvTveboZJg0qUpmJZb5VqzN" crossorigin="anonymous">
     <link href="_static/css/index.css" rel="stylesheet">
-    <link rel="stylesheet" href="_static/sphinx-book-theme.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/sphinx-book-theme.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="_static/mystnb.css" />
@@ -156,12 +156,17 @@
 <ul class="nav sidenav_l1">
  <li class="toctree-l1">
   <a class="reference internal" href="3-MF/1-DQN.html">
-   1. Deep Q-Learning
+   1. Deep Q-Learning (DQN)
   </a>
  </li>
  <li class="toctree-l1">
   <a class="reference internal" href="3-MF/2-BeyondDQN.html">
    2. Beyond DQN
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="3-MF/3-PG.html">
+   3. Policy gradient
   </a>
  </li>
 </ul>
@@ -309,14 +314,12 @@
   <div class="section" id="deep-reinforcement-learning">
 <h1>Deep Reinforcement Learning<a class="headerlink" href="#deep-reinforcement-learning" title="Permalink to this headline">¶</a></h1>
 <p>These are the lecture notes for the module <strong>Deep Reinforcement Learning</strong> taught by Dr. Julien Vitay at the Technische Universität Chemnitz, Faculty of Computer Science, Professorship for Artificial Intelligence.</p>
-<p>The content will be uploaded on a regular basis during the semester. Registration to the course happens on OPAL:</p>
-<p><a class="reference external" href="https://bildungsportal.sachsen.de/opal/auth/RepositoryEntry/21637267457">https://bildungsportal.sachsen.de/opal/auth/RepositoryEntry/21637267457</a></p>
-<p>Each section/lecture is accompanied by a set of videos, the slides and some lecture notes which summarize the most important points to understand.</p>
-<p>The videos are integrated in the lecture notes, you can also access the complete playlist here:</p>
-<p><a class="reference external" href="https://www.youtube.com/playlist?list=PLIEjdhhAF7UJwegwyWUcDrUNJTQfxMcUw">https://www.youtube.com/playlist?list=PLIEjdhhAF7UJwegwyWUcDrUNJTQfxMcUw</a></p>
-<p>Exercises are provided in the form of Jupyter notebooks, allowing to implement in Python at your own pace the algorithms seen in the lectures and learn to use reinforcement learning libraries such as <code class="docutils literal notranslate"><span class="pre">gym</span></code>. A notebook to work on and the solution are downloadable at the top-right of each page. A video explaining the exercise and one commenting the solution are available, with the playlist being at:</p>
-<p><a class="reference external" href="https://www.youtube.com/playlist?list=PLIEjdhhAF7UJdex6a4gEajx9GuPtJ9WCC">https://www.youtube.com/playlist?list=PLIEjdhhAF7UJdex6a4gEajx9GuPtJ9WCC</a></p>
-<p><strong>Recommended readings</strong>: <a class="bibtex reference internal" href="zreferences.html#sutton2017" id="id1">[SB17]</a></p>
+<p>The content will be uploaded on a regular basis during the semester. Registration to the course happens on <a class="reference external" href="https://bildungsportal.sachsen.de/opal/auth/RepositoryEntry/21637267457">OPAL</a>. Each section/lecture is accompanied by a set of videos, the slides and some lecture notes which summarize the most important points to understand. The videos are integrated in the lecture notes, but you can also access the complete playlist on <a class="reference external" href="https://www.youtube.com/playlist?list=PLIEjdhhAF7UJwegwyWUcDrUNJTQfxMcUw">Youtube</a>.</p>
+<p>Exercises are provided in the form of Jupyter notebooks, allowing to implement in Python at your own pace the algorithms seen in the lectures and learn to use reinforcement learning libraries such as <code class="docutils literal notranslate"><span class="pre">gym</span></code>. A notebook to work on and the solution are downloadable at the top-right of each page. A video explaining the exercise and one commenting the solution are available, with the playlist being on <a class="reference external" href="https://www.youtube.com/playlist?list=PLIEjdhhAF7UJdex6a4gEajx9GuPtJ9WCC">Youtube</a>.</p>
+<p><strong>Recommended readings</strong>:</p>
+<ul class="simple">
+<li><p><a class="bibtex reference internal" href="zreferences.html#sutton2017" id="id1">[Sutton &amp; Barto, 2017]</a> Richard Sutton and Andrew Barto (2017). Reinforcement Learning: An Introduction. MIT press. <a class="reference external" href="http://incompleteideas.net/book/the-book-2nd.html">http://incompleteideas.net/book/the-book-2nd.html</a></p></li>
+</ul>
 <div class="tableofcontents-wrapper compound">
 <p class="caption"><span class="caption-text">Introduction</span></p>
 <ul>
@@ -335,8 +338,9 @@
 </ul>
 <p class="caption"><span class="caption-text">Model-free RL</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="3-MF/1-DQN.html">1. Deep Q-Learning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="3-MF/1-DQN.html">1. Deep Q-Learning (DQN)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="3-MF/2-BeyondDQN.html">2. Beyond DQN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="3-MF/3-PG.html">3. Policy gradient</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Exercises</span></p>
 <ul>

@@ -9,8 +9,8 @@
     <title>7.1. Gym environments &#8212; Deep Reinforcement Learning</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" integrity="sha384-KA6wR/X5RY4zFAHpv/CnoG2UW1uogYfdnP67Uv7eULvTveboZJg0qUpmJZb5VqzN" crossorigin="anonymous">
     <link href="../_static/css/index.css" rel="stylesheet">
-    <link rel="stylesheet" href="../_static/sphinx-book-theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/sphinx-book-theme.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
@@ -157,12 +157,17 @@
 <ul class="nav sidenav_l1">
  <li class="toctree-l1">
   <a class="reference internal" href="../3-MF/1-DQN.html">
-   1. Deep Q-Learning
+   1. Deep Q-Learning (DQN)
   </a>
  </li>
  <li class="toctree-l1">
   <a class="reference internal" href="../3-MF/2-BeyondDQN.html">
    2. Beyond DQN
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../3-MF/3-PG.html">
+   3. Policy gradient
   </a>
  </li>
 </ul>
@@ -384,11 +389,11 @@
 <h3><span class="section-number">7.1.1.1. </span>On your computer<a class="headerlink" href="#on-your-computer" title="Permalink to this headline">¶</a></h3>
 <p>On your computer, you first need to make sure you have the right dependencies, especially <code class="docutils literal notranslate"><span class="pre">cmake</span></code>:</p>
 <p><strong>Ubuntu Linux:</strong></p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>apt-get install -y cmake swig
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>apt-get install libglu1-mesa-dev libgl1-mesa-dev libosmesa6-dev xvfb ffmpeg curl patchelf libglfw3 libglfw3-dev cmake zlib1g zlib1g-dev swig
 </pre></div>
 </div>
 <p><strong>MacOSX:</strong></p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>brew install cmake swig
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>brew install cmake swig boost boost-python sdl2 wget
 </pre></div>
 </div>
 <p>On Windows, you may have to have Microsoft Visual C++ build tools installed. The link <a class="reference external" href="https://towardsdatascience.com/how-to-install-openai-gym-in-a-windows-environment-338969e24d30">https://towardsdatascience.com/how-to-install-openai-gym-in-a-windows-environment-338969e24d30</a> suggests the 2017 version, but Visual C++ 2015-2019 Redistributable seems to also work.</p>

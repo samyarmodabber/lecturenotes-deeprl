@@ -9,8 +9,8 @@
     <title>5. Temporal Difference learning &#8212; Deep Reinforcement Learning</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" integrity="sha384-KA6wR/X5RY4zFAHpv/CnoG2UW1uogYfdnP67Uv7eULvTveboZJg0qUpmJZb5VqzN" crossorigin="anonymous">
     <link href="../_static/css/index.css" rel="stylesheet">
-    <link rel="stylesheet" href="../_static/sphinx-book-theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/sphinx-book-theme.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
@@ -157,12 +157,17 @@
 <ul class="nav sidenav_l1">
  <li class="toctree-l1">
   <a class="reference internal" href="../3-MF/1-DQN.html">
-   1. Deep Q-Learning
+   1. Deep Q-Learning (DQN)
   </a>
  </li>
  <li class="toctree-l1">
   <a class="reference internal" href="../3-MF/2-BeyondDQN.html">
    2. Beyond DQN
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../3-MF/3-PG.html">
+   3. Policy gradient
   </a>
  </li>
 </ul>
@@ -380,7 +385,7 @@
 <p>where <span class="math notranslate nohighlight">\(r_{t+1} + \gamma\, V(s_{t+1})\)</span> is a sampled estimate of the return.</p>
 <div class="figure align-default" id="id12">
 <a class="reference internal image-reference" href="../_images/MCTD.svg"><img alt="../_images/MCTD.svg" src="../_images/MCTD.svg" width="50%" /></a>
-<p class="caption"><span class="caption-number">Fig. 5.1 </span><span class="caption-text">TD replaces <span class="math notranslate nohighlight">\(R_{t+1}\)</span> with an estimate <span class="math notranslate nohighlight">\(V(s_{t+1})\)</span>. Adapted from <a class="bibtex reference internal" href="../zreferences.html#sutton1998" id="id1">[SB98]</a>.</span><a class="headerlink" href="#id12" title="Permalink to this image">¶</a></p>
+<p class="caption"><span class="caption-number">Fig. 5.1 </span><span class="caption-text">TD replaces <span class="math notranslate nohighlight">\(R_{t+1}\)</span> with an estimate <span class="math notranslate nohighlight">\(V(s_{t+1})\)</span>. Adapted from <a class="bibtex reference internal" href="../zreferences.html#sutton1998" id="id1">[Sutton &amp; Barto, 1998]</a>.</span><a class="headerlink" href="#id12" title="Permalink to this image">¶</a></p>
 </div>
 <p>The quantity</p>
 <div class="math notranslate nohighlight">
@@ -439,7 +444,7 @@ If <span class="math notranslate nohighlight">\(\delta_t &lt; 0\)</span>, we sho
 <p><strong>SARSA</strong> (state-action-reward-state-action) updates the value of a state-action pair by using the predicted value of the next state-action pair according to the current policy.</p>
 <div class="figure align-default" id="id13">
 <a class="reference internal image-reference" href="../_images/sarsa-sequence.png"><img alt="../_images/sarsa-sequence.png" src="../_images/sarsa-sequence.png" style="width: 70%;" /></a>
-<p class="caption"><span class="caption-number">Fig. 5.2 </span><span class="caption-text">State-action-reward-state-action transitions. Source: <a class="bibtex reference internal" href="../zreferences.html#sutton1998" id="id2">[SB98]</a>.</span><a class="headerlink" href="#id13" title="Permalink to this image">¶</a></p>
+<p class="caption"><span class="caption-number">Fig. 5.2 </span><span class="caption-text">State-action-reward-state-action transitions. Source: <a class="bibtex reference internal" href="../zreferences.html#sutton1998" id="id2">[Sutton &amp; Barto, 1998]</a>.</span><a class="headerlink" href="#id13" title="Permalink to this image">¶</a></p>
 </div>
 <p>When arriving in <span class="math notranslate nohighlight">\(s_{t+1}\)</span> from <span class="math notranslate nohighlight">\((s_t, a_t)\)</span>, we already sample the next action:</p>
 <div class="math notranslate nohighlight">
@@ -560,7 +565,7 @@ If <span class="math notranslate nohighlight">\(\delta_t &lt; 0\)</span>, we sho
 <p>Actor-critic methods are TD methods that have a separate memory structure to explicitly represent the policy independent of the value function. The policy <span class="math notranslate nohighlight">\(\pi\)</span> is implemented by the <strong>actor</strong>, because it is used to select actions. The estimated values <span class="math notranslate nohighlight">\(V(s)\)</span> are implemented by the <strong>critic</strong>, because it criticizes the actions made by the actor. Learning is always <strong>on-policy</strong>: the critic must learn about and critique whatever policy is currently being followed by the actor.</p>
 <div class="figure align-default" id="id14">
 <a class="reference internal image-reference" href="../_images/actorcritic.png"><img alt="../_images/actorcritic.png" src="../_images/actorcritic.png" style="width: 50%;" /></a>
-<p class="caption"><span class="caption-number">Fig. 5.3 </span><span class="caption-text">Actor-critic architecture. Source: <a class="bibtex reference internal" href="../zreferences.html#sutton1998" id="id3">[SB98]</a>.</span><a class="headerlink" href="#id14" title="Permalink to this image">¶</a></p>
+<p class="caption"><span class="caption-number">Fig. 5.3 </span><span class="caption-text">Actor-critic architecture. Source: <a class="bibtex reference internal" href="../zreferences.html#sutton1998" id="id3">[Sutton &amp; Barto, 1998]</a>.</span><a class="headerlink" href="#id14" title="Permalink to this image">¶</a></p>
 </div>
 <p>The critic computes the <strong>TD error</strong> or <strong>1-step advantage</strong> after each transition <span class="math notranslate nohighlight">\((s_t, a_t, r_{t+1}, s_{t+1})\)</span>:</p>
 <div class="math notranslate nohighlight">
@@ -669,7 +674,7 @@ If <span class="math notranslate nohighlight">\(\delta_t &lt; 0\)</span>, we sho
 <p>TD has <strong>low variance, some bias</strong>, so it is usually more <strong>sample efficient</strong> than MC. TD(0) converges to <span class="math notranslate nohighlight">\(V^\pi(s)\)</span> (but not always with function approximation). The policy might be suboptimal. It is more sensitive to initial values (bootstrapping).</p>
 <div class="figure align-default" id="id15">
 <a class="reference internal image-reference" href="../_images/gridworld-lambda.png"><img alt="../_images/gridworld-lambda.png" src="../_images/gridworld-lambda.png" style="width: 70%;" /></a>
-<p class="caption"><span class="caption-number">Fig. 5.4 </span><span class="caption-text">Gridworld environment. Source: <a class="bibtex reference internal" href="../zreferences.html#sutton1998" id="id4">[SB98]</a>.</span><a class="headerlink" href="#id15" title="Permalink to this image">¶</a></p>
+<p class="caption"><span class="caption-number">Fig. 5.4 </span><span class="caption-text">Gridworld environment. Source: <a class="bibtex reference internal" href="../zreferences.html#sutton1998" id="id4">[Sutton &amp; Barto, 1998]</a>.</span><a class="headerlink" href="#id15" title="Permalink to this image">¶</a></p>
 </div>
 <p>When the reward function is sparse (e.g. only at the end of a game), only the last action, leading to that reward, will be updated the first time in TD.</p>
 <div class="math notranslate nohighlight">
@@ -681,7 +686,7 @@ If <span class="math notranslate nohighlight">\(\delta_t &lt; 0\)</span>, we sho
 <h3><span class="section-number">5.3.1. </span>n-step returns<a class="headerlink" href="#n-step-returns" title="Permalink to this headline">¶</a></h3>
 <div class="figure align-default" id="id16">
 <a class="reference internal image-reference" href="../_images/nstep.png"><img alt="../_images/nstep.png" src="../_images/nstep.png" style="width: 70%;" /></a>
-<p class="caption"><span class="caption-number">Fig. 5.5 </span><span class="caption-text">n-step returns. Source: <a class="bibtex reference internal" href="../zreferences.html#sutton1998" id="id5">[SB98]</a>.</span><a class="headerlink" href="#id16" title="Permalink to this image">¶</a></p>
+<p class="caption"><span class="caption-number">Fig. 5.5 </span><span class="caption-text">n-step returns. Source: <a class="bibtex reference internal" href="../zreferences.html#sutton1998" id="id5">[Sutton &amp; Barto, 1998]</a>.</span><a class="headerlink" href="#id16" title="Permalink to this image">¶</a></p>
 </div>
 <p>Optimally, we would like a trade-off between:</p>
 <ul class="simple">
@@ -718,7 +723,7 @@ A^n_t = \sum_{k=0}^{n-1} \gamma^{k} \, r_{t+k+1} + \gamma^n \,  V(s_{t+n+1}) - V
 \[R^\lambda_t = (1  - \lambda) \, \sum_{n=1}^\infty \lambda^{n-1} \, R^n_t\]</div>
 <div class="figure align-default" id="id17">
 <a class="reference internal image-reference" href="../_images/eligibility-forward.png"><img alt="../_images/eligibility-forward.png" src="../_images/eligibility-forward.png" style="width: 60%;" /></a>
-<p class="caption"><span class="caption-number">Fig. 5.6 </span><span class="caption-text"><span class="math notranslate nohighlight">\(\lambda\)</span>-returns are averages of all n-step returns. Source: <a class="bibtex reference internal" href="../zreferences.html#sutton1998" id="id6">[SB98]</a>.</span><a class="headerlink" href="#id17" title="Permalink to this image">¶</a></p>
+<p class="caption"><span class="caption-number">Fig. 5.6 </span><span class="caption-text"><span class="math notranslate nohighlight">\(\lambda\)</span>-returns are averages of all n-step returns. Source: <a class="bibtex reference internal" href="../zreferences.html#sutton1998" id="id6">[Sutton &amp; Barto, 1998]</a>.</span><a class="headerlink" href="#id17" title="Permalink to this image">¶</a></p>
 </div>
 <p>The term <span class="math notranslate nohighlight">\(1- \lambda\)</span> is there to ensure that the coefficients <span class="math notranslate nohighlight">\(\lambda^{n-1}\)</span> sum to one.</p>
 <div class="math notranslate nohighlight">
@@ -726,7 +731,7 @@ A^n_t = \sum_{k=0}^{n-1} \gamma^{k} \, r_{t+k+1} + \gamma^n \,  V(s_{t+n+1}) - V
 <p>Each reward <span class="math notranslate nohighlight">\(r_{t+k+1}\)</span> will count multiple times in the <span class="math notranslate nohighlight">\(\lambda\)</span>-return. Distant rewards are discounted by <span class="math notranslate nohighlight">\(\lambda^k\)</span> in addition to <span class="math notranslate nohighlight">\(\gamma^k\)</span>.</p>
 <div class="figure align-default" id="id18">
 <a class="reference internal image-reference" href="../_images/eligibility-forward-decay.png"><img alt="../_images/eligibility-forward-decay.png" src="../_images/eligibility-forward-decay.png" style="width: 70%;" /></a>
-<p class="caption"><span class="caption-number">Fig. 5.7 </span><span class="caption-text"><span class="math notranslate nohighlight">\(\lambda\)</span> controls the importance of large n-step returns. Source: <a class="bibtex reference internal" href="../zreferences.html#sutton1998" id="id7">[SB98]</a>.</span><a class="headerlink" href="#id18" title="Permalink to this image">¶</a></p>
+<p class="caption"><span class="caption-number">Fig. 5.7 </span><span class="caption-text"><span class="math notranslate nohighlight">\(\lambda\)</span> controls the importance of large n-step returns. Source: <a class="bibtex reference internal" href="../zreferences.html#sutton1998" id="id7">[Sutton &amp; Barto, 1998]</a>.</span><a class="headerlink" href="#id18" title="Permalink to this image">¶</a></p>
 </div>
 <p>Large n-step returns (MC) should not have as much importance as small ones (TD), as they have a high variance.</p>
 <p>To understand the role of <span class="math notranslate nohighlight">\(\lambda\)</span>, let’s split the infinite sum w.r.t the end of the episode at time <span class="math notranslate nohighlight">\(T\)</span>. n-step returns with <span class="math notranslate nohighlight">\(n \geq T\)</span> all have a MC return of <span class="math notranslate nohighlight">\(R_t\)</span>:</p>
@@ -740,7 +745,7 @@ A^n_t = \sum_{k=0}^{n-1} \gamma^{k} \, r_{t+k+1} + \gamma^n \,  V(s_{t+n+1}) - V
 <p>This <strong>forward view</strong> of eligibility traces implies to look at all future rewards until the end of the episode to perform a value update. This prevents online learning using single transitions.</p>
 <div class="figure align-default" id="id19">
 <a class="reference internal image-reference" href="../_images/eligibility-forward-view.png"><img alt="../_images/eligibility-forward-view.png" src="../_images/eligibility-forward-view.png" style="width: 70%;" /></a>
-<p class="caption"><span class="caption-number">Fig. 5.8 </span><span class="caption-text">Forward view of eligibility traces. Source: <a class="bibtex reference internal" href="../zreferences.html#sutton1998" id="id8">[SB98]</a>.</span><a class="headerlink" href="#id19" title="Permalink to this image">¶</a></p>
+<p class="caption"><span class="caption-number">Fig. 5.8 </span><span class="caption-text">Forward view of eligibility traces. Source: <a class="bibtex reference internal" href="../zreferences.html#sutton1998" id="id8">[Sutton &amp; Barto, 1998]</a>.</span><a class="headerlink" href="#id19" title="Permalink to this image">¶</a></p>
 </div>
 <p>Another view on eligibility traces is that the  <strong>TD reward prediction error</strong> at time <span class="math notranslate nohighlight">\(t\)</span> is sent backwards in time:</p>
 <div class="math notranslate nohighlight">
@@ -749,7 +754,7 @@ A^n_t = \sum_{k=0}^{n-1} \gamma^{k} \, r_{t+k+1} + \gamma^n \,  V(s_{t+n+1}) - V
 \]</div>
 <div class="figure align-default" id="id20">
 <a class="reference internal image-reference" href="../_images/eligibility-backwards.png"><img alt="../_images/eligibility-backwards.png" src="../_images/eligibility-backwards.png" style="width: 70%;" /></a>
-<p class="caption"><span class="caption-number">Fig. 5.9 </span><span class="caption-text">Backward view of eligibility traces. Source: <a class="bibtex reference internal" href="../zreferences.html#sutton1998" id="id9">[SB98]</a>.</span><a class="headerlink" href="#id20" title="Permalink to this image">¶</a></p>
+<p class="caption"><span class="caption-number">Fig. 5.9 </span><span class="caption-text">Backward view of eligibility traces. Source: <a class="bibtex reference internal" href="../zreferences.html#sutton1998" id="id9">[Sutton &amp; Barto, 1998]</a>.</span><a class="headerlink" href="#id20" title="Permalink to this image">¶</a></p>
 </div>
 <p>Every state <span class="math notranslate nohighlight">\(s\)</span> previously visited during the episode will be updated proportionally to the current TD error and an <strong>eligibility trace</strong> <span class="math notranslate nohighlight">\(e_t(s)\)</span>:</p>
 <div class="math notranslate nohighlight">
@@ -766,7 +771,7 @@ A^n_t = \sum_{k=0}^{n-1} \gamma^{k} \, r_{t+k+1} + \gamma^n \,  V(s_{t+n+1}) - V
 \end{split}\]</div>
 <div class="figure align-default" id="id21">
 <a class="reference internal image-reference" href="../_images/traces.png"><img alt="../_images/traces.png" src="../_images/traces.png" style="width: 70%;" /></a>
-<p class="caption"><span class="caption-number">Fig. 5.10 </span><span class="caption-text">Updating of eligibility traces. Source: <a class="bibtex reference internal" href="../zreferences.html#sutton1998" id="id10">[SB98]</a>.</span><a class="headerlink" href="#id21" title="Permalink to this image">¶</a></p>
+<p class="caption"><span class="caption-number">Fig. 5.10 </span><span class="caption-text">Updating of eligibility traces. Source: <a class="bibtex reference internal" href="../zreferences.html#sutton1998" id="id10">[Sutton &amp; Barto, 1998]</a>.</span><a class="headerlink" href="#id21" title="Permalink to this image">¶</a></p>
 </div>
 <p><span class="math notranslate nohighlight">\(\lambda\)</span> defines how important is a future TD error for the current state.</p>
 <div class="admonition-td-lambda-algorithm-policy-evaluation admonition">
@@ -845,7 +850,7 @@ A^2_t &amp;= r_{t+1} + \gamma \, r_{t+2} + \gamma^2 \, V(s_{t+2}) - V(s_{t}) \\
 \[
 A^n_t = \sum_{k=0}^{n-1} \gamma^{k} \, r_{t+k+1} + \gamma^n \,  V(s_{t+n+1}) - V (s_t)
 \]</div>
-<p>Schulman et al. (2015) <a class="bibtex reference internal" href="../zreferences.html#schulman2015a" id="id11">[SML+15]</a> proposed a <strong>generalized advantage estimate</strong> (GAE) <span class="math notranslate nohighlight">\(A_t^{\text{GAE}(\gamma, \lambda)}\)</span> summing all possible n-step advantages with a discount parameter <span class="math notranslate nohighlight">\(\lambda\)</span>:</p>
+<p>Schulman et al. (2015) <a class="bibtex reference internal" href="../zreferences.html#schulman2015a" id="id11">[Schulman et al., 2015]</a> proposed a <strong>generalized advantage estimate</strong> (GAE) <span class="math notranslate nohighlight">\(A_t^{\text{GAE}(\gamma, \lambda)}\)</span> summing all possible n-step advantages with a discount parameter <span class="math notranslate nohighlight">\(\lambda\)</span>:</p>
 <div class="math notranslate nohighlight">
 \[A_t^{\text{GAE}(\gamma, \lambda)} = (1 - \lambda) \sum_{n=1}^\infty \lambda^n \, A^n_t\]</div>
 <p>This is just a forward eligibility trace over distant n-step advantages: the 1-step advantage is more important the the 1000-step advantage (too much variance). We can show that the GAE can be expressed as a function of the future 1-step TD errors:</p>

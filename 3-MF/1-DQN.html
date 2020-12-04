@@ -6,11 +6,11 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>1. Deep Q-Learning &#8212; Deep Reinforcement Learning</title>
+    <title>1. Deep Q-Learning (DQN) &#8212; Deep Reinforcement Learning</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" integrity="sha384-KA6wR/X5RY4zFAHpv/CnoG2UW1uogYfdnP67Uv7eULvTveboZJg0qUpmJZb5VqzN" crossorigin="anonymous">
     <link href="../_static/css/index.css" rel="stylesheet">
-    <link rel="stylesheet" href="../_static/sphinx-book-theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/sphinx-book-theme.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
@@ -50,8 +50,8 @@
 <!-- Opengraph tags -->
 <meta property="og:url"         content="https://julien-vitay.net/lecturenotes-deeprl/3-MF/1-DQN.html" />
 <meta property="og:type"        content="article" />
-<meta property="og:title"       content="Deep Q-Learning" />
-<meta property="og:description" content="Deep Q-Learning  Slides: pdf  Value-based deep RL  &lt;div class=&#39;embed-container&#39;&gt;&lt;iframe src=&#39;https://www.youtube.com/embed/_luuEjWJU20&#39; frameborder=&#39;0&#39; allowful" />
+<meta property="og:title"       content="Deep Q-Learning (DQN)" />
+<meta property="og:description" content="Deep Q-Learning (DQN)  Slides: pdf  Value-based deep RL  &lt;div class=&#39;embed-container&#39;&gt;&lt;iframe src=&#39;https://www.youtube.com/embed/_luuEjWJU20&#39; frameborder=&#39;0&#39; al" />
 <meta property="og:image"       content="https://julien-vitay.net/lecturenotes-deeprl/_static/tuc.svg" />
 
 <meta name="twitter:card" content="summary" />
@@ -157,12 +157,17 @@
 <ul class="current nav sidenav_l1">
  <li class="toctree-l1 current active">
   <a class="current reference internal" href="#">
-   1. Deep Q-Learning
+   1. Deep Q-Learning (DQN)
   </a>
  </li>
  <li class="toctree-l1">
   <a class="reference internal" href="2-BeyondDQN.html">
    2. Beyond DQN
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="3-PG.html">
+   3. Policy gradient
   </a>
  </li>
 </ul>
@@ -375,8 +380,8 @@
         
               <div>
                 
-  <div class="section" id="deep-q-learning">
-<h1><span class="section-number">1. </span>Deep Q-Learning<a class="headerlink" href="#deep-q-learning" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="deep-q-learning-dqn">
+<h1><span class="section-number">1. </span>Deep Q-Learning (DQN)<a class="headerlink" href="#deep-q-learning-dqn" title="Permalink to this headline">¶</a></h1>
 <p>Slides: <a class="reference external" href="https://www.tu-chemnitz.de/informatik/KI/edu/deeprl/lectures/pdf/3.1-DQN.pdf">pdf</a></p>
 <div class="section" id="value-based-deep-rl">
 <h2><span class="section-number">1.1. </span>Value-based deep RL<a class="headerlink" href="#value-based-deep-rl" title="Permalink to this headline">¶</a></h2>
@@ -494,7 +499,7 @@
 <li><p>The correlation between successive inputs or outputs.</p></li>
 <li><p>The non-stationarity of the problem.</p></li>
 </ol>
-<p>These two problems are very bad for deep networks, which end up overfitting the learned episodes or not learning anything at all. Deepmind researchers <a class="bibtex reference internal" href="../zreferences.html#mnih2013" id="id1">[MKS+13]</a> proposed to use two classical ML tricks to overcome these problems:</p>
+<p>These two problems are very bad for deep networks, which end up overfitting the learned episodes or not learning anything at all. Deepmind researchers <a class="bibtex reference internal" href="../zreferences.html#mnih2013" id="id1">[Mnih et al., 2013]</a> proposed to use two classical ML tricks to overcome these problems:</p>
 <ol class="simple">
 <li><p>experience replay memory.</p></li>
 <li><p>target networks.</p></li>
@@ -625,7 +630,7 @@
 <p>The deep network can be anything. Deep RL is only about defining the loss function adequately. For pixel-based problems (e.g. video games), convolutional neural networks (without max-pooling) are the weapon of choice.</p>
 <div class="figure align-default" id="id25">
 <a class="reference internal image-reference" href="../_images/DeepQNetwork.jpg"><img alt="../_images/DeepQNetwork.jpg" src="../_images/DeepQNetwork.jpg" style="width: 100%;" /></a>
-<p class="caption"><span class="caption-number">Fig. 1.54 </span><span class="caption-text">Architecture of DQN <a class="bibtex reference internal" href="../zreferences.html#mnih2013" id="id2">[MKS+13]</a>.</span><a class="headerlink" href="#id25" title="Permalink to this image">¶</a></p>
+<p class="caption"><span class="caption-number">Fig. 1.54 </span><span class="caption-text">Architecture of DQN <a class="bibtex reference internal" href="../zreferences.html#mnih2013" id="id2">[Mnih et al., 2013]</a>.</span><a class="headerlink" href="#id25" title="Permalink to this image">¶</a></p>
 </div>
 <p>Why no max-pooling? The goal of max-pooling is to get rid of the spatial information in the image. For object recognition, you do not care whether the object is in the center or on the side of the image. Max-pooling brings <strong>spatial invariance</strong>. In video games, you <strong>want</strong> to keep the spatial information: the optimal action depends on where the ball is relative to the paddle.</p>
 <p>Are individual frames good representations of states? Using video frames as states breaks the Markov property: the speed and direction of the ball is a very relevant information for the task, but not contained in a single frame. This characterizes a <strong>Partially-observable Markov Decision Process</strong> (POMDP).</p>
@@ -708,11 +713,11 @@
 <p>The DQN network was trained to solve 49 different Atari 2600 games <strong>with the same architecture and hyperparameters</strong>. In most of the games, the network reaches <strong>super-human</strong> performance. Some games are still badly performed (e.g. Montezuma’s revenge), as they require long-term planning. It was the first RL algorithm able to learn different tasks (no free lunch theorem). The 2015 paper in Nature started the hype for deep RL.</p>
 <div class="figure align-default" id="id26">
 <a class="reference internal image-reference" href="../_images/dqn-results.png"><img alt="../_images/dqn-results.png" src="../_images/dqn-results.png" style="width: 100%;" /></a>
-<p class="caption"><span class="caption-number">Fig. 1.55 </span><span class="caption-text">Training curves of DQN <a class="bibtex reference internal" href="../zreferences.html#mnih2013" id="id3">[MKS+13]</a>.</span><a class="headerlink" href="#id26" title="Permalink to this image">¶</a></p>
+<p class="caption"><span class="caption-number">Fig. 1.55 </span><span class="caption-text">Training curves of DQN <a class="bibtex reference internal" href="../zreferences.html#mnih2013" id="id3">[Mnih et al., 2013]</a>.</span><a class="headerlink" href="#id26" title="Permalink to this image">¶</a></p>
 </div>
 <div class="figure align-default" id="id27">
 <a class="reference internal image-reference" href="../_images/atari-results.png"><img alt="../_images/atari-results.png" src="../_images/atari-results.png" style="width: 70%;" /></a>
-<p class="caption"><span class="caption-number">Fig. 1.56 </span><span class="caption-text">Performance of DQN on Atari games <a class="bibtex reference internal" href="../zreferences.html#mnih2013" id="id4">[MKS+13]</a>.</span><a class="headerlink" href="#id27" title="Permalink to this image">¶</a></p>
+<p class="caption"><span class="caption-number">Fig. 1.56 </span><span class="caption-text">Performance of DQN on Atari games <a class="bibtex reference internal" href="../zreferences.html#mnih2013" id="id4">[Mnih et al., 2013]</a>.</span><a class="headerlink" href="#id27" title="Permalink to this image">¶</a></p>
 </div>
 </div>
 </div>
@@ -727,7 +732,7 @@
 <p>This does not matter much in action selection, as we apply <span class="math notranslate nohighlight">\(\epsilon\)</span>-greedy or softmax on the Q-values anyway, but it may make learning slower (sample complexity) and less optimal.</p>
 <div class="figure align-default" id="id28">
 <a class="reference internal image-reference" href="../_images/ddqn-results1.png"><img alt="../_images/ddqn-results1.png" src="../_images/ddqn-results1.png" style="width: 100%;" /></a>
-<p class="caption"><span class="caption-number">Fig. 1.57 </span><span class="caption-text">Q-learning methods overstimate Q-values <a class="bibtex reference internal" href="../zreferences.html#vanhasselt2015" id="id5">[vanHasseltGS15]</a>.</span><a class="headerlink" href="#id28" title="Permalink to this image">¶</a></p>
+<p class="caption"><span class="caption-number">Fig. 1.57 </span><span class="caption-text">Q-learning methods overstimate Q-values <a class="bibtex reference internal" href="../zreferences.html#vanhasselt2015" id="id5">[van Hasselt et al., 2015]</a>.</span><a class="headerlink" href="#id28" title="Permalink to this image">¶</a></p>
 </div>
 <p>To avoid optimistic estimations, the target is computed by both the value network <span class="math notranslate nohighlight">\(\theta\)</span> and the target network <span class="math notranslate nohighlight">\(\theta'\)</span>:</p>
 <ul class="simple">
@@ -740,14 +745,14 @@
 </ul>
 <div class="math notranslate nohighlight">
 \[t = r + \gamma \, Q_{\theta'}(s´, a^*)\]</div>
-<p>This gives the following loss function for <strong>double DQN</strong> (DDQN, <a class="bibtex reference internal" href="../zreferences.html#vanhasselt2015" id="id6">[vanHasseltGS15]</a>):</p>
+<p>This gives the following loss function for <strong>double DQN</strong> (DDQN, <a class="bibtex reference internal" href="../zreferences.html#vanhasselt2015" id="id6">[van Hasselt et al., 2015]</a>):</p>
 <div class="math notranslate nohighlight">
 \[
     \mathcal{L}(\theta) = \mathbb{E}_\mathcal{D} [(r + \gamma \, Q_{\theta'}(s´, \text{argmax}_{a'} Q_{\theta}(s', a')) - Q_\theta(s, a))^2]
 \]</div>
 <div class="figure align-default" id="id29">
 <a class="reference internal image-reference" href="../_images/ddqn-results1.png"><img alt="../_images/ddqn-results1.png" src="../_images/ddqn-results1.png" style="width: 100%;" /></a>
-<p class="caption"><span class="caption-number">Fig. 1.58 </span><span class="caption-text">Estimated Q-values by Double DQN compared to DQN and the ground truth <a class="bibtex reference internal" href="../zreferences.html#vanhasselt2015" id="id7">[vanHasseltGS15]</a>.</span><a class="headerlink" href="#id29" title="Permalink to this image">¶</a></p>
+<p class="caption"><span class="caption-number">Fig. 1.58 </span><span class="caption-text">Estimated Q-values by Double DQN compared to DQN and the ground truth <a class="bibtex reference internal" href="../zreferences.html#vanhasselt2015" id="id7">[van Hasselt et al., 2015]</a>.</span><a class="headerlink" href="#id29" title="Permalink to this image">¶</a></p>
 </div>
 </div>
 <div class="section" id="prioritized-experience-replay">
@@ -761,7 +766,7 @@
 <div class="math notranslate nohighlight">
 \[\delta_t = r_{t+1} + \gamma \, \max_{a'} Q_\theta(s_{t+1}, a_{t+1}) - Q_\theta(s_t, a_t) \approx 0\]</div>
 <p>The experience replay memory makes learning very <strong>slow</strong>, as we need a lot of samples to learn something useful: high <strong>sample complexity</strong>. We need a smart mechanism to preferentially pick the transitions that will boost learning the most, without introducing a bias.</p>
-<p><strong>Prioritized sweeping</strong> is actually a quite old idea <a class="bibtex reference internal" href="../zreferences.html#moore1993" id="id8">[MA93]</a>. The idea of <strong>prioritized experience replay</strong> (PER, <a class="bibtex reference internal" href="../zreferences.html#schaul2015" id="id9">[SQAS15]</a>) is to sample in priority those transitions whose TD error is the highest:</p>
+<p><strong>Prioritized sweeping</strong> is actually a quite old idea <a class="bibtex reference internal" href="../zreferences.html#moore1993" id="id8">[Moore &amp; Atkeson, 1993]</a>. The idea of <strong>prioritized experience replay</strong> (PER, <a class="bibtex reference internal" href="../zreferences.html#schaul2015" id="id9">[Schaul et al., 2015]</a>) is to sample in priority those transitions whose TD error is the highest:</p>
 <div class="math notranslate nohighlight">
 \[\delta_t = r_{t+1} + \gamma \, \max_{a'} Q_\theta(s_{t+1}, a_{t+1}) - Q_\theta(s_t, a_t)\]</div>
 <p>In practice, we insert the transition <span class="math notranslate nohighlight">\((s, a, r, s', \delta)\)</span> into the replay buffer. To create a minibatch, the sampling algorithm select a transition <span class="math notranslate nohighlight">\(k\)</span> based on the probability:</p>
@@ -784,11 +789,11 @@
 </div>
 <div class="figure align-default" id="id32">
 <a class="reference internal image-reference" href="../_images/per_results1.png"><img alt="../_images/per_results1.png" src="../_images/per_results1.png" style="width: 100%;" /></a>
-<p class="caption"><span class="caption-number">Fig. 1.61 </span><span class="caption-text">DQN with PER outperforms DQN <a class="bibtex reference internal" href="../zreferences.html#schaul2015" id="id10">[SQAS15]</a>.</span><a class="headerlink" href="#id32" title="Permalink to this image">¶</a></p>
+<p class="caption"><span class="caption-number">Fig. 1.61 </span><span class="caption-text">DQN with PER outperforms DQN <a class="bibtex reference internal" href="../zreferences.html#schaul2015" id="id10">[Schaul et al., 2015]</a>.</span><a class="headerlink" href="#id32" title="Permalink to this image">¶</a></p>
 </div>
 <div class="figure align-default" id="id33">
 <a class="reference internal image-reference" href="../_images/per_results2.png"><img alt="../_images/per_results2.png" src="../_images/per_results2.png" style="width: 100%;" /></a>
-<p class="caption"><span class="caption-number">Fig. 1.62 </span><span class="caption-text">DQN with PER outperforms DQN <a class="bibtex reference internal" href="../zreferences.html#schaul2015" id="id11">[SQAS15]</a>.</span><a class="headerlink" href="#id33" title="Permalink to this image">¶</a></p>
+<p class="caption"><span class="caption-number">Fig. 1.62 </span><span class="caption-text">DQN with PER outperforms DQN <a class="bibtex reference internal" href="../zreferences.html#schaul2015" id="id11">[Schaul et al., 2015]</a>.</span><a class="headerlink" href="#id33" title="Permalink to this image">¶</a></p>
 </div>
 </div>
 <div class="section" id="dueling-networks">
@@ -796,7 +801,7 @@
 <p>DQN and its variants learn to predict directly the Q-value of each available action.</p>
 <div class="figure align-default" id="id34">
 <a class="reference internal image-reference" href="../_images/duelling1.png"><img alt="../_images/duelling1.png" src="../_images/duelling1.png" style="width: 60%;" /></a>
-<p class="caption"><span class="caption-number">Fig. 1.63 </span><span class="caption-text">DQN predicts directly the Q-values. Source: <a class="bibtex reference internal" href="../zreferences.html#wang2016" id="id12">[WSH+16]</a>.</span><a class="headerlink" href="#id34" title="Permalink to this image">¶</a></p>
+<p class="caption"><span class="caption-number">Fig. 1.63 </span><span class="caption-text">DQN predicts directly the Q-values. Source: <a class="bibtex reference internal" href="../zreferences.html#wang2016" id="id12">[Wang et al., 2016]</a>.</span><a class="headerlink" href="#id34" title="Permalink to this image">¶</a></p>
 </div>
 <p>There are several problems with predicting Q-values with a DNN:</p>
 <ul class="simple">
@@ -833,14 +838,14 @@
 <a class="reference internal image-reference" href="../_images/dueling-principle2.svg"><img alt="../_images/dueling-principle2.svg" src="../_images/dueling-principle2.svg" width="60%" /></a>
 <p class="caption"><span class="caption-number">Fig. 1.65 </span><span class="caption-text">The variance of the advantages is much lower.</span><a class="headerlink" href="#id36" title="Permalink to this image">¶</a></p>
 </div>
-<p>In <strong>dueling networks</strong> <a class="bibtex reference internal" href="../zreferences.html#wang2016" id="id13">[WSH+16]</a>, the network is forced to decompose the estimated Q-value <span class="math notranslate nohighlight">\(Q_\theta(s, a)\)</span> into a state value <span class="math notranslate nohighlight">\(V_\alpha(s)\)</span> and an advantage function <span class="math notranslate nohighlight">\(A_\beta(s, a)\)</span>:</p>
+<p>In <strong>dueling networks</strong> <a class="bibtex reference internal" href="../zreferences.html#wang2016" id="id13">[Wang et al., 2016]</a>, the network is forced to decompose the estimated Q-value <span class="math notranslate nohighlight">\(Q_\theta(s, a)\)</span> into a state value <span class="math notranslate nohighlight">\(V_\alpha(s)\)</span> and an advantage function <span class="math notranslate nohighlight">\(A_\beta(s, a)\)</span>:</p>
 <div class="math notranslate nohighlight">
 \[
     Q_\theta(s, a) = V_\alpha(s) + A_\beta(s, a)
 \]</div>
 <div class="figure align-default" id="id37">
 <a class="reference internal image-reference" href="../_images/duelling2.png"><img alt="../_images/duelling2.png" src="../_images/duelling2.png" style="width: 60%;" /></a>
-<p class="caption"><span class="caption-number">Fig. 1.66 </span><span class="caption-text">Dueling DQN decomposes the Q-values as the sum of the V-value and the advantage of the action. Source: <a class="bibtex reference internal" href="../zreferences.html#wang2016" id="id14">[WSH+16]</a>.</span><a class="headerlink" href="#id37" title="Permalink to this image">¶</a></p>
+<p class="caption"><span class="caption-number">Fig. 1.66 </span><span class="caption-text">Dueling DQN decomposes the Q-values as the sum of the V-value and the advantage of the action. Source: <a class="bibtex reference internal" href="../zreferences.html#wang2016" id="id14">[Wang et al., 2016]</a>.</span><a class="headerlink" href="#id37" title="Permalink to this image">¶</a></p>
 </div>
 <p>The parameters <span class="math notranslate nohighlight">\(\alpha\)</span> and <span class="math notranslate nohighlight">\(\beta\)</span> are just two shared subparts of the NN <span class="math notranslate nohighlight">\(\theta\)</span>. The loss function</p>
 <div class="math notranslate nohighlight">
@@ -872,13 +877,13 @@ Q_\theta(s, a) = 10 &amp; = 1 + 9 \\
 \]</div>
 <div class="figure align-default" id="id38">
 <a class="reference internal image-reference" href="../_images/dueling-result.png"><img alt="../_images/dueling-result.png" src="../_images/dueling-result.png" style="width: 80%;" /></a>
-<p class="caption"><span class="caption-number">Fig. 1.67 </span><span class="caption-text">Dueling DQN network improves over double DQN with PER on most Atari games. Source: <a class="bibtex reference internal" href="../zreferences.html#wang2016" id="id15">[WSH+16]</a>.</span><a class="headerlink" href="#id38" title="Permalink to this image">¶</a></p>
+<p class="caption"><span class="caption-number">Fig. 1.67 </span><span class="caption-text">Dueling DQN network improves over double DQN with PER on most Atari games. Source: <a class="bibtex reference internal" href="../zreferences.html#wang2016" id="id15">[Wang et al., 2016]</a>.</span><a class="headerlink" href="#id38" title="Permalink to this image">¶</a></p>
 </div>
 <div class="admonition-summary-of-dqn-algorithms admonition">
 <p class="admonition-title">Summary of DQN algorithms</p>
 <div class="figure align-default" id="id39">
 <a class="reference internal image-reference" href="../_images/DeepQNetwork.jpg"><img alt="../_images/DeepQNetwork.jpg" src="../_images/DeepQNetwork.jpg" style="width: 100%;" /></a>
-<p class="caption"><span class="caption-number">Fig. 1.68 </span><span class="caption-text">Architecture of DQN <a class="bibtex reference internal" href="../zreferences.html#mnih2013" id="id16">[MKS+13]</a>.</span><a class="headerlink" href="#id39" title="Permalink to this image">¶</a></p>
+<p class="caption"><span class="caption-number">Fig. 1.68 </span><span class="caption-text">Architecture of DQN <a class="bibtex reference internal" href="../zreferences.html#mnih2013" id="id16">[Mnih et al., 2013]</a>.</span><a class="headerlink" href="#id39" title="Permalink to this image">¶</a></p>
 </div>
 <p>DQN and its early variants (double duelling DQN with PER) are an example of <strong>value-based deep RL</strong>. The value <span class="math notranslate nohighlight">\(Q_\theta(s, a)\)</span> of each possible action in a given state is approximated by a convolutional neural network. The NN has to minimize the mse between the predicted Q-values and the target value corresponding to the Bellman equation:</p>
 <div class="math notranslate nohighlight">

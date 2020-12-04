@@ -1,4 +1,4 @@
-# Deep Q-Learning
+# Deep Q-Learning (DQN)
 
 Slides: [pdf](https://www.tu-chemnitz.de/informatik/KI/edu/deeprl/lectures/pdf/3.1-DQN.pdf)
 

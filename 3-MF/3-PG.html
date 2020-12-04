@@ -1,0 +1,755 @@
+
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>3. Policy gradient &#8212; Deep Reinforcement Learning</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" integrity="sha384-KA6wR/X5RY4zFAHpv/CnoG2UW1uogYfdnP67Uv7eULvTveboZJg0qUpmJZb5VqzN" crossorigin="anonymous">
+    <link href="../_static/css/index.css" rel="stylesheet">
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/sphinx-book-theme.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/style.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-dropdown.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/sphinx-book-theme.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/togglebutton.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/sphinx-book-theme.js"></script>
+    <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processRefs": false, "processEnvironments": false}})</script>
+    <script async="async" src="https://unpkg.com/thebelab@latest/lib/index.js"></script>
+    <script >
+        const thebe_selector = ".thebe"
+        const thebe_selector_input = "pre"
+        const thebe_selector_output = ".output"
+    </script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <link rel="canonical" href="https://julien-vitay.net/lecturenotes-deeprl/3-MF/3-PG.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="1. Introduction to Python" href="../5-exercises/ex1-Python.html" />
+    <link rel="prev" title="2. Beyond DQN" href="2-BeyondDQN.html" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="docsearch:language" content="en">
+
+
+<!-- Opengraph tags -->
+<meta property="og:url"         content="https://julien-vitay.net/lecturenotes-deeprl/3-MF/3-PG.html" />
+<meta property="og:type"        content="article" />
+<meta property="og:title"       content="Policy gradient" />
+<meta property="og:description" content="Policy gradient  Slides: pdf  Policy Search  &lt;div class=&#39;embed-container&#39;&gt;&lt;iframe src=&#39;https://www.youtube.com/embed/oMnUUa2qV1A&#39; frameborder=&#39;0&#39; allowfullscree" />
+<meta property="og:image"       content="https://julien-vitay.net/lecturenotes-deeprl/_static/tuc.svg" />
+
+<meta name="twitter:card" content="summary" />
+
+
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
+<a class="navbar-brand text-wrap" href="../index.html">
+  
+  <img src="../_static/tuc.svg" class="logo" alt="logo">
+  
+  
+  <h1 class="site-logo" id="site-title">Deep Reinforcement Learning</h1>
+  
+</a>
+</div>
+
+<form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form>
+
+<nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+  <ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../intro.html">
+   Deep Reinforcement Learning
+  </a>
+ </li>
+</ul>
+<p class="caption">
+ <span class="caption-text">
+  Introduction
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../1-intro/1-Introduction.html">
+   1. Introduction
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../1-intro/2-Math.html">
+   2. Math basics
+  </a>
+ </li>
+</ul>
+<p class="caption">
+ <span class="caption-text">
+  Tabular RL
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../2-tabular/1-Bandits.html">
+   1. Bandits
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../2-tabular/2-MDP.html">
+   2. Markov Decision Processes
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../2-tabular/3-DP.html">
+   3. Dynamic Programming
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../2-tabular/4-MC.html">
+   4. Monte-Carlo (MC) methods
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../2-tabular/5-TD.html">
+   5. Temporal Difference learning
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../2-tabular/6-FA.html">
+   6. Function approximation
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../2-tabular/7-NN.html">
+   7. Deep learning
+  </a>
+ </li>
+</ul>
+<p class="caption">
+ <span class="caption-text">
+  Model-free RL
+ </span>
+</p>
+<ul class="current nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="1-DQN.html">
+   1. Deep Q-Learning (DQN)
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="2-BeyondDQN.html">
+   2. Beyond DQN
+  </a>
+ </li>
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   3. Policy gradient
+  </a>
+ </li>
+</ul>
+<p class="caption">
+ <span class="caption-text">
+  Exercises
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../5-exercises/ex1-Python.html">
+   1. Introduction to Python
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../5-exercises/ex2-Numpy.html">
+   2. Numpy and Matplotlib
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../5-exercises/ex3-Sampling.html">
+   3. Sampling
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../5-exercises/ex4-Bandits.html">
+   4. Bandits (part 1)
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../5-exercises/ex5-Bandits2.html">
+   5. Bandits (part 2)
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../5-exercises/ex6-DP.html">
+   6. Dynamic programming
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../5-exercises/ex7-Gym.html">
+   7. Gym environments
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../5-exercises/ex8-MC.html">
+   8. Monte-Carlo control
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../5-exercises/ex9-TD.html">
+   9. Q-learning
+  </a>
+ </li>
+</ul>
+<p class="caption">
+ <span class="caption-text">
+  References
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../zreferences.html">
+   1. Bibliography
+  </a>
+ </li>
+</ul>
+
+</nav>
+
+ <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="row topbar fixed-top container-xl">
+    <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show">
+    </div>
+    <div class="col pl-2 topbar-main">
+        
+        <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+            data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+            aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+            title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+            <i class="fas fa-bars"></i>
+            <i class="fas fa-arrow-left"></i>
+            <i class="fas fa-arrow-up"></i>
+        </button>
+        
+        <div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="../_sources/3-MF/3-PG.md"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.md</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+    
+</div>
+        <!-- Source interaction buttons -->
+
+
+        <!-- Full screen (wrap in <a> to have style consistency -->
+        <a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+                data-placement="bottom" onclick="toggleFullScreen()" title="Fullscreen mode"><i
+                    class="fas fa-expand"></i></button></a>
+
+        <!-- Launch buttons -->
+
+    </div>
+
+    <!-- Table of contents -->
+    <div class="d-none d-md-block col-md-2 bd-toc show">
+        <div class="tocsection onthispage pt-5 pb-3">
+            <i class="fas fa-list"></i> Contents
+        </div>
+        <nav id="bd-toc-nav">
+            <ul class="nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#policy-search">
+   3.1. Policy Search
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#reinforce">
+   3.2. REINFORCE
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#reinforce-algorithm">
+     3.2.1. REINFORCE algorithm
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#reinforce-with-baseline">
+     3.2.2. REINFORCE with baseline
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id5">
+   3.3. Policy Gradient
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#policy-gradient-theorem">
+     3.3.1. Policy Gradient theorem
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#policy-gradient-theorem-with-function-approximation">
+     3.3.2. Policy Gradient Theorem with function approximation
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#actor-critic-architectures">
+     3.3.3. Actor-critic architectures
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+        </nav>
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+        
+              <div>
+                
+  <div class="section" id="policy-gradient">
+<h1><span class="section-number">3. </span>Policy gradient<a class="headerlink" href="#policy-gradient" title="Permalink to this headline">¶</a></h1>
+<p>Slides: <a class="reference external" href="https://www.tu-chemnitz.de/informatik/KI/edu/deeprl/lectures/pdf/3.3-PG.pdf">pdf</a></p>
+<div class="section" id="policy-search">
+<h2><span class="section-number">3.1. </span>Policy Search<a class="headerlink" href="#policy-search" title="Permalink to this headline">¶</a></h2>
+<div class='embed-container'><iframe src='https://www.youtube.com/embed/oMnUUa2qV1A' frameborder='0' allowfullscreen></iframe></div>
+<p>Learning directly the Q-values in value-based methods (DQN) suffers from many problems:</p>
+<ol class="simple">
+<li><p>The Q-values are <strong>unbounded</strong>: they can take any value (positive or negative), so the output layer must be linear.</p></li>
+<li><p>The Q-values have a <strong>high variability</strong>: some <span class="math notranslate nohighlight">\((s,a)\)</span> pairs have very negative values, others have very positive values. Difficult to learn for a NN.</p></li>
+<li><p>Works only for small <strong>discrete action spaces</strong>: need to iterate over all actions to find the greedy action.</p></li>
+</ol>
+<p>Instead of learning the Q-values, one could approximate directly the policy <span class="math notranslate nohighlight">\(\pi_\theta(s, a)\)</span> with a neural network. <span class="math notranslate nohighlight">\(\pi_\theta(s, a)\)</span> is called a <strong>parameterized policy</strong>: it depends directly on the parameters <span class="math notranslate nohighlight">\(\theta\)</span> of the NN. For discrete action spaces, the output of the NN can be a <strong>softmax</strong> layer, directly giving the probability of selecting an action. For continuous action spaces, the output layer can directly control the effector (joint angles). Parameterized policies can represent continuous policies and avoid the curse of dimensionality.</p>
+<div class="figure align-default" id="id8">
+<a class="reference internal image-reference" href="../_images/conv_agent.png"><img alt="../_images/conv_agent.png" src="../_images/conv_agent.png" style="width: 70%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 3.10 </span><span class="caption-text">Policy search methods learn directly the policy.</span><a class="headerlink" href="#id8" title="Permalink to this image">¶</a></p>
+</div>
+<p><strong>Policy search</strong> methods aim at maximizing directly the expected return over all possible trajectories (episodes) <span class="math notranslate nohighlight">\(\tau = (s_0, a_0, \dots, s_T, a_T)\)</span></p>
+<div class="math notranslate nohighlight">
+\[
+    \mathcal{J}(\theta) = \mathbb{E}_{\tau \sim \rho_\theta}[R(\tau)] = \int_{\tau} \rho_\theta(\tau) \; R(\tau) \; d\tau
+\]</div>
+<p>All trajectories <span class="math notranslate nohighlight">\(\tau\)</span> selected by the policy <span class="math notranslate nohighlight">\(\pi_\theta\)</span> should be associated with a high expected return <span class="math notranslate nohighlight">\(R(\tau)\)</span> in order to maximize this objective function. <span class="math notranslate nohighlight">\(\rho_\theta\)</span> is the space of trajectories possible under <span class="math notranslate nohighlight">\(\pi_\theta\)</span>. This means that the optimal policy should only select actions that maximizes the expected return: exactly what we want.</p>
+<div class="figure align-default" id="id9">
+<a class="reference internal image-reference" href="../_images/policysearch.svg"><img alt="../_images/policysearch.svg" src="../_images/policysearch.svg" width="50%" /></a>
+<p class="caption"><span class="caption-number">Fig. 3.11 </span><span class="caption-text">Policy search maximizes the return of the trajectories generated by the policy.</span><a class="headerlink" href="#id9" title="Permalink to this image">¶</a></p>
+</div>
+<p>The objective function is however not <strong>model-free</strong>, as the probability of a trajectory does depend on the environments dynamics:</p>
+<div class="math notranslate nohighlight">
+\[
+    \rho_\theta(\tau) = p_\theta(s_0, a_0, \ldots, s_T, a_T) = p_0 (s_0) \, \prod_{t=0}^T \pi_\theta(s_t, a_t) \, p(s_{t+1} | s_t, a_t)
+\]</div>
+<p>The objective function is furthermore <strong>not computable</strong>:</p>
+<ul class="simple">
+<li><p>An <strong>infinity</strong> of possible trajectories to integrate if the action space is continuous.</p></li>
+<li><p>Even if we sample trajectories, we would need a huge number of them to correctly estimate the objective function (<strong>sample complexity</strong>) because of the huge <strong>variance</strong> of the returns.</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[
+    \mathcal{J}(\theta) = \mathbb{E}_{\tau \sim \rho_\theta}[R(\tau)] \approx \frac{1}{M} \, \sum_{i=1}^M R(\tau_i)
+\]</div>
+<p>All we need to find is a computable gradient <span class="math notranslate nohighlight">\(\nabla_\theta \mathcal{J}(\theta)\)</span> to apply gradient ascent and backpropagation.</p>
+<div class="math notranslate nohighlight">
+\[
+    \Delta \theta = \eta \, \nabla_\theta \mathcal{J}(\theta)
+\]</div>
+<p><strong>Policy Gradient</strong> (PG) methods only try to estimate this gradient, but do not care about the objective function itself…</p>
+<div class="math notranslate nohighlight">
+\[
+    g = \nabla_\theta \mathcal{J}(\theta)
+\]</div>
+<p>In particular, any function <span class="math notranslate nohighlight">\(\mathcal{J}'(\theta)\)</span> whose gradient is locally the same (or has the same direction) will do:</p>
+<div class="math notranslate nohighlight">
+\[\mathcal{J}'(\theta) = \alpha \, \mathcal{J}(\theta) + \beta \; \Rightarrow \; \nabla_\theta \mathcal{J}'(\theta) \propto \nabla_\theta \mathcal{J}(\theta)  \; \Rightarrow \; \Delta \theta = \eta \, \nabla_\theta \mathcal{J}'(\theta)\]</div>
+<p>This is called <strong>surrogate optimization</strong>: we actually want to maximize <span class="math notranslate nohighlight">\(\mathcal{J}(\theta)\)</span> but we cannot compute it. We instead create a surrogate objective <span class="math notranslate nohighlight">\(\mathcal{J}'(\theta)\)</span> which is locally the same as <span class="math notranslate nohighlight">\(\mathcal{J}(\theta)\)</span> and tractable.</p>
+<div class="figure align-default" id="id10">
+<a class="reference internal image-reference" href="../_images/pg-idea.png"><img alt="../_images/pg-idea.png" src="../_images/pg-idea.png" style="width: 70%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 3.12 </span><span class="caption-text">Policy gradient methods only care about the gradient of the objective function. Source: <a class="reference external" href="https://www.freecodecamp.org/news/an-introduction-to-policy-gradients-with-cartpole-and-doom-495b5ef2207f/">https://www.freecodecamp.org/news/an-introduction-to-policy-gradients-with-cartpole-and-doom-495b5ef2207f/</a>.</span><a class="headerlink" href="#id10" title="Permalink to this image">¶</a></p>
+</div>
+</div>
+<div class="section" id="reinforce">
+<h2><span class="section-number">3.2. </span>REINFORCE<a class="headerlink" href="#reinforce" title="Permalink to this headline">¶</a></h2>
+<div class='embed-container'><iframe src='https://www.youtube.com/embed/qjZk7VcNndI' frameborder='0' allowfullscreen></iframe></div>
+<div class="section" id="reinforce-algorithm">
+<h3><span class="section-number">3.2.1. </span>REINFORCE algorithm<a class="headerlink" href="#reinforce-algorithm" title="Permalink to this headline">¶</a></h3>
+<p>The <strong>REINFORCE</strong> algorithm <a class="bibtex reference internal" href="../zreferences.html#williams1992" id="id1">[Williams, 1992]</a> proposes an unbiased estimate of the policy gradient:</p>
+<div class="math notranslate nohighlight">
+\[
+    \nabla_\theta \mathcal{J}(\theta) = \nabla_\theta \int_\tau \rho_\theta (\tau) \, R(\tau) \, d\tau =  \int_\tau (\nabla_\theta \rho_\theta (\tau)) \, R(\tau) \, d\tau
+\]</div>
+<p>by noting that the return of a trajectory does not depend on the weights <span class="math notranslate nohighlight">\(\theta\)</span> (the agent only controls its actions, not the environment).</p>
+<p>We now use the <strong>log-trick</strong>, a simple identity based on the fact that:</p>
+<div class="math notranslate nohighlight">
+\[
+    \frac{d \log f(x)}{dx} = \frac{f'(x)}{f(x)}
+\]</div>
+<p>to rewrite the policy gradient of a single trajectory:</p>
+<div class="math notranslate nohighlight">
+\[
+    \nabla_\theta \rho_\theta (\tau) = \rho_\theta (\tau) \, \nabla_\theta \log \rho_\theta (\tau)
+\]</div>
+<p>The policy gradient becomes:</p>
+<div class="math notranslate nohighlight">
+\[
+    \nabla_\theta \mathcal{J}(\theta) =  \int_\tau \rho_\theta (\tau) \, \nabla_\theta \log \rho_\theta (\tau) \, R(\tau) \, d\tau
+\]</div>
+<p>which now has the form of a mathematical expectation:</p>
+<div class="math notranslate nohighlight">
+\[
+    \nabla_\theta \mathcal{J}(\theta) =  \mathbb{E}_{\tau \sim \rho_\theta}[ \nabla_\theta \log \rho_\theta (\tau) \, R(\tau) ]
+\]</div>
+<p>The advantage of REINFORCE is that it is <strong>model-free</strong>:</p>
+<div class="math notranslate nohighlight">
+\[
+    \rho_\theta(\tau) = p_\theta(s_0, a_0, \ldots, s_T, a_T) = p_0 (s_0) \, \prod_{t=0}^T \pi_\theta(s_t, a_t) p(s_{t+1} | s_t, a_t)
+\]</div>
+<div class="math notranslate nohighlight">
+\[
+    \log \rho_\theta(\tau) = \log p_0 (s_0) + \sum_{t=0}^T \log \pi_\theta(s_t, a_t) + \sum_{t=0}^T \log p(s_{t+1} | s_t, a_t)
+\]</div>
+<div class="math notranslate nohighlight">
+\[
+    \nabla_\theta \log \rho_\theta(\tau) = \sum_{t=0}^T \nabla_\theta \log \pi_\theta(s_t, a_t)
+\]</div>
+<p>The transition dynamics <span class="math notranslate nohighlight">\(p(s_{t+1} | s_t, a_t)\)</span> disappear from the gradient.  The <strong>Policy Gradient</strong> does not depend on the dynamics of the environment:</p>
+<div class="math notranslate nohighlight">
+\[
+    \nabla_\theta \mathcal{J}(\theta) =  \mathbb{E}_{\tau \sim \rho_\theta}[\sum_{t=0}^T \nabla_\theta \log \pi_\theta(s_t, a_t) \, R(\tau) ]
+\]</div>
+<p>The REINFORCE algorithm is a policy-based variant of Monte-Carlo control:</p>
+<div class="admonition-reinforce-algorithm admonition">
+<p class="admonition-title">REINFORCE algorithm</p>
+<p><a class="bibtex reference internal" href="../zreferences.html#williams1992" id="id2">[Williams, 1992]</a>.</p>
+<ul>
+<li><p><strong>while</strong> not converged:</p>
+<ul class="simple">
+<li><p>Sample <span class="math notranslate nohighlight">\(M\)</span> trajectories <span class="math notranslate nohighlight">\(\{\tau_i\}\)</span> using the current policy <span class="math notranslate nohighlight">\(\pi_\theta\)</span> and observe the returns <span class="math notranslate nohighlight">\(\{R(\tau_i)\}\)</span>.</p></li>
+<li><p>Estimate the policy gradient as an average over the trajectories:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[
+       \nabla_\theta \mathcal{J}(\theta) \approx \frac{1}{M} \sum_{i=1}^M \sum_{t=0}^T \nabla_\theta \log \pi_\theta(s_t, a_t) \, R(\tau_i)
+    \]</div>
+<ul class="simple">
+<li><p>Update the policy using gradient ascent:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[
+        \theta \leftarrow \theta + \eta \, \nabla_\theta \mathcal{J}(\theta)
+    \]</div>
+</li>
+</ul>
+</div>
+<p><strong>Advantages</strong></p>
+<ul class="simple">
+<li><p>The policy gradient is <strong>model-free</strong>.</p></li>
+<li><p>Works with <strong>partially observable</strong> problems (POMDP): as the return is computed over complete trajectories, it does not matter whether the states are Markov or not.</p></li>
+</ul>
+<p><strong>Inconvenients</strong></p>
+<ul class="simple">
+<li><p>Only for <strong>episodic tasks</strong>.</p></li>
+<li><p>The gradient has a <strong>high variance</strong>: returns may change a lot during learning.</p></li>
+<li><p>It has therefore a high <strong>sample complexity</strong>: we need to sample many episodes to correctly estimate the policy gradient.</p></li>
+<li><p>Strictly <strong>on-policy</strong>: trajectories must be frequently sampled and immediately used to update the policy.</p></li>
+</ul>
+</div>
+<div class="section" id="reinforce-with-baseline">
+<h3><span class="section-number">3.2.2. </span>REINFORCE with baseline<a class="headerlink" href="#reinforce-with-baseline" title="Permalink to this headline">¶</a></h3>
+<p>To reduce the variance of the estimated gradient, a baseline is often subtracted from the return:</p>
+<div class="math notranslate nohighlight">
+\[
+    \nabla_\theta \mathcal{J}(\theta) =  \mathbb{E}_{\tau \sim \rho_\theta}[\sum_{t=0}^T \nabla_\theta \log \pi_\theta(s_t, a_t) \, (R(\tau) - b) ]
+\]</div>
+<p>As long as the baseline <span class="math notranslate nohighlight">\(b\)</span> is independent from <span class="math notranslate nohighlight">\(\theta\)</span>, it does not introduce a bias:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{aligned}
+    \mathbb{E}_{\tau \sim \rho_\theta}[\nabla_\theta \log \rho_\theta (\tau) \, b ] &amp; = \int_\tau \rho_\theta (\tau) \nabla_\theta \log \rho_\theta (\tau) \, b \, d\tau \\
+    &amp; = \int_\tau \nabla_\theta  \rho_\theta (\tau) \, b \, d\tau \\
+    &amp;= b \, \nabla_\theta \int_\tau \rho_\theta (\tau) \, d\tau \\
+    &amp;=  b \, \nabla_\theta 1 \\
+    &amp;= 0
+\end{aligned}
+\end{split}\]</div>
+<p>A simple baseline that reduces the variance of the returns is a <strong>moving average</strong> of the returns obtained during all episodes:</p>
+<div class="math notranslate nohighlight">
+\[b = \alpha \, R(\tau) + (1 - \alpha) \, b\]</div>
+<p>This is similar to <strong>reinforcement comparison</strong> for bandits, except we compute the mean return instead of the mean reward. A trajectory <span class="math notranslate nohighlight">\(\tau\)</span> should be <strong>reinforced</strong> if it brings more return than average.</p>
+<p><a class="bibtex reference internal" href="../zreferences.html#williams1992" id="id3">[Williams, 1992]</a> showed that the best baseline (the one that reduces the variance the most) is actually:</p>
+<div class="math notranslate nohighlight">
+\[
+    b = \frac{\mathbb{E}_{\tau \sim \rho_\theta}[(\nabla_\theta \log \rho_\theta (\tau))^2 \, R(\tau)]}{\mathbb{E}_{\tau \sim \rho_\theta}[(\nabla_\theta \log \rho_\theta (\tau))^2]}
+\]</div>
+<p>but it is complex to compute. In practice, a baseline that works well is the value of the encountered states:</p>
+<div class="math notranslate nohighlight">
+\[
+    \nabla_\theta \mathcal{J}(\theta) =  \mathbb{E}_{\tau \sim \rho_\theta}[\sum_{t=0}^T \nabla_\theta \log \pi_\theta(s_t, a_t) \, (R(\tau) - V^\pi(s_t)) ]
+\]</div>
+<p><span class="math notranslate nohighlight">\(R(\tau) - V^\pi(s_t)\)</span> becomes the <strong>advantage</strong> of the action <span class="math notranslate nohighlight">\(a_t\)</span> in <span class="math notranslate nohighlight">\(s_t\)</span>: how much return does it provide compared to what can be expected in <span class="math notranslate nohighlight">\(s_t\)</span> generally. As in <strong>dueling networks</strong>, it reduces the variance of the returns. Problem: the value of each state has to be learned separately (see actor-critic architectures).</p>
+<div class="admonition-application-of-reinforce-to-resource-management admonition">
+<p class="admonition-title">Application of REINFORCE to resource management</p>
+<p><img alt="" src="../_images/reinforce-cluster.png" /></p>
+<p>REINFORCE with baseline can be used to allocate resources (CPU cores, memory, etc) when scheduling jobs on a cloud of compute servers. In DeepRM <a class="bibtex reference internal" href="../zreferences.html#mao2016" id="id4">[Mao et al., 2016]</a>, the policy is approximated by a shallow NN (one hidden layer with 20 neurons). The state space is the current occupancy of the cluster as well as the job waiting list. The action space is sending a job to a particular resource. The reward is the negative <strong>job slowdown</strong>: how much longer the job needs to complete compared to the optimal case. DeepRM outperforms all alternative job schedulers.</p>
+<p><img alt="" src="../_images/reinforce-cluster2.png" /></p>
+</div>
+</div>
+</div>
+<div class="section" id="id5">
+<h2><span class="section-number">3.3. </span>Policy Gradient<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h2>
+<div class='embed-container'><iframe src='https://www.youtube.com/embed/1b7E_byZNGU' frameborder='0' allowfullscreen></iframe></div>
+<div class="section" id="policy-gradient-theorem">
+<h3><span class="section-number">3.3.1. </span>Policy Gradient theorem<a class="headerlink" href="#policy-gradient-theorem" title="Permalink to this headline">¶</a></h3>
+<p>The REINFORCE gradient estimate is the following:</p>
+<div class="math notranslate nohighlight">
+\[
+    \nabla_\theta \mathcal{J}(\theta) =  \mathbb{E}_{\tau \sim \rho_\theta}[\sum_{t=0}^T \nabla_\theta \log \pi_\theta(s_t, a_t) \, R(\tau) ] =  \mathbb{E}_{\tau \sim \rho_\theta}[\sum_{t=0}^T (\nabla_\theta \log \pi_\theta(s_t, a_t)) \, (\sum_{t'=0}^T \gamma^{t'} \, r_{t'+1}) ]
+\]</div>
+<p>For each state-action pair <span class="math notranslate nohighlight">\((s_t, a_t)\)</span> encountered during the episode, the gradient of the log-policy is multiplied by the complete return of the episode:</p>
+<div class="math notranslate nohighlight">
+\[R(\tau) = \sum_{t'=0}^T \gamma^{t'} \, r_{t'+1}\]</div>
+<p>The <strong>causality principle</strong> states that rewards obtained before time <span class="math notranslate nohighlight">\(t\)</span> are not caused by that action. The policy gradient can be rewritten as:</p>
+<div class="math notranslate nohighlight">
+\[
+    \nabla_\theta \mathcal{J}(\theta) =  \mathbb{E}_{\tau \sim \rho_\theta}[\sum_{t=0}^T \nabla_\theta \log \pi_\theta(s_t, a_t) \, (\sum_{t'=t}^T \gamma^{t' - t} \, r_{t'+1}) ] =  \mathbb{E}_{\tau \sim \rho_\theta}[\sum_{t=0}^T \nabla_\theta \log \pi_\theta(s_t, a_t) \, R_t ]
+\]</div>
+<p>The return at time <span class="math notranslate nohighlight">\(t\)</span> (<strong>reward-to-go</strong>) multiplies the gradient of the log-likelihood of the policy(the <strong>score</strong>) for each transition in the episode:</p>
+<div class="math notranslate nohighlight">
+\[
+    \nabla_\theta \mathcal{J}(\theta) =  \mathbb{E}_{\tau \sim \rho_\theta}[\sum_{t=0}^T \nabla_\theta \log \pi_\theta(s_t, a_t) \, R_t ]
+\]</div>
+<p>As we have:</p>
+<div class="math notranslate nohighlight">
+\[Q^\pi(s, a) = \mathbb{E}_\pi [R_t | s_t =s; a_t =a]\]</div>
+<p>we can replace <span class="math notranslate nohighlight">\(R_t\)</span> with <span class="math notranslate nohighlight">\(Q^{\pi_\theta}(s_t, a_t)\)</span> without introducing any bias:</p>
+<div class="math notranslate nohighlight">
+\[
+    \nabla_\theta \mathcal{J}(\theta) =  \mathbb{E}_{\tau \sim \rho_\theta}[\sum_{t=0}^T \nabla_\theta \log \pi_\theta(s_t, a_t) \, Q^{\pi_\theta}(s_t, a_t) ]
+\]</div>
+<p>This is true on average (no bias if the Q-value estimates are correct) and has a much lower variance!</p>
+<p>The policy gradient is defined over complete trajectories:</p>
+<div class="math notranslate nohighlight">
+\[
+    \nabla_\theta \mathcal{J}(\theta) =  \mathbb{E}_{\tau \sim \rho_\theta}[\sum_{t=0}^T \nabla_\theta \log \pi_\theta(s_t, a_t) \, Q^{\pi_\theta}(s_t, a_t) ]
+\]</div>
+<p>However, <span class="math notranslate nohighlight">\(\nabla_\theta \log \pi_\theta(s_t, a_t) \, Q^{\pi_\theta}(s_t, a_t)\)</span> now only depends on <span class="math notranslate nohighlight">\((s_t, a_t)\)</span>, not the future nor the past. Each step of the episode is now independent from each other (if we have the Markov property). We can then <strong>sample single transitions</strong> instead of complete episodes:</p>
+<div class="math notranslate nohighlight">
+\[
+    \nabla_\theta \mathcal{J}(\theta) =  \mathbb{E}_{s \sim \rho_\theta, a \sim \pi_\theta}[\nabla_\theta \log \pi_\theta(s, a) \, Q^{\pi_\theta}(s, a) ]
+\]</div>
+<p>Note that this is not true for <span class="math notranslate nohighlight">\(\mathcal{J}(\theta)\)</span> directly, as the value of <span class="math notranslate nohighlight">\(\mathcal{J}(\theta)\)</span> changes (computed over single transitions instead of complete episodes, so it is smaller), but it is true for its gradient (both go in the same direction)!</p>
+<div class="admonition-policy-gradient-theorem admonition">
+<p class="admonition-title">Policy Gradient Theorem</p>
+<p><a class="bibtex reference internal" href="../zreferences.html#sutton1999" id="id6">[Sutton et al., 1999]</a>.</p>
+<p>For any MDP, the policy gradient is:</p>
+<div class="math notranslate nohighlight">
+\[
+    g = \nabla_\theta \mathcal{J}(\theta) =  \mathbb{E}_{s \sim \rho_\theta, a \sim \pi_\theta}[\nabla_\theta \log \pi_\theta(s, a) \, Q^{\pi_\theta}(s, a) ]
+\]</div>
+</div>
+</div>
+<div class="section" id="policy-gradient-theorem-with-function-approximation">
+<h3><span class="section-number">3.3.2. </span>Policy Gradient Theorem with function approximation<a class="headerlink" href="#policy-gradient-theorem-with-function-approximation" title="Permalink to this headline">¶</a></h3>
+<p>Better yet, <a class="bibtex reference internal" href="../zreferences.html#sutton1999" id="id7">[Sutton et al., 1999]</a> showed that we can replace the true Q-value <span class="math notranslate nohighlight">\(Q^{\pi_\theta}(s, a)\)</span> by an estimate <span class="math notranslate nohighlight">\(Q_\varphi(s, a)\)</span> as long as this one is unbiased:</p>
+<div class="math notranslate nohighlight">
+\[
+    \nabla_\theta \mathcal{J}(\theta) =  \mathbb{E}_{s \sim \rho_\theta, a \sim \pi_\theta}[\nabla_\theta \log \pi_\theta(s, a) \, Q_\varphi(s, a) ]
+\]</div>
+<p>We only need to have:</p>
+<div class="math notranslate nohighlight">
+\[
+    Q_\varphi(s, a) \approx Q^{\pi_\theta}(s, a) \; \forall s, a
+\]</div>
+<p>The approximated Q-values can for example minimize the <strong>mean square error</strong> with the true Q-values:</p>
+<div class="math notranslate nohighlight">
+\[
+    \mathcal{L}(\varphi) =  \mathbb{E}_{s \sim \rho_\theta, a \sim \pi_\theta}[(Q^{\pi_\theta}(s, a) - Q_\varphi(s, a))^2]
+\]</div>
+</div>
+<div class="section" id="actor-critic-architectures">
+<h3><span class="section-number">3.3.3. </span>Actor-critic architectures<a class="headerlink" href="#actor-critic-architectures" title="Permalink to this headline">¶</a></h3>
+<p>We obtain an <strong>actor-critic</strong> architecture:</p>
+<ul class="simple">
+<li><p>the <strong>actor</strong> <span class="math notranslate nohighlight">\(\pi_\theta(s, a)\)</span> implements the policy and selects an action <span class="math notranslate nohighlight">\(a\)</span> in a state <span class="math notranslate nohighlight">\(s\)</span>.</p></li>
+<li><p>the <strong>critic</strong> <span class="math notranslate nohighlight">\(Q_\varphi(s, a)\)</span> estimates the value of that action and drives learning in the actor.</p></li>
+</ul>
+<div class="figure align-default" id="id11">
+<a class="reference internal image-reference" href="../_images/policygradient.svg"><img alt="../_images/policygradient.svg" src="../_images/policygradient.svg" width="90%" /></a>
+<p class="caption"><span class="caption-number">Fig. 3.13 </span><span class="caption-text">Actor-critic architecture for policy gradient.</span><a class="headerlink" href="#id11" title="Permalink to this image">¶</a></p>
+</div>
+<p>But how to train the critic? We do not know <span class="math notranslate nohighlight">\(Q^{\pi_\theta}(s, a)\)</span>. As always, we can estimate it through <strong>sampling</strong>:</p>
+<ul class="simple">
+<li><p><strong>Monte-Carlo</strong> critic: sampling the complete episode.</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[
+    \mathcal{L}(\varphi) =  \mathbb{E}_{s \sim \rho_\theta, a \sim \pi_\theta}[(R(s, a) - Q_\varphi(s, a))^2]
+\]</div>
+<ul class="simple">
+<li><p><strong>SARSA</strong> critic: sampling <span class="math notranslate nohighlight">\((s, a, r, s', a')\)</span> transitions.</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[
+    \mathcal{L}(\varphi) =  \mathbb{E}_{s, s' \sim \rho_\theta, a, a' \sim \pi_\theta}[(r + \gamma \, Q_\varphi(s', a') - Q_\varphi(s, a))^2]
+\]</div>
+<ul class="simple">
+<li><p><strong>Q-learning</strong> critic: sampling <span class="math notranslate nohighlight">\((s, a, r, s')\)</span> transitions.</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[
+    \mathcal{L}(\varphi) =  \mathbb{E}_{s, s' \sim \rho_\theta, a \sim \pi_\theta}[(r + \gamma \, \max_{a'} Q_\varphi(s', a') - Q_\varphi(s, a))^2]
+\]</div>
+<p>As with REINFORCE, the PG actor suffers from the <strong>high variance</strong> of the Q-values. It is possible to use a <strong>baseline</strong> in the PG without introducing a bias:</p>
+<div class="math notranslate nohighlight">
+\[
+    \nabla_\theta \mathcal{J}(\theta) =  \mathbb{E}_{s \sim \rho_\theta, a \sim \pi_\theta}[\nabla_\theta \log \pi_\theta(s, a) \, (Q^{\pi_\theta}(s, a) -b)]
+\]</div>
+<p>In particular, the <strong>advantage actor-critic</strong> uses the value of a state as the baseline:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{aligned}
+    \nabla_\theta \mathcal{J}(\theta) &amp;=  \mathbb{E}_{s \sim \rho_\theta, a \sim \pi_\theta}[\nabla_\theta \log \pi_\theta(s, a) \, (Q^{\pi_\theta}(s, a) - V^{\pi_\theta}(s))] \\
+    &amp;\\
+    &amp;=  \mathbb{E}_{s \sim \rho_\theta, a \sim \pi_\theta}[\nabla_\theta \log \pi_\theta(s, a) \, A^{\pi_\theta}(s, a)] \\
+\end{aligned}
+\end{split}\]</div>
+<p>The critic can either:</p>
+<ul class="simple">
+<li><p>learn to approximate both <span class="math notranslate nohighlight">\(Q^{\pi_\theta}(s, a)\)</span>  and <span class="math notranslate nohighlight">\(V^{\pi_\theta}(s)\)</span> with two different NN (SAC).</p></li>
+<li><p>replace one of them with a sampling estimate (A3C, DDPG)</p></li>
+<li><p>learn the advantage <span class="math notranslate nohighlight">\(A^{\pi_\theta}(s, a)\)</span> directly (GAE, PPO)</p></li>
+</ul>
+<p><strong>Policy Gradient methods</strong> can therefore take many forms :</p>
+<div class="math notranslate nohighlight">
+\[
+    \nabla_\theta J(\theta) =  \mathbb{E}_{s_t \sim \rho_\theta, a_t \sim \pi_\theta}[\nabla_\theta \log \pi_\theta (s_t, a_t) \, \psi_t ]
+\]</div>
+<p>where:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(\psi_t = R_t\)</span> is the <em>REINFORCE</em> algorithm (MC sampling).</p></li>
+<li><p><span class="math notranslate nohighlight">\(\psi_t = R_t - b\)</span> is the <em>REINFORCE with baseline</em> algorithm.</p></li>
+<li><p><span class="math notranslate nohighlight">\(\psi_t = Q^\pi(s_t, a_t)\)</span> is the <em>policy gradient theorem</em>.</p></li>
+<li><p><span class="math notranslate nohighlight">\(\psi_t = A^\pi(s_t, a_t) = Q^\pi(s_t, a_t) - V^\pi(s_t)\)</span> is the <em>advantage actor-critic</em>.</p></li>
+<li><p><span class="math notranslate nohighlight">\(\psi_t = r_{t+1} + \gamma \, V^\pi(s_{t+1}) - V^\pi(s_t)\)</span> is the <em>TD actor-critic</em>.</p></li>
+<li><p><span class="math notranslate nohighlight">\(\psi_t = \sum_{k=0}^{n-1} \gamma^{k} \, r_{t+k+1} + \gamma^n \, V^\pi(s_{t+n+1}) - V^\pi(s_t)\)</span> is the <em>n-step advantage</em>.</p></li>
+</ul>
+<p>and many others…</p>
+<p>The different variants of PG deal with the bias/variance trade-off.</p>
+<div class="math notranslate nohighlight">
+\[
+    \nabla_\theta J(\theta) =  \mathbb{E}_{s_t \sim \rho_\theta, a_t \sim \pi_\theta}[\nabla_\theta \log \pi_\theta (s_t, a_t) \, \psi_t ]
+\]</div>
+<ol class="simple">
+<li><p>The more <span class="math notranslate nohighlight">\(\psi_t\)</span> relies on <strong>sampled rewards</strong> (e.g. <span class="math notranslate nohighlight">\(R_t\)</span>), the more the gradient will be correct on average (small bias), but the more it will vary (high variance). This increases the sample complexity: we need to average more samples to correctly estimate the gradient.</p></li>
+<li><p>The more <span class="math notranslate nohighlight">\(\psi_t\)</span> relies on <strong>estimations</strong> (e.g. the TD error), the more stable the gradient (small variance), but the more incorrect it is (high bias). This can lead to suboptimal policies, i.e. local optima of the objective function.</p></li>
+</ol>
+<p>All the methods we will see in the rest of the course are attempts at finding the best trade-off.</p>
+</div>
+</div>
+</div>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./3-MF"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+        </div>
+    </div>
+    
+    
+    <div class='prev-next-bottom'>
+        
+    <a class='left-prev' id="prev-link" href="2-BeyondDQN.html" title="previous page"><span class="section-number">2. </span>Beyond DQN</a>
+    <a class='right-next' id="next-link" href="../5-exercises/ex1-Python.html" title="next page"><span class="section-number">1. </span>Introduction to Python</a>
+
+    </div>
+    <footer class="footer mt-5 mt-md-0">
+    <div class="container">
+      <p>
+        
+          By Julien Vitay - julien.vitay@informatik.tu-chemnitz.de<br/>
+        
+            &copy; Copyright 2020.<br/>
+          <div class="extra_footer">
+            Technische Universität Chemnitz - Faculty of Computer Science - Professorship for Artificial Intelligence
+          </div>
+      </p>
+    </div>
+  </footer>
+</main>
+
+
+      </div>
+    </div>
+
+    <script src="../_static/js/index.js"></script>
+    
+  </body>
+</html>
