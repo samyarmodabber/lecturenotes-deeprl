@@ -91,6 +91,14 @@
           title: Solution
 
 
+    - file: 5-exercises/ex10-Eligibilitytraces
+      sections:
+        - file: 5-exercises/10-Eligibilitytraces
+          title: Notebook
+        - file: 5-exercises/10-Eligibilitytraces-solution
+          title: Solution
+
+
 - part: References
   chapters:
     - file: zreferences
