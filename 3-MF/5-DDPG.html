@@ -1,0 +1,819 @@
+
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>5. Deep Deterministic Policy Gradient (DDPG) &#8212; Deep Reinforcement Learning</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" integrity="sha384-KA6wR/X5RY4zFAHpv/CnoG2UW1uogYfdnP67Uv7eULvTveboZJg0qUpmJZb5VqzN" crossorigin="anonymous">
+    <link href="../_static/css/index.css" rel="stylesheet">
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/sphinx-book-theme.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/style.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-dropdown.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/sphinx-book-theme.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/togglebutton.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/sphinx-book-theme.js"></script>
+    <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processRefs": false, "processEnvironments": false}})</script>
+    <script async="async" src="https://unpkg.com/thebelab@latest/lib/index.js"></script>
+    <script >
+        const thebe_selector = ".thebe"
+        const thebe_selector_input = "pre"
+        const thebe_selector_output = ".output"
+    </script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <link rel="canonical" href="https://julien-vitay.net/lecturenotes-deeprl/3-MF/5-DDPG.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="1. Introduction to Python" href="../5-exercises/ex1-Python.html" />
+    <link rel="prev" title="4. Advantage actor-critic (A2C, A3C)" href="4-A3C.html" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="docsearch:language" content="en">
+
+
+<!-- Opengraph tags -->
+<meta property="og:url"         content="https://julien-vitay.net/lecturenotes-deeprl/3-MF/5-DDPG.html" />
+<meta property="og:type"        content="article" />
+<meta property="og:title"       content="Deep Deterministic Policy Gradient (DDPG)" />
+<meta property="og:description" content="Deep Deterministic Policy Gradient (DDPG)  Slides: pdf  Deterministic policy gradient theorem  &lt;div class=&#39;embed-container&#39;&gt;&lt;iframe src=&#39;https://www.youtube.com" />
+<meta property="og:image"       content="https://julien-vitay.net/lecturenotes-deeprl/_static/tuc.svg" />
+
+<meta name="twitter:card" content="summary" />
+
+
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
+<a class="navbar-brand text-wrap" href="../index.html">
+  
+  <img src="../_static/tuc.svg" class="logo" alt="logo">
+  
+  
+  <h1 class="site-logo" id="site-title">Deep Reinforcement Learning</h1>
+  
+</a>
+</div>
+
+<form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form>
+
+<nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+  <ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../intro.html">
+   Deep Reinforcement Learning
+  </a>
+ </li>
+</ul>
+<p class="caption">
+ <span class="caption-text">
+  Introduction
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../1-intro/1-Introduction.html">
+   1. Introduction
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../1-intro/2-Math.html">
+   2. Math basics
+  </a>
+ </li>
+</ul>
+<p class="caption">
+ <span class="caption-text">
+  Tabular RL
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../2-tabular/1-Bandits.html">
+   1. Bandits
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../2-tabular/2-MDP.html">
+   2. Markov Decision Processes
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../2-tabular/3-DP.html">
+   3. Dynamic Programming
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../2-tabular/4-MC.html">
+   4. Monte-Carlo (MC) methods
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../2-tabular/5-TD.html">
+   5. Temporal Difference learning
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../2-tabular/6-FA.html">
+   6. Function approximation
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../2-tabular/7-NN.html">
+   7. Deep learning
+  </a>
+ </li>
+</ul>
+<p class="caption">
+ <span class="caption-text">
+  Model-free RL
+ </span>
+</p>
+<ul class="current nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="1-DQN.html">
+   1. Deep Q-Learning (DQN)
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="2-BeyondDQN.html">
+   2. Beyond DQN
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="3-PG.html">
+   3. Policy gradient (PG)
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="4-A3C.html">
+   4. Advantage actor-critic (A2C, A3C)
+  </a>
+ </li>
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   5. Deep Deterministic Policy Gradient (DDPG)
+  </a>
+ </li>
+</ul>
+<p class="caption">
+ <span class="caption-text">
+  Exercises
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../5-exercises/ex1-Python.html">
+   1. Introduction to Python
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../5-exercises/ex2-Numpy.html">
+   2. Numpy and Matplotlib
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../5-exercises/ex3-Sampling.html">
+   3. Sampling
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../5-exercises/ex4-Bandits.html">
+   4. Bandits (part 1)
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../5-exercises/ex5-Bandits2.html">
+   5. Bandits (part 2)
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../5-exercises/ex6-DP.html">
+   6. Dynamic programming
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../5-exercises/ex7-Gym.html">
+   7. Gym environments
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../5-exercises/ex8-MC.html">
+   8. Monte-Carlo control
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../5-exercises/ex9-TD.html">
+   9. Q-learning
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../5-exercises/ex10-Eligibilitytraces.html">
+   10. Eligibility traces
+  </a>
+ </li>
+</ul>
+<p class="caption">
+ <span class="caption-text">
+  References
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../zreferences.html">
+   1. Bibliography
+  </a>
+ </li>
+</ul>
+
+</nav>
+
+ <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="row topbar fixed-top container-xl">
+    <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show">
+    </div>
+    <div class="col pl-2 topbar-main">
+        
+        <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+            data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+            aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+            title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+            <i class="fas fa-bars"></i>
+            <i class="fas fa-arrow-left"></i>
+            <i class="fas fa-arrow-up"></i>
+        </button>
+        
+        <div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="../_sources/3-MF/5-DDPG.md"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.md</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+    
+</div>
+        <!-- Source interaction buttons -->
+
+
+        <!-- Full screen (wrap in <a> to have style consistency -->
+        <a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+                data-placement="bottom" onclick="toggleFullScreen()" title="Fullscreen mode"><i
+                    class="fas fa-expand"></i></button></a>
+
+        <!-- Launch buttons -->
+
+    </div>
+
+    <!-- Table of contents -->
+    <div class="d-none d-md-block col-md-2 bd-toc show">
+        <div class="tocsection onthispage pt-5 pb-3">
+            <i class="fas fa-list"></i> Contents
+        </div>
+        <nav id="bd-toc-nav">
+            <ul class="nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#deterministic-policy-gradient-theorem">
+   5.1. Deterministic policy gradient theorem
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#problem-with-stochastic-policies">
+     5.1.1. Problem with stochastic policies
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#deterministic-policy-gradient">
+     5.1.2. Deterministic policy gradient
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#off-policy-actor-critic">
+     5.1.3. Off-policy actor-critic
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#ddpg-deep-deterministic-policy-gradient">
+   5.2. DDPG: Deep Deterministic Policy Gradient
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#td3-twin-delayed-deep-deterministic-policy-gradient">
+   5.3. TD3 - Twin Delayed Deep Deterministic policy gradient
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#twin-critics-against-overestimation">
+     5.3.1. Twin critics against overestimation
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#delayed-learning-for-stability">
+     5.3.2. Delayed learning for stability
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#target-exploration">
+     5.3.3. Target exploration
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#algorithm">
+     5.3.4. Algorithm
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#d4pg-distributed-distributional-ddpg">
+   5.4. D4PG: Distributed Distributional DDPG
+  </a>
+ </li>
+</ul>
+
+        </nav>
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+        
+              <div>
+                
+  <div class="section" id="deep-deterministic-policy-gradient-ddpg">
+<h1><span class="section-number">5. </span>Deep Deterministic Policy Gradient (DDPG)<a class="headerlink" href="#deep-deterministic-policy-gradient-ddpg" title="Permalink to this headline">¶</a></h1>
+<p>Slides: <a class="reference external" href="https://www.tu-chemnitz.de/informatik/KI/edu/deeprl/lectures/pdf/3.5-DDPG.pdf">pdf</a></p>
+<div class="section" id="deterministic-policy-gradient-theorem">
+<h2><span class="section-number">5.1. </span>Deterministic policy gradient theorem<a class="headerlink" href="#deterministic-policy-gradient-theorem" title="Permalink to this headline">¶</a></h2>
+<div class='embed-container'><iframe src='https://www.youtube.com/embed/knqtWwp8qoM' frameborder='0' allowfullscreen></iframe></div>
+<div class="section" id="problem-with-stochastic-policies">
+<h3><span class="section-number">5.1.1. </span>Problem with stochastic policies<a class="headerlink" href="#problem-with-stochastic-policies" title="Permalink to this headline">¶</a></h3>
+<p>Actor-critic methods are strictly <strong>on-policy</strong>: the transitions used to train the critic <strong>must</strong> be generated by the current version of the actor.</p>
+<div class="math notranslate nohighlight">
+\[
+    \nabla_\theta \mathcal{J}(\theta) =  \mathbb{E}_{s_t \sim \rho_\theta, a_t \sim \pi_\theta}[\nabla_\theta \log \pi_\theta (s_t, a_t) \, (R_t - V_\varphi(s_t)) ]
+\]</div>
+<div class="math notranslate nohighlight">
+\[
+    \mathcal{L}(\varphi) =  \mathbb{E}_{s_t \sim \rho_\theta, a_t \sim \pi_\theta}[(R_t - V_\varphi(s_t))^2]
+\]</div>
+<p>Past transitions cannot be reused to train the actor (no replay memory). Domain knowledge cannot be used to guide the exploration.</p>
+<p>The learned policy <span class="math notranslate nohighlight">\(\pi_\theta(s, a)\)</span> is <strong>stochastic</strong>. This generates a lot of <strong>variance</strong> in the obtained returns, therefore in the gradients. This can greatly impair learning (bad convergence) and slow it down (sample complexity). We would not have this problem if the policy was <strong>deterministic</strong> as in off-policy methods.</p>
+<p>The objective function that we tried to minimize until now is :</p>
+<div class="math notranslate nohighlight">
+\[
+    \mathcal{J}(\theta) =  \mathbb{E}_{\tau \sim \rho_\theta}[R(\tau)]
+\]</div>
+<p>i.e. we want the returns of all trajectories generated by the <strong>stochastic policy</strong> <span class="math notranslate nohighlight">\(\pi_\theta\)</span> to be maximal.</p>
+<p>It is equivalent to say that we want the value of <strong>all</strong> states visited by the policy <span class="math notranslate nohighlight">\(\pi_\theta\)</span> to be maximal: a policy <span class="math notranslate nohighlight">\(\pi\)</span> is better than another policy <span class="math notranslate nohighlight">\(\pi'\)</span> if its expected return is greater or equal than that of <span class="math notranslate nohighlight">\(\pi'\)</span> for all states <span class="math notranslate nohighlight">\(s\)</span>.</p>
+<div class="math notranslate nohighlight">
+\[\pi &gt; \pi' \Leftrightarrow V^{\pi}(s) &gt; V^{\pi'}(s) \quad \forall s \in \mathcal{S}\]</div>
+<p>The objective function can be rewritten as:</p>
+<div class="math notranslate nohighlight">
+\[
+    \mathcal{J}'(\theta) =  \mathbb{E}_{s \sim \rho_\theta}[V^{\pi_\theta}(s)]
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(\rho_\theta\)</span> now represents the <strong>state visitation distribution</strong>, i.e. how often a state <span class="math notranslate nohighlight">\(s\)</span> will be visited by the policy <span class="math notranslate nohighlight">\(\pi_\theta\)</span>.</p>
+<p>The two objective functions:</p>
+<div class="math notranslate nohighlight">
+\[
+    \mathcal{J}(\theta) =  \mathbb{E}_{\tau \sim \rho_\theta}[R(\tau)]
+\]</div>
+<p>and:</p>
+<div class="math notranslate nohighlight">
+\[
+    \mathcal{J}'(\theta) =  \mathbb{E}_{s \sim \rho_\theta}[V^{\pi_\theta}(s)]
+\]</div>
+<p>are not the same: <span class="math notranslate nohighlight">\(\mathcal{J}\)</span> has different values than <span class="math notranslate nohighlight">\(\mathcal{J}'\)</span>.</p>
+<p>However, they have a maximum for the same <strong>optimal policy</strong> <span class="math notranslate nohighlight">\(\pi^*\)</span> and their gradient is the same:</p>
+<div class="math notranslate nohighlight">
+\[
+    \nabla_\theta \, \mathcal{J}(\theta) =  \nabla_\theta \, \mathcal{J}'(\theta)
+\]</div>
+<p>If a change in the policy <span class="math notranslate nohighlight">\(\pi_\theta\)</span> increases the return of all trajectories, it also increases the value of the visited states.  Take-home message: their <strong>policy gradient</strong> is the same, we have the right to re-define the problem like this.</p>
+<div class="math notranslate nohighlight">
+\[
+   g = \nabla_\theta \, \mathcal{J}(\theta) =  \mathbb{E}_{s \sim \rho_\theta}[\nabla_\theta \, V^{\pi_\theta}(s)]
+\]</div>
+</div>
+<div class="section" id="deterministic-policy-gradient">
+<h3><span class="section-number">5.1.2. </span>Deterministic policy gradient<a class="headerlink" href="#deterministic-policy-gradient" title="Permalink to this headline">¶</a></h3>
+<p>When introducing Q-values, we obtain the following policy gradient:</p>
+<div class="math notranslate nohighlight">
+\[
+   g = \nabla_\theta \, \mathcal{J}(\theta) =  \mathbb{E}_{s \sim \rho_\theta}[\nabla_\theta \, V^{\pi_\theta}(s)] =  \mathbb{E}_{s \sim \rho_\theta}[\sum_a \nabla_\theta \, \pi_\theta(s, a) \, Q^{\pi_\theta}(s, a)]
+\]</div>
+<p>This formulation necessitates to integrate overall possible actions.</p>
+<ul class="simple">
+<li><p>Not possible with continuous action spaces.</p></li>
+<li><p>The stochastic policy adds a lot of variance.</p></li>
+</ul>
+<p>But let’s suppose that the policy is <strong>deterministic</strong>, i.e. it takes a single action in state <span class="math notranslate nohighlight">\(s\)</span>. We can note this deterministic policy <span class="math notranslate nohighlight">\(\mu_\theta(s)\)</span>, with:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{aligned}
+    \mu_\theta :  \; \mathcal{S} &amp; \rightarrow \mathcal{A} \\
+    s &amp; \; \rightarrow \mu_\theta(s) \\
+\end{aligned}
+\end{split}\]</div>
+<p>The deterministic policy gradient becomes:</p>
+<div class="math notranslate nohighlight">
+\[
+   g = \nabla_\theta \, \mathcal{J}(\theta) =  \mathbb{E}_{s \sim \rho_\theta}[\nabla_\theta \, Q^{\mu_\theta}(s, \mu_\theta(s))]
+\]</div>
+<p>We can now use the chain rule to decompose the gradient of <span class="math notranslate nohighlight">\(Q^{\mu_\theta}(s, \mu_\theta(s))\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[\nabla_\theta \, Q^{\mu_\theta}(s, \mu_\theta(s)) = \nabla_a \, Q^{\mu_\theta}(s, a)|_{a = \mu_\theta(s)} \times \nabla_\theta \mu_\theta(s)\]</div>
+<div class="figure align-default" id="id14">
+<a class="reference internal image-reference" href="../_images/dpg-chainrule.svg"><img alt="../_images/dpg-chainrule.svg" src="../_images/dpg-chainrule.svg" width="80%" /></a>
+<p class="caption"><span class="caption-number">Fig. 5.11 </span><span class="caption-text">Chain rule applied to the deterministic policy gradient.</span><a class="headerlink" href="#id14" title="Permalink to this image">¶</a></p>
+</div>
+<p><span class="math notranslate nohighlight">\(\nabla_a \, Q^{\mu_\theta}(s, a)|_{a = \mu_\theta(s)}\)</span> means that we differentiate <span class="math notranslate nohighlight">\(Q^{\mu_\theta}\)</span> w.r.t. <span class="math notranslate nohighlight">\(a\)</span>, and evaluate it in <span class="math notranslate nohighlight">\(\mu_\theta(s)\)</span>. <span class="math notranslate nohighlight">\(a\)</span> is a variable, but <span class="math notranslate nohighlight">\(\mu_\theta(s)\)</span> is a deterministic value (constant).</p>
+<p><span class="math notranslate nohighlight">\(\nabla_\theta \mu_\theta(s)\)</span> tells how the output of the policy network varies with the parameters of NN: automatic differentiation frameworks such as tensorflow can tell you that.</p>
+<div class="admonition-deterministic-policy-gradient-theorem admonition">
+<p class="admonition-title">Deterministic policy gradient theorem</p>
+<p><a class="bibtex reference internal" href="../zreferences.html#silver2014" id="id1">[Silver et al., 2014]</a></p>
+<p>For any MDP, the <strong>deterministic policy gradient</strong> is:</p>
+<div class="math notranslate nohighlight">
+\[\nabla_\theta \, \mathcal{J}(\theta) =  \mathbb{E}_{s \sim \rho_\theta}[\nabla_a \, Q^{\mu_\theta}(s, a)|_{a = \mu_\theta(s)} \times \nabla_\theta \mu_\theta(s)]\]</div>
+</div>
+</div>
+<div class="section" id="off-policy-actor-critic">
+<h3><span class="section-number">5.1.3. </span>Off-policy actor-critic<a class="headerlink" href="#off-policy-actor-critic" title="Permalink to this headline">¶</a></h3>
+<p>As always, you do not know the true Q-value <span class="math notranslate nohighlight">\(Q^{\mu_\theta}(s, a)\)</span>, because you search for the policy <span class="math notranslate nohighlight">\(\mu_\theta\)</span>. <a class="bibtex reference internal" href="../zreferences.html#silver2014" id="id2">[Silver et al., 2014]</a> showed that you can safely (without introducing any bias) replace the true Q-value with an estimate <span class="math notranslate nohighlight">\(Q_\varphi(s, a)\)</span>, as long as the estimate minimizes the mse with the TD target:</p>
+<div class="math notranslate nohighlight">
+\[Q_\varphi(s, a) \approx Q^{\mu_\theta}(s, a)\]</div>
+<div class="math notranslate nohighlight">
+\[\mathcal{L}(\varphi) = \mathbb{E}_{s \sim \rho_\theta}[(r(s, \mu_\theta(s)) + \gamma \, Q_\varphi(s', \mu_\theta(s')) - Q_\varphi(s, \mu_\theta(s)))^2]\]</div>
+<p>We come back to an actor-critic architecture:</p>
+<ul class="simple">
+<li><p>The <strong>deterministic actor</strong> <span class="math notranslate nohighlight">\(\mu_\theta(s)\)</span> selects a single action in state <span class="math notranslate nohighlight">\(s\)</span>.</p></li>
+<li><p>The <strong>critic</strong> <span class="math notranslate nohighlight">\(Q_\varphi(s, a)\)</span> estimates the value of that action.</p></li>
+</ul>
+<div class="figure align-default" id="id15">
+<a class="reference internal image-reference" href="../_images/dpg.svg"><img alt="../_images/dpg.svg" src="../_images/dpg.svg" width="80%" /></a>
+<p class="caption"><span class="caption-number">Fig. 5.12 </span><span class="caption-text">Actor-critic architecture of the deterministic policy gradient with function approximation.</span><a class="headerlink" href="#id15" title="Permalink to this image">¶</a></p>
+</div>
+<p><strong>Training the actor:</strong></p>
+<div class="math notranslate nohighlight">
+\[
+    \nabla_\theta \mathcal{J}(\theta) = \mathbb{E}_{s \sim \rho_\theta}[\nabla_\theta \mu_\theta(s) \times \nabla_a Q_\varphi(s, a) |_{a = \mu_\theta(s)}]
+\]</div>
+<p><strong>Training the critic:</strong></p>
+<div class="math notranslate nohighlight">
+\[
+    \mathcal{L}(\varphi) = \mathbb{E}_{s \sim \rho_\theta}[(r(s, \mu_\theta(s)) + \gamma \, Q_\varphi(s', \mu_\theta(s')) - Q_\varphi(s, \mu_\theta(s)))^2]
+\]</div>
+<p>If you act off-policy, i.e. you visit the states <span class="math notranslate nohighlight">\(s\)</span> using a <strong>behavior policy</strong> <span class="math notranslate nohighlight">\(b\)</span>, you would theoretically need to correct the policy gradient with <strong>importance sampling</strong>:</p>
+<div class="math notranslate nohighlight">
+\[
+    \nabla_\theta \mathcal{J}(\theta) = \mathbb{E}_{s \sim \rho_b}[\sum_a \, \frac{\pi_\theta(s, a)}{b(s, a)} \, \nabla_\theta \mu_\theta(s) \times \nabla_a Q_\varphi(s, a) |_{a = \mu_\theta(s)}]
+\]</div>
+<p>But your policy is now <strong>deterministic</strong>: the actor only takes the action <span class="math notranslate nohighlight">\(a=\mu_\theta(s)\)</span> with probability 1, not <span class="math notranslate nohighlight">\(\pi(s, a)\)</span>. The <strong>importance weight</strong> is 1 for that action, 0 for the other. You can safely sample states from a behavior policy, it won’t affect the deterministic policy gradient:</p>
+<div class="math notranslate nohighlight">
+\[
+    \nabla_\theta \mathcal{J}(\theta) = \mathbb{E}_{s \sim \rho_b}[\nabla_\theta \mu_\theta(s) \times \nabla_a Q_\varphi(s, a) |_{a = \mu_\theta(s)}]
+\]</div>
+<p>The critic uses Q-learning, so it is also off-policy. <strong>DPG is an off-policy actor-critic architecture!</strong></p>
+</div>
+</div>
+<div class="section" id="ddpg-deep-deterministic-policy-gradient">
+<h2><span class="section-number">5.2. </span>DDPG: Deep Deterministic Policy Gradient<a class="headerlink" href="#ddpg-deep-deterministic-policy-gradient" title="Permalink to this headline">¶</a></h2>
+<div class='embed-container'><iframe src='https://www.youtube.com/embed/9vdo91DE1ZY' frameborder='0' allowfullscreen></iframe></div>
+<p>As the name indicates, DDPG <a class="bibtex reference internal" href="../zreferences.html#lillicrap2015" id="id3">[Lillicrap et al., 2015]</a> is the deep variant of DPG for <strong>continuous control</strong>. It uses the DQN tricks to stabilize learning with deep networks:</p>
+<ul class="simple">
+<li><p>As DPG is <strong>off-policy</strong>, an <strong>experience replay memory</strong> can be used to sample experiences.</p></li>
+<li><p>The <strong>actor</strong> <span class="math notranslate nohighlight">\(\mu_\theta\)</span> learns using sampled transitions with DPG.</p></li>
+<li><p>The <strong>critic</strong> <span class="math notranslate nohighlight">\(Q_\varphi\)</span> uses Q-learning on sampled transitions: <strong>target networks</strong> can be used to cope with the non-stationarity of the Bellman targets.</p></li>
+</ul>
+<p>Contrary to DQN, the target networks are not updated every once in a while, but slowly <strong>integrate</strong> the trained networks after each update (moving average of the weights):</p>
+<div class="math notranslate nohighlight">
+\[\theta' \leftarrow \tau \theta + (1-\tau) \, \theta'\]</div>
+<div class="math notranslate nohighlight">
+\[\varphi' \leftarrow \tau \varphi + (1-\tau) \, \varphi'\]</div>
+<p>A deterministic actor is good for learning (less variance), but not for exploring. We cannot use <span class="math notranslate nohighlight">\(\epsilon\)</span>-greedy or softmax, as the actor outputs directly the policy, not Q-values. For continuous actions, an <strong>exploratory noise</strong> can be added to the deterministic action:</p>
+<div class="math notranslate nohighlight">
+\[a_t = \mu_\theta(s_t) + \xi_t\]</div>
+<p>Ex: if the actor wants to move the joint of a robot by <span class="math notranslate nohighlight">\(2^o\)</span>, it will actually be moved from <span class="math notranslate nohighlight">\(2.1^o\)</span> or <span class="math notranslate nohighlight">\(1.9^o\)</span>.</p>
+<div class="figure align-default" id="id16">
+<a class="reference internal image-reference" href="../_images/ddpg.svg"><img alt="../_images/ddpg.svg" src="../_images/ddpg.svg" width="100%" /></a>
+<p class="caption"><span class="caption-number">Fig. 5.13 </span><span class="caption-text">Deep deterministic policy gradient architecture with exploratory noise.</span><a class="headerlink" href="#id16" title="Permalink to this image">¶</a></p>
+</div>
+<p>In DDPG, an <strong>Ornstein-Uhlenbeck</strong> stochastic process <a class="bibtex reference internal" href="../zreferences.html#uhlenbeck1930" id="id4">[Uhlenbeck &amp; Ornstein, 1930]</a> is used to add noise to the continuous actions. It is defined by a <strong>stochastic differential equation</strong>, classically used to describe Brownian motion:</p>
+<div class="math notranslate nohighlight">
+\[ dx_t = \theta (\mu - x_t) dt + \sigma dW_t \qquad \text{with} \qquad dW_t = \mathcal{N}(0, dt)\]</div>
+<p>The temporal mean of <span class="math notranslate nohighlight">\(x_t\)</span> is <span class="math notranslate nohighlight">\(\mu= 0\)</span>, its amplitude is <span class="math notranslate nohighlight">\(\theta\)</span> (exploration level), its speed is <span class="math notranslate nohighlight">\(\sigma\)</span>.</p>
+<div class="figure align-default" id="id17">
+<a class="reference internal image-reference" href="../_images/OU.png"><img alt="../_images/OU.png" src="../_images/OU.png" style="width: 100%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 5.14 </span><span class="caption-text">Ornstein-Uhlenbeck stochastic process.</span><a class="headerlink" href="#id17" title="Permalink to this image">¶</a></p>
+</div>
+<p>Another approach to ensure exploration is to add noise to the <strong>parameters</strong> <span class="math notranslate nohighlight">\(\theta\)</span> of the actor at inference time. For the same input <span class="math notranslate nohighlight">\(s_t\)</span>, the output <span class="math notranslate nohighlight">\(\mu_\theta(s_t)\)</span> will be different every time. The <strong>NoisyNet</strong> <a class="bibtex reference internal" href="../zreferences.html#fortunato2017" id="id5">[Fortunato et al., 2017]</a> approach can be applied to any deep RL algorithm to enable a smart state-dependent exploration (e.g. Noisy DQN).</p>
+<div class="admonition-ddpg-deep-deterministic-policy-gradient admonition">
+<p class="admonition-title">DDPG: deep deterministic policy gradient</p>
+<ul>
+<li><p>Initialize actor network <span class="math notranslate nohighlight">\(\mu_{\theta}\)</span> and critic <span class="math notranslate nohighlight">\(Q_\varphi\)</span>, target networks <span class="math notranslate nohighlight">\(\mu_{\theta'}\)</span> and <span class="math notranslate nohighlight">\(Q_{\varphi'}\)</span>,  ERM <span class="math notranslate nohighlight">\(\mathcal{D}\)</span> of maximal size <span class="math notranslate nohighlight">\(N\)</span>, random process <span class="math notranslate nohighlight">\(\xi\)</span>.</p></li>
+<li><p>for <span class="math notranslate nohighlight">\(t \in [0, T_\text{max}]\)</span>:</p>
+<ul>
+<li><p>Select the action <span class="math notranslate nohighlight">\(a_t = \mu_\theta(s_t) + \xi\)</span> and store <span class="math notranslate nohighlight">\((s_t, a_t, r_{t+1}, s_{t+1})\)</span> in the ERM.</p></li>
+<li><p>For each transition <span class="math notranslate nohighlight">\((s_k, a_k, r_k, s'_k)\)</span> in a minibatch of <span class="math notranslate nohighlight">\(K\)</span> transitions randomly sampled from <span class="math notranslate nohighlight">\(\mathcal{D}\)</span>:</p>
+<ul class="simple">
+<li><p>Compute the target value using target networks</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[t_k = r_k + \gamma \, Q_{\varphi'}(s'_k, \mu_{\theta'}(s'_k))\]</div>
+</li>
+<li><p>Update the critic by minimizing:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[\mathcal{L}(\varphi) = \frac{1}{K} \sum_k (t_k - Q_\varphi(s_k, a_k))^2\]</div>
+<ul class="simple">
+<li><p>Update the actor by applying the deterministic policy gradient:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[\nabla_\theta \mathcal{J}(\theta) = \frac{1}{K} \sum_k \nabla_\theta \mu_\theta(s_k) \times \nabla_a Q_\varphi(s_k, a) |_{a = \mu_\theta(s_k)}\]</div>
+<ul class="simple">
+<li><p>Update the target networks:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[\theta' \leftarrow \tau \theta + (1-\tau) \, \theta' \; ; \; \varphi' \leftarrow \tau \varphi + (1-\tau) \, \varphi'\]</div>
+</li>
+</ul>
+</div>
+<p>DDPG allows to learn continuous policies: there can be one tanh output neuron per joint in a robot. The learned policy is deterministic: this simplifies learning as we do not need to integrate over the action space after sampling. Exploratory noise (e.g. Ohrstein-Uhlenbeck) has to be added to the selected action during learning in order to ensure exploration. DDPG allows to use an experience replay memory, reusing past samples (better sample complexity than A3C).</p>
+<div class='embed-container'><iframe src='https://www.youtube.com/embed/tJBIqkC1wWM' frameborder='0' allowfullscreen></iframe></div>
+<div class='embed-container'><iframe src='https://www.youtube.com/embed/iFg5lcUzSYU' frameborder='0' allowfullscreen></iframe></div>
+<div class="admonition-example-learning-to-drive-in-a-day admonition">
+<p class="admonition-title">Example: learning to drive in a day</p>
+<div class='embed-container'><iframe src='https://www.youtube.com/embed/eRwTbRtnT1I' frameborder='0' allowfullscreen></iframe></div>
+<p><img alt="" src="../_images/ddpg-drive.png" /></p>
+<p>The algorithm of <a class="bibtex reference internal" href="../zreferences.html#kendall2018" id="id6">[Kendall et al., 2018]</a> is based on DDPG with prioritized experience replay. Training is live, with an on-board NVIDIA Drive PX2 GPU. A simulated environment is first used to find the hyperparameters.
+A variational autoencoder (VAE) is optionally use to pretrain the convolutional layers on random episodes.</p>
+<p>More info: <a class="reference external" href="https://wayve.ai/blog/learning-to-drive-in-a-day-with-reinforcement-learning">https://wayve.ai/blog/learning-to-drive-in-a-day-with-reinforcement-learning</a></p>
+</div>
+</div>
+<div class="section" id="td3-twin-delayed-deep-deterministic-policy-gradient">
+<h2><span class="section-number">5.3. </span>TD3 - Twin Delayed Deep Deterministic policy gradient<a class="headerlink" href="#td3-twin-delayed-deep-deterministic-policy-gradient" title="Permalink to this headline">¶</a></h2>
+<div class='embed-container'><iframe src='https://www.youtube.com/embed/dJ-nPMcZZxo' frameborder='0' allowfullscreen></iframe></div>
+<p>DDPG suffers from several problems:</p>
+<ul class="simple">
+<li><p>Unstable (catastrophic forgetting, policy collapse).</p></li>
+<li><p>Brittleness (sensitivity to hyperparameters such as learning rates).</p></li>
+<li><p>Overestimation of Q-values.</p></li>
+</ul>
+<p>Policy collapse happens when the bias of the critic is too high for the actor. Example with A2C:</p>
+<div class="figure align-default" id="id18">
+<a class="reference internal image-reference" href="../_images/policy-collapse.png"><img alt="../_images/policy-collapse.png" src="../_images/policy-collapse.png" style="width: 70%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 5.15 </span><span class="caption-text">Policy collapse happens regularly without  warning: the performance is back to random. Source: Oliver Lange (2019). Investigation of Model-Based Augmentation of Model-Free Reinforcement Learning Algorithms. MSc thesis, TU Chemnitz.</span><a class="headerlink" href="#id18" title="Permalink to this image">¶</a></p>
+</div>
+<p>TD3 <a class="bibtex reference internal" href="../zreferences.html#fujimoto2018" id="id7">[Fujimoto et al., 2018]</a> has been introduced to fix the problems of DDPG.</p>
+<div class="section" id="twin-critics-against-overestimation">
+<h3><span class="section-number">5.3.1. </span>Twin critics against overestimation<a class="headerlink" href="#twin-critics-against-overestimation" title="Permalink to this headline">¶</a></h3>
+<p>As any Q-learning-based method, DDPG <strong>overestimates</strong> Q-values. The Bellman target <span class="math notranslate nohighlight">\(t = r + \gamma \, \max_{a'} Q(s', a')\)</span> uses a maximum over other values, so it is increasingly overestimated during learning. After a while, the overestimated Q-values disrupt training in the actor.</p>
+<div class="figure align-default" id="id19">
+<a class="reference internal image-reference" href="../_images/td3-overestimation.png"><img alt="../_images/td3-overestimation.png" src="../_images/td3-overestimation.png" style="width: 70%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 5.16 </span><span class="caption-text">Overestimation of Q-values by DDPG and TD3 (labelled CDQ here - clipped double Q-learning). Source: <a class="bibtex reference internal" href="../zreferences.html#fujimoto2018" id="id8">[Fujimoto et al., 2018]</a></span><a class="headerlink" href="#id19" title="Permalink to this image">¶</a></p>
+</div>
+<p>Double Q-learning solves the problem by using the target network <span class="math notranslate nohighlight">\(\theta'\)</span> to estimate Q-values, but the value network <span class="math notranslate nohighlight">\(\theta\)</span> to select the greedy action in the next state:</p>
+<div class="math notranslate nohighlight">
+\[
+    \mathcal{L}(\theta) = \mathbb{E}_\mathcal{D} [(r + \gamma \, Q_{\theta'}(s´, \text{argmax}_{a'} Q_{\theta}(s', a')) - Q_\theta(s, a))^2]
+\]</div>
+<p>The idea is to use two different independent networks to reduce overestimation. This does not work well with DDPG, as the Bellman target <span class="math notranslate nohighlight">\(t = r + \gamma \, Q_{\varphi'}(s', \mu_{\theta'}(s'))\)</span> uses a target actor network that is not very different from the trained deterministic actor.</p>
+<p>TD3 uses two critics <span class="math notranslate nohighlight">\(\varphi_1\)</span> and <span class="math notranslate nohighlight">\(\varphi_2\)</span> (and target critics):  the Q-value used to train the actor will be the <strong>lesser of two evils</strong>, i.e. the minimum Q-value:</p>
+<div class="math notranslate nohighlight">
+\[t = r + \gamma \, \min(Q_{\varphi'_1}(s', \mu_{\theta'}(s')), Q_{\varphi'_2}(s', \mu_{\theta'}(s')))\]</div>
+<p>One of the critic will always be less over-estimating than the other. Better than nothing… Using twin critics is called <strong>clipped double learning</strong>.</p>
+<p>Both critics learn in parallel using the same target:</p>
+<div class="math notranslate nohighlight">
+\[\mathcal{L}(\varphi_1) = \mathbb{E}[(t - Q_{\varphi_1}(s, a))^2] \qquad ; \qquad \mathcal{L}(\varphi_2) = \mathbb{E}[ (t - Q_{\varphi_2}(s, a))^2]\]</div>
+<p>The actor is trained using the first critic only:</p>
+<div class="math notranslate nohighlight">
+\[\nabla_\theta \mathcal{J}(\theta) = \mathbb{E}[ \nabla_\theta \mu_\theta(s) \times \nabla_a Q_{\varphi_1}(s, a) |_{a = \mu_\theta(s)} ]\]</div>
+</div>
+<div class="section" id="delayed-learning-for-stability">
+<h3><span class="section-number">5.3.2. </span>Delayed learning for stability<a class="headerlink" href="#delayed-learning-for-stability" title="Permalink to this headline">¶</a></h3>
+<p>Another issue with actor-critic architecture in general is that the critic is always biased during training, what can impact the actor and ultimately collapse the policy:</p>
+<div class="math notranslate nohighlight">
+\[\nabla_\theta \mathcal{J}(\theta) = \mathbb{E}[ \nabla_\theta \mu_\theta(s) \times \nabla_a Q_{\varphi_1}(s, a) |_{a = \mu_\theta(s)} ]\]</div>
+<div class="math notranslate nohighlight">
+\[Q_{\varphi_1}(s, a) \approx Q^{\mu_\theta}(s, a)\]</div>
+<p>The critic should learn much faster than the actor in order to provide <strong>unbiased</strong> gradients.
+Increasing the learning rate in the critic creates instability, reducing the learning rate in the actor slows down learning.
+The solution proposed by TD3 is to <strong>delay</strong> the update of the actor, i.e. update it only every <span class="math notranslate nohighlight">\(d\)</span> minibatches:</p>
+<ul class="simple">
+<li><p>Train the critics <span class="math notranslate nohighlight">\(\varphi_1\)</span> and <span class="math notranslate nohighlight">\(\varphi_2\)</span> on the minibatch.</p></li>
+<li><p><strong>every</strong> <span class="math notranslate nohighlight">\(d\)</span> steps:</p>
+<ul>
+<li><p>Train the actor <span class="math notranslate nohighlight">\(\theta\)</span> on the minibatch.</p></li>
+</ul>
+</li>
+</ul>
+<p>This leaves enough time to the critics to improve their prediction and provides less biased gradients to the actor.</p>
+</div>
+<div class="section" id="target-exploration">
+<h3><span class="section-number">5.3.3. </span>Target exploration<a class="headerlink" href="#target-exploration" title="Permalink to this headline">¶</a></h3>
+<p>A last problem with deterministic policies is that they tend to always select the same actions <span class="math notranslate nohighlight">\(\mu_\theta(s)\)</span> (overfitting). For exploration, some additive noise is added to the selected action:</p>
+<div class="math notranslate nohighlight">
+\[a = \mu_\theta(s) + \xi\]</div>
+<p>But this is not true for the Bellman targets, which use the deterministic action:</p>
+<div class="math notranslate nohighlight">
+\[t = r + \gamma \, Q_{\varphi}(s', \mu_{\theta}(s'))\]</div>
+<p>TD3 proposes to also use additive noise in the Bellman targets:</p>
+<div class="math notranslate nohighlight">
+\[t = r + \gamma \, Q_{\varphi}(s', \mu_{\theta}(s') + \xi)\]</div>
+<p>If the additive noise is zero on average, the Bellman targets will be correct on average (unbiased) but will prevent overfitting of particular actions. The additive noise does not have to be an <strong>Ornstein-Uhlenbeck</strong> stochastic process, but could simply be a random variable:</p>
+<div class="math notranslate nohighlight">
+\[\xi \sim \mathcal{N}(0, 1)\]</div>
+</div>
+<div class="section" id="algorithm">
+<h3><span class="section-number">5.3.4. </span>Algorithm<a class="headerlink" href="#algorithm" title="Permalink to this headline">¶</a></h3>
+<div class="admonition-td3-twin-delayed-deep-deterministic-policy-gradient admonition">
+<p class="admonition-title">TD3 - Twin Delayed Deep Deterministic policy gradient</p>
+<ul>
+<li><p>Initialize actor <span class="math notranslate nohighlight">\(\mu_{\theta}\)</span>, critics <span class="math notranslate nohighlight">\(Q_{\varphi_1}, Q_{\varphi_2}\)</span>, target networks <span class="math notranslate nohighlight">\(\mu_{\theta'}, Q_{\varphi_1'},Q_{\varphi_2'}\)</span>,  ERM <span class="math notranslate nohighlight">\(\mathcal{D}\)</span>, random processes <span class="math notranslate nohighlight">\(\xi_1, \xi_2\)</span>.</p></li>
+<li><p>for <span class="math notranslate nohighlight">\(t \in [0, T_\text{max}]\)</span>:</p>
+<ul>
+<li><p>Select the action <span class="math notranslate nohighlight">\(a_t = \mu_\theta(s_t) + \xi_1\)</span> and store <span class="math notranslate nohighlight">\((s_t, a_t, r_{t+1}, s_{t+1})\)</span> in the ERM.</p></li>
+<li><p>For each transition <span class="math notranslate nohighlight">\((s_k, a_k, r_k, s'_k)\)</span> in a minibatch sampled from <span class="math notranslate nohighlight">\(\mathcal{D}\)</span>:</p>
+<ul class="simple">
+<li><p>Compute the target</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[t_k = r_k + \gamma \, \min(Q_{\varphi_1'}(s'_k, \mu_{\theta'}(s'_k) + \xi_2), Q_{\varphi_2'}(s'_k, \mu_{\theta'}(s'_k) + \xi_2))\]</div>
+</li>
+<li><p>Update the critics by minimizing:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[\mathcal{L}(\varphi_1) = \frac{1}{K} \sum_k (t_k - Q_{\varphi_1}(s_k, a_k))^2 \qquad ; \qquad \mathcal{L}(\varphi_2) = \frac{1}{K} \sum_k (t_k - Q_{\varphi_2}(s_k, a_k))^2\]</div>
+<ul>
+<li><p><strong>every</strong> <span class="math notranslate nohighlight">\(d\)</span> steps:</p>
+<ul class="simple">
+<li><p>Update the actor by applying the DPG using <span class="math notranslate nohighlight">\(Q_{\varphi_1}\)</span>:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[\nabla_\theta \mathcal{J}(\theta) = \frac{1}{K} \sum_k \nabla_\theta \mu_\theta(s_k) \times \nabla_a Q_{\varphi_1}(s_k, a) |_{a = \mu_\theta(s_k)}\]</div>
+<ul class="simple">
+<li><p>Update the target networks:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[\theta' \leftarrow \tau \theta + (1-\tau) \, \theta' \; ; \; \varphi_1' \leftarrow \tau \varphi_1 + (1-\tau) \, \varphi_1' \; ; \; \varphi_2' \leftarrow \tau \varphi_2 + (1-\tau) \, \varphi_2'\]</div>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<p>TD3 <a class="bibtex reference internal" href="../zreferences.html#fujimoto2018" id="id9">[Fujimoto et al., 2018]</a> introduces three major changes to DDPG:</p>
+<ul class="simple">
+<li><p><strong>twin</strong> critics.</p></li>
+<li><p><strong>delayed</strong> actor updates.</p></li>
+<li><p>noisy Bellman targets.</p></li>
+</ul>
+<p>TD3 outperforms DDPG (but also PPO and SAC) on continuous control tasks.</p>
+<div class="figure align-default" id="id20">
+<a class="reference internal image-reference" href="../_images/td3-results.png"><img alt="../_images/td3-results.png" src="../_images/td3-results.png" style="width: 100%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 5.17 </span><span class="caption-text">Performance of TD3 on continuous control tasks compared to the state-of-the-art. Source: <a class="bibtex reference internal" href="../zreferences.html#fujimoto2018" id="id10">[Fujimoto et al., 2018]</a></span><a class="headerlink" href="#id20" title="Permalink to this image">¶</a></p>
+</div>
+</div>
+</div>
+<div class="section" id="d4pg-distributed-distributional-ddpg">
+<h2><span class="section-number">5.4. </span>D4PG: Distributed Distributional DDPG<a class="headerlink" href="#d4pg-distributed-distributional-ddpg" title="Permalink to this headline">¶</a></h2>
+<p>D4PG (Distributed Distributional DDPG, <a class="bibtex reference internal" href="../zreferences.html#barth-maron2018" id="id11">[Barth-Maron et al., 2018]</a>) combines:</p>
+<ul class="simple">
+<li><p><strong>Deterministic policy gradient</strong> as in DDPG:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[\nabla_\theta \mathcal{J}(\theta) = \mathbb{E}_{s \sim \rho_b}[\nabla_\theta \mu_\theta(s) \times \nabla_a \mathbb{E} [\mathcal{Z}_\varphi(s, a)] |_{a = \mu_\theta(s)}]\]</div>
+<ul class="simple">
+<li><p><strong>Distributional critic</strong>: The critic does not predict single Q-values <span class="math notranslate nohighlight">\(Q_\varphi(s, a)\)</span>, but the distribution of returns <span class="math notranslate nohighlight">\(\mathcal{Z}_\varphi(s, a)\)</span> (as in Categorical DQN):</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[\mathcal{L}(\varphi) = \mathbb{E}_{s \in \rho_b} [ \text{KL}(\mathcal{T} \, \mathcal{Z}_\varphi(s, a) || \mathcal{Z}_\varphi(s, a))]\]</div>
+<ul class="simple">
+<li><p><strong>n-step</strong> returns (as in A3C):</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[\mathcal{T} \, \mathcal{Z}_\varphi(s_t, a_t)= \sum_{k=0}^{n-1} \gamma^{k} \, r_{t+k+1} + \gamma^n \, \mathcal{Z}_\varphi(s_{t+n+1}, \mu_\theta(s_{t+n+1}))\]</div>
+<ul class="simple">
+<li><p><strong>Distributed workers</strong>: D4PG uses <span class="math notranslate nohighlight">\(K=32\)</span> or <span class="math notranslate nohighlight">\(64\)</span> copies of the actor to fill the ERM in parallel.</p></li>
+<li><p><strong>Prioritized Experience Replay</strong> (PER):</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[P(k) = \frac{(|\delta_k| + \epsilon)^\alpha}{\sum_k (|\delta_k| + \epsilon)^\alpha}\]</div>
+<p>It could be called the Rainbow DDPG.</p>
+<div class="figure align-default" id="id21">
+<a class="reference internal image-reference" href="../_images/d4pg-results.png"><img alt="../_images/d4pg-results.png" src="../_images/d4pg-results.png" style="width: 100%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 5.18 </span><span class="caption-text">All components of D4PG are necessary to beat DDPG. Source: <a class="bibtex reference internal" href="../zreferences.html#barth-maron2018" id="id12">[Barth-Maron et al., 2018]</a></span><a class="headerlink" href="#id21" title="Permalink to this image">¶</a></p>
+</div>
+<div class='embed-container'><iframe src='https://www.youtube.com/embed/9kGdCjJtNls' frameborder='0' allowfullscreen></iframe></div>
+<div class="admonition-parkour-networks admonition">
+<p class="admonition-title">Parkour networks</p>
+<p>For Parkour tasks, the states cover two different informations: the <strong>terrain</strong> (distance to obstacles, etc.) and the <strong>proprioception</strong> (joint positions of the agent). They enter the actor and critic networks at different locations.</p>
+<p><img alt="" src="../_images/parkour-network.png" /></p>
+<p>Source: <a class="bibtex reference internal" href="../zreferences.html#barth-maron2018" id="id13">[Barth-Maron et al., 2018]</a></p>
+</div>
+</div>
+</div>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./3-MF"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+        </div>
+    </div>
+    
+    
+    <div class='prev-next-bottom'>
+        
+    <a class='left-prev' id="prev-link" href="4-A3C.html" title="previous page"><span class="section-number">4. </span>Advantage actor-critic (A2C, A3C)</a>
+    <a class='right-next' id="next-link" href="../5-exercises/ex1-Python.html" title="next page"><span class="section-number">1. </span>Introduction to Python</a>
+
+    </div>
+    <footer class="footer mt-5 mt-md-0">
+    <div class="container">
+      <p>
+        
+          By Julien Vitay - julien.vitay@informatik.tu-chemnitz.de<br/>
+        
+            &copy; Copyright 2020.<br/>
+          <div class="extra_footer">
+            Technische Universität Chemnitz - Faculty of Computer Science - Professorship for Artificial Intelligence
+          </div>
+      </p>
+    </div>
+  </footer>
+</main>
+
+
+      </div>
+    </div>
+
+    <script src="../_static/js/index.js"></script>
+    
+  </body>
+</html>

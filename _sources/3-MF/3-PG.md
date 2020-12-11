@@ -1,4 +1,4 @@
-# Policy gradient
+# Policy gradient (PG)
 
 Slides: [pdf](https://www.tu-chemnitz.de/informatik/KI/edu/deeprl/lectures/pdf/3.3-PG.pdf)
 

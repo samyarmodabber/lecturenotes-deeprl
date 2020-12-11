@@ -40,7 +40,7 @@
     <link rel="canonical" href="https://julien-vitay.net/lecturenotes-deeprl/zreferences.html" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="prev" title="9.2. Q-learning" href="5-exercises/9-TD-solution.html" />
+    <link rel="prev" title="10.2. Eligibility traces" href="5-exercises/10-Eligibilitytraces-solution.html" />
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="docsearch:language" content="en">
@@ -166,7 +166,17 @@
  </li>
  <li class="toctree-l1">
   <a class="reference internal" href="3-MF/3-PG.html">
-   3. Policy gradient
+   3. Policy gradient (PG)
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="3-MF/4-A3C.html">
+   4. Advantage actor-critic (A2C, A3C)
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="3-MF/5-DDPG.html">
+   5. Deep Deterministic Policy Gradient (DDPG)
   </a>
  </li>
 </ul>
@@ -219,6 +229,11 @@
  <li class="toctree-l1">
   <a class="reference internal" href="5-exercises/ex9-TD.html">
    9. Q-learning
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="5-exercises/ex10-Eligibilitytraces.html">
+   10. Eligibility traces
   </a>
  </li>
 </ul>
@@ -329,6 +344,9 @@
 <dt class="bibtex label" id="fortunato2017"><span class="brackets">Fortunato et al., 2017</span></dt>
 <dd><p>Fortunato, M., Azar, M. G., Piot, B., Menick, J., Osband, I., Graves, A., … Legg, S. (2017 , June). Noisy Networks for Exploration. <em>arXiv:1706.10295 [cs, stat]</em>. URL: <a class="reference external" href="http://arxiv.org/abs/1706.10295">http://arxiv.org/abs/1706.10295</a>, <a class="reference external" href="https://arxiv.org/abs/1706.10295">arXiv:1706.10295</a></p>
 </dd>
+<dt class="bibtex label" id="fujimoto2018"><span class="brackets">Fujimoto et al., 2018</span></dt>
+<dd><p>Fujimoto, S., Meger, D., &amp; Precup, D. (2018 , December). Off-Policy Deep Reinforcement Learning without Exploration. <em>arXiv:1812.02900 [cs, stat]</em>. URL: <a class="reference external" href="http://arxiv.org/abs/1812.02900">http://arxiv.org/abs/1812.02900</a>, <a class="reference external" href="https://arxiv.org/abs/1812.02900">arXiv:1812.02900</a></p>
+</dd>
 <dt class="bibtex label" id="goodfellow2016"><span class="brackets">Goodfellow et al., 2016</span></dt>
 <dd><p>Goodfellow, I., Bengio, Y., &amp; Courville, A. (2016). <em>Deep Learning</em>. MIT Press.</p>
 </dd>
@@ -347,8 +365,17 @@
 <dt class="bibtex label" id="kapturowski2019"><span class="brackets">Kapturowski et al., 2019</span></dt>
 <dd><p>Kapturowski, S., Ostrovski, G., Quan, J., Munos, R., &amp; Dabney, W. (2019). Recurrent experience replay in distributed reinforcement learning. <em>ICLR</em> (p. 19). URL: <a class="reference external" href="https://openreview.net/pdf?id=r1lyTjAqYX">https://openreview.net/pdf?id=r1lyTjAqYX</a></p>
 </dd>
+<dt class="bibtex label" id="kendall2018"><span class="brackets">Kendall et al., 2018</span></dt>
+<dd><p>Kendall, A., Hawke, J., Janz, D., Mazur, P., Reda, D., Allen, J.-M., … Shah, A. (2018 , July). Learning to Drive in a Day. <em>arXiv:1807.00412 [cs, stat]</em>. URL: <a class="reference external" href="http://arxiv.org/abs/1807.00412">http://arxiv.org/abs/1807.00412</a>, <a class="reference external" href="https://arxiv.org/abs/1807.00412">arXiv:1807.00412</a></p>
+</dd>
+<dt class="bibtex label" id="lillicrap2015"><span class="brackets">Lillicrap et al., 2015</span></dt>
+<dd><p>Lillicrap, T. P., Hunt, J. J., Pritzel, A., Heess, N., Erez, T., Tassa, Y., … Wierstra, D. (2015). Continuous control with deep reinforcement learning. <em>CoRR</em>. URL: <a class="reference external" href="http://arxiv.org/abs/1509.02971">http://arxiv.org/abs/1509.02971</a></p>
+</dd>
 <dt class="bibtex label" id="mao2016"><span class="brackets">Mao et al., 2016</span></dt>
 <dd><p>Mao, H., Alizadeh, M., Menache, I., &amp; Kandula, S. (2016). Resource Management with Deep Reinforcement Learning. <em>Proceedings of the 15th ACM Workshop on Hot Topics in Networks - HotNets ‘16</em> (pp. 50–56). Atlanta, GA, USA: ACM Press. URL: <a class="reference external" href="http://dl.acm.org/citation.cfm?doid=3005745.3005750">http://dl.acm.org/citation.cfm?doid=3005745.3005750</a>, <a class="reference external" href="https://doi.org/10.1145/3005745.3005750">doi:10.1145/3005745.3005750</a></p>
+</dd>
+<dt class="bibtex label" id="mnih2016"><span class="brackets">Mnih et al., 2016</span></dt>
+<dd><p>Mnih, V., Badia, A. P., Mirza, M., Graves, A., Lillicrap, T. P., Harley, T., … Kavukcuoglu, K. (2016 , February). Asynchronous Methods for Deep Reinforcement Learning. <em>Proc. ICML</em>. URL: <a class="reference external" href="http://arxiv.org/abs/1602.01783">http://arxiv.org/abs/1602.01783</a></p>
 </dd>
 <dt class="bibtex label" id="mnih2013"><span class="brackets">Mnih et al., 2013</span></dt>
 <dd><p>Mnih, V., Kavukcuoglu, K., Silver, D., Graves, A., Antonoglou, I., Wierstra, D., &amp; Riedmiller, M. (2013 , December). Playing Atari with Deep Reinforcement Learning. <em>arXiv:1312.5602 [cs]</em>. URL: <a class="reference external" href="http://arxiv.org/abs/1312.5602">http://arxiv.org/abs/1312.5602</a>, <a class="reference external" href="https://arxiv.org/abs/1312.5602">arXiv:1312.5602</a></p>
@@ -359,6 +386,9 @@
 <dt class="bibtex label" id="nair2015"><span class="brackets">Nair et al., 2015</span></dt>
 <dd><p>Nair, A., Srinivasan, P., Blackwell, S., Alcicek, C., Fearon, R., De Maria, A., … Silver, D. (2015). Massively Parallel Methods for Deep Reinforcement Learning. <em>arXiv:1507.04296 [cs]</em>. URL: <a class="reference external" href="https://arxiv.org/pdf/1507.04296.pdf">https://arxiv.org/pdf/1507.04296.pdf</a>, <a class="reference external" href="https://arxiv.org/abs/1507.04296">arXiv:1507.04296</a></p>
 </dd>
+<dt class="bibtex label" id="niu2011"><span class="brackets">Niu et al., 2011</span></dt>
+<dd><p>Niu, F., Recht, B., Re, C., &amp; Wright, S. J. (2011). HOGWILD!: A Lock-Free Approach to Parallelizing Stochastic Gradient Descent. <em>Proc. Advances in Neural Information Processing Systems</em> (pp. 21–21). URL: <a class="reference external" href="http://arxiv.org/abs/1106.5730">http://arxiv.org/abs/1106.5730</a></p>
+</dd>
 <dt class="bibtex label" id="plappert2018"><span class="brackets">Plappert et al., 2018</span></dt>
 <dd><p>Plappert, M., Houthooft, R., Dhariwal, P., Sidor, S., Chen, R. Y., Chen, X., … Andrychowicz, M. (2018 , January). Parameter Space Noise for Exploration. <em>arXiv:1706.01905 [cs, stat]</em>. URL: <a class="reference external" href="http://arxiv.org/abs/1706.01905">http://arxiv.org/abs/1706.01905</a>, <a class="reference external" href="https://arxiv.org/abs/1706.01905">arXiv:1706.01905</a></p>
 </dd>
@@ -367,6 +397,9 @@
 </dd>
 <dt class="bibtex label" id="schulman2015a"><span class="brackets">Schulman et al., 2015</span></dt>
 <dd><p>Schulman, J., Moritz, P., Levine, S., Jordan, M., &amp; Abbeel, P. (2015 , June). High-Dimensional Continuous Control Using Generalized Advantage Estimation. <em>arXiv:1506.02438 [cs]</em>. URL: <a class="reference external" href="http://arxiv.org/abs/1506.02438">http://arxiv.org/abs/1506.02438</a>, <a class="reference external" href="https://arxiv.org/abs/1506.02438">arXiv:1506.02438</a></p>
+</dd>
+<dt class="bibtex label" id="silver2014"><span class="brackets">Silver et al., 2014</span></dt>
+<dd><p>Silver, D., Lever, G., Heess, N., Degris, T., Wierstra, D., &amp; Riedmiller, M. (2014). Xing, E. P., &amp; Jebara, T. (Eds.). Deterministic Policy Gradient Algorithms. <em>Proc. ICML</em> (pp. 387–395). PMLR. URL: <a class="reference external" href="http://proceedings.mlr.press/v32/silver14.html">http://proceedings.mlr.press/v32/silver14.html</a></p>
 </dd>
 <dt class="bibtex label" id="sutton1998"><span class="brackets">Sutton &amp; Barto, 1998</span></dt>
 <dd><p>Sutton, R. S., &amp; Barto, A. G. (1998). <em>Reinforcement Learning: An Introduction</em>. Cambridge, MA: MIT press.</p>
@@ -380,11 +413,17 @@
 <dt class="bibtex label" id="tesauro1995"><span class="brackets">Tesauro, 1995</span></dt>
 <dd><p>Tesauro, G. (1995). Murray, A. F. (Ed.). TD-Gammon: A Self-Teaching Backgammon Program. <em>Applications of Neural Networks</em> (pp. 267–285). Boston, MA: Springer US.</p>
 </dd>
+<dt class="bibtex label" id="uhlenbeck1930"><span class="brackets">Uhlenbeck &amp; Ornstein, 1930</span></dt>
+<dd><p>Uhlenbeck, G. E., &amp; Ornstein, L.S. (1930). On the Theory of the Brownian Motion. <em>Physical Review</em>, <em>36</em>. <a class="reference external" href="https://doi.org/10.1103/PhysRev.36.823">doi:10.1103/PhysRev.36.823</a></p>
+</dd>
 <dt class="bibtex label" id="wang2016"><span class="brackets">Wang et al., 2016</span></dt>
 <dd><p>Wang, Z., Schaul, T., Hessel, M., van Hasselt, H., Lanctot, M., &amp; de Freitas, N. (2016 , April). Dueling Network Architectures for Deep Reinforcement Learning. <em>arXiv:1511.06581 [cs]</em>. URL: <a class="reference external" href="http://arxiv.org/abs/1511.06581">http://arxiv.org/abs/1511.06581</a>, <a class="reference external" href="https://arxiv.org/abs/1511.06581">arXiv:1511.06581</a></p>
 </dd>
 <dt class="bibtex label" id="williams1992"><span class="brackets">Williams, 1992</span></dt>
 <dd><p>Williams, R. J. (1992). Simple statistical gradient-following algorithms for connectionist reinforcement learning. <em>Machine Learning</em>, <em>8</em>, 229–256.</p>
+</dd>
+<dt class="bibtex label" id="barth-maron2018"><span class="brackets">Barth-Maron et al., 2018</span></dt>
+<dd><p>Barth-Maron, G., Hoffman, M. W., Budden, D., Dabney, W., Horgan, D., TB, D., … Lillicrap, T. (2018 , April). Distributed Distributional Deterministic Policy Gradients. <em>arXiv:1804.08617 [cs]</em>. URL: <a class="reference external" href="http://arxiv.org/abs/1804.08617">http://arxiv.org/abs/1804.08617</a>, <a class="reference external" href="https://arxiv.org/abs/1804.08617">arXiv:1804.08617</a></p>
 </dd>
 <dt class="bibtex label" id="vanhasselt2015"><span class="brackets">van Hasselt et al., 2015</span></dt>
 <dd><p>van Hasselt, H., Guez, A., &amp; Silver, D. (2015 , September). Deep Reinforcement Learning with Double Q-learning. <em>arXiv:1509.06461 [cs]</em>. URL: <a class="reference external" href="http://arxiv.org/abs/1509.06461">http://arxiv.org/abs/1509.06461</a>, <a class="reference external" href="https://arxiv.org/abs/1509.06461">arXiv:1509.06461</a></p>
@@ -421,7 +460,7 @@
     
     <div class='prev-next-bottom'>
         
-    <a class='left-prev' id="prev-link" href="5-exercises/9-TD-solution.html" title="previous page"><span class="section-number">9.2. </span>Q-learning</a>
+    <a class='left-prev' id="prev-link" href="5-exercises/10-Eligibilitytraces-solution.html" title="previous page"><span class="section-number">10.2. </span>Eligibility traces</a>
 
     </div>
     <footer class="footer mt-5 mt-md-0">

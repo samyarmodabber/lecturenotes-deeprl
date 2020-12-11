@@ -6,7 +6,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>3. Policy gradient &#8212; Deep Reinforcement Learning</title>
+    <title>3. Policy gradient (PG) &#8212; Deep Reinforcement Learning</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" integrity="sha384-KA6wR/X5RY4zFAHpv/CnoG2UW1uogYfdnP67Uv7eULvTveboZJg0qUpmJZb5VqzN" crossorigin="anonymous">
     <link href="../_static/css/index.css" rel="stylesheet">
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -40,7 +40,7 @@
     <link rel="canonical" href="https://julien-vitay.net/lecturenotes-deeprl/3-MF/3-PG.html" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="1. Introduction to Python" href="../5-exercises/ex1-Python.html" />
+    <link rel="next" title="4. Advantage actor-critic (A2C, A3C)" href="4-A3C.html" />
     <link rel="prev" title="2. Beyond DQN" href="2-BeyondDQN.html" />
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -50,8 +50,8 @@
 <!-- Opengraph tags -->
 <meta property="og:url"         content="https://julien-vitay.net/lecturenotes-deeprl/3-MF/3-PG.html" />
 <meta property="og:type"        content="article" />
-<meta property="og:title"       content="Policy gradient" />
-<meta property="og:description" content="Policy gradient  Slides: pdf  Policy Search  &lt;div class=&#39;embed-container&#39;&gt;&lt;iframe src=&#39;https://www.youtube.com/embed/oMnUUa2qV1A&#39; frameborder=&#39;0&#39; allowfullscree" />
+<meta property="og:title"       content="Policy gradient (PG)" />
+<meta property="og:description" content="Policy gradient (PG)  Slides: pdf  Policy Search  &lt;div class=&#39;embed-container&#39;&gt;&lt;iframe src=&#39;https://www.youtube.com/embed/oMnUUa2qV1A&#39; frameborder=&#39;0&#39; allowfull" />
 <meta property="og:image"       content="https://julien-vitay.net/lecturenotes-deeprl/_static/tuc.svg" />
 
 <meta name="twitter:card" content="summary" />
@@ -167,7 +167,17 @@
  </li>
  <li class="toctree-l1 current active">
   <a class="current reference internal" href="#">
-   3. Policy gradient
+   3. Policy gradient (PG)
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="4-A3C.html">
+   4. Advantage actor-critic (A2C, A3C)
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="5-DDPG.html">
+   5. Deep Deterministic Policy Gradient (DDPG)
   </a>
  </li>
 </ul>
@@ -220,6 +230,11 @@
  <li class="toctree-l1">
   <a class="reference internal" href="../5-exercises/ex9-TD.html">
    9. Q-learning
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../5-exercises/ex10-Eligibilitytraces.html">
+   10. Eligibility traces
   </a>
  </li>
 </ul>
@@ -327,7 +342,7 @@
   </ul>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#id5">
+  <a class="reference internal nav-link" href="#policy-gradient">
    3.3. Policy Gradient
   </a>
   <ul class="nav section-nav flex-column">
@@ -358,8 +373,8 @@
         
               <div>
                 
-  <div class="section" id="policy-gradient">
-<h1><span class="section-number">3. </span>Policy gradient<a class="headerlink" href="#policy-gradient" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="policy-gradient-pg">
+<h1><span class="section-number">3. </span>Policy gradient (PG)<a class="headerlink" href="#policy-gradient-pg" title="Permalink to this headline">¶</a></h1>
 <p>Slides: <a class="reference external" href="https://www.tu-chemnitz.de/informatik/KI/edu/deeprl/lectures/pdf/3.3-PG.pdf">pdf</a></p>
 <div class="section" id="policy-search">
 <h2><span class="section-number">3.1. </span>Policy Search<a class="headerlink" href="#policy-search" title="Permalink to this headline">¶</a></h2>
@@ -371,9 +386,9 @@
 <li><p>Works only for small <strong>discrete action spaces</strong>: need to iterate over all actions to find the greedy action.</p></li>
 </ol>
 <p>Instead of learning the Q-values, one could approximate directly the policy <span class="math notranslate nohighlight">\(\pi_\theta(s, a)\)</span> with a neural network. <span class="math notranslate nohighlight">\(\pi_\theta(s, a)\)</span> is called a <strong>parameterized policy</strong>: it depends directly on the parameters <span class="math notranslate nohighlight">\(\theta\)</span> of the NN. For discrete action spaces, the output of the NN can be a <strong>softmax</strong> layer, directly giving the probability of selecting an action. For continuous action spaces, the output layer can directly control the effector (joint angles). Parameterized policies can represent continuous policies and avoid the curse of dimensionality.</p>
-<div class="figure align-default" id="id8">
+<div class="figure align-default" id="id7">
 <a class="reference internal image-reference" href="../_images/conv_agent.png"><img alt="../_images/conv_agent.png" src="../_images/conv_agent.png" style="width: 70%;" /></a>
-<p class="caption"><span class="caption-number">Fig. 3.10 </span><span class="caption-text">Policy search methods learn directly the policy.</span><a class="headerlink" href="#id8" title="Permalink to this image">¶</a></p>
+<p class="caption"><span class="caption-number">Fig. 3.10 </span><span class="caption-text">Policy search methods learn directly the policy.</span><a class="headerlink" href="#id7" title="Permalink to this image">¶</a></p>
 </div>
 <p><strong>Policy search</strong> methods aim at maximizing directly the expected return over all possible trajectories (episodes) <span class="math notranslate nohighlight">\(\tau = (s_0, a_0, \dots, s_T, a_T)\)</span></p>
 <div class="math notranslate nohighlight">
@@ -381,9 +396,9 @@
     \mathcal{J}(\theta) = \mathbb{E}_{\tau \sim \rho_\theta}[R(\tau)] = \int_{\tau} \rho_\theta(\tau) \; R(\tau) \; d\tau
 \]</div>
 <p>All trajectories <span class="math notranslate nohighlight">\(\tau\)</span> selected by the policy <span class="math notranslate nohighlight">\(\pi_\theta\)</span> should be associated with a high expected return <span class="math notranslate nohighlight">\(R(\tau)\)</span> in order to maximize this objective function. <span class="math notranslate nohighlight">\(\rho_\theta\)</span> is the space of trajectories possible under <span class="math notranslate nohighlight">\(\pi_\theta\)</span>. This means that the optimal policy should only select actions that maximizes the expected return: exactly what we want.</p>
-<div class="figure align-default" id="id9">
+<div class="figure align-default" id="id8">
 <a class="reference internal image-reference" href="../_images/policysearch.svg"><img alt="../_images/policysearch.svg" src="../_images/policysearch.svg" width="50%" /></a>
-<p class="caption"><span class="caption-number">Fig. 3.11 </span><span class="caption-text">Policy search maximizes the return of the trajectories generated by the policy.</span><a class="headerlink" href="#id9" title="Permalink to this image">¶</a></p>
+<p class="caption"><span class="caption-number">Fig. 3.11 </span><span class="caption-text">Policy search maximizes the return of the trajectories generated by the policy.</span><a class="headerlink" href="#id8" title="Permalink to this image">¶</a></p>
 </div>
 <p>The objective function is however not <strong>model-free</strong>, as the probability of a trajectory does depend on the environments dynamics:</p>
 <div class="math notranslate nohighlight">
@@ -413,9 +428,9 @@
 <div class="math notranslate nohighlight">
 \[\mathcal{J}'(\theta) = \alpha \, \mathcal{J}(\theta) + \beta \; \Rightarrow \; \nabla_\theta \mathcal{J}'(\theta) \propto \nabla_\theta \mathcal{J}(\theta)  \; \Rightarrow \; \Delta \theta = \eta \, \nabla_\theta \mathcal{J}'(\theta)\]</div>
 <p>This is called <strong>surrogate optimization</strong>: we actually want to maximize <span class="math notranslate nohighlight">\(\mathcal{J}(\theta)\)</span> but we cannot compute it. We instead create a surrogate objective <span class="math notranslate nohighlight">\(\mathcal{J}'(\theta)\)</span> which is locally the same as <span class="math notranslate nohighlight">\(\mathcal{J}(\theta)\)</span> and tractable.</p>
-<div class="figure align-default" id="id10">
+<div class="figure align-default" id="id9">
 <a class="reference internal image-reference" href="../_images/pg-idea.png"><img alt="../_images/pg-idea.png" src="../_images/pg-idea.png" style="width: 70%;" /></a>
-<p class="caption"><span class="caption-number">Fig. 3.12 </span><span class="caption-text">Policy gradient methods only care about the gradient of the objective function. Source: <a class="reference external" href="https://www.freecodecamp.org/news/an-introduction-to-policy-gradients-with-cartpole-and-doom-495b5ef2207f/">https://www.freecodecamp.org/news/an-introduction-to-policy-gradients-with-cartpole-and-doom-495b5ef2207f/</a>.</span><a class="headerlink" href="#id10" title="Permalink to this image">¶</a></p>
+<p class="caption"><span class="caption-number">Fig. 3.12 </span><span class="caption-text">Policy gradient methods only care about the gradient of the objective function. Source: <a class="reference external" href="https://www.freecodecamp.org/news/an-introduction-to-policy-gradients-with-cartpole-and-doom-495b5ef2207f/">https://www.freecodecamp.org/news/an-introduction-to-policy-gradients-with-cartpole-and-doom-495b5ef2207f/</a>.</span><a class="headerlink" href="#id9" title="Permalink to this image">¶</a></p>
 </div>
 </div>
 <div class="section" id="reinforce">
@@ -545,8 +560,8 @@
 </div>
 </div>
 </div>
-<div class="section" id="id5">
-<h2><span class="section-number">3.3. </span>Policy Gradient<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="policy-gradient">
+<h2><span class="section-number">3.3. </span>Policy Gradient<a class="headerlink" href="#policy-gradient" title="Permalink to this headline">¶</a></h2>
 <div class='embed-container'><iframe src='https://www.youtube.com/embed/1b7E_byZNGU' frameborder='0' allowfullscreen></iframe></div>
 <div class="section" id="policy-gradient-theorem">
 <h3><span class="section-number">3.3.1. </span>Policy Gradient theorem<a class="headerlink" href="#policy-gradient-theorem" title="Permalink to this headline">¶</a></h3>
@@ -590,7 +605,7 @@
 <p>Note that this is not true for <span class="math notranslate nohighlight">\(\mathcal{J}(\theta)\)</span> directly, as the value of <span class="math notranslate nohighlight">\(\mathcal{J}(\theta)\)</span> changes (computed over single transitions instead of complete episodes, so it is smaller), but it is true for its gradient (both go in the same direction)!</p>
 <div class="admonition-policy-gradient-theorem admonition">
 <p class="admonition-title">Policy Gradient Theorem</p>
-<p><a class="bibtex reference internal" href="../zreferences.html#sutton1999" id="id6">[Sutton et al., 1999]</a>.</p>
+<p><a class="bibtex reference internal" href="../zreferences.html#sutton1999" id="id5">[Sutton et al., 1999]</a>.</p>
 <p>For any MDP, the policy gradient is:</p>
 <div class="math notranslate nohighlight">
 \[
@@ -600,7 +615,7 @@
 </div>
 <div class="section" id="policy-gradient-theorem-with-function-approximation">
 <h3><span class="section-number">3.3.2. </span>Policy Gradient Theorem with function approximation<a class="headerlink" href="#policy-gradient-theorem-with-function-approximation" title="Permalink to this headline">¶</a></h3>
-<p>Better yet, <a class="bibtex reference internal" href="../zreferences.html#sutton1999" id="id7">[Sutton et al., 1999]</a> showed that we can replace the true Q-value <span class="math notranslate nohighlight">\(Q^{\pi_\theta}(s, a)\)</span> by an estimate <span class="math notranslate nohighlight">\(Q_\varphi(s, a)\)</span> as long as this one is unbiased:</p>
+<p>Better yet, <a class="bibtex reference internal" href="../zreferences.html#sutton1999" id="id6">[Sutton et al., 1999]</a> showed that we can replace the true Q-value <span class="math notranslate nohighlight">\(Q^{\pi_\theta}(s, a)\)</span> by an estimate <span class="math notranslate nohighlight">\(Q_\varphi(s, a)\)</span> as long as this one is unbiased:</p>
 <div class="math notranslate nohighlight">
 \[
     \nabla_\theta \mathcal{J}(\theta) =  \mathbb{E}_{s \sim \rho_\theta, a \sim \pi_\theta}[\nabla_\theta \log \pi_\theta(s, a) \, Q_\varphi(s, a) ]
@@ -623,9 +638,9 @@
 <li><p>the <strong>actor</strong> <span class="math notranslate nohighlight">\(\pi_\theta(s, a)\)</span> implements the policy and selects an action <span class="math notranslate nohighlight">\(a\)</span> in a state <span class="math notranslate nohighlight">\(s\)</span>.</p></li>
 <li><p>the <strong>critic</strong> <span class="math notranslate nohighlight">\(Q_\varphi(s, a)\)</span> estimates the value of that action and drives learning in the actor.</p></li>
 </ul>
-<div class="figure align-default" id="id11">
+<div class="figure align-default" id="id10">
 <a class="reference internal image-reference" href="../_images/policygradient.svg"><img alt="../_images/policygradient.svg" src="../_images/policygradient.svg" width="90%" /></a>
-<p class="caption"><span class="caption-number">Fig. 3.13 </span><span class="caption-text">Actor-critic architecture for policy gradient.</span><a class="headerlink" href="#id11" title="Permalink to this image">¶</a></p>
+<p class="caption"><span class="caption-number">Fig. 3.13 </span><span class="caption-text">Actor-critic architecture for policy gradient.</span><a class="headerlink" href="#id10" title="Permalink to this image">¶</a></p>
 </div>
 <p>But how to train the critic? We do not know <span class="math notranslate nohighlight">\(Q^{\pi_\theta}(s, a)\)</span>. As always, we can estimate it through <strong>sampling</strong>:</p>
 <ul class="simple">
@@ -727,7 +742,7 @@
     <div class='prev-next-bottom'>
         
     <a class='left-prev' id="prev-link" href="2-BeyondDQN.html" title="previous page"><span class="section-number">2. </span>Beyond DQN</a>
-    <a class='right-next' id="next-link" href="../5-exercises/ex1-Python.html" title="next page"><span class="section-number">1. </span>Introduction to Python</a>
+    <a class='right-next' id="next-link" href="4-A3C.html" title="next page"><span class="section-number">4. </span>Advantage actor-critic (A2C, A3C)</a>
 
     </div>
     <footer class="footer mt-5 mt-md-0">

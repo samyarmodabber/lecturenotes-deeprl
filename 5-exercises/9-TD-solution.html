@@ -40,7 +40,7 @@
     <link rel="canonical" href="https://julien-vitay.net/lecturenotes-deeprl/5-exercises/9-TD-solution.html" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="1. Bibliography" href="../zreferences.html" />
+    <link rel="next" title="10. Eligibility traces" href="ex10-Eligibilitytraces.html" />
     <link rel="prev" title="9.1. Q-learning" href="9-TD.html" />
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -167,7 +167,17 @@
  </li>
  <li class="toctree-l1">
   <a class="reference internal" href="../3-MF/3-PG.html">
-   3. Policy gradient
+   3. Policy gradient (PG)
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../3-MF/4-A3C.html">
+   4. Advantage actor-critic (A2C, A3C)
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../3-MF/5-DDPG.html">
+   5. Deep Deterministic Policy Gradient (DDPG)
   </a>
  </li>
 </ul>
@@ -233,6 +243,11 @@
     </a>
    </li>
   </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="ex10-Eligibilitytraces.html">
+   10. Eligibility traces
+  </a>
  </li>
 </ul>
 <p class="caption">
@@ -384,7 +399,7 @@
 <p>You can use the following parameters at the beginning, but feel free to change them:</p>
 <ul class="simple">
 <li><p>Discount factor <span class="math notranslate nohighlight">\(\gamma = 0.9\)</span>.</p></li>
-<li><p>Learning rate <span class="math notranslate nohighlight">\(\alpha = 0.01\)</span>.</p></li>
+<li><p>Learning rate <span class="math notranslate nohighlight">\(\alpha = 0.1\)</span>.</p></li>
 <li><p>Epsilon-greedy action selection, with an initial exploration parameter of 1.0 and an exponential decay of <span class="math notranslate nohighlight">\(10^{-5}\)</span> after each update (i.e. every step!).</p></li>
 <li><p>A total number of episodes of 20000.</p></li>
 </ul>
@@ -762,7 +777,7 @@ Number of steps [15, 9, 17, 13, 16]
     <div class='prev-next-bottom'>
         
     <a class='left-prev' id="prev-link" href="9-TD.html" title="previous page"><span class="section-number">9.1. </span>Q-learning</a>
-    <a class='right-next' id="next-link" href="../zreferences.html" title="next page"><span class="section-number">1. </span>Bibliography</a>
+    <a class='right-next' id="next-link" href="ex10-Eligibilitytraces.html" title="next page"><span class="section-number">10. </span>Eligibility traces</a>
 
     </div>
     <footer class="footer mt-5 mt-md-0">
