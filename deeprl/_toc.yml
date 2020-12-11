@@ -22,6 +22,8 @@
     - file: 3-MF/1-DQN
     - file: 3-MF/2-BeyondDQN
     - file: 3-MF/3-PG
+    - file: 3-MF/4-A3C
+    - file: 3-MF/5-DDPG
 
 - part: Exercises
   chapters:
