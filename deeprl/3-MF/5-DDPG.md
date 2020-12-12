@@ -23,7 +23,7 @@ Past transitions cannot be reused to train the actor (no replay memory). Domain 
 The learned policy $\pi_\theta(s, a)$ is **stochastic**. This generates a lot of **variance** in the obtained returns, therefore in the gradients. This can greatly impair learning (bad convergence) and slow it down (sample complexity). We would not have this problem if the policy was **deterministic** as in off-policy methods.
 
 
-The objective function that we tried to minimize until now is :
+The objective function that we tried to maximize until now is :
 
 $$
     \mathcal{J}(\theta) =  \mathbb{E}_{\tau \sim \rho_\theta}[R(\tau)]
