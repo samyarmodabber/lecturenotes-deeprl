@@ -407,7 +407,7 @@
 \]</div>
 <p>Past transitions cannot be reused to train the actor (no replay memory). Domain knowledge cannot be used to guide the exploration.</p>
 <p>The learned policy <span class="math notranslate nohighlight">\(\pi_\theta(s, a)\)</span> is <strong>stochastic</strong>. This generates a lot of <strong>variance</strong> in the obtained returns, therefore in the gradients. This can greatly impair learning (bad convergence) and slow it down (sample complexity). We would not have this problem if the policy was <strong>deterministic</strong> as in off-policy methods.</p>
-<p>The objective function that we tried to minimize until now is :</p>
+<p>The objective function that we tried to maximize until now is :</p>
 <div class="math notranslate nohighlight">
 \[
     \mathcal{J}(\theta) =  \mathbb{E}_{\tau \sim \rho_\theta}[R(\tau)]
