@@ -1,0 +1,734 @@
+
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>6. Natural gradients (TRPO, PPO) &#8212; Deep Reinforcement Learning</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" integrity="sha384-KA6wR/X5RY4zFAHpv/CnoG2UW1uogYfdnP67Uv7eULvTveboZJg0qUpmJZb5VqzN" crossorigin="anonymous">
+    <link href="../_static/css/index.css" rel="stylesheet">
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/sphinx-book-theme.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/style.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-dropdown.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/sphinx-book-theme.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/togglebutton.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/sphinx-book-theme.js"></script>
+    <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processRefs": false, "processEnvironments": false}})</script>
+    <script async="async" src="https://unpkg.com/thebelab@latest/lib/index.js"></script>
+    <script >
+        const thebe_selector = ".thebe"
+        const thebe_selector_input = "pre"
+        const thebe_selector_output = ".output"
+    </script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <link rel="canonical" href="https://julien-vitay.net/lecturenotes-deeprl/3-MF/6-PPO.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="1. Introduction to Python" href="../5-exercises/ex1-Python.html" />
+    <link rel="prev" title="5. Deep Deterministic Policy Gradient (DDPG)" href="5-DDPG.html" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="docsearch:language" content="en">
+
+
+<!-- Opengraph tags -->
+<meta property="og:url"         content="https://julien-vitay.net/lecturenotes-deeprl/3-MF/6-PPO.html" />
+<meta property="og:type"        content="article" />
+<meta property="og:title"       content="Natural gradients (TRPO, PPO)" />
+<meta property="og:description" content="Natural gradients (TRPO, PPO)  Slides: pdf  Rationale  &lt;div class=&#39;embed-container&#39;&gt;&lt;iframe src=&#39;https://www.youtube.com/embed/7h22fVmJs9g&#39; frameborder=&#39;0&#39; allo" />
+<meta property="og:image"       content="https://julien-vitay.net/lecturenotes-deeprl/_static/tuc.svg" />
+
+<meta name="twitter:card" content="summary" />
+
+
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
+<a class="navbar-brand text-wrap" href="../index.html">
+  
+  <img src="../_static/tuc.svg" class="logo" alt="logo">
+  
+  
+  <h1 class="site-logo" id="site-title">Deep Reinforcement Learning</h1>
+  
+</a>
+</div>
+
+<form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form>
+
+<nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+  <ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../intro.html">
+   Deep Reinforcement Learning
+  </a>
+ </li>
+</ul>
+<p class="caption">
+ <span class="caption-text">
+  Introduction
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../1-intro/1-Introduction.html">
+   1. Introduction
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../1-intro/2-Math.html">
+   2. Math basics
+  </a>
+ </li>
+</ul>
+<p class="caption">
+ <span class="caption-text">
+  Tabular RL
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../2-tabular/1-Bandits.html">
+   1. Bandits
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../2-tabular/2-MDP.html">
+   2. Markov Decision Processes
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../2-tabular/3-DP.html">
+   3. Dynamic Programming
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../2-tabular/4-MC.html">
+   4. Monte-Carlo (MC) methods
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../2-tabular/5-TD.html">
+   5. Temporal Difference learning
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../2-tabular/6-FA.html">
+   6. Function approximation
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../2-tabular/7-NN.html">
+   7. Deep learning
+  </a>
+ </li>
+</ul>
+<p class="caption">
+ <span class="caption-text">
+  Model-free RL
+ </span>
+</p>
+<ul class="current nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="1-DQN.html">
+   1. Deep Q-Learning (DQN)
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="2-BeyondDQN.html">
+   2. Beyond DQN
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="3-PG.html">
+   3. Policy gradient (PG)
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="4-A3C.html">
+   4. Advantage actor-critic (A2C, A3C)
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="5-DDPG.html">
+   5. Deep Deterministic Policy Gradient (DDPG)
+  </a>
+ </li>
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   6. Natural gradients (TRPO, PPO)
+  </a>
+ </li>
+</ul>
+<p class="caption">
+ <span class="caption-text">
+  Exercises
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../5-exercises/ex1-Python.html">
+   1. Introduction to Python
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../5-exercises/ex2-Numpy.html">
+   2. Numpy and Matplotlib
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../5-exercises/ex3-Sampling.html">
+   3. Sampling
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../5-exercises/ex4-Bandits.html">
+   4. Bandits (part 1)
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../5-exercises/ex5-Bandits2.html">
+   5. Bandits (part 2)
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../5-exercises/ex6-DP.html">
+   6. Dynamic programming
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../5-exercises/ex7-Gym.html">
+   7. Gym environments
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../5-exercises/ex8-MC.html">
+   8. Monte-Carlo control
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../5-exercises/ex9-TD.html">
+   9. Q-learning
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../5-exercises/ex10-Eligibilitytraces.html">
+   10. Eligibility traces
+  </a>
+ </li>
+</ul>
+<p class="caption">
+ <span class="caption-text">
+  References
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../zreferences.html">
+   1. Bibliography
+  </a>
+ </li>
+</ul>
+
+</nav>
+
+ <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="row topbar fixed-top container-xl">
+    <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show">
+    </div>
+    <div class="col pl-2 topbar-main">
+        
+        <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+            data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+            aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+            title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+            <i class="fas fa-bars"></i>
+            <i class="fas fa-arrow-left"></i>
+            <i class="fas fa-arrow-up"></i>
+        </button>
+        
+        <div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="../_sources/3-MF/6-PPO.md"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.md</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+    
+</div>
+        <!-- Source interaction buttons -->
+
+
+        <!-- Full screen (wrap in <a> to have style consistency -->
+        <a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+                data-placement="bottom" onclick="toggleFullScreen()" title="Fullscreen mode"><i
+                    class="fas fa-expand"></i></button></a>
+
+        <!-- Launch buttons -->
+
+    </div>
+
+    <!-- Table of contents -->
+    <div class="d-none d-md-block col-md-2 bd-toc show">
+        <div class="tocsection onthispage pt-5 pb-3">
+            <i class="fas fa-list"></i> Contents
+        </div>
+        <nav id="bd-toc-nav">
+            <ul class="nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#rationale">
+   6.1. Rationale
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#trpo-trust-region-policy-optimization">
+   6.2. TRPO: Trust Region Policy Optimization
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#ppo-proximal-policy-optimization">
+   6.3. PPO: Proximal Policy Optimization
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#openai-five-dota-2">
+   6.4. OpenAI Five: Dota 2
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#acer-actor-critic-with-experience-replay">
+   6.5. ACER: Actor-Critic with Experience Replay
+  </a>
+ </li>
+</ul>
+
+        </nav>
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+        
+              <div>
+                
+  <div class="section" id="natural-gradients-trpo-ppo">
+<h1><span class="section-number">6. </span>Natural gradients (TRPO, PPO)<a class="headerlink" href="#natural-gradients-trpo-ppo" title="Permalink to this headline">¶</a></h1>
+<p>Slides: <a class="reference external" href="https://www.tu-chemnitz.de/informatik/KI/edu/deeprl/lectures/pdf/3.6-PPO.pdf">pdf</a></p>
+<div class="section" id="rationale">
+<h2><span class="section-number">6.1. </span>Rationale<a class="headerlink" href="#rationale" title="Permalink to this headline">¶</a></h2>
+<div class='embed-container'><iframe src='https://www.youtube.com/embed/7h22fVmJs9g' frameborder='0' allowfullscreen></iframe></div>
+<p>DQN and DDPG are <strong>off-policy</strong> methods, so we can use a replay memory.</p>
+<ul class="simple">
+<li><p>They need less samples to converge as they re-use past experiences (<strong>sample efficient</strong>).</p></li>
+<li><p>The critic is biased (overestimation), so learning is <strong>unstable</strong> and <strong>suboptimal</strong>.</p></li>
+</ul>
+<p>A3C is <strong>on-policy</strong>, we have to use distributed learning.</p>
+<ul class="simple">
+<li><p>The critic is less biased, so it learns better policies (<strong>optimality</strong>).</p></li>
+<li><p>It however need a lot of samples (<strong>sample complexity</strong>) as it must collect transitions with the current learned policy.</p></li>
+</ul>
+<p>All suffer from <strong>parameter brittleness</strong>: choosing the right hyperparameters for a task is extremely difficult. For example a learning rate of <span class="math notranslate nohighlight">\(10^{-5}\)</span> might work, but not <span class="math notranslate nohighlight">\(1.1 * 10^{-5}\)</span>. Other hyperparameters: size of the ERM, update frequency of the target networks, training frequency. Can’t we do better?</p>
+<p>Where is the problem with on-policy methods? The policy gradient is <strong>unbiased</strong> only when the critic <span class="math notranslate nohighlight">\(Q_\varphi(s, a)\)</span> accurately approximates the true Q-values of the <strong>current policy</strong>.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{aligned}
+    \nabla_\theta J(\theta) &amp; =  \mathbb{E}_{s \sim \rho_\theta, a \sim \pi_\theta}[\nabla_\theta \log \pi_\theta(s, a) \, Q^{\pi_\theta}(s, a)] \\
+    &amp; \approx  \mathbb{E}_{s \sim \rho_\theta, a \sim \pi_\theta}[\nabla_\theta \log \pi_\theta(s, a) \, Q_\varphi(s, a)]
+\end{aligned}
+\end{split}\]</div>
+<p>If transitions are generated by a different (older) policy <span class="math notranslate nohighlight">\(b\)</span>, the policy gradient will be wrong. We could correct the policy gradient with <strong>importance sampling</strong>:</p>
+<div class="math notranslate nohighlight">
+\[
+    \nabla_\theta J(\theta) \approx  \mathbb{E}_{s \sim \rho_b, a \sim b}[ \frac{\pi_\theta(s, a)}{b(s, a)} \, \nabla_\theta \log \pi_\theta(s, a) \, Q_\varphi(s, a))]
+\]</div>
+<p>This is the <strong>off-policy actor-critic</strong> (Off-PAC) algorithm of <a class="bibtex reference internal" href="../zreferences.html#degris2012" id="id1">[Degris et al., 2012]</a>. It is however limited to linear approximation, as the critic <span class="math notranslate nohighlight">\(Q_\varphi(s, a)\)</span> needs to very quickly adapt to changes in the policy (deep NN are very slow learners) and the importance weight <span class="math notranslate nohighlight">\(\frac{\pi_\theta(s, a)}{b(s, a)}\)</span> can have a huge variance.</p>
+<p>Once we have an estimate of the policy gradient:</p>
+<div class="math notranslate nohighlight">
+\[
+    \nabla_\theta J(\theta) =  \mathbb{E}_{s \sim \rho_\theta, a \sim \pi_\theta}[\nabla_\theta \log \pi_\theta(s, a) \, Q_\varphi(s, a)]
+\]</div>
+<p>we can update the weights <span class="math notranslate nohighlight">\(\theta\)</span> in the direction of that gradient:</p>
+<div class="math notranslate nohighlight">
+\[
+    \theta \leftarrow \theta + \eta \, \nabla_\theta J(\theta)
+\]</div>
+<p>(or some variant of it, such as RMSprop or Adam). We search for the <strong>smallest parameter change</strong> (controlled by the learning rate <span class="math notranslate nohighlight">\(\eta\)</span>) that produces the <strong>biggest positive change</strong> in the returns. Choosing the learning rate <span class="math notranslate nohighlight">\(\eta\)</span> is extremely difficult in deep RL:</p>
+<ul class="simple">
+<li><p>If the learning rate is too small, the network converges very slowly, requiring a lot of samples to converge (<strong>sample complexity</strong>).</p></li>
+<li><p>If the learning rate is too high, parameter updates can totally destroy the policy (<strong>instability</strong>).</p></li>
+</ul>
+<p>The learning rate should adapt to the current parameter values in order to stay in a <strong>trust region</strong>.</p>
+<div class="figure align-default" id="id8">
+<a class="reference internal image-reference" href="../_images/natural-gradient-reason1.jpeg"><img alt="../_images/natural-gradient-reason1.jpeg" src="../_images/natural-gradient-reason1.jpeg" style="width: 100%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 6.20 </span><span class="caption-text">Too big updates can lead to policy collapse. Source:  <a class="reference external" href="https://medium.com/&#64;jonathan_hui/rl-trust-region-policy-optimization-trpo-explained-a6ee04eeeee9">https://medium.com/&#64;jonathan_hui/rl-trust-region-policy-optimization-trpo-explained-a6ee04eeeee9</a></span><a class="headerlink" href="#id8" title="Permalink to this image">¶</a></p>
+</div>
+<p>The policy gradient tells you in <strong>which direction</strong> of the parameter space <span class="math notranslate nohighlight">\(\theta\)</span> the return is increasing the most. If you take too big a step in that direction, the new policy might become completely bad (<strong>policy collapse</strong>). Once the policy has collapsed, the new samples will all have a small return: the previous progress is lost. This is especially true when the parameter space has a <strong>high curvature</strong>, which is the case with deep NN.</p>
+<p>Policy collapse is a huge problem in deep RL: the network starts learning correctly but suddenly collapses to a random agent. For on-policy methods, all progress is lost: the network has to relearn from scratch, as the new samples will be generated by a bad policy.</p>
+<p><strong>Trust region</strong> optimization searches in the <strong>neighborhood</strong> of the current parameters <span class="math notranslate nohighlight">\(\theta\)</span> which new value would maximize the return the most. This is a <strong>constrained optimization</strong> problem: we still want to maximize the return of the policy, but by keeping the policy as close as possible from its previous value.</p>
+<div class="figure align-default" id="id9">
+<a class="reference internal image-reference" href="../_images/natural-gradient-reason2.jpeg"><img alt="../_images/natural-gradient-reason2.jpeg" src="../_images/natural-gradient-reason2.jpeg" style="width: 100%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 6.21 </span><span class="caption-text">The parameter update should be made inside the trust region. Source:  <a class="reference external" href="https://medium.com/&#64;jonathan_hui/rl-trust-region-policy-optimization-trpo-explained-a6ee04eeeee9">https://medium.com/&#64;jonathan_hui/rl-trust-region-policy-optimization-trpo-explained-a6ee04eeeee9</a></span><a class="headerlink" href="#id9" title="Permalink to this image">¶</a></p>
+</div>
+<p>The size of the neighborhood determines the safety of the parameter change. In safe regions, we can take big steps. In dangerous regions, we have to take small steps. <strong>Problem:</strong> how can we estimate the safety of a parameter change?</p>
+<div class="figure align-default" id="id10">
+<a class="reference internal image-reference" href="../_images/natural-gradient-reason3.jpeg"><img alt="../_images/natural-gradient-reason3.jpeg" src="../_images/natural-gradient-reason3.jpeg" style="width: 80%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 6.22 </span><span class="caption-text">The size of the trust region depends on the curvature of the objective function. Source:  <a class="reference external" href="https://medium.com/&#64;jonathan_hui/rl-trust-region-policy-optimization-trpo-explained-a6ee04eeeee9">https://medium.com/&#64;jonathan_hui/rl-trust-region-policy-optimization-trpo-explained-a6ee04eeeee9</a></span><a class="headerlink" href="#id10" title="Permalink to this image">¶</a></p>
+</div>
+</div>
+<div class="section" id="trpo-trust-region-policy-optimization">
+<h2><span class="section-number">6.2. </span>TRPO: Trust Region Policy Optimization<a class="headerlink" href="#trpo-trust-region-policy-optimization" title="Permalink to this headline">¶</a></h2>
+<div class='embed-container'><iframe src='https://www.youtube.com/embed/bUv4BRAJ-OI' frameborder='0' allowfullscreen></iframe></div>
+<p>We want to maximize the expected return of a policy <span class="math notranslate nohighlight">\(\pi_\theta\)</span>, which is equivalent to the Q-value of every state-action pair visited by the policy:</p>
+<div class="math notranslate nohighlight">
+\[\mathcal{J}(\theta) = \mathbb{E}_{s \sim \rho_\theta, a \sim \pi_\theta} [Q^{\pi_\theta}(s, a)]\]</div>
+<p>Let’s note <span class="math notranslate nohighlight">\(\theta_\text{old}\)</span> the current value of the parameters of the policy <span class="math notranslate nohighlight">\(\pi_{\theta_\text{old}}\)</span>.</p>
+<p><a class="bibtex reference internal" href="../zreferences.html#kakade2002" id="id2">[Kakade &amp; Langford, 2002]</a> have shown that the expected return of a policy <span class="math notranslate nohighlight">\(\pi_\theta\)</span> is linked to the expected return of the current policy <span class="math notranslate nohighlight">\(\pi_{\theta_\text{old}}\)</span> with:</p>
+<div class="math notranslate nohighlight">
+\[\mathcal{J}(\theta) = \mathcal{J}(\theta_\text{old}) + \mathbb{E}_{s \sim \rho_\theta, a \sim \pi_\theta} [A^{\pi_{\theta_\text{old}}}(s, a)]\]</div>
+<p>where:</p>
+<div class="math notranslate nohighlight">
+\[A^{\pi_{\theta_\text{old}}}(s, a) = Q_\theta(s, a) - Q_{\theta_\text{old}}(s, a)\]</div>
+<p>is the <strong>advantage</strong> of taking the action <span class="math notranslate nohighlight">\((s, a)\)</span> and thereafter following <span class="math notranslate nohighlight">\(\pi_\theta\)</span>, compared to following the current policy <span class="math notranslate nohighlight">\(\pi_{\theta_\text{old}}\)</span>.</p>
+<p>The return under any policy <span class="math notranslate nohighlight">\(\theta\)</span> is equal to the return under <span class="math notranslate nohighlight">\(\theta_\text{old}\)</span>, plus how the newly chosen actions in the rest of the trajectory improves (or worsens) the returns.</p>
+<p>If we can estimate the advantages and maximize them, we can find a new policy <span class="math notranslate nohighlight">\(\pi_\theta\)</span> with a higher return than the current one.</p>
+<div class="math notranslate nohighlight">
+\[\mathcal{L}(\theta) = \mathbb{E}_{s \sim \rho_\theta, a \sim \pi_\theta} [A^{\pi_{\theta_\text{old}}}(s, a)]\]</div>
+<p>By definition, <span class="math notranslate nohighlight">\(\mathcal{L}(\theta_\text{old}) = 0\)</span>, so the policy maximizing <span class="math notranslate nohighlight">\(\mathcal{L}(\theta)\)</span> has positive advantages and is better than <span class="math notranslate nohighlight">\(\pi_{\theta_\text{old}}\)</span>.</p>
+<div class="math notranslate nohighlight">
+\[\theta_\text{new} = \text{argmax}_\theta \; \mathcal{L}(\theta) \; \Rightarrow \; \mathcal{J}(\theta_\text{new}) \geq \mathcal{J}(\theta_\text{old})\]</div>
+<p>Maximizing the advantages ensures <strong>monotonic improvement</strong>: the new policy is always better than the previous one. Policy collapse is not possible!</p>
+<p>The problem is that we have to take samples <span class="math notranslate nohighlight">\((s, a)\)</span> from <span class="math notranslate nohighlight">\(\pi_\theta\)</span>: we do not know it yet, as it is what we search. The only policy at our disposal to estimate the advantages is the current policy <span class="math notranslate nohighlight">\(\pi_{\theta_\text{old}}\)</span>. We could use <strong>importance sampling</strong> to sample from <span class="math notranslate nohighlight">\(\pi_{\theta_\text{old}}\)</span>, but it would introduce a lot of variance (but see PPO later):</p>
+<div class="math notranslate nohighlight">
+\[\mathcal{L}(\theta) = \mathbb{E}_{s \sim \rho_{\theta_\text{old}}, a \sim \pi_{\theta_\text{old}}} [\frac{\pi_{\theta}(s, a)}{\pi_{\theta_\text{old}}(s, a)} \, A^{\pi_{\theta_\text{old}}}(s, a)]\]</div>
+<p>In TRPO <a class="bibtex reference internal" href="../zreferences.html#schulman2015" id="id3">[Schulman et al., 2015a]</a>, we are adding a <strong>constraint</strong> instead:</p>
+<ul class="simple">
+<li><p>the new policy <span class="math notranslate nohighlight">\(\pi_{\theta_\text{new}}\)</span> should not be (very) different from <span class="math notranslate nohighlight">\(\pi_{\theta_\text{old}}\)</span>.</p></li>
+<li><p>the importance sampling weight <span class="math notranslate nohighlight">\(\frac{\pi_{\theta_\text{new}}(s, a)}{\pi_{\theta_\text{old}}(s, a)}\)</span> will not be very different from 1, so we can omit it.</p></li>
+</ul>
+<p>Let’s define a new objective function <span class="math notranslate nohighlight">\(\mathcal{J}_{\theta_\text{old}}(\theta)\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[\mathcal{J}_{\theta_\text{old}}(\theta) = \mathcal{J}(\theta_\text{old}) + \mathbb{E}_{s \sim \rho_{\theta_\text{old}}, a \sim \pi_{\theta}} [A^{\pi_{\theta_\text{old}}}(s, a)]\]</div>
+<p>The only difference with <span class="math notranslate nohighlight">\(\mathcal{J}(\theta)\)</span> is that the visited states <span class="math notranslate nohighlight">\(s\)</span> are now sampled by the current policy <span class="math notranslate nohighlight">\(\pi_{\theta_\text{old}}\)</span>. This makes the expectation tractable: we know how to visit the states, but we compute the advantage of actions taken by the new policy in those states.</p>
+<p>Previous objective function:</p>
+<div class="math notranslate nohighlight">
+\[\mathcal{J}(\theta) = \mathcal{J}(\theta_\text{old}) + \mathbb{E}_{s \sim \rho_\theta, a \sim \pi_\theta} [A^{\pi_{\theta_\text{old}}}(s, a)]\]</div>
+<p>New objective function:</p>
+<div class="math notranslate nohighlight">
+\[\mathcal{J}_{\theta_\text{old}}(\theta) = \mathcal{J}(\theta_\text{old}) + \mathbb{E}_{s \sim \rho_{\theta_\text{old}}, a \sim \pi_{\theta}} [A^{\pi_{\theta_\text{old}}}(s, a)]\]</div>
+<p>It is “easy” to observe that the new objective function has the same value in <span class="math notranslate nohighlight">\(\theta_\text{old}\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[\mathcal{J}_{\theta_\text{old}}(\theta_\text{old}) = \mathcal{J}(\theta_\text{old})\]</div>
+<p>and that its gradient w.r.t. <span class="math notranslate nohighlight">\(\theta\)</span> is the same in <span class="math notranslate nohighlight">\(\theta_\text{old}\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[\nabla_\theta \mathcal{J}_{\theta_\text{old}}(\theta)|_{\theta = \theta_\text{old}} = \nabla_\theta \, \mathcal{J}(\theta)|_{\theta = \theta_\text{old}}\]</div>
+<p>At least locally, maximizing <span class="math notranslate nohighlight">\(\mathcal{J}_{\theta_\text{old}}(\theta)\)</span> is exactly the same as maximizing <span class="math notranslate nohighlight">\(\mathcal{J}(\theta)\)</span>. <span class="math notranslate nohighlight">\(\mathcal{J}_{\theta_\text{old}}(\theta)\)</span> is called a <strong>surrogate objective function</strong>: it is not what we want to maximize, but it leads to the same result locally.</p>
+<div class="figure align-default" id="id11">
+<a class="reference internal image-reference" href="../_images/trustregion1.svg"><img alt="../_images/trustregion1.svg" src="../_images/trustregion1.svg" width="80%" /></a>
+<p class="caption"><span class="caption-number">Fig. 6.23 </span><span class="caption-text">The surrogate objective is locally the same as the true objective, so we can follow its gradient.</span><a class="headerlink" href="#id11" title="Permalink to this image">¶</a></p>
+</div>
+<p>How big a step can we take when maximizing <span class="math notranslate nohighlight">\(\mathcal{J}_{\theta_\text{old}}(\theta)\)</span>? <span class="math notranslate nohighlight">\(\pi_\theta\)</span> and <span class="math notranslate nohighlight">\(\pi_{\theta_\text{old}}\)</span> must be close from each other for the approximation to stand.</p>
+<p>The first variant explored in the TRPO paper is a <strong>constrained optimization</strong> approach (Lagrange optimization):</p>
+<div class="math notranslate nohighlight">
+\[
+    \max_\theta \mathcal{J}_{\theta_\text{old}}(\theta) = \mathcal{J}(\theta_\text{old}) + \mathbb{E}_{s \sim \rho_{\theta_\text{old}}, a \sim \pi_{\theta}} [A^{\pi_{\theta_\text{old}}}(s, a)]
+\]</div>
+<div class="math notranslate nohighlight">
+\[
+    \text{such that:} \; D_\text{KL} (\pi_{\theta_\text{old}}||\pi_\theta) \leq \delta
+\]</div>
+<p>The KL divergence between the distributions <span class="math notranslate nohighlight">\(\pi_{\theta_\text{old}}\)</span> and <span class="math notranslate nohighlight">\(\pi_\theta\)</span> must be below a threshold <span class="math notranslate nohighlight">\(\delta\)</span>. This version of TRPO uses a <strong>hard constraint</strong>: We search for a policy <span class="math notranslate nohighlight">\(\pi_\theta\)</span> that maximizes the expected return while staying within the <strong>trust region</strong> around <span class="math notranslate nohighlight">\(\pi_{\theta_\text{old}}\)</span>.</p>
+<p>The second approach <strong>regularizes</strong> the objective function with the KL divergence:</p>
+<div class="math notranslate nohighlight">
+\[
+    \max_\theta \mathcal{L}(\theta) = \mathcal{J}_{\theta_\text{old}}(\theta) - C \, D_\text{KL} (\pi_{\theta_\text{old}}||\pi_\theta)
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(C\)</span> is a regularization parameter controlling the importance of the constraint. This <strong>surrogate objective function</strong> is a <strong>lower bound</strong> of the initial objective <span class="math notranslate nohighlight">\(\mathcal{J}(\theta)\)</span>:</p>
+<ol class="simple">
+<li><p>The two objectives have the same value in <span class="math notranslate nohighlight">\(\theta_\text{old}\)</span>:</p></li>
+</ol>
+<div class="math notranslate nohighlight">
+\[\mathcal{L}(\theta_\text{old}) = \mathcal{J}_{\theta_\text{old}}(\theta_\text{old}) - C \,  D_{KL}(\pi_{\theta_\text{old}} || \pi_{\theta_\text{old}}) = \mathcal{J}(\theta_\text{old})\]</div>
+<ol class="simple">
+<li><p>Their gradient w.r.t <span class="math notranslate nohighlight">\(\theta\)</span> are the same in <span class="math notranslate nohighlight">\(\theta_\text{old}\)</span>:</p></li>
+</ol>
+<div class="math notranslate nohighlight">
+\[\nabla_\theta \mathcal{L}(\theta)|_{\theta = \theta_\text{old}} = \nabla_\theta \mathcal{J}(\theta)|_{\theta = \theta_\text{old}}\]</div>
+<ol class="simple">
+<li><p>The surrogate objective is always smaller than the real objective, as the KL divergence is positive:</p></li>
+</ol>
+<div class="math notranslate nohighlight">
+\[\mathcal{J}(\theta) \geq \mathcal{J}_{\theta_\text{old}}(\theta) - C \,  D_{KL}(\pi_{\theta_\text{old}} || \pi_\theta)\]</div>
+<div class="figure align-default" id="id12">
+<a class="reference internal image-reference" href="../_images/trustregion2.svg"><img alt="../_images/trustregion2.svg" src="../_images/trustregion2.svg" width="80%" /></a>
+<p class="caption"><span class="caption-number">Fig. 6.24 </span><span class="caption-text">The surrogate objective adds the constraint that the update should stay in the trust region.</span><a class="headerlink" href="#id12" title="Permalink to this image">¶</a></p>
+</div>
+<p>The policy <span class="math notranslate nohighlight">\(\pi_\theta\)</span> maximizing the surrogate objective <span class="math notranslate nohighlight">\(\mathcal{L}(\theta) = \mathcal{J}_{\theta_\text{old}}(\theta) - C \, D_\text{KL} (\pi_{\theta_\text{old}}||\pi_\theta)\)</span> has a higher expected return than <span class="math notranslate nohighlight">\(\pi_{\theta_\text{old}}\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[\mathcal{J}(\theta) &gt; \mathcal{J}(\theta_\text{old})\]</div>
+<p>is very close to <span class="math notranslate nohighlight">\(\pi_{\theta_\text{old}}\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[D_\text{KL} (\pi_{\theta_\text{old}}||\pi_\theta) \approx 0\]</div>
+<p>but the parameters <span class="math notranslate nohighlight">\(\theta\)</span> are much closer to the optimal parameters <span class="math notranslate nohighlight">\(\theta^*\)</span>.</p>
+<p>The maximum of <span class="math notranslate nohighlight">\(\mathcal{L}(\theta)\)</span> can be found using conjugate gradients optimization, the Fisher Information matrix and natural gradients: very complex to implement… However, there is a <strong>monotonic improvement guarantee</strong>: the successive policies can only get better over time, no policy collapse! This is the major advantage of TRPO compared to the other methods: it always works, although very slowly.</p>
+</div>
+<div class="section" id="ppo-proximal-policy-optimization">
+<h2><span class="section-number">6.3. </span>PPO: Proximal Policy Optimization<a class="headerlink" href="#ppo-proximal-policy-optimization" title="Permalink to this headline">¶</a></h2>
+<div class='embed-container'><iframe src='https://www.youtube.com/embed/B1IFO9u_l0Y' frameborder='0' allowfullscreen></iframe></div>
+<p>Let’s take the unconstrained objective function of TRPO:</p>
+<div class="math notranslate nohighlight">
+\[\mathcal{J}_{\theta_\text{old}}(\theta) = \mathcal{J}(\theta_\text{old}) + \mathbb{E}_{s \sim \rho_{\theta_\text{old}}, a \sim \pi_{\theta}} [A^{\pi_{\theta_\text{old}}}(s, a)]\]</div>
+<p><span class="math notranslate nohighlight">\(\mathcal{J}(\theta_\text{old})\)</span> does not depend on <span class="math notranslate nohighlight">\(\theta\)</span>, so we only need to maximize the advantages:</p>
+<div class="math notranslate nohighlight">
+\[\mathcal{L}(\theta) = \mathbb{E}_{s \sim \rho_{\theta_\text{old}}, a \sim \pi_{\theta}} [A^{\pi_{\theta_\text{old}}}(s, a)]\]</div>
+<p>In order to avoid sampling action from the <strong>unknown</strong> policy <span class="math notranslate nohighlight">\(\pi_\theta\)</span>, we can use importance sampling with the current policy:</p>
+<div class="math notranslate nohighlight">
+\[\mathcal{L}(\theta) = \mathbb{E}_{s \sim \rho_{\theta_\text{old}}, a \sim \pi_{\theta_\text{old}}} [\rho(s, a) \, A^{\pi_{\theta_\text{old}}}(s, a)]\]</div>
+<p>with <span class="math notranslate nohighlight">\(\rho(s, a) = \frac{\pi_{\theta}(s, a)}{\pi_{\theta_\text{old}}(s, a)}\)</span> being the <strong>importance sampling weight</strong>. But the importance sampling weight <span class="math notranslate nohighlight">\(\rho(s, a)\)</span> introduces a lot of variance, worsening the sample complexity. Is there another way to make sure that <span class="math notranslate nohighlight">\(\pi_\theta\)</span> is not very different from <span class="math notranslate nohighlight">\(\pi_{\theta_\text{old}}\)</span>, therefore reducing the variance of the importance sampling weight?</p>
+<p>The solution introduced by PPO <a class="bibtex reference internal" href="../zreferences.html#schulman2017" id="id4">[Schulman et al., 2017]</a> is simply to <strong>clip</strong> the importance sampling weight when it is too different from 1:</p>
+<div class="math notranslate nohighlight">
+\[\mathcal{L}(\theta) = \mathbb{E}_{s \sim \rho_{\theta_\text{old}}, a \sim \pi_{\theta_\text{old}}} [\min(\rho(s, a) \, A^{\pi_{\theta_\text{old}}}(s, a), \text{clip}(\rho(s, a), 1-\epsilon, 1+\epsilon) \, A^{\pi_{\theta_\text{old}}}(s, a))]\]</div>
+<p>For each sampled action <span class="math notranslate nohighlight">\((s, a)\)</span>, we use the minimum between:</p>
+<ul class="simple">
+<li><p>the TRPO unconstrained objective with IS <span class="math notranslate nohighlight">\(\rho(s, a) \, A^{\pi_{\theta_\text{old}}}(s, a)\)</span>.</p></li>
+<li><p>the same, but with the IS weight clipped between <span class="math notranslate nohighlight">\(1-\epsilon\)</span> and <span class="math notranslate nohighlight">\(1+\epsilon\)</span>.</p></li>
+</ul>
+<div class="figure align-default" id="id13">
+<a class="reference internal image-reference" href="../_images/ppo-clippingfunction.svg"><img alt="../_images/ppo-clippingfunction.svg" src="../_images/ppo-clippingfunction.svg" width="80%" /></a>
+<p class="caption"><span class="caption-number">Fig. 6.25 </span><span class="caption-text">Clipped importance sampling weight.</span><a class="headerlink" href="#id13" title="Permalink to this image">¶</a></p>
+</div>
+<p>If the advantage <span class="math notranslate nohighlight">\(A^{\pi_{\theta_\text{old}}}(s, a)\)</span> is positive (better action than usual) and:</p>
+<ul class="simple">
+<li><p>the IS is higher than <span class="math notranslate nohighlight">\(1+\epsilon\)</span>, we use <span class="math notranslate nohighlight">\((1+\epsilon) \, A^{\pi_{\theta_\text{old}}}(s, a)\)</span>.</p></li>
+<li><p>otherwise, we use <span class="math notranslate nohighlight">\(\rho(s, a) \, A^{\pi_{\theta_\text{old}}}(s, a)\)</span>.</p></li>
+</ul>
+<div class="figure align-default" id="id14">
+<a class="reference internal image-reference" href="../_images/ppo-clipped.png"><img alt="../_images/ppo-clipped.png" src="../_images/ppo-clipped.png" style="width: 50%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 6.26 </span><span class="caption-text">Clipped objective for positive advantages.</span><a class="headerlink" href="#id14" title="Permalink to this image">¶</a></p>
+</div>
+<p>If the advantage <span class="math notranslate nohighlight">\(A^{\pi_{\theta_\text{old}}}(s, a)\)</span> is negative (worse action than usual) and:</p>
+<ul class="simple">
+<li><p>the IS is lower than <span class="math notranslate nohighlight">\(1-\epsilon\)</span>, we use <span class="math notranslate nohighlight">\((1-\epsilon) \, A^{\pi_{\theta_\text{old}}}(s, a)\)</span>.</p></li>
+<li><p>otherwise, we use <span class="math notranslate nohighlight">\(\rho(s, a) \, A^{\pi_{\theta_\text{old}}}(s, a)\)</span>.</p></li>
+</ul>
+<div class="figure align-default" id="id15">
+<a class="reference internal image-reference" href="../_images/ppo-clipped2.png"><img alt="../_images/ppo-clipped2.png" src="../_images/ppo-clipped2.png" style="width: 50%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 6.27 </span><span class="caption-text">Clipped objective for negative advantages.</span><a class="headerlink" href="#id15" title="Permalink to this image">¶</a></p>
+</div>
+<p>This avoids changing too much the policy between two updates:</p>
+<ul class="simple">
+<li><p>Good actions (<span class="math notranslate nohighlight">\(A^{\pi_{\theta_\text{old}}}(s, a) &gt; 0\)</span>) do not become much more likely than before.</p></li>
+<li><p>Bad actions (<span class="math notranslate nohighlight">\(A^{\pi_{\theta_\text{old}}}(s, a) &lt; 0\)</span>) do not become much less likely than before.</p></li>
+</ul>
+<p>The PPO <strong>clipped objective</strong> ensures than the importance sampling weight stays around one, so the new policy is not very different from the old one. It can learn from single transitions.</p>
+<div class="math notranslate nohighlight">
+\[\mathcal{L}(\theta) = \mathbb{E}_{s \sim \rho_{\theta_\text{old}}, a \sim \pi_{\theta_\text{old}}} [\min(\rho(s, a) \, A^{\pi_{\theta_\text{old}}}(s, a), \text{clip}(\rho(s, a), 1-\epsilon, 1+\epsilon) \, A^{\pi_{\theta_\text{old}}}(s, a))]\]</div>
+<p>The advantage of an action can be learned using any advantage estimator, for example the <strong>n-step advantage</strong>:</p>
+<div class="math notranslate nohighlight">
+\[A^{\pi_{\theta_\text{old}}}(s_t, a_t) =  \sum_{k=0}^{n-1} \gamma^{k} \, r_{t+k+1} + \gamma^n \, V_\varphi(s_{t+n+1}) - V_\varphi(s_{t})\]</div>
+<p>Most implementations use <strong>Generalized Advantage Estimation</strong> (GAE, <a class="bibtex reference internal" href="../zreferences.html#schulman2015a" id="id5">[Schulman et al., 2015b]</a>). PPO is therefore an <strong>actor-critic</strong> method (as TRPO). PPO is <strong>on-policy</strong>: it collects samples using <strong>distributed learning</strong> (as A3C) and then applies several updates to the actor and critic.</p>
+<div class="admonition-ppo-proximal-policy-optimization admonition">
+<p class="admonition-title">PPO: Proximal Policy Optimization</p>
+<ul>
+<li><p>Initialize an actor <span class="math notranslate nohighlight">\(\pi_\theta\)</span> and a critic <span class="math notranslate nohighlight">\(V_\varphi\)</span> with random weights.</p></li>
+<li><p><strong>while</strong> not converged :</p>
+<ul>
+<li><p>for <span class="math notranslate nohighlight">\(N\)</span> workers in parallel:</p>
+<ul class="simple">
+<li><p>Collect <span class="math notranslate nohighlight">\(T\)</span> transitions using <span class="math notranslate nohighlight">\(\pi_{\theta}\)</span>.</p></li>
+<li><p>Compute the advantage <span class="math notranslate nohighlight">\(A_\varphi(s, a)\)</span> of each transition using the critic <span class="math notranslate nohighlight">\(V_\varphi\)</span>.</p></li>
+</ul>
+</li>
+<li><p>for <span class="math notranslate nohighlight">\(K\)</span> epochs:</p>
+<ul class="simple">
+<li><p>Sample <span class="math notranslate nohighlight">\(M\)</span> transitions <span class="math notranslate nohighlight">\(\mathcal{D}\)</span> from the ones previously collected.</p></li>
+<li><p>Train the actor to maximize the clipped surrogate objective.</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[\mathcal{L}(\theta) = \mathbb{E}_{s, a \sim \mathcal{D}} [\min(\rho(s, a) \, A_\varphi(s, a), \text{clip}(\rho(s, a), 1-\epsilon, 1+\epsilon) \, A_\varphi(s, a))]\]</div>
+<ul class="simple">
+<li><p>Train the critic to minimize the advantage.</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[\mathcal{L}(\varphi) = \mathbb{E}_{s, a \sim \mathcal{D}} [(A_\varphi(s, a))^2]\]</div>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<p>PPO is an <strong>on-policy actor-critic</strong> PG algorithm, using distributed learning. <strong>Clipping</strong> the importance sampling weight allows to avoid <strong>policy collapse</strong>, by staying in the <strong>trust region</strong> (the policy does not change much between two updates). The <strong>monotonic improvement guarantee</strong> is very important: the network will always find a (local) maximum of the returns. PPO is much less sensible to hyperparameters than DDPG (<strong>brittleness</strong>): works often out of the box with default settings. It does not necessitate complex optimization procedures like TRPO: first-order methods such as <strong>SGD</strong> work (easy to implement). The actor and the critic can <strong>share weights</strong> (unlike TRPO), allowing to work with pixel-based inputs, convolutional or recurrent layers. It can use <strong>discrete or continuous action spaces</strong>, although it is most efficient in the continuous case. Go-to method for robotics. Drawback: not very <strong>sample efficient</strong>.</p>
+<p>Implementing PPO necessitates quite a lot of tricks (early stopping, MPI). OpenAI Baselines or SpinningUp provide efficient implementations:</p>
+<p><a class="reference external" href="https://spinningup.openai.com/en/latest/algorithms/ppo.html">https://spinningup.openai.com/en/latest/algorithms/ppo.html</a></p>
+<p><a class="reference external" href="https://github.com/openai/baselines/tree/master/baselines/ppo2">https://github.com/openai/baselines/tree/master/baselines/ppo2</a></p>
+<div class="figure align-default" id="id16">
+<a class="reference internal image-reference" href="../_images/ppo-results-mujoco.png"><img alt="../_images/ppo-results-mujoco.png" src="../_images/ppo-results-mujoco.png" style="width: 100%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 6.28 </span><span class="caption-text">Performance of PPO on Mujoco continuous control tasks <a class="bibtex reference internal" href="../zreferences.html#schulman2017" id="id6">[Schulman et al., 2017]</a>.</span><a class="headerlink" href="#id16" title="Permalink to this image">¶</a></p>
+</div>
+<p>See <a class="reference external" href="https://openai.com/blog/openai-baselines-ppo/">https://openai.com/blog/openai-baselines-ppo/</a> for more videos:</p>
+<div class='embed-container'><iframe src='https://www.youtube.com/embed/faDKMMwOS2Q' frameborder='0' allowfullscreen></iframe></div>
+<div class='embed-container'><iframe src='https://www.youtube.com/embed/jwSbzNHGflM' frameborder='0' allowfullscreen></iframe></div>
+</div>
+<div class="section" id="openai-five-dota-2">
+<h2><span class="section-number">6.4. </span>OpenAI Five: Dota 2<a class="headerlink" href="#openai-five-dota-2" title="Permalink to this headline">¶</a></h2>
+<div class='embed-container'><iframe src='https://www.youtube.com/embed/MSawUc776z0' frameborder='0' allowfullscreen></iframe></div>
+<p>PPO is used by OpenAI to play Dota 2. Their website is very well made:</p>
+<p><a class="reference external" href="https://openai.com/projects/five/">https://openai.com/projects/five/</a></p>
+<div class='embed-container'><iframe src='https://www.youtube.com/embed/eHipy_j29Xw' frameborder='0' allowfullscreen></iframe></div>
+<p>Why is Dota 2 hard?</p>
+<div class="figure align-default" id="id17">
+<a class="reference internal image-reference" href="../_images/ppo-dota-reasons.png"><img alt="../_images/ppo-dota-reasons.png" src="../_images/ppo-dota-reasons.png" style="width: 100%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 6.29 </span><span class="caption-text">Dota 2 is much harder for AI than chess or Go. Source: <a class="reference external" href="https://openai.com/projects/five/">https://openai.com/projects/five/</a></span><a class="headerlink" href="#id17" title="Permalink to this image">¶</a></p>
+</div>
+<hr class="docutils" />
+<p>Feature                             Chess   Go      Dota 2</p>
+<hr class="docutils" />
+<p>Total number of moves               40      150     20000
+Number of possible actions          35      250     1000
+Number of inputs                    70      400     20000</p>
+<hr class="docutils" />
+<p>OpenAI Five is composed of 5 PPO networks (one per player), using 128,000 CPUs and 256 V100 GPUs.</p>
+<div class="figure align-default" id="id18">
+<a class="reference internal image-reference" href="../_images/ppo-dota-architecture.png"><img alt="../_images/ppo-dota-architecture.png" src="../_images/ppo-dota-architecture.png" style="width: 100%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 6.30 </span><span class="caption-text">Architecture of OpenAI five. Source: <a class="reference external" href="https://openai.com/projects/five/">https://openai.com/projects/five/</a></span><a class="headerlink" href="#id18" title="Permalink to this image">¶</a></p>
+</div>
+<div class="figure align-default" id="id19">
+<a class="reference internal image-reference" href="../_images/ppo-dota-facts.png"><img alt="../_images/ppo-dota-facts.png" src="../_images/ppo-dota-facts.png" style="width: 100%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 6.31 </span><span class="caption-text">Hardware requirements. Source: <a class="reference external" href="https://openai.com/projects/five/">https://openai.com/projects/five/</a></span><a class="headerlink" href="#id19" title="Permalink to this image">¶</a></p>
+</div>
+<div class="figure align-default" id="id20">
+<a class="reference internal image-reference" href="../_images/ppo-dota-inputs.png"><img alt="../_images/ppo-dota-inputs.png" src="../_images/ppo-dota-inputs.png" style="width: 100%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 6.32 </span><span class="caption-text">State representation. Source: <a class="reference external" href="https://openai.com/projects/five/">https://openai.com/projects/five/</a></span><a class="headerlink" href="#id20" title="Permalink to this image">¶</a></p>
+</div>
+<div class="figure align-default" id="id21">
+<a class="reference internal image-reference" href="../_images/ppo-dota-nn.png"><img alt="../_images/ppo-dota-nn.png" src="../_images/ppo-dota-nn.png" style="width: 100%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 6.33 </span><span class="caption-text">Deep NN used as the actor. Source: <a class="reference external" href="https://openai.com/projects/five/">https://openai.com/projects/five/</a></span><a class="headerlink" href="#id21" title="Permalink to this image">¶</a></p>
+</div>
+<p>Check the complete NN architecture at: <a class="reference external" href="https://d4mucfpksywv.cloudfront.net/research-covers/openai-five/network-architecture.pdf">https://d4mucfpksywv.cloudfront.net/research-covers/openai-five/network-architecture.pdf</a></p>
+<p>The agents are trained by <strong>self-play</strong>. Each worker plays against:</p>
+<ul class="simple">
+<li><p>the current version of the network 80% of the time.</p></li>
+<li><p>an older version of the network 20% of the time.</p></li>
+</ul>
+<p>The reward function is hand-designed using human heuristics: net worth, kills, deaths, assists, last hits…</p>
+<div class="figure align-default" id="id22">
+<a class="reference internal image-reference" href="../_images/ppo-dota-example.png"><img alt="../_images/ppo-dota-example.png" src="../_images/ppo-dota-example.png" style="width: 100%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 6.34 </span><span class="caption-text">OpenAI five. Source: <a class="reference external" href="https://openai.com/projects/five/">https://openai.com/projects/five/</a></span><a class="headerlink" href="#id22" title="Permalink to this image">¶</a></p>
+</div>
+<p>The discount factor <span class="math notranslate nohighlight">\(\gamma\)</span> is annealed from 0.998 (valuing future rewards with a half-life of 46 seconds) to 0.9997 (valuing future rewards with a half-life of five minutes). Coordinating all the resources (CPU, GPU) is actually the main difficulty: Kubernetes, Azure, and GCP backends for Rapid, TensorBoard, Sentry and Grafana for monitoring…</p>
+</div>
+<div class="section" id="acer-actor-critic-with-experience-replay">
+<h2><span class="section-number">6.5. </span>ACER: Actor-Critic with Experience Replay<a class="headerlink" href="#acer-actor-critic-with-experience-replay" title="Permalink to this headline">¶</a></h2>
+<p>ACER <a class="bibtex reference internal" href="../zreferences.html#wang2017" id="id7">[Wang et al., 2017]</a> is the off-policy version of PPO:</p>
+<ul class="simple">
+<li><p>Off-policy actor-critic architecture (using experience replay),</p></li>
+<li><p>Retrace estimation of values (Munos et al. 2016),</p></li>
+<li><p>Importance sampling weight truncation with bias correction,</p></li>
+<li><p>Efficient trust region optimization (TRPO),</p></li>
+<li><p>Stochastic Dueling Network (SDN) in order to estimate both <span class="math notranslate nohighlight">\(Q_\varphi(s, a)\)</span> and <span class="math notranslate nohighlight">\(V_\varphi(s)\)</span>.</p></li>
+</ul>
+<p>The performance is comparable to PPO. It works sometimes better than PPO on some environments, sometimes not.</p>
+</div>
+</div>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./3-MF"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+        </div>
+    </div>
+    
+    
+    <div class='prev-next-bottom'>
+        
+    <a class='left-prev' id="prev-link" href="5-DDPG.html" title="previous page"><span class="section-number">5. </span>Deep Deterministic Policy Gradient (DDPG)</a>
+    <a class='right-next' id="next-link" href="../5-exercises/ex1-Python.html" title="next page"><span class="section-number">1. </span>Introduction to Python</a>
+
+    </div>
+    <footer class="footer mt-5 mt-md-0">
+    <div class="container">
+      <p>
+        
+          By Julien Vitay - julien.vitay@informatik.tu-chemnitz.de<br/>
+        
+            &copy; Copyright 2020.<br/>
+          <div class="extra_footer">
+            Technische Universität Chemnitz - Faculty of Computer Science - Professorship for Artificial Intelligence
+          </div>
+      </p>
+    </div>
+  </footer>
+</main>
+
+
+      </div>
+    </div>
+
+    <script src="../_static/js/index.js"></script>
+    
+  </body>
+</html>
