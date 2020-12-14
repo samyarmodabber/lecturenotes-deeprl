@@ -180,6 +180,11 @@
    5. Deep Deterministic Policy Gradient (DDPG)
   </a>
  </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../3-MF/6-PPO.html">
+   6. Natural gradients (TRPO, PPO)
+  </a>
+ </li>
 </ul>
 <p class="caption">
  <span class="caption-text">
@@ -865,7 +870,7 @@ A^2_t &amp;= r_{t+1} + \gamma \, r_{t+2} + \gamma^2 \, V(s_{t+2}) - V(s_{t}) \\
 \[
 A^n_t = \sum_{k=0}^{n-1} \gamma^{k} \, r_{t+k+1} + \gamma^n \,  V(s_{t+n+1}) - V (s_t)
 \]</div>
-<p>Schulman et al. (2015) <a class="bibtex reference internal" href="../zreferences.html#schulman2015a" id="id11">[Schulman et al., 2015]</a> proposed a <strong>generalized advantage estimate</strong> (GAE) <span class="math notranslate nohighlight">\(A_t^{\text{GAE}(\gamma, \lambda)}\)</span> summing all possible n-step advantages with a discount parameter <span class="math notranslate nohighlight">\(\lambda\)</span>:</p>
+<p>Schulman et al. (2015) <a class="bibtex reference internal" href="../zreferences.html#schulman2015a" id="id11">[Schulman et al., 2015b]</a> proposed a <strong>generalized advantage estimate</strong> (GAE) <span class="math notranslate nohighlight">\(A_t^{\text{GAE}(\gamma, \lambda)}\)</span> summing all possible n-step advantages with a discount parameter <span class="math notranslate nohighlight">\(\lambda\)</span>:</p>
 <div class="math notranslate nohighlight">
 \[A_t^{\text{GAE}(\gamma, \lambda)} = (1 - \lambda) \sum_{n=1}^\infty \lambda^n \, A^n_t\]</div>
 <p>This is just a forward eligibility trace over distant n-step advantages: the 1-step advantage is more important the the 1000-step advantage (too much variance). We can show that the GAE can be expressed as a function of the future 1-step TD errors:</p>
