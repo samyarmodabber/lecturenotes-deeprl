@@ -326,6 +326,7 @@ width: 100%
 Performance of PPO on Mujoco continuous control tasks {cite}`Schulman2017`.
 ```
 
+
 See <https://openai.com/blog/openai-baselines-ppo/> for more videos:
 
 <div class='embed-container'><iframe src='https://www.youtube.com/embed/faDKMMwOS2Q' frameborder='0' allowfullscreen></iframe></div>
@@ -341,7 +342,6 @@ PPO is used by OpenAI to play Dota 2. Their website is very well made:
 <https://openai.com/projects/five/>
 
 <div class='embed-container'><iframe src='https://www.youtube.com/embed/eHipy_j29Xw' frameborder='0' allowfullscreen></iframe></div>
-
 
 Why is Dota 2 hard?
 

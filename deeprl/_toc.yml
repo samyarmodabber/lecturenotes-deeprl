@@ -1,6 +1,5 @@
 - file: intro
   numbered: true
-  expand_sections: true
 
 - part: Introduction
   chapters:
@@ -99,6 +98,13 @@
         - file: 5-exercises/10-Eligibilitytraces
           title: Notebook
         - file: 5-exercises/10-Eligibilitytraces-solution
+          title: Solution
+
+    - file: 5-exercises/ex11-Keras
+      sections:
+        - file: 5-exercises/11-Keras
+          title: Notebook
+        - file: 5-exercises/11-Keras-solution
           title: Solution
 
 
