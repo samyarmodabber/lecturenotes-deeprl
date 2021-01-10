@@ -1,0 +1,848 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>7. Maximum Entropy RL (SAC) &#8212; Deep Reinforcement Learning</title>
+    
+  <link rel="stylesheet" href="../_static/css/index.73d71520a4ca3b99cfee5594769eaaae.css">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+  <link rel="stylesheet"
+    href="../_static/vendor/open-sans_all/1.44.1/index.css">
+  <link rel="stylesheet"
+    href="../_static/vendor/lato_latin-ext/1.44.1/index.css">
+
+    
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/sphinx-book-theme.40e2e510f6b7d1648584402491bb10fe.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/style.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    
+  <link rel="preload" as="script" href="../_static/js/index.3da636dd464baa7582d2.js">
+
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/togglebutton.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../_static/sphinx-book-theme.d31b09fe5c1d09cb49b26a786de4a05d.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processRefs": false, "processEnvironments": false}})</script>
+    <script async="async" src="https://unpkg.com/thebelab@latest/lib/index.js"></script>
+    <script >
+        const thebe_selector = ".thebe"
+        const thebe_selector_input = "pre"
+        const thebe_selector_output = ".output"
+    </script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <link rel="canonical" href="https://julien-vitay.net/lecturenotes-deeprl/3-MF/7-SAC.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="1. Model-based RL" href="../4-MB/1-MB.html" />
+    <link rel="prev" title="6. Natural gradients (TRPO, PPO)" href="6-PPO.html" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en" />
+
+
+<!-- Opengraph tags -->
+<meta property="og:url"         content="https://julien-vitay.net/lecturenotes-deeprl/3-MF/7-SAC.html" />
+<meta property="og:type"        content="article" />
+<meta property="og:title"       content="Maximum Entropy RL (SAC)" />
+<meta property="og:description" content="Maximum Entropy RL (SAC)  Slides: pdf  Soft RL  &lt;div class=&#39;embed-container&#39;&gt;&lt;iframe src=&#39;https://www.youtube.com/embed/b7CnFrgQ0hg&#39; frameborder=&#39;0&#39; allowfullsc" />
+<meta property="og:image"       content="https://julien-vitay.net/lecturenotes-deeprl/_static/tuc.svg" />
+
+<meta name="twitter:card" content="summary" />
+
+
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
+<a class="navbar-brand text-wrap" href="../index.html">
+  
+  <img src="../_static/tuc.svg" class="logo" alt="logo">
+  
+  
+  <h1 class="site-logo" id="site-title">Deep Reinforcement Learning</h1>
+  
+</a>
+</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form>
+<nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+    <ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../intro.html">
+   Deep Reinforcement Learning
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Introduction
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../1-intro/1-Introduction.html">
+   1. Introduction
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../1-intro/2-Math.html">
+   2. Math basics
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Tabular RL
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../2-tabular/1-Bandits.html">
+   1. Bandits
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../2-tabular/2-MDP.html">
+   2. Markov Decision Processes
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../2-tabular/3-DP.html">
+   3. Dynamic Programming
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../2-tabular/4-MC.html">
+   4. Monte-Carlo (MC) methods
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../2-tabular/5-TD.html">
+   5. Temporal Difference learning
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../2-tabular/6-FA.html">
+   6. Function approximation
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../2-tabular/7-NN.html">
+   7. Deep learning
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Model-free RL
+ </span>
+</p>
+<ul class="current nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="1-DQN.html">
+   1. Deep Q-Learning (DQN)
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="2-BeyondDQN.html">
+   2. Beyond DQN
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="3-PG.html">
+   3. Policy gradient (PG)
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="4-A3C.html">
+   4. Advantage actor-critic (A2C, A3C)
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="5-DDPG.html">
+   5. Deep Deterministic Policy Gradient (DDPG)
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="6-PPO.html">
+   6. Natural gradients (TRPO, PPO)
+  </a>
+ </li>
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   7. Maximum Entropy RL (SAC)
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Model-based RL
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../4-MB/1-MB.html">
+   1. Model-based RL
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Exercises
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="../5-exercises/ex1-Python.html">
+   1. Introduction to Python
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="../5-exercises/1-Python.html">
+     1.1. Notebook
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../5-exercises/1-Python-solution.html">
+     1.2. Solution
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="../5-exercises/ex2-Numpy.html">
+   2. Numpy and Matplotlib
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="../5-exercises/2-Numpy.html">
+     2.1. Notebook
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../5-exercises/2-Numpy-solution.html">
+     2.2. Solution
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="../5-exercises/ex3-Sampling.html">
+   3. Sampling
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="../5-exercises/3-Sampling.html">
+     3.1. Notebook
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../5-exercises/3-Sampling-solution.html">
+     3.2. Solution
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="../5-exercises/ex4-Bandits.html">
+   4. Bandits (part 1)
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="../5-exercises/4-Bandits.html">
+     4.1. Notebook
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../5-exercises/4-Bandits-solution.html">
+     4.2. Solution
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="../5-exercises/ex5-Bandits2.html">
+   5. Bandits (part 2)
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="../5-exercises/5-Bandits2.html">
+     5.1. Notebook
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../5-exercises/5-Bandits2-solution.html">
+     5.2. Solution
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="../5-exercises/ex6-DP.html">
+   6. Dynamic programming
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="../5-exercises/6-DP.html">
+     6.1. Notebook
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../5-exercises/6-DP-solution.html">
+     6.2. Solution
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="../5-exercises/ex7-Gym.html">
+   7. Gym environments
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="../5-exercises/7-Gym.html">
+     7.1. Notebook
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../5-exercises/7-Gym-solution.html">
+     7.2. Solution
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="../5-exercises/ex8-MC.html">
+   8. Monte-Carlo control
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="../5-exercises/8-MonteCarlo.html">
+     8.1. Notebook
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../5-exercises/8-MonteCarlo-solution.html">
+     8.2. Solution
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="../5-exercises/ex9-TD.html">
+   9. Q-learning
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="../5-exercises/9-TD.html">
+     9.1. Notebook
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../5-exercises/9-TD-solution.html">
+     9.2. Solution
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="../5-exercises/ex10-Eligibilitytraces.html">
+   10. Eligibility traces
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="../5-exercises/10-Eligibilitytraces.html">
+     10.1. Notebook
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../5-exercises/10-Eligibilitytraces-solution.html">
+     10.2. Solution
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="../5-exercises/ex11-Keras.html">
+   11. Keras
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="../5-exercises/11-Keras.html">
+     11.1. Notebook
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../5-exercises/11-Keras-solution.html">
+     11.2. Solution
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  References
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../zreferences.html">
+   1. Bibliography
+  </a>
+ </li>
+</ul>
+
+</nav> <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="row topbar fixed-top container-xl">
+    <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show">
+    </div>
+    <div class="col pl-2 topbar-main">
+        
+        <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+            data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+            aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+            title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+            <i class="fas fa-bars"></i>
+            <i class="fas fa-arrow-left"></i>
+            <i class="fas fa-arrow-up"></i>
+        </button>
+        
+        
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="../_sources/3-MF/7-SAC.md"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.md</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+</div>
+
+        <!-- Source interaction buttons -->
+
+
+        <!-- Full screen (wrap in <a> to have style consistency -->
+        <a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+                data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+                title="Fullscreen mode"><i
+                    class="fas fa-expand"></i></button></a>
+
+        <!-- Launch buttons -->
+
+    </div>
+
+    <!-- Table of contents -->
+    <div class="d-none d-md-block col-md-2 bd-toc show">
+        
+        <div class="tocsection onthispage pt-5 pb-3">
+            <i class="fas fa-list"></i> Contents
+        </div>
+        <nav id="bd-toc-nav">
+            <ul class="nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#soft-rl">
+   7.1. Soft RL
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#continuous-stochastic-policies">
+   7.2. Continuous stochastic policies
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#maximum-entropy-rl">
+   7.3. Maximum Entropy RL
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#soft-actor-critic-sac">
+   7.4. Soft Actor-Critic (SAC)
+  </a>
+ </li>
+</ul>
+
+        </nav>
+        
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+        
+              <div>
+                
+  <div class="section" id="maximum-entropy-rl-sac">
+<h1><span class="section-number">7. </span>Maximum Entropy RL (SAC)<a class="headerlink" href="#maximum-entropy-rl-sac" title="Permalink to this headline">¶</a></h1>
+<p>Slides: <a class="reference external" href="https://www.tu-chemnitz.de/informatik/KI/edu/deeprl/lectures/pdf/3.7-SAC.pdf">pdf</a></p>
+<div class="section" id="soft-rl">
+<h2><span class="section-number">7.1. </span>Soft RL<a class="headerlink" href="#soft-rl" title="Permalink to this headline">¶</a></h2>
+<div class='embed-container'><iframe src='https://www.youtube.com/embed/b7CnFrgQ0hg' frameborder='0' allowfullscreen></iframe></div>
+<p>All methods seen so far search the optimal policy that maximizes the return:</p>
+<div class="math notranslate nohighlight">
+\[\pi^* = \text{arg} \max_\pi \, \mathbb{E}_{\pi} [ \sum_t \gamma^t \, r(s_t, a_t, s_{t+1}) ]\]</div>
+<p>The optimal policy is deterministic and greedy by definition.</p>
+<div class="math notranslate nohighlight">
+\[\pi^*(s) = \text{arg} \max_a Q^*(s, a)\]</div>
+<p>Exploration is ensured externally by :</p>
+<ul class="simple">
+<li><p>applying <span class="math notranslate nohighlight">\(\epsilon\)</span>-greedy or softmax on the Q-values (DQN),</p></li>
+<li><p>adding exploratory noise (DDPG),</p></li>
+<li><p>learning stochastic policies that become deterministic over time (A3C, PPO).</p></li>
+</ul>
+<p>Is “hard” RL, caring only about <strong>exploitation</strong>, always the best option?</p>
+<p>The optimal policy is only greedy for a MDP, not obligatorily for a POMDP. Games like chess are POMDPs: you do not know what your opponent is going to play (missing information). If you always play the same moves (e.g. opening moves), your opponent will adapt and you will end up losing systematically. <strong>Variety</strong> in playing is beneficial in POMDPs: it can counteract the uncertainty about the environment <a class="bibtex reference internal" href="../zreferences.html#todorov2008" id="id1">[Todorov, 2008]</a>, <a class="bibtex reference internal" href="../zreferences.html#toussaint2009" id="id2">[Toussaint, 2009]</a>.</p>
+<p>There are sometimes more than one way to collect rewards, especially with sparse rewards. If exploration decreases too soon, the RL agent will “overfit” one of the paths. If one of the paths is suddenly blocked, the agent would have to completely re-learn its policy. It would be more efficient if the agent had learned all possibles paths, even if some of them are less optimal.</p>
+<p>Softmax policies allow to learn <strong>multimodal</strong> policies, but only for discrete action spaces.</p>
+<div class="math notranslate nohighlight">
+\[
+    \pi(s, a) = \frac{\exp Q(s, a) / \tau}{ \sum_b \exp Q(s, b) / \tau}
+\]</div>
+<p>In continuous action spaces, we would have to integrate over the whole action space, what is not tractable. Exploratory noise as in DDPG only leads to <strong>unimodal</strong> policies: greedy action plus some noise.</p>
+<div class="figure align-default" id="id9">
+<a class="reference internal image-reference" href="../_images/sac-unimodal.png"><img alt="../_images/sac-unimodal.png" src="../_images/sac-unimodal.png" style="width: 70%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 7.16 </span><span class="caption-text">Unimodal policies explore around the greedy action. Source: <a class="reference external" href="https://bair.berkeley.edu/blog/2017/10/06/soft-q-learning/">https://bair.berkeley.edu/blog/2017/10/06/soft-q-learning/</a></span><a class="headerlink" href="#id9" title="Permalink to this image">¶</a></p>
+</div>
+<div class="figure align-default" id="id10">
+<a class="reference internal image-reference" href="../_images/sac-multimodal.png"><img alt="../_images/sac-multimodal.png" src="../_images/sac-multimodal.png" style="width: 70%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 7.17 </span><span class="caption-text">Multimodal policies explore in the whole action space. Source: <a class="reference external" href="https://bair.berkeley.edu/blog/2017/10/06/soft-q-learning/">https://bair.berkeley.edu/blog/2017/10/06/soft-q-learning/</a></span><a class="headerlink" href="#id10" title="Permalink to this image">¶</a></p>
+</div>
+</div>
+<div class="section" id="continuous-stochastic-policies">
+<h2><span class="section-number">7.2. </span>Continuous stochastic policies<a class="headerlink" href="#continuous-stochastic-policies" title="Permalink to this headline">¶</a></h2>
+<div class='embed-container'><iframe src='https://www.youtube.com/embed/00oPvNm-VBA' frameborder='0' allowfullscreen></iframe></div>
+<p>The easiest to implement a stochastic policy with a neural network is a <strong>Gaussian policy</strong>. Suppose that we want to control a robotic arm with <span class="math notranslate nohighlight">\(n\)</span> degrees of freedom. An action <span class="math notranslate nohighlight">\(\mathbf{a}\)</span> is a vector of joint displacements:</p>
+<div class="math notranslate nohighlight">
+\[\mathbf{a} = \begin{bmatrix} \Delta \theta_1 &amp; \Delta \theta_2 &amp; \ldots \, \Delta \theta_n\end{bmatrix}^T\]</div>
+<p>A Gaussian policy considers the vector <span class="math notranslate nohighlight">\(\mathbf{a}\)</span> to be sampled from the <strong>normal distribution</strong> <span class="math notranslate nohighlight">\(\mathcal{N}(\mu_\theta(s), \sigma_\theta(s))\)</span>.
+The mean <span class="math notranslate nohighlight">\(\mu_\theta(s)\)</span> and standard deviation <span class="math notranslate nohighlight">\(\sigma_\theta(s)\)</span> are vectors that can be the output of the <strong>actor</strong> neural network with parameters <span class="math notranslate nohighlight">\(\theta\)</span>. <strong>Sampling</strong> an action from the normal distribution is done through the <strong>reparameterization trick</strong>:</p>
+<div class="math notranslate nohighlight">
+\[\mathbf{a} = \mu_\theta(s) + \sigma_\theta(s) \, \xi\]</div>
+<p>where <span class="math notranslate nohighlight">\(\xi \sim \mathcal{N}(0, 1)\)</span> comes from the standard normal distribution.</p>
+<p>The good thing with the normal distribution is that we know its pdf:</p>
+<div class="math notranslate nohighlight">
+\[
+    \pi_\theta(s, a) = \frac{1}{\sqrt{2\pi\sigma^2_\theta(s)}} \, \exp -\frac{(a - \mu_\theta(s))^2}{2\sigma^2_\theta(s)}
+\]</div>
+<p>When estimating the <strong>policy gradient</strong> (REINFORCE, A3C, PPO, etc):</p>
+<div class="math notranslate nohighlight">
+\[
+    \nabla_\theta J(\theta) =  \mathbb{E}_{s \sim \rho^\pi, a \sim \pi_\theta}[\nabla_\theta \log \pi_\theta (s, a) \, \psi ]
+\]</div>
+<p>the log-likelihood <span class="math notranslate nohighlight">\(\log \pi_\theta (s, a)\)</span> is a simple function of <span class="math notranslate nohighlight">\(\mu_\theta(s)\)</span> and <span class="math notranslate nohighlight">\(\sigma_\theta(s)\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[\log \pi_\theta (s, a) = -\frac{(a - \mu_\theta(s))^2}{2\sigma^2_\theta(s)} - \frac{1}{2} \, \log 2\pi\sigma^2_\theta(s)\]</div>
+<p>so we can easily compute its gradient w.r.t <span class="math notranslate nohighlight">\(\theta\)</span> and apply backpropagation:</p>
+<div class="math notranslate nohighlight">
+\[
+    \nabla_{\mu_\theta(s)} \log \pi_\theta (s, a) = \frac{a - \mu_\theta(s)}{\sigma_\theta(s)^2} \qquad \nabla_{\sigma_\theta(s)} \log \pi_\theta (s, a) = \frac{(a - \mu_\theta(s))^2}{\sigma_\theta(s)^3} - \frac{1}{\sigma_\theta(s)}
+\]</div>
+<p>A Gaussian policy samples actions from the <strong>normal distribution</strong> <span class="math notranslate nohighlight">\(\mathcal{N}(\mu_\theta(s), \sigma_\theta(s))\)</span>, with <span class="math notranslate nohighlight">\(\mu_\theta(s)\)</span> and <span class="math notranslate nohighlight">\(\sigma_\theta(s)\)</span> being the output of the actor.</p>
+<div class="math notranslate nohighlight">
+\[\mathbf{a} = \mu_\theta(s) + \sigma_\theta(s) \, \xi\]</div>
+<p>The score <span class="math notranslate nohighlight">\(\nabla_\theta \log \pi_\theta (s, a)\)</span> can be obtained easily using the output of the actor:</p>
+<div class="math notranslate nohighlight">
+\[
+    \nabla_{\mu_\theta(s)} \log \pi_\theta (s, a) = \frac{a - \mu_\theta(s)}{\sigma_\theta(s)^2}
+\]</div>
+<div class="math notranslate nohighlight">
+\[
+ \nabla_{\sigma_\theta(s)} \log \pi_\theta (s, a) = \frac{(a - \mu_\theta(s))^2}{\sigma_\theta(s)^3} - \frac{1}{\sigma_\theta(s)}
+\]</div>
+<p>The rest of the score (<span class="math notranslate nohighlight">\(\nabla_\theta \mu_\theta(s)\)</span> and <span class="math notranslate nohighlight">\(\nabla_\theta \sigma_\theta(s)\)</span>) is the problem of tensorflow/pytorch.
+This is the same <strong>reparametrization trick</strong> used in variational autoencoders to allow backpropagation to work through a sampling operation.
+<strong>Beta</strong> distributions are an even better choice to parameterize stochastic policies <a class="bibtex reference internal" href="../zreferences.html#chou2017" id="id3">[Chou et al., 2017]</a>.</p>
+</div>
+<div class="section" id="maximum-entropy-rl">
+<h2><span class="section-number">7.3. </span>Maximum Entropy RL<a class="headerlink" href="#maximum-entropy-rl" title="Permalink to this headline">¶</a></h2>
+<div class='embed-container'><iframe src='https://www.youtube.com/embed/BLSAgKBOnSI' frameborder='0' allowfullscreen></iframe></div>
+<p>Although stochastic, Gaussian policies are still <strong>unimodal policies</strong>: they mostly sample actions around the mean <span class="math notranslate nohighlight">\(\mu_\theta(s)\)</span> and the variance <span class="math notranslate nohighlight">\(\sigma_\theta(s)\)</span> decreases to 0 with learning. If we want a multimodal policy that learns different solutions, we need to learn a <strong>Softmax</strong> distribution (Gibbs / Boltzmann) over the action space. How can we do that when the action space is continuous?</p>
+<p>A solution to force the policy to be <strong>multimodal</strong> is to force it to be as stochastic as possible by <strong>maximizing its entropy</strong>. Instead of searching for the policy that “only” maximizes the returns:</p>
+<div class="math notranslate nohighlight">
+\[
+    \pi^* = \text{arg} \max_\pi \, \mathbb{E}_{\pi} [ \sum_t \gamma^t \, r(s_t, a_t, s_{t+1}) ]
+\]</div>
+<p>we search for the policy that maximizes the returns while being as stochastic as possible:</p>
+<div class="math notranslate nohighlight">
+\[
+    \pi^* = \text{arg} \max_\pi \, \mathbb{E}_{\pi} [ \sum_t \gamma^t \, r(s_t, a_t, s_{t+1}) + \alpha \, H(\pi(s_t))]
+\]</div>
+<p>This new objective function defines the <strong>maximum entropy RL</strong> framework <a class="bibtex reference internal" href="../zreferences.html#williams1991" id="id4">[Williams &amp; Peng, 1991]</a>. The entropy of the policy <strong>regularizes</strong> the objective function: the policy should still maximize the returns, but stay as stochastic as possible depending on the parameter <span class="math notranslate nohighlight">\(\alpha\)</span>. Entropy regularization can always be added to PG methods such as A3C. It is always possible to fall back to hard RL by setting <span class="math notranslate nohighlight">\(\alpha\)</span> to 0.</p>
+<p>The entropy of a policy in a state <span class="math notranslate nohighlight">\(s_t\)</span> is defined by the expected negative log-likelihood of the policy:</p>
+<div class="math notranslate nohighlight">
+\[H(\pi_\theta(s_t)) = \mathbb{E}_{a \sim \pi_\theta(s_t)} [- \log \pi_\theta(s_t, a)]\]</div>
+<p>For a discrete action space:</p>
+<div class="math notranslate nohighlight">
+\[
+    H(\pi_\theta(s_t)) = - \sum_a \pi_\theta(s_t, a) \, \log \pi_\theta(s_t, a)
+\]</div>
+<p>For a continuous action space:</p>
+<div class="math notranslate nohighlight">
+\[
+    H(\pi_\theta(s_t)) = - \int_a \pi_\theta(s_t, a) \, \log \pi_\theta(s_t, a) \, da
+\]</div>
+<p>The entropy necessitates to sum or integrate the <strong>self-information</strong> of each possible action in a given state.
+A <strong>deterministic</strong> (greedy) policy has zero entropy, the same action is always taken: <strong>exploitation</strong>.
+A <strong>random</strong> policy has a high entropy, you cannot predict which action will be taken: <strong>exploration</strong>.
+Maximum entropy RL embeds the exploration-exploitation trade-off inside the objective function instead of relying on external mechanisms such as the softmax temperature.</p>
+<p>In <strong>soft Q-learning</strong> <a class="bibtex reference internal" href="../zreferences.html#haarnoja2017" id="id5">[Haarnoja et al., 2017]</a>, the objective function is defined over complete trajectories:</p>
+<div class="math notranslate nohighlight">
+\[
+    \mathcal{J}(\theta) = \sum_t \gamma^t \, \mathbb{E}_{\pi} [ r(s_t, a_t, s_{t+1}) + \alpha \, H(\pi(s_t))]
+\]</div>
+<p>The goal of the agent is to generate trajectories associated with a lot of rewards (high return) but only visiting states with a high entropy, i.e. where the policy is random (exploration).</p>
+<p>The agent can decide how the trade-off is solved via regularization:</p>
+<ul class="simple">
+<li><p>If a single action leads to high rewards, the policy may become deterministic.</p></li>
+<li><p>If several actions lead to equivalent rewards, the policy must stay stochastic.</p></li>
+</ul>
+<p>In soft Q-learning, the policy is implemented as a softmax over <strong>soft Q-values</strong>:</p>
+<div class="math notranslate nohighlight">
+\[
+    \pi_\theta(s, a) = \dfrac{\exp  \dfrac{Q^\text{soft}_\theta (s, a)}{\alpha}}{\sum_b \exp \dfrac{Q^\text{soft}_\theta (s, b)}{\alpha}} \propto \exp \dfrac{Q^\text{soft}_\theta (s, a)}{\alpha}
+\]</div>
+<p><span class="math notranslate nohighlight">\(\alpha\)</span> plays the role of the softmax temperature parameter <span class="math notranslate nohighlight">\(\tau\)</span>.</p>
+<p>Soft Q-learning belongs to <strong>energy-based models</strong>, as <span class="math notranslate nohighlight">\(-\dfrac{Q^\text{soft}_\theta (s, a)}{\alpha}\)</span> represents the energy of the Boltzmann distribution (see restricted Boltzmann machines). The <strong>partition function</strong> <span class="math notranslate nohighlight">\(\sum_b \exp \dfrac{Q^\text{soft}_\theta (s, b)}{\alpha}\)</span> is untractable for continuous action spaces, as one would need to integrate over the whole action space, but it will disappear from the equations anyway.</p>
+<p>Soft V and Q values are the equivalent of the hard value functions, but for the new objective:</p>
+<div class="math notranslate nohighlight">
+\[
+    \mathcal{J}(\theta) = \sum_t \gamma^t \, \mathbb{E}_{\pi} [ r(s_t, a_t, s_{t+1}) + \alpha \, H(\pi(s_t))]
+\]</div>
+<p>The soft value of an action depends on the immediate reward and the soft value of the next state (soft Bellman equation):</p>
+<div class="math notranslate nohighlight">
+\[
+    Q^\text{soft}_\theta(s_t, a_t) = \mathbb{E}_{s_{t+1} \in \rho_\theta} [r(s_t, a_t, s_{t+1}) + \gamma \, V^\text{soft}_\theta(s_{t+1})]
+\]</div>
+<p>The soft value of a state is the expected value over the available actions plus the entropy of the policy.</p>
+<div class="math notranslate nohighlight">
+\[
+    V^\text{soft}_\theta(s_t) = \mathbb{E}_{a_{t} \in \pi} [Q^\text{soft}_\theta(s_{t}, a_{t})] + H(\pi_\theta(s_t)) = \mathbb{E}_{a_{t} \in \pi} [Q^\text{soft}_\theta(s_{t}, a_{t}) -  \log \, \pi_\theta(s_t, a_t)]
+\]</div>
+<p><a class="bibtex reference internal" href="../zreferences.html#haarnoja2017" id="id6">[Haarnoja et al., 2017]</a> showed that these soft value functions are the solution of the entropy-regularized objective function. All we need is to be able to estimate them… Soft Q-learning uses complex optimization methods (variational inference) to do it, but SAC is more practical.</p>
+</div>
+<div class="section" id="soft-actor-critic-sac">
+<h2><span class="section-number">7.4. </span>Soft Actor-Critic (SAC)<a class="headerlink" href="#soft-actor-critic-sac" title="Permalink to this headline">¶</a></h2>
+<div class='embed-container'><iframe src='https://www.youtube.com/embed/4drdHdaANXM' frameborder='0' allowfullscreen></iframe></div>
+<p>Putting:</p>
+<div class="math notranslate nohighlight">
+\[
+    Q^\text{soft}_\theta(s_t, a_t) = \mathbb{E}_{s_{t+1} \in \rho_\theta} [r(s_t, a_t, s_{t+1}) + \gamma \, V^\text{soft}_\theta(s_{t+1})]
+\]</div>
+<p>and:</p>
+<div class="math notranslate nohighlight">
+\[
+    V^\text{soft}_\theta(s_t) = \mathbb{E}_{a_{t} \in \pi} [Q^\text{soft}_\theta(s_{t}, a_{t}) -  \log \, \pi_\theta(s_t, a_t)]
+\]</div>
+<p>together, we obtain:</p>
+<div class="math notranslate nohighlight">
+\[
+    Q^\text{soft}_\theta(s_t, a_t) = \mathbb{E}_{s_{t+1} \in \rho_\theta} [r(s_t, a_t, s_{t+1}) + \gamma \, \mathbb{E}_{a_{t+1} \in \pi} [Q^\text{soft}_\theta(s_{t+1}, a_{t+1}) -  \log \, \pi_\theta(s_{t+1}, a_{t+1})]]
+\]</div>
+<p>If we want to train a <strong>critic</strong> <span class="math notranslate nohighlight">\(Q_\varphi(s, a)\)</span> to estimate the true soft Q-value of an action <span class="math notranslate nohighlight">\(Q^\text{soft}_\theta(s, a)\)</span>, we just need to sample <span class="math notranslate nohighlight">\((s_t, a_t, r_{t+1}, a_{t+1})\)</span> transitions and minimize:</p>
+<div class="math notranslate nohighlight">
+\[
+    \mathcal{L}(\varphi) = \mathbb{E}_{s_t, a_t, s_{t+1} \sim \rho_\theta} [(r_{t+1} + \gamma \, Q_\varphi(s_{t+1}, a_{t+1}) - \log \pi_\theta(s_{t+1}, a_{t+1}) - Q_\varphi(s_{t}, a_{t}) )^2]
+\]</div>
+<p>The only difference with a SARSA critic is that the negative log-likelihood of the next action is added to the target. In practice, <span class="math notranslate nohighlight">\(s_t\)</span>, <span class="math notranslate nohighlight">\(a_t\)</span> and <span class="math notranslate nohighlight">\(r_{t+1}\)</span> can come from a replay buffer, but <span class="math notranslate nohighlight">\(a_{t+1}\)</span> has to be sampled from the current policy <span class="math notranslate nohighlight">\(\pi_\theta\)</span> (but not taken!). SAC <a class="bibtex reference internal" href="../zreferences.html#haarnoja2018b" id="id7">[Haarnoja et al., 2018]</a> is therefore an <strong>off-policy actor-critic algorithm</strong>, but with stochastic policies!</p>
+<p>But how do we train the actor? The policy is defined by a softmax over the soft Q-values, but the log-partition <span class="math notranslate nohighlight">\(Z\)</span> is untractable for continuous spaces:</p>
+<div class="math notranslate nohighlight">
+\[
+    \pi_\theta(s, a) = \dfrac{\exp  \dfrac{Q_\varphi (s, a)}{\alpha}}{\sum_b \exp \dfrac{Q_\varphi (s, b)}{\alpha}} = \dfrac{1}{Z} \, \exp \dfrac{Q_\varphi (s, a)}{\alpha}
+\]</div>
+<p>The trick is to make the <strong>parameterized actor</strong> <span class="math notranslate nohighlight">\(\pi_\theta\)</span> learn to be close from this softmax, by minimizing the KL divergence:</p>
+<div class="math notranslate nohighlight">
+\[
+    \mathcal{L}(\theta) = D_\text{KL} (\pi_\theta(s, a) || \dfrac{1}{Z} \, \exp \dfrac{Q_\varphi (s, a)}{\alpha}) = \mathbb{E}_{s, a \sim \pi_\theta(s, a)} [- \log \dfrac{\dfrac{1}{Z} \, \exp \dfrac{Q_\varphi (s, a)}{\alpha}}{\pi_\theta(s, a)}]
+\]</div>
+<p>As <span class="math notranslate nohighlight">\(Z\)</span> does not depend on <span class="math notranslate nohighlight">\(\theta\)</span>, it will automagically disappear when taking the gradient!</p>
+<div class="math notranslate nohighlight">
+\[
+   \nabla_\theta \, \mathcal{L}(\theta) = \mathbb{E}_{s, a} [\alpha \, \nabla_\theta \log \pi_\theta(s, a) - Q_\varphi (s, a)]
+\]</div>
+<p>So the actor just has to implement a Gaussian policy and we can train it using soft-Q-value.</p>
+<p><strong>Soft Actor-Critic</strong> (SAC) is an <strong>off-policy actor-critic</strong> architecture for <strong>maximum entropy RL</strong>:</p>
+<div class="math notranslate nohighlight">
+\[
+    \mathcal{J}(\theta) = \sum_t \gamma^t \, \mathbb{E}_{\pi} [ r(s_t, a_t, s_{t+1}) + \alpha \, H(\pi(s_t))]
+\]</div>
+<p>Maximizing the entropy of the policy ensures an efficient exploration. It is even possible to learn the value of the parameter <span class="math notranslate nohighlight">\(\alpha\)</span>. The critic learns to estimate soft Q-values that take the entropy of the policy into account:</p>
+<div class="math notranslate nohighlight">
+\[
+    \mathcal{L}(\varphi) = \mathbb{E}_{s_t, a_t, s_{t+1} \sim \rho_\theta} [(r_{t+1} + \gamma \, Q_\varphi(s_{t+1}, a_{t+1}) - \log \pi_\theta(s_{t+1}, a_{t+1}) - Q_\varphi(s_{t}, a_{t}) )^2]
+\]</div>
+<p>The actor learns a Gaussian policy that becomes close to a softmax over the soft Q-values:</p>
+<div class="math notranslate nohighlight">
+\[
+    \pi_\theta(s, a) \propto \exp \dfrac{Q_\varphi (s, a)}{\alpha}
+\]</div>
+<div class="math notranslate nohighlight">
+\[
+   \nabla_\theta \, \mathcal{L}(\theta) = \mathbb{E}_{s, a} [\alpha \, \nabla_\theta \log \pi_\theta(s, a) - Q_\varphi (s, a)]
+\]</div>
+<p>In practice, SAC uses <strong>clipped double learning</strong> like TD3: it takes the lesser of two evils between two critics <span class="math notranslate nohighlight">\(Q_{\varphi_1}\)</span> and <span class="math notranslate nohighlight">\(Q_{\varphi_2}\)</span>.
+The next action <span class="math notranslate nohighlight">\(a_{t+1}\)</span> comes from the current policy, no need for target networks.
+Unlike TD3, the learned policy is <strong>stochastic</strong>: no need for target noise as the targets are already stochastic.
+See <a class="reference external" href="https://spinningup.openai.com/en/latest/algorithms/sac.html">https://spinningup.openai.com/en/latest/algorithms/sac.html</a> for a detailed comparison of SAC and TD3.
+The initial version of SAV additionally learned a soft V-value critic, but this turns out not to be needed.</p>
+<div class="figure align-default" id="id11">
+<a class="reference internal image-reference" href="../_images/sac_results.png"><img alt="../_images/sac_results.png" src="../_images/sac_results.png" style="width: 100%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 7.18 </span><span class="caption-text">SAC compared to DDPG, TD3 and PPO. Source <a class="bibtex reference internal" href="../zreferences.html#haarnoja2018b" id="id8">[Haarnoja et al., 2018]</a>.</span><a class="headerlink" href="#id11" title="Permalink to this image">¶</a></p>
+</div>
+<p>The enhanced exploration strategy through maximum entropy RL allows to learn robust and varied strategies that can cope with changes in the environment.</p>
+<div class="figure align-default" id="id12">
+<a class="reference internal image-reference" href="../_images/sac-walker.gif"><img alt="../_images/sac-walker.gif" src="../_images/sac-walker.gif" style="width: 100%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 7.19 </span><span class="caption-text">SAC on the Walker environment. Source: <a class="reference external" href="https://bair.berkeley.edu/blog/2017/10/06/soft-q-learning/">https://bair.berkeley.edu/blog/2017/10/06/soft-q-learning/</a></span><a class="headerlink" href="#id12" title="Permalink to this image">¶</a></p>
+</div>
+<div class="figure align-default" id="id13">
+<a class="reference internal image-reference" href="../_images/sac_ant.gif"><img alt="../_images/sac_ant.gif" src="../_images/sac_ant.gif" style="width: 100%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 7.20 </span><span class="caption-text">SAC on the Ant environment. Source: <a class="reference external" href="https://bair.berkeley.edu/blog/2017/10/06/soft-q-learning/">https://bair.berkeley.edu/blog/2017/10/06/soft-q-learning/</a></span><a class="headerlink" href="#id13" title="Permalink to this image">¶</a></p>
+</div>
+<p>The low sample complexity of SAC allows to train a real-world robot in less than 2 hours!</p>
+<div class='embed-container'><iframe src='https://www.youtube.com/embed/FmMPHL3TcrE' frameborder='0' allowfullscreen></iframe></div>
+<p>Although trained on a flat surface, the rich learned stochastic policy can generalize to complex terrains.</p>
+<div class='embed-container'><iframe src='https://www.youtube.com/embed/KOObeIjzXTY' frameborder='0' allowfullscreen></iframe></div>
+<p>When trained to stack lego bricks, the robotic arm learns to explore the whole state-action space.</p>
+<div class="figure align-default" id="id14">
+<a class="reference internal image-reference" href="../_images/sac_lego1.gif"><img alt="../_images/sac_lego1.gif" src="../_images/sac_lego1.gif" style="width: 100%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 7.21 </span><span class="caption-text">Source: <a class="reference external" href="https://bair.berkeley.edu/blog/2017/10/06/soft-q-learning/">https://bair.berkeley.edu/blog/2017/10/06/soft-q-learning/</a>.</span><a class="headerlink" href="#id14" title="Permalink to this image">¶</a></p>
+</div>
+<p>This makes it more robust to external perturbations after training:</p>
+<div class="figure align-default" id="id15">
+<a class="reference internal image-reference" href="../_images/sac_lego2.gif"><img alt="../_images/sac_lego2.gif" src="../_images/sac_lego2.gif" style="width: 20%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 7.22 </span><span class="caption-text">Source: <a class="reference external" href="https://bair.berkeley.edu/blog/2017/10/06/soft-q-learning/">https://bair.berkeley.edu/blog/2017/10/06/soft-q-learning/</a>.</span><a class="headerlink" href="#id15" title="Permalink to this image">¶</a></p>
+</div>
+</div>
+</div>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./3-MF"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+        </div>
+    </div>
+    
+    
+    <div class='prev-next-bottom'>
+        
+    <a class='left-prev' id="prev-link" href="6-PPO.html" title="previous page"><span class="section-number">6. </span>Natural gradients (TRPO, PPO)</a>
+    <a class='right-next' id="next-link" href="../4-MB/1-MB.html" title="next page"><span class="section-number">1. </span>Model-based RL</a>
+
+    </div>
+    <footer class="footer mt-5 mt-md-0">
+    <div class="container">
+      <p>
+        
+          By Julien Vitay - julien.vitay@informatik.tu-chemnitz.de<br/>
+        
+            &copy; Copyright 2020.<br/>
+          <div class="extra_footer">
+            Technische Universität Chemnitz - Faculty of Computer Science - Professorship for Artificial Intelligence
+          </div>
+      </p>
+    </div>
+  </footer>
+</main>
+
+
+      </div>
+    </div>
+
+    
+  <script src="../_static/js/index.3da636dd464baa7582d2.js"></script>
+
+
+    
+  </body>
+</html>

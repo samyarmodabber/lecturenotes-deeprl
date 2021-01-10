@@ -24,6 +24,11 @@
     - file: 3-MF/4-A3C
     - file: 3-MF/5-DDPG
     - file: 3-MF/6-PPO
+    - file: 3-MF/7-SAC
+
+- part: Model-based RL
+  chapters:
+    - file: 4-MB/1-MB
 
 - part: Exercises
   chapters:

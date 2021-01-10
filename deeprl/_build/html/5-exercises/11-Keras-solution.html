@@ -1,0 +1,1394 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>11.2. Keras tutorial &#8212; Deep Reinforcement Learning</title>
+    
+  <link rel="stylesheet" href="../_static/css/index.73d71520a4ca3b99cfee5594769eaaae.css">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+  <link rel="stylesheet"
+    href="../_static/vendor/open-sans_all/1.44.1/index.css">
+  <link rel="stylesheet"
+    href="../_static/vendor/lato_latin-ext/1.44.1/index.css">
+
+    
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/sphinx-book-theme.40e2e510f6b7d1648584402491bb10fe.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/style.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    
+  <link rel="preload" as="script" href="../_static/js/index.3da636dd464baa7582d2.js">
+
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/togglebutton.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../_static/sphinx-book-theme.d31b09fe5c1d09cb49b26a786de4a05d.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processRefs": false, "processEnvironments": false}})</script>
+    <script async="async" src="https://unpkg.com/thebelab@latest/lib/index.js"></script>
+    <script >
+        const thebe_selector = ".thebe"
+        const thebe_selector_input = "pre"
+        const thebe_selector_output = ".output"
+    </script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <link rel="canonical" href="https://julien-vitay.net/lecturenotes-deeprl/5-exercises/11-Keras-solution.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="1. Bibliography" href="../zreferences.html" />
+    <link rel="prev" title="11.1. Keras tutorial" href="11-Keras.html" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en" />
+
+
+<!-- Opengraph tags -->
+<meta property="og:url"         content="https://julien-vitay.net/lecturenotes-deeprl/5-exercises/11-Keras-solution.html" />
+<meta property="og:type"        content="article" />
+<meta property="og:title"       content="Keras tutorial" />
+<meta property="og:description" content="Keras tutorial  The goal of this tutorial is to very quickly present keras, the high-level API of tensorflow, as it has already been seen in the Neurocomputing " />
+<meta property="og:image"       content="https://julien-vitay.net/lecturenotes-deeprl/_static/tuc.svg" />
+
+<meta name="twitter:card" content="summary" />
+
+
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
+<a class="navbar-brand text-wrap" href="../index.html">
+  
+  <img src="../_static/tuc.svg" class="logo" alt="logo">
+  
+  
+  <h1 class="site-logo" id="site-title">Deep Reinforcement Learning</h1>
+  
+</a>
+</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form>
+<nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+    <ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../intro.html">
+   Deep Reinforcement Learning
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Introduction
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../1-intro/1-Introduction.html">
+   1. Introduction
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../1-intro/2-Math.html">
+   2. Math basics
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Tabular RL
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../2-tabular/1-Bandits.html">
+   1. Bandits
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../2-tabular/2-MDP.html">
+   2. Markov Decision Processes
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../2-tabular/3-DP.html">
+   3. Dynamic Programming
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../2-tabular/4-MC.html">
+   4. Monte-Carlo (MC) methods
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../2-tabular/5-TD.html">
+   5. Temporal Difference learning
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../2-tabular/6-FA.html">
+   6. Function approximation
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../2-tabular/7-NN.html">
+   7. Deep learning
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Model-free RL
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../3-MF/1-DQN.html">
+   1. Deep Q-Learning (DQN)
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../3-MF/2-BeyondDQN.html">
+   2. Beyond DQN
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../3-MF/3-PG.html">
+   3. Policy gradient (PG)
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../3-MF/4-A3C.html">
+   4. Advantage actor-critic (A2C, A3C)
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../3-MF/5-DDPG.html">
+   5. Deep Deterministic Policy Gradient (DDPG)
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../3-MF/6-PPO.html">
+   6. Natural gradients (TRPO, PPO)
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../3-MF/7-SAC.html">
+   7. Maximum Entropy RL (SAC)
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Model-based RL
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../4-MB/1-MB.html">
+   1. Model-based RL
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Exercises
+ </span>
+</p>
+<ul class="current nav sidenav_l1">
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="ex1-Python.html">
+   1. Introduction to Python
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="1-Python.html">
+     1.1. Notebook
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="1-Python-solution.html">
+     1.2. Solution
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="ex2-Numpy.html">
+   2. Numpy and Matplotlib
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="2-Numpy.html">
+     2.1. Notebook
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="2-Numpy-solution.html">
+     2.2. Solution
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="ex3-Sampling.html">
+   3. Sampling
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="3-Sampling.html">
+     3.1. Notebook
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="3-Sampling-solution.html">
+     3.2. Solution
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="ex4-Bandits.html">
+   4. Bandits (part 1)
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="4-Bandits.html">
+     4.1. Notebook
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="4-Bandits-solution.html">
+     4.2. Solution
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="ex5-Bandits2.html">
+   5. Bandits (part 2)
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="5-Bandits2.html">
+     5.1. Notebook
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="5-Bandits2-solution.html">
+     5.2. Solution
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="ex6-DP.html">
+   6. Dynamic programming
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="6-DP.html">
+     6.1. Notebook
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="6-DP-solution.html">
+     6.2. Solution
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="ex7-Gym.html">
+   7. Gym environments
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="7-Gym.html">
+     7.1. Notebook
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="7-Gym-solution.html">
+     7.2. Solution
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="ex8-MC.html">
+   8. Monte-Carlo control
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="8-MonteCarlo.html">
+     8.1. Notebook
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="8-MonteCarlo-solution.html">
+     8.2. Solution
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="ex9-TD.html">
+   9. Q-learning
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="9-TD.html">
+     9.1. Notebook
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="9-TD-solution.html">
+     9.2. Solution
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="ex10-Eligibilitytraces.html">
+   10. Eligibility traces
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="10-Eligibilitytraces.html">
+     10.1. Notebook
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="10-Eligibilitytraces-solution.html">
+     10.2. Solution
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+ <li class="toctree-l1 current active collapsible-parent">
+  <a class="reference internal" href="ex11-Keras.html">
+   11. Keras
+  </a>
+  <ul class="current collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="11-Keras.html">
+     11.1. Notebook
+    </a>
+   </li>
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
+     11.2. Solution
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  References
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../zreferences.html">
+   1. Bibliography
+  </a>
+ </li>
+</ul>
+
+</nav> <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="row topbar fixed-top container-xl">
+    <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show">
+    </div>
+    <div class="col pl-2 topbar-main">
+        
+        <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+            data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+            aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+            title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+            <i class="fas fa-bars"></i>
+            <i class="fas fa-arrow-left"></i>
+            <i class="fas fa-arrow-up"></i>
+        </button>
+        
+        
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="../_sources/5-exercises/11-Keras-solution.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.ipynb</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+</div>
+
+        <!-- Source interaction buttons -->
+
+
+        <!-- Full screen (wrap in <a> to have style consistency -->
+        <a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+                data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+                title="Fullscreen mode"><i
+                    class="fas fa-expand"></i></button></a>
+
+        <!-- Launch buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
+    <div class="dropdown-buttons">
+        
+        <a class="binder-button" href="https://mybinder.org/v2/gh/vitay/lecturenotes-deeprl/master?urlpath=tree/deeprl/5-exercises/11-Keras-solution.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
+                data-placement="left"><img class="binder-button-logo"
+                    src="../_static/images/logo_binder.svg"
+                    alt="Interact on binder">Binder</button></a>
+        
+        
+        
+        <a class="colab-button" href="https://colab.research.google.com/github/vitay/lecturenotes-deeprl/blob/master/deeprl/5-exercises/11-Keras-solution.ipynb"><button type="button" class="btn btn-secondary topbarbtn"
+                title="Launch Colab" data-toggle="tooltip" data-placement="left"><img class="colab-button-logo"
+                    src="../_static/images/logo_colab.png"
+                    alt="Interact on Colab">Colab</button></a>
+        
+        
+    </div>
+</div>
+
+    </div>
+
+    <!-- Table of contents -->
+    <div class="d-none d-md-block col-md-2 bd-toc show">
+        
+        <div class="tocsection onthispage pt-5 pb-3">
+            <i class="fas fa-list"></i> Contents
+        </div>
+        <nav id="bd-toc-nav">
+            <ul class="nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#keras">
+   11.2.1. Keras
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#training-a-mlp-on-mnist">
+   11.2.2. Training a MLP on MNIST
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#correlated-inputs">
+   11.2.3. Correlated inputs
+  </a>
+ </li>
+</ul>
+
+        </nav>
+        
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+        
+              <div>
+                
+  <div class="section" id="keras-tutorial">
+<h1><span class="section-number">11.2. </span>Keras tutorial<a class="headerlink" href="#keras-tutorial" title="Permalink to this headline">¶</a></h1>
+<p>The goal of this tutorial is to very quickly present keras, the high-level API of tensorflow, as it has already been seen in the Neurocomputing exercises. We will train a small fully-connected network on MNIST and observe what happens when the inputs or outputs are correlated, by training successively on the 0 digits, then the 1, etc.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="keras">
+<h2><span class="section-number">11.2.1. </span>Keras<a class="headerlink" href="#keras" title="Permalink to this headline">¶</a></h2>
+<p>The first step is to install tensorflow. The easiest way is to use pip:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip install tensorflow
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">keras</span></code> is now available as a submodule of tensorflow (you can also install it as a separate package):</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">tensorflow</span> <span class="k">as</span> <span class="nn">tf</span>
+</pre></div>
+</div>
+<p>Keras provides a lot of ready-made layer types, activation functions, optimizers and so on. Do not hesitate to read its documentation on <a class="reference external" href="https://keras.io">https://keras.io</a>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">tensorflow</span> <span class="k">as</span> <span class="nn">tf</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>The most important object in keras is <code class="docutils literal notranslate"><span class="pre">Sequential</span></code>. It is a container where you sequentially add layers of neurons (fully-connected, convolutional, recurrent, etc) and other stuff. It represents your model, i.e. the neural network itself.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">models</span><span class="o">.</span><span class="n">Sequential</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>You can then <code class="docutils literal notranslate"><span class="pre">add()</span></code> layers to the model. A fully-connected layer is called <code class="docutils literal notranslate"><span class="pre">Dense</span></code> in keras.</p>
+<p>Let’s create a MLP with 10 input neurons, two hidden layers with 100 hidden neurons each and 3 output neurons.</p>
+<p>The input layer is represented by the <code class="docutils literal notranslate"><span class="pre">Input</span></code> layer:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">((</span><span class="mi">10</span><span class="p">,)))</span>
+</pre></div>
+</div>
+<p>The first hidden layer can be added to the model with:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s2">&quot;relu&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>The layer has 100 neurons and uses the ReLU activation function. One could optionally define the activation function as an additional “layer”, but it is usually not needed:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="mi">100</span><span class="p">))</span>
+<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">Activation</span><span class="p">(</span><span class="s1">&#39;relu&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>Adding more layers is straightforward:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s2">&quot;relu&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>Finally, we can add the output layer. The activation function depends on the problem:</p>
+<ul class="simple">
+<li><p>For regression problems, a linear activation function should be used when the targets can take any value (e.g. Q-values):</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s2">&quot;linear&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>If the targets are bounded between 0 and 1, a logistic/sigmoid function can be used:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s2">&quot;sigmoid&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>For multi-class classification problems, a softmax activation function should be used:</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s2">&quot;softmax&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>This defines fully the structure of your desired neural network.</p>
+<p><strong>Q:</strong> Implement a neural network for classification with 10 input neurons, two hidden layers with 100 neurons each (using ReLU) and 3 output neurons.</p>
+<p><em>Hint:</em> <code class="docutils literal notranslate"><span class="pre">print(model.summary())</span></code> gives you a summary of the architecture of your model. Note in particular the number of trainable parameters (weights and biases).</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">models</span><span class="o">.</span><span class="n">Sequential</span><span class="p">()</span>
+<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">((</span><span class="mi">10</span><span class="p">,)))</span>
+<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s2">&quot;relu&quot;</span><span class="p">))</span>
+<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;relu&#39;</span><span class="p">))</span>
+<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;softmax&#39;</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">summary</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Model: &quot;sequential&quot;
+_________________________________________________________________
+Layer (type)                 Output Shape              Param #   
+=================================================================
+dense (Dense)                (None, 100)               1100      
+_________________________________________________________________
+dense_1 (Dense)              (None, 100)               10100     
+_________________________________________________________________
+dense_2 (Dense)              (None, 3)                 303       
+=================================================================
+Total params: 11,503
+Trainable params: 11,503
+Non-trainable params: 0
+_________________________________________________________________
+None
+</pre></div>
+</div>
+</div>
+</div>
+<p>The next step is to choose an <strong>optimizer</strong> for the neural network, i.e. a variant of gradient descent that will be used to iteratively modify the parameters.</p>
+<p><code class="docutils literal notranslate"><span class="pre">keras</span></code> provides an extensive list of optimizers: <a class="reference external" href="https://keras.io/optimizers/">https://keras.io/optimizers/</a>. The most useful in practice are:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">SGD</span></code>, the vanilla stochastic gradient descent.</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">optimizer</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">optimizers</span><span class="o">.</span><span class="n">SGD</span><span class="p">(</span><span class="n">learning_rate</span><span class="o">=</span><span class="mf">0.001</span><span class="p">,</span> <span class="n">momentum</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span> <span class="n">nesterov</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">RMSprop</span></code>, using second moments:</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">optimizer</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">optimizers</span><span class="o">.</span><span class="n">RMSprop</span><span class="p">(</span><span class="n">learning_rate</span><span class="o">=</span><span class="mf">0.001</span><span class="p">)</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">Adam</span></code>:</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">optimizer</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">optimizers</span><span class="o">.</span><span class="n">Adam</span><span class="p">(</span><span class="n">learning_rate</span><span class="o">=</span><span class="mf">0.001</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Choosing a optimizer is a matter of taste and trial-and-error. In deep RL, a good choice is Adam: the default values for its other parameters are usually good, it converges well, so your only job is to find the right learning rate.</p>
+<p>Finally, the model must be <strong>compiled</strong> by defining:</p>
+<ul class="simple">
+<li><p>A loss function. For multi-class classification, it should be <code class="docutils literal notranslate"><span class="pre">'categorical_crossentropy'</span></code>. For regression, it can be <code class="docutils literal notranslate"><span class="pre">'mse'</span></code>. See the list of built-in loss functions here: <a class="reference external" href="https://keras.io/losses/">https://keras.io/losses/</a> but know that you can also simply define your own.</p></li>
+<li><p>The chosen optimizer.</p></li>
+<li><p>The metrics, i.e. what you want tensorflow to print during training. By default it only prints the current value of the loss function. For classification tasks, it usually makes more sense to also print the <code class="docutils literal notranslate"><span class="pre">accuracy</span></code>.</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">model</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span>
+    <span class="n">loss</span><span class="o">=</span><span class="s1">&#39;categorical_crossentropy&#39;</span><span class="p">,</span> 
+    <span class="n">optimizer</span><span class="o">=</span><span class="n">optimizer</span><span class="p">,</span>
+    <span class="n">metrics</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;accuracy&#39;</span><span class="p">]</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Q:</strong> Compile the model for classification, using the Adam optimizer and a learning rate of 0.01.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">optimizer</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">optimizers</span><span class="o">.</span><span class="n">Adam</span><span class="p">(</span><span class="n">learning_rate</span><span class="o">=</span><span class="mf">0.01</span><span class="p">)</span>
+
+<span class="n">model</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span>
+    <span class="n">loss</span><span class="o">=</span><span class="s1">&#39;categorical_crossentropy&#39;</span><span class="p">,</span> 
+    <span class="n">optimizer</span><span class="o">=</span><span class="n">optimizer</span><span class="p">,</span>
+    <span class="n">metrics</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;accuracy&#39;</span><span class="p">]</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Let’s now train the model on some dummy data. To show the power of deep neural networks, we will try to learn noise by heart.</p>
+<p>The following cell creates an input tensor <code class="docutils literal notranslate"><span class="pre">X</span></code> with 1000 random vectors of 10 elements, with values sampled between -1 and 1. The targets (desired outputs) <code class="docutils literal notranslate"><span class="pre">t</span></code> are class indices (0, 1 or 2), also randomly selected.</p>
+<p>However, neural networks expect <strong>one-hot encoded vectors</strong> for the target, i.e. (1, 0, 0), (0, 1, 0), (0, 0, 1) instead of 0, 1, 2. The method <code class="docutils literal notranslate"><span class="pre">tf.keras.utils.to_categorical</span></code> allows you to do that.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="o">-</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="p">(</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+<span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="p">(</span><span class="mi">1000</span><span class="p">,</span> <span class="p">))</span>
+<span class="n">T</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">to_categorical</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Let’s learn it. The <code class="docutils literal notranslate"><span class="pre">Sequential</span></code> model has a method called <code class="docutils literal notranslate"><span class="pre">fit()</span></code> where you simply pass the training data <code class="docutils literal notranslate"><span class="pre">(X,</span> <span class="pre">T)</span></code> and some other parameters, such as:</p>
+<ul class="simple">
+<li><p>the batch size,</p></li>
+<li><p>the total number of epochs,</p></li>
+<li><p>the proportion of training examples to keep in order to compute the validation loss/accuracy (optional but recommmended).</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Training</span>
+<span class="n">history</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">callbacks</span><span class="o">.</span><span class="n">History</span><span class="p">()</span>
+
+<span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span>
+    <span class="n">X</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span>
+    <span class="n">batch_size</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> 
+    <span class="n">epochs</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
+    <span class="n">validation_split</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
+    <span class="n">callbacks</span><span class="o">=</span><span class="p">[</span><span class="n">history</span><span class="p">]</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Q:</strong> Train the model on the data, using a batch size of 100 for 50 epochs. Explain why you obtained this result.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">history</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span>
+    <span class="n">X</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span>
+    <span class="n">batch_size</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> 
+    <span class="n">epochs</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
+    <span class="n">validation_split</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
+    <span class="n">verbose</span><span class="o">=</span><span class="mi">2</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Epoch 1/50
+9/9 - 0s - loss: 1.1248 - accuracy: 0.3267 - val_loss: 1.1045 - val_accuracy: 0.3700
+Epoch 2/50
+9/9 - 0s - loss: 1.0847 - accuracy: 0.3956 - val_loss: 1.1058 - val_accuracy: 0.3500
+Epoch 3/50
+9/9 - 0s - loss: 1.0672 - accuracy: 0.4211 - val_loss: 1.1099 - val_accuracy: 0.4300
+Epoch 4/50
+9/9 - 0s - loss: 1.0471 - accuracy: 0.4500 - val_loss: 1.1324 - val_accuracy: 0.3700
+Epoch 5/50
+9/9 - 0s - loss: 1.0238 - accuracy: 0.4778 - val_loss: 1.1600 - val_accuracy: 0.3500
+Epoch 6/50
+9/9 - 0s - loss: 0.9954 - accuracy: 0.4933 - val_loss: 1.1748 - val_accuracy: 0.3000
+Epoch 7/50
+9/9 - 0s - loss: 0.9602 - accuracy: 0.5456 - val_loss: 1.2112 - val_accuracy: 0.3200
+Epoch 8/50
+9/9 - 0s - loss: 0.9268 - accuracy: 0.5578 - val_loss: 1.2281 - val_accuracy: 0.3200
+Epoch 9/50
+9/9 - 0s - loss: 0.8850 - accuracy: 0.5811 - val_loss: 1.3152 - val_accuracy: 0.3300
+Epoch 10/50
+9/9 - 0s - loss: 0.8589 - accuracy: 0.6067 - val_loss: 1.3365 - val_accuracy: 0.3200
+Epoch 11/50
+9/9 - 0s - loss: 0.8106 - accuracy: 0.6422 - val_loss: 1.3766 - val_accuracy: 0.2800
+Epoch 12/50
+9/9 - 0s - loss: 0.7556 - accuracy: 0.6744 - val_loss: 1.4404 - val_accuracy: 0.3300
+Epoch 13/50
+9/9 - 0s - loss: 0.7030 - accuracy: 0.7033 - val_loss: 1.4946 - val_accuracy: 0.3200
+Epoch 14/50
+9/9 - 0s - loss: 0.6611 - accuracy: 0.7278 - val_loss: 1.5825 - val_accuracy: 0.2700
+Epoch 15/50
+9/9 - 0s - loss: 0.6036 - accuracy: 0.7578 - val_loss: 1.5963 - val_accuracy: 0.3100
+Epoch 16/50
+9/9 - 0s - loss: 0.5378 - accuracy: 0.8033 - val_loss: 1.7330 - val_accuracy: 0.2900
+Epoch 17/50
+9/9 - 0s - loss: 0.5032 - accuracy: 0.8089 - val_loss: 1.8647 - val_accuracy: 0.3300
+Epoch 18/50
+9/9 - 0s - loss: 0.4677 - accuracy: 0.8256 - val_loss: 1.8221 - val_accuracy: 0.2900
+Epoch 19/50
+9/9 - 0s - loss: 0.4277 - accuracy: 0.8378 - val_loss: 2.0721 - val_accuracy: 0.2800
+Epoch 20/50
+9/9 - 0s - loss: 0.3658 - accuracy: 0.8878 - val_loss: 1.9940 - val_accuracy: 0.3000
+Epoch 21/50
+9/9 - 0s - loss: 0.3388 - accuracy: 0.8978 - val_loss: 1.9864 - val_accuracy: 0.2800
+Epoch 22/50
+9/9 - 0s - loss: 0.2718 - accuracy: 0.9344 - val_loss: 2.3513 - val_accuracy: 0.2700
+Epoch 23/50
+9/9 - 0s - loss: 0.2419 - accuracy: 0.9522 - val_loss: 2.2233 - val_accuracy: 0.3000
+Epoch 24/50
+9/9 - 0s - loss: 0.2141 - accuracy: 0.9511 - val_loss: 2.4652 - val_accuracy: 0.3200
+Epoch 25/50
+9/9 - 0s - loss: 0.1990 - accuracy: 0.9611 - val_loss: 2.4545 - val_accuracy: 0.3100
+Epoch 26/50
+9/9 - 0s - loss: 0.1652 - accuracy: 0.9733 - val_loss: 2.5535 - val_accuracy: 0.3200
+Epoch 27/50
+9/9 - 0s - loss: 0.1517 - accuracy: 0.9711 - val_loss: 2.7361 - val_accuracy: 0.3300
+Epoch 28/50
+9/9 - 0s - loss: 0.1462 - accuracy: 0.9722 - val_loss: 2.8098 - val_accuracy: 0.3300
+Epoch 29/50
+9/9 - 0s - loss: 0.1313 - accuracy: 0.9811 - val_loss: 2.9959 - val_accuracy: 0.3000
+Epoch 30/50
+9/9 - 0s - loss: 0.1291 - accuracy: 0.9778 - val_loss: 3.0673 - val_accuracy: 0.2900
+Epoch 31/50
+9/9 - 0s - loss: 0.1031 - accuracy: 0.9833 - val_loss: 3.1009 - val_accuracy: 0.3400
+Epoch 32/50
+9/9 - 0s - loss: 0.1038 - accuracy: 0.9789 - val_loss: 3.0347 - val_accuracy: 0.2800
+Epoch 33/50
+9/9 - 0s - loss: 0.0932 - accuracy: 0.9856 - val_loss: 3.1245 - val_accuracy: 0.3000
+Epoch 34/50
+9/9 - 0s - loss: 0.0837 - accuracy: 0.9867 - val_loss: 3.1909 - val_accuracy: 0.3100
+Epoch 35/50
+9/9 - 0s - loss: 0.0973 - accuracy: 0.9767 - val_loss: 3.3376 - val_accuracy: 0.3000
+Epoch 36/50
+9/9 - 0s - loss: 0.0927 - accuracy: 0.9800 - val_loss: 3.4815 - val_accuracy: 0.3000
+Epoch 37/50
+9/9 - 0s - loss: 0.0806 - accuracy: 0.9878 - val_loss: 3.4252 - val_accuracy: 0.2800
+Epoch 38/50
+9/9 - 0s - loss: 0.0642 - accuracy: 0.9911 - val_loss: 3.4091 - val_accuracy: 0.3200
+Epoch 39/50
+9/9 - 0s - loss: 0.0529 - accuracy: 0.9922 - val_loss: 3.4793 - val_accuracy: 0.3200
+Epoch 40/50
+9/9 - 0s - loss: 0.0425 - accuracy: 0.9978 - val_loss: 3.5650 - val_accuracy: 0.3500
+Epoch 41/50
+9/9 - 0s - loss: 0.0287 - accuracy: 1.0000 - val_loss: 3.6355 - val_accuracy: 0.3100
+Epoch 42/50
+9/9 - 0s - loss: 0.0237 - accuracy: 1.0000 - val_loss: 3.6962 - val_accuracy: 0.2900
+Epoch 43/50
+9/9 - 0s - loss: 0.0178 - accuracy: 1.0000 - val_loss: 3.7916 - val_accuracy: 0.3200
+Epoch 44/50
+9/9 - 0s - loss: 0.0153 - accuracy: 1.0000 - val_loss: 3.7966 - val_accuracy: 0.3000
+Epoch 45/50
+9/9 - 0s - loss: 0.0129 - accuracy: 1.0000 - val_loss: 3.8263 - val_accuracy: 0.3100
+Epoch 46/50
+9/9 - 0s - loss: 0.0117 - accuracy: 1.0000 - val_loss: 3.8541 - val_accuracy: 0.3100
+Epoch 47/50
+9/9 - 0s - loss: 0.0107 - accuracy: 1.0000 - val_loss: 3.8768 - val_accuracy: 0.3100
+Epoch 48/50
+9/9 - 0s - loss: 0.0098 - accuracy: 1.0000 - val_loss: 3.9317 - val_accuracy: 0.3000
+Epoch 49/50
+9/9 - 0s - loss: 0.0093 - accuracy: 1.0000 - val_loss: 3.9322 - val_accuracy: 0.3000
+Epoch 50/50
+9/9 - 0s - loss: 0.0086 - accuracy: 1.0000 - val_loss: 3.9628 - val_accuracy: 0.3000
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>A:</strong> The final training is 100%, the validation accuracy is 33% (may vary depending on initialization). The network has learned the training examples by heart, although they are totally random, but totally fails to generalize.</p>
+<p>The main is reason is that we have only 1000 training examples, with a total number of free parameters (VC dimension) around 11500. By definition, the model can learn this training set perfectly, although it is totally random. Its VC dimension is however way to high to generalize anything. It is even worse here: as the data is random, there is nothing to generalize. A nice example to understand why NN overfit…</p>
+</div>
+<div class="section" id="training-a-mlp-on-mnist">
+<h2><span class="section-number">11.2.2. </span>Training a MLP on MNIST<a class="headerlink" href="#training-a-mlp-on-mnist" title="Permalink to this headline">¶</a></h2>
+<p>Let’s now try to learn something a bit more serious, the MNIST dataset. The following cell load the MNIST data (training set 60000 28x28 monochrome images, test set of 10000 images), normalizes it (values betwen 0 and 1 for each pixel), removes the mean image from the training set and transforms the targets to one-hot encoded vectors for the 10 classes. See the neurocomputing exercise for more details.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Load the MNIST dataset</span>
+<span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">t_train</span><span class="p">),</span> <span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">t_test</span><span class="p">)</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">mnist</span><span class="o">.</span><span class="n">load_data</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Training data:&quot;</span><span class="p">,</span> <span class="n">X_train</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">t_train</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Test data:&quot;</span><span class="p">,</span> <span class="n">X_test</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">t_test</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+
+<span class="c1"># Reshape the images to vectors and normalize</span>
+<span class="n">X_train</span> <span class="o">=</span> <span class="n">X_train</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">X_train</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">784</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;float32&#39;</span><span class="p">)</span> <span class="o">/</span> <span class="mf">255.</span>
+<span class="n">X_test</span> <span class="o">=</span> <span class="n">X_test</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">X_test</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">784</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;float32&#39;</span><span class="p">)</span> <span class="o">/</span> <span class="mf">255.</span>
+
+<span class="c1"># Mean removal</span>
+<span class="n">X_mean</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">X_train</span> <span class="o">-=</span> <span class="n">X_mean</span>
+<span class="n">X_test</span> <span class="o">-=</span> <span class="n">X_mean</span>
+
+<span class="c1"># One-hot encoded outputs</span>
+<span class="n">T_train</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">to_categorical</span><span class="p">(</span><span class="n">t_train</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+<span class="n">T_test</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">to_categorical</span><span class="p">(</span><span class="n">t_test</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Training data: (60000, 28, 28) (60000,)
+Test data: (10000, 28, 28) (10000,)
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>Q:</strong> Create a fully connected neural network with 784 input neurons (one per pixel), 10 softmax output neurons and whatever you want in the middle, so that it can reach around 98% validation accuracy after <strong>20 epochs</strong>.</p>
+<ul class="simple">
+<li><p>Put the network creation (including <code class="docutils literal notranslate"><span class="pre">compile()</span></code>) in a method <code class="docutils literal notranslate"><span class="pre">create_model()</span></code>, so that you can create a model multiple times.</p></li>
+<li><p>Choose a good value for the learning rate.</p></li>
+<li><p>Do not exagerate with the number of layers and neurons. Two or there hidden layers with 100 to 300 neurons are more than enough.</p></li>
+<li><p>You will quickly observe that the network overfits: the training accuracy is higher than the validation accuracy. The training accuracy actually goes to 100% if your network is too big. In that case, feel free to add a dropout layer after each fully-connected layer:</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">Dropout</span><span class="p">(</span><span class="mf">0.5</span><span class="p">))</span>
+</pre></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">create_model</span><span class="p">():</span>
+    <span class="c1"># Create the model</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">models</span><span class="o">.</span><span class="n">Sequential</span><span class="p">()</span>
+    
+    <span class="c1"># Input layer with 784 pixels</span>
+    <span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">((</span><span class="mi">784</span><span class="p">,)))</span>
+
+    <span class="c1"># Hidden layer with 150 neurons</span>
+    <span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="mi">150</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s2">&quot;relu&quot;</span><span class="p">))</span>
+    <span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">Dropout</span><span class="p">(</span><span class="mf">0.5</span><span class="p">))</span>
+
+    <span class="c1"># Second hidden layer with 100 neurons</span>
+    <span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s2">&quot;relu&quot;</span><span class="p">))</span>
+    <span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">Dropout</span><span class="p">(</span><span class="mf">0.5</span><span class="p">))</span>
+
+    <span class="c1"># Softmax output layer with 10 neurons</span>
+    <span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s2">&quot;softmax&quot;</span><span class="p">))</span>
+
+    <span class="c1"># Learning rule</span>
+    <span class="n">optimizer</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">optimizers</span><span class="o">.</span><span class="n">Adam</span><span class="p">(</span><span class="n">lr</span><span class="o">=</span><span class="mf">0.001</span><span class="p">)</span>
+
+    <span class="c1"># Loss function</span>
+    <span class="n">model</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span>
+        <span class="n">loss</span><span class="o">=</span><span class="s1">&#39;categorical_crossentropy&#39;</span><span class="p">,</span> <span class="c1"># loss</span>
+        <span class="n">optimizer</span><span class="o">=</span><span class="n">optimizer</span><span class="p">,</span> <span class="c1"># learning rule</span>
+        <span class="n">metrics</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;accuracy&#39;</span><span class="p">]</span> <span class="c1"># show accuracy</span>
+    <span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">summary</span><span class="p">())</span>
+    
+    <span class="k">return</span> <span class="n">model</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">create_model</span><span class="p">()</span>
+
+<span class="c1"># Training</span>
+<span class="n">history</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">callbacks</span><span class="o">.</span><span class="n">History</span><span class="p">()</span>
+
+<span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span>
+    <span class="n">X_train</span><span class="p">,</span> <span class="n">T_train</span><span class="p">,</span>
+    <span class="n">batch_size</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> 
+    <span class="n">epochs</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
+    <span class="n">validation_split</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
+    <span class="n">callbacks</span><span class="o">=</span><span class="p">[</span><span class="n">history</span><span class="p">]</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Model: &quot;sequential_1&quot;
+_________________________________________________________________
+Layer (type)                 Output Shape              Param #   
+=================================================================
+dense_3 (Dense)              (None, 150)               117750    
+_________________________________________________________________
+dropout (Dropout)            (None, 150)               0         
+_________________________________________________________________
+dense_4 (Dense)              (None, 100)               15100     
+_________________________________________________________________
+dropout_1 (Dropout)          (None, 100)               0         
+_________________________________________________________________
+dense_5 (Dense)              (None, 10)                1010      
+=================================================================
+Total params: 133,860
+Trainable params: 133,860
+Non-trainable params: 0
+_________________________________________________________________
+None
+Epoch 1/20
+540/540 [==============================] - 3s 5ms/step - loss: 0.5906 - accuracy: 0.8192 - val_loss: 0.1724 - val_accuracy: 0.9478
+Epoch 2/20
+540/540 [==============================] - 2s 4ms/step - loss: 0.3256 - accuracy: 0.9048 - val_loss: 0.1309 - val_accuracy: 0.9625
+Epoch 3/20
+540/540 [==============================] - 2s 4ms/step - loss: 0.2708 - accuracy: 0.9197 - val_loss: 0.1126 - val_accuracy: 0.9692
+Epoch 4/20
+540/540 [==============================] - 2s 5ms/step - loss: 0.2379 - accuracy: 0.9291 - val_loss: 0.1016 - val_accuracy: 0.9703
+Epoch 5/20
+540/540 [==============================] - 2s 5ms/step - loss: 0.2128 - accuracy: 0.9375 - val_loss: 0.0898 - val_accuracy: 0.9748
+Epoch 6/20
+540/540 [==============================] - 3s 5ms/step - loss: 0.1985 - accuracy: 0.9416 - val_loss: 0.0848 - val_accuracy: 0.9762
+Epoch 7/20
+540/540 [==============================] - 3s 5ms/step - loss: 0.1826 - accuracy: 0.9458 - val_loss: 0.0823 - val_accuracy: 0.9780
+Epoch 8/20
+540/540 [==============================] - 3s 6ms/step - loss: 0.1797 - accuracy: 0.9466 - val_loss: 0.0792 - val_accuracy: 0.9790
+Epoch 9/20
+540/540 [==============================] - 3s 5ms/step - loss: 0.1655 - accuracy: 0.9508 - val_loss: 0.0770 - val_accuracy: 0.9775
+Epoch 10/20
+540/540 [==============================] - 3s 5ms/step - loss: 0.1609 - accuracy: 0.9521 - val_loss: 0.0754 - val_accuracy: 0.9790
+Epoch 11/20
+540/540 [==============================] - 3s 6ms/step - loss: 0.1536 - accuracy: 0.9525 - val_loss: 0.0698 - val_accuracy: 0.9790
+Epoch 12/20
+540/540 [==============================] - 3s 5ms/step - loss: 0.1439 - accuracy: 0.9569 - val_loss: 0.0730 - val_accuracy: 0.9783
+Epoch 13/20
+540/540 [==============================] - 3s 6ms/step - loss: 0.1419 - accuracy: 0.9568 - val_loss: 0.0703 - val_accuracy: 0.9805
+Epoch 14/20
+540/540 [==============================] - 3s 5ms/step - loss: 0.1369 - accuracy: 0.9586 - val_loss: 0.0701 - val_accuracy: 0.9788
+Epoch 15/20
+540/540 [==============================] - 4s 7ms/step - loss: 0.1375 - accuracy: 0.9589 - val_loss: 0.0677 - val_accuracy: 0.9807
+Epoch 16/20
+540/540 [==============================] - 3s 6ms/step - loss: 0.1322 - accuracy: 0.9601 - val_loss: 0.0706 - val_accuracy: 0.9795
+Epoch 17/20
+540/540 [==============================] - 3s 6ms/step - loss: 0.1277 - accuracy: 0.9621 - val_loss: 0.0675 - val_accuracy: 0.9810
+Epoch 18/20
+540/540 [==============================] - 3s 6ms/step - loss: 0.1271 - accuracy: 0.9614 - val_loss: 0.0677 - val_accuracy: 0.9802
+Epoch 19/20
+540/540 [==============================] - 3s 6ms/step - loss: 0.1221 - accuracy: 0.9629 - val_loss: 0.0689 - val_accuracy: 0.9805
+Epoch 20/20
+540/540 [==============================] - 4s 7ms/step - loss: 0.1180 - accuracy: 0.9637 - val_loss: 0.0665 - val_accuracy: 0.9813
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;tensorflow.python.keras.callbacks.History at 0x7f3c50063670&gt;
+</pre></div>
+</div>
+</div>
+</div>
+<p>After training, one should evaluate the model on the test set. <code class="docutils literal notranslate"><span class="pre">keras</span></code> provides an <code class="docutils literal notranslate"><span class="pre">evaluate()</span></code> method that computes the different metrics (in our case the loss) on the data:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">score</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">T_test</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Another solution would be to <code class="docutils literal notranslate"><span class="pre">predict()</span></code> labels on the test set and manually compare them to the ground truth:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">Y</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+<span class="n">loss</span> <span class="o">=</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">T_test</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">Y</span><span class="p">))</span>
+<span class="n">predicted_classes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">Y</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">accuracy</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">predicted_classes</span> <span class="o">!=</span> <span class="n">t_test</span><span class="p">)</span><span class="o">/</span><span class="n">t_test</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>Another important thing to visualize after training is how the training and validation loss (or accuracy) evolved during training. The <code class="docutils literal notranslate"><span class="pre">fit()</span></code> method updates a <code class="docutils literal notranslate"><span class="pre">History</span></code> object which contains the history of your metrics (loss and accuracy) after each epoch of training. These are simple numpy arrays, accessible with:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">history</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="s1">&#39;loss&#39;</span><span class="p">]</span>
+<span class="n">history</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="s1">&#39;val_loss&#39;</span><span class="p">]</span>
+<span class="n">history</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="s1">&#39;accuracy&#39;</span><span class="p">]</span>
+<span class="n">history</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="s1">&#39;val_accuracy&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+<p><strong>Q:</strong> Compute the test loss and accuracy of your model. Plot the history of the training and validation loss/accuracy.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Testing</span>
+<span class="n">score</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">T_test</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Test loss:&#39;</span><span class="p">,</span> <span class="n">score</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Test accuracy:&#39;</span><span class="p">,</span> <span class="n">score</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">121</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">history</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="s1">&#39;loss&#39;</span><span class="p">],</span> <span class="s1">&#39;-r&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Training&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">history</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="s1">&#39;val_loss&#39;</span><span class="p">],</span> <span class="s1">&#39;-b&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Validation&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Epoch #&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Loss&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">122</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">history</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="s1">&#39;accuracy&#39;</span><span class="p">],</span> <span class="s1">&#39;-r&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Training&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">history</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="s1">&#39;val_accuracy&#39;</span><span class="p">],</span> <span class="s1">&#39;-b&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Validation&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Epoch #&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Accuracy&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>313/313 [==============================] - 3s 10ms/step - loss: 0.0762 - accuracy: 0.9776
+Test loss: 0.0761534720659256
+Test accuracy: 0.9775999784469604
+</pre></div>
+</div>
+<img alt="../_images/11-Keras-solution_20_1.png" src="../_images/11-Keras-solution_20_1.png" />
+</div>
+</div>
+</div>
+<div class="section" id="correlated-inputs">
+<h2><span class="section-number">11.2.3. </span>Correlated inputs<a class="headerlink" href="#correlated-inputs" title="Permalink to this headline">¶</a></h2>
+<p>Now that we have a basic NN working on MNIST, let’s investigate why deep NN hate sequentially correlated inputs (which is the main justification for the experience replay memory in DQN). Is that really true, or is just some mathematical assumption that does not matter in practice?</p>
+<p>The idea of this part is the following: we will train the same network as before for 20 epochs, but each epoch will train the network on all the 0s first, then all the 1s, etc. Each epoch will contain the same number of training examples as before, but the order of presentation will simply be different.</p>
+<p>To get all examples of the training set which have the target 3 (for example), you just have to slice the matrices accordingly:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">X</span> <span class="o">=</span> <span class="n">X_train</span><span class="p">[</span><span class="n">t_train</span><span class="o">==</span><span class="mi">3</span><span class="p">,</span> <span class="p">:]</span>
+<span class="n">T</span> <span class="o">=</span> <span class="n">T_train</span><span class="p">[</span><span class="n">t_train</span><span class="o">==</span><span class="mi">3</span><span class="p">]</span>
+</pre></div>
+</div>
+<p><strong>Q:</strong> Train the same network as before (but reinitialize it!) for 20 epochs, with each epoch sequentially iterating over the classes 0, 1, 2, 3, etc. Plot the loss and accurary during training. What do you observe?</p>
+<p><em>Hint:</em> you will have two for loops to write: one over the epochs, one over the digits.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">20</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
+        <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>You should only do one epoch for each call to <code class="docutils literal notranslate"><span class="pre">fit()</span></code>. Set <code class="docutils literal notranslate"><span class="pre">verbose=0</span></code> in <code class="docutils literal notranslate"><span class="pre">fit()</span></code> to avoid printing too much info.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">create_model</span><span class="p">()</span>
+
+<span class="n">history</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">callbacks</span><span class="o">.</span><span class="n">History</span><span class="p">()</span>
+
+<span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">20</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Epoch: &quot;</span><span class="p">,</span> <span class="n">e</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
+        <span class="c1"># Training</span>
+        <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span>
+            <span class="n">X_train</span><span class="p">[</span><span class="n">t_train</span><span class="o">==</span><span class="n">c</span><span class="p">,</span> <span class="p">:],</span> <span class="n">T_train</span><span class="p">[</span><span class="n">t_train</span><span class="o">==</span><span class="n">c</span><span class="p">,</span> <span class="p">:],</span>
+            <span class="n">batch_size</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> 
+            <span class="n">epochs</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+            <span class="n">validation_split</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
+            <span class="n">verbose</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="n">callbacks</span><span class="o">=</span><span class="p">[</span><span class="n">history</span><span class="p">]</span>
+        <span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; Training loss:&quot;</span><span class="p">,</span> <span class="n">history</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="s2">&quot;loss&quot;</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; Training accuracy:&quot;</span><span class="p">,</span> <span class="n">history</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="s2">&quot;accuracy&quot;</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; Validation loss:&quot;</span><span class="p">,</span> <span class="n">history</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="s2">&quot;val_loss&quot;</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; Validation accuracy:&quot;</span><span class="p">,</span> <span class="n">history</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="s2">&quot;val_accuracy&quot;</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+        
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">121</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">history</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="s1">&#39;loss&#39;</span><span class="p">],</span> <span class="s1">&#39;-r&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Training&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">history</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="s1">&#39;val_loss&#39;</span><span class="p">],</span> <span class="s1">&#39;-b&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Validation&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Epoch #&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Loss&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">122</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">history</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="s1">&#39;accuracy&#39;</span><span class="p">],</span> <span class="s1">&#39;-r&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Training&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">history</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="s1">&#39;val_accuracy&#39;</span><span class="p">],</span> <span class="s1">&#39;-b&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Validation&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Epoch #&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Accuracy&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Model: &quot;sequential_2&quot;
+_________________________________________________________________
+Layer (type)                 Output Shape              Param #   
+=================================================================
+dense_6 (Dense)              (None, 150)               117750    
+_________________________________________________________________
+dropout_2 (Dropout)          (None, 150)               0         
+_________________________________________________________________
+dense_7 (Dense)              (None, 100)               15100     
+_________________________________________________________________
+dropout_3 (Dropout)          (None, 100)               0         
+_________________________________________________________________
+dense_8 (Dense)              (None, 10)                1010      
+=================================================================
+Total params: 133,860
+Trainable params: 133,860
+Non-trainable params: 0
+_________________________________________________________________
+None
+Epoch:  1
+ Training loss: 2.303544521331787
+ Training accuracy: 0.36010459065437317
+ Validation loss: 0.09534391760826111
+ Validation accuracy: 0.9798319339752197
+Epoch:  2
+ Training loss: 1.2442150115966797
+ Training accuracy: 0.642883837223053
+ Validation loss: 0.052448783069849014
+ Validation accuracy: 0.9831932783126831
+Epoch:  3
+ Training loss: 0.9227474331855774
+ Training accuracy: 0.7226372957229614
+ Validation loss: 0.05481710284948349
+ Validation accuracy: 0.9831932783126831
+Epoch:  4
+ Training loss: 0.690196692943573
+ Training accuracy: 0.782218873500824
+ Validation loss: 0.03968832269310951
+ Validation accuracy: 0.9899159669876099
+Epoch:  5
+ Training loss: 0.8069394826889038
+ Training accuracy: 0.7721329927444458
+ Validation loss: 0.04939291998744011
+ Validation accuracy: 0.9865546226501465
+Epoch:  6
+ Training loss: 0.6689518690109253
+ Training accuracy: 0.7945461273193359
+ Validation loss: 0.04903123527765274
+ Validation accuracy: 0.9848739504814148
+Epoch:  7
+ Training loss: 0.5738986134529114
+ Training accuracy: 0.8195741772651672
+ Validation loss: 0.05302703008055687
+ Validation accuracy: 0.9848739504814148
+Epoch:  8
+ Training loss: 0.6133586168289185
+ Training accuracy: 0.8135973215103149
+ Validation loss: 0.04930460453033447
+ Validation accuracy: 0.9882352948188782
+Epoch:  9
+ Training loss: 0.5698745846748352
+ Training accuracy: 0.8246170878410339
+ Validation loss: 0.04807405546307564
+ Validation accuracy: 0.9831932783126831
+Epoch:  10
+ Training loss: 0.5016088485717773
+ Training accuracy: 0.8375046849250793
+ Validation loss: 0.046830914914608
+ Validation accuracy: 0.9865546226501465
+Epoch:  11
+ Training loss: 0.5332214832305908
+ Training accuracy: 0.8272320032119751
+ Validation loss: 0.04619760811328888
+ Validation accuracy: 0.9865546226501465
+Epoch:  12
+ Training loss: 0.4986168146133423
+ Training accuracy: 0.8341426849365234
+ Validation loss: 0.050045475363731384
+ Validation accuracy: 0.9831932783126831
+Epoch:  13
+ Training loss: 0.4833643436431885
+ Training accuracy: 0.8397459983825684
+ Validation loss: 0.043992891907691956
+ Validation accuracy: 0.9831932783126831
+Epoch:  14
+ Training loss: 0.48562461137771606
+ Training accuracy: 0.8612252473831177
+ Validation loss: 0.04528520256280899
+ Validation accuracy: 0.9848739504814148
+Epoch:  15
+ Training loss: 0.4696274399757385
+ Training accuracy: 0.8457227945327759
+ Validation loss: 0.04450022429227829
+ Validation accuracy: 0.9848739504814148
+Epoch:  16
+ Training loss: 0.4291788935661316
+ Training accuracy: 0.859357476234436
+ Validation loss: 0.045817792415618896
+ Validation accuracy: 0.9831932783126831
+Epoch:  17
+ Training loss: 0.4401220381259918
+ Training accuracy: 0.8578633069992065
+ Validation loss: 0.04923098906874657
+ Validation accuracy: 0.9848739504814148
+Epoch:  18
+ Training loss: 0.3859715163707733
+ Training accuracy: 0.8744863867759705
+ Validation loss: 0.04724453389644623
+ Validation accuracy: 0.9865546226501465
+Epoch:  19
+ Training loss: 0.4003971815109253
+ Training accuracy: 0.8737392425537109
+ Validation loss: 0.04661360755562782
+ Validation accuracy: 0.9848739504814148
+Epoch:  20
+ Training loss: 0.38569140434265137
+ Training accuracy: 0.8744863867759705
+ Validation loss: 0.044399961829185486
+ Validation accuracy: 0.9848739504814148
+</pre></div>
+</div>
+<img alt="../_images/11-Keras-solution_22_1.png" src="../_images/11-Keras-solution_22_1.png" />
+</div>
+</div>
+<p><strong>A:</strong> the training accuracy slowly increases (with some oscillations, some numbers are harder to learn than others), but the validation accuracy is suspiciously high right from the start…</p>
+<p><strong>Q:</strong> Evaluate the model after training on the whole test set. What happens?</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Testing</span>
+<span class="n">score</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">T_test</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Test loss:&#39;</span><span class="p">,</span> <span class="n">score</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Test accuracy:&#39;</span><span class="p">,</span> <span class="n">score</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Test loss: 0.68121737241745
+Test accuracy: 0.803600013256073
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>A:</strong> horror! The test accuracy is now awful, although the training and validation accuracies were fine after 20 epochs.</p>
+<p><strong>Q:</strong> To better understand what happened, compute the test accuracy of the network on each class of the test set individually: all the 0s of the test set, then all the 1s, etc. What happens?</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
+    <span class="n">score</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">X_test</span><span class="p">[</span><span class="n">t_test</span><span class="o">==</span><span class="n">c</span><span class="p">,</span> <span class="p">:],</span> <span class="n">T_test</span><span class="p">[</span><span class="n">t_test</span><span class="o">==</span><span class="n">c</span><span class="p">,</span> <span class="p">:],</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Class&quot;</span><span class="p">,</span> <span class="n">c</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Test loss:&#39;</span><span class="p">,</span> <span class="n">score</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Test accuracy:&#39;</span><span class="p">,</span> <span class="n">score</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Class 0
+Test loss: 0.4328828752040863
+Test accuracy: 0.9010204076766968
+Class 1
+Test loss: 0.4053132236003876
+Test accuracy: 0.9198237657546997
+Class 2
+Test loss: 1.080206274986267
+Test accuracy: 0.694767415523529
+Class 3
+Test loss: 1.150202989578247
+Test accuracy: 0.60792076587677
+Class 4
+Test loss: 1.4120031595230103
+Test accuracy: 0.6191446185112
+Class 5
+Test loss: 1.117068886756897
+Test accuracy: 0.6804932951927185
+Class 6
+Test loss: 0.1382644772529602
+Test accuracy: 0.9551148414611816
+Class 7
+Test loss: 0.8572134971618652
+Test accuracy: 0.7033073902130127
+Class 8
+Test loss: 0.19737786054611206
+Test accuracy: 0.9579055309295654
+Class 9
+Test loss: 0.061951059848070145
+Test accuracy: 0.9831516146659851
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>A:</strong> the last digits to be seen during training are the 9s: they have a good test accuracy. The 8s were seen not too long ago, they are also OK. But the other digits have been forgotten! The memory has been erased. This explains why you cannot train a deep network on-policy: the last episode would be remembered, but all the previous ones would be erased (catastrophic forgetting).</p>
+<p>A notable exception is for the 6s, which look like 9s, and the 0s, which look like 8s: they share features with the digits which are well recognized, so they perform OK.</p>
+<p><strong>Q:</strong> Increase and decrease the learning rate of the optimizer. What do you observe? Is there a solution to this problem?</p>
+<p><strong>A:</strong> Increasing the learning rate worsens the problem. Decreasing does help, but then learning is very slow. This is classical example of catastrophic forgetting: learning a new task erases the previous ones. There is no solution to this problem for now, apart from taking <strong>i.i.d</strong> samples in each minibatch.</p>
+</div>
+</div>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./5-exercises"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+        </div>
+    </div>
+    
+    
+    <div class='prev-next-bottom'>
+        
+    <a class='left-prev' id="prev-link" href="11-Keras.html" title="previous page"><span class="section-number">11.1. </span>Keras tutorial</a>
+    <a class='right-next' id="next-link" href="../zreferences.html" title="next page"><span class="section-number">1. </span>Bibliography</a>
+
+    </div>
+    <footer class="footer mt-5 mt-md-0">
+    <div class="container">
+      <p>
+        
+          By Julien Vitay - julien.vitay@informatik.tu-chemnitz.de<br/>
+        
+            &copy; Copyright 2020.<br/>
+          <div class="extra_footer">
+            Technische Universität Chemnitz - Faculty of Computer Science - Professorship for Artificial Intelligence
+          </div>
+      </p>
+    </div>
+  </footer>
+</main>
+
+
+      </div>
+    </div>
+
+    
+  <script src="../_static/js/index.3da636dd464baa7582d2.js"></script>
+
+
+    
+  </body>
+</html>

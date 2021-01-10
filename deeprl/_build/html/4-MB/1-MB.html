@@ -1,0 +1,735 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>1. Model-based RL &#8212; Deep Reinforcement Learning</title>
+    
+  <link rel="stylesheet" href="../_static/css/index.73d71520a4ca3b99cfee5594769eaaae.css">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+  <link rel="stylesheet"
+    href="../_static/vendor/open-sans_all/1.44.1/index.css">
+  <link rel="stylesheet"
+    href="../_static/vendor/lato_latin-ext/1.44.1/index.css">
+
+    
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/sphinx-book-theme.40e2e510f6b7d1648584402491bb10fe.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/style.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    
+  <link rel="preload" as="script" href="../_static/js/index.3da636dd464baa7582d2.js">
+
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/togglebutton.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../_static/sphinx-book-theme.d31b09fe5c1d09cb49b26a786de4a05d.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processRefs": false, "processEnvironments": false}})</script>
+    <script async="async" src="https://unpkg.com/thebelab@latest/lib/index.js"></script>
+    <script >
+        const thebe_selector = ".thebe"
+        const thebe_selector_input = "pre"
+        const thebe_selector_output = ".output"
+    </script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <link rel="canonical" href="https://julien-vitay.net/lecturenotes-deeprl/4-MB/1-MB.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="1. Introduction to Python" href="../5-exercises/ex1-Python.html" />
+    <link rel="prev" title="7. Maximum Entropy RL (SAC)" href="../3-MF/7-SAC.html" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en" />
+
+
+<!-- Opengraph tags -->
+<meta property="og:url"         content="https://julien-vitay.net/lecturenotes-deeprl/4-MB/1-MB.html" />
+<meta property="og:type"        content="article" />
+<meta property="og:title"       content="Model-based RL" />
+<meta property="og:description" content="Model-based RL  Slides: pdf  Model-free vs. model-based RL  &lt;div class=&#39;embed-container&#39;&gt;&lt;iframe src=&#39;https://www.youtube.com/embed/p3k05RxrTVE&#39; frameborder=&#39;0&#39;" />
+<meta property="og:image"       content="https://julien-vitay.net/lecturenotes-deeprl/_static/tuc.svg" />
+
+<meta name="twitter:card" content="summary" />
+
+
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
+<a class="navbar-brand text-wrap" href="../index.html">
+  
+  <img src="../_static/tuc.svg" class="logo" alt="logo">
+  
+  
+  <h1 class="site-logo" id="site-title">Deep Reinforcement Learning</h1>
+  
+</a>
+</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form>
+<nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+    <ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../intro.html">
+   Deep Reinforcement Learning
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Introduction
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../1-intro/1-Introduction.html">
+   1. Introduction
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../1-intro/2-Math.html">
+   2. Math basics
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Tabular RL
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../2-tabular/1-Bandits.html">
+   1. Bandits
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../2-tabular/2-MDP.html">
+   2. Markov Decision Processes
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../2-tabular/3-DP.html">
+   3. Dynamic Programming
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../2-tabular/4-MC.html">
+   4. Monte-Carlo (MC) methods
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../2-tabular/5-TD.html">
+   5. Temporal Difference learning
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../2-tabular/6-FA.html">
+   6. Function approximation
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../2-tabular/7-NN.html">
+   7. Deep learning
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Model-free RL
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../3-MF/1-DQN.html">
+   1. Deep Q-Learning (DQN)
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../3-MF/2-BeyondDQN.html">
+   2. Beyond DQN
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../3-MF/3-PG.html">
+   3. Policy gradient (PG)
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../3-MF/4-A3C.html">
+   4. Advantage actor-critic (A2C, A3C)
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../3-MF/5-DDPG.html">
+   5. Deep Deterministic Policy Gradient (DDPG)
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../3-MF/6-PPO.html">
+   6. Natural gradients (TRPO, PPO)
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../3-MF/7-SAC.html">
+   7. Maximum Entropy RL (SAC)
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Model-based RL
+ </span>
+</p>
+<ul class="current nav sidenav_l1">
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   1. Model-based RL
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Exercises
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="../5-exercises/ex1-Python.html">
+   1. Introduction to Python
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="../5-exercises/1-Python.html">
+     1.1. Notebook
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../5-exercises/1-Python-solution.html">
+     1.2. Solution
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="../5-exercises/ex2-Numpy.html">
+   2. Numpy and Matplotlib
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="../5-exercises/2-Numpy.html">
+     2.1. Notebook
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../5-exercises/2-Numpy-solution.html">
+     2.2. Solution
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="../5-exercises/ex3-Sampling.html">
+   3. Sampling
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="../5-exercises/3-Sampling.html">
+     3.1. Notebook
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../5-exercises/3-Sampling-solution.html">
+     3.2. Solution
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="../5-exercises/ex4-Bandits.html">
+   4. Bandits (part 1)
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="../5-exercises/4-Bandits.html">
+     4.1. Notebook
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../5-exercises/4-Bandits-solution.html">
+     4.2. Solution
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="../5-exercises/ex5-Bandits2.html">
+   5. Bandits (part 2)
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="../5-exercises/5-Bandits2.html">
+     5.1. Notebook
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../5-exercises/5-Bandits2-solution.html">
+     5.2. Solution
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="../5-exercises/ex6-DP.html">
+   6. Dynamic programming
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="../5-exercises/6-DP.html">
+     6.1. Notebook
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../5-exercises/6-DP-solution.html">
+     6.2. Solution
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="../5-exercises/ex7-Gym.html">
+   7. Gym environments
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="../5-exercises/7-Gym.html">
+     7.1. Notebook
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../5-exercises/7-Gym-solution.html">
+     7.2. Solution
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="../5-exercises/ex8-MC.html">
+   8. Monte-Carlo control
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="../5-exercises/8-MonteCarlo.html">
+     8.1. Notebook
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../5-exercises/8-MonteCarlo-solution.html">
+     8.2. Solution
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="../5-exercises/ex9-TD.html">
+   9. Q-learning
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="../5-exercises/9-TD.html">
+     9.1. Notebook
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../5-exercises/9-TD-solution.html">
+     9.2. Solution
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="../5-exercises/ex10-Eligibilitytraces.html">
+   10. Eligibility traces
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="../5-exercises/10-Eligibilitytraces.html">
+     10.1. Notebook
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../5-exercises/10-Eligibilitytraces-solution.html">
+     10.2. Solution
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="../5-exercises/ex11-Keras.html">
+   11. Keras
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="../5-exercises/11-Keras.html">
+     11.1. Notebook
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../5-exercises/11-Keras-solution.html">
+     11.2. Solution
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  References
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../zreferences.html">
+   1. Bibliography
+  </a>
+ </li>
+</ul>
+
+</nav> <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="row topbar fixed-top container-xl">
+    <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show">
+    </div>
+    <div class="col pl-2 topbar-main">
+        
+        <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+            data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+            aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+            title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+            <i class="fas fa-bars"></i>
+            <i class="fas fa-arrow-left"></i>
+            <i class="fas fa-arrow-up"></i>
+        </button>
+        
+        
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="../_sources/4-MB/1-MB.md"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.md</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+</div>
+
+        <!-- Source interaction buttons -->
+
+
+        <!-- Full screen (wrap in <a> to have style consistency -->
+        <a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+                data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+                title="Fullscreen mode"><i
+                    class="fas fa-expand"></i></button></a>
+
+        <!-- Launch buttons -->
+
+    </div>
+
+    <!-- Table of contents -->
+    <div class="d-none d-md-block col-md-2 bd-toc show">
+        
+        <div class="tocsection onthispage pt-5 pb-3">
+            <i class="fas fa-list"></i> Contents
+        </div>
+        <nav id="bd-toc-nav">
+            <ul class="nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#model-free-vs-model-based-rl">
+   1.1. Model-free vs. model-based RL
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#model-predictive-control-mpc">
+   1.2. Model Predictive Control (MPC)
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#dyna-q">
+   1.3. Dyna-Q
+  </a>
+ </li>
+</ul>
+
+        </nav>
+        
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+        
+              <div>
+                
+  <div class="section" id="model-based-rl">
+<h1><span class="section-number">1. </span>Model-based RL<a class="headerlink" href="#model-based-rl" title="Permalink to this headline">¶</a></h1>
+<p>Slides: <a class="reference external" href="https://www.tu-chemnitz.de/informatik/KI/edu/deeprl/lectures/pdf/4.1-ModelBased.pdf">pdf</a></p>
+<div class="section" id="model-free-vs-model-based-rl">
+<h2><span class="section-number">1.1. </span>Model-free vs. model-based RL<a class="headerlink" href="#model-free-vs-model-based-rl" title="Permalink to this headline">¶</a></h2>
+<div class='embed-container'><iframe src='https://www.youtube.com/embed/p3k05RxrTVE' frameborder='0' allowfullscreen></iframe></div>
+<p>In <strong>model-free RL</strong> (MF) methods, we do not need to know anything about the dynamics of the environment to start learning a policy:</p>
+<div class="math notranslate nohighlight">
+\[p(s_{t+1} | s_t, a_t) \; \; r(s_t, a_t, s_{t+1})\]</div>
+<p>We just sample transitions <span class="math notranslate nohighlight">\((s, a, r, s')\)</span> and update Q-values or a policy network. The main advantage is that the agent does not need to “think” when acting: just select the action with highest Q-value (<strong>reflexive behavior</strong>). The other advantage is that you can use MF methods on <strong>any</strong> MDP: you do not need to know anything about them. But MF methods are very slow (sample complexity): as they make no assumption, they have to learn everything by trial-and-error from scratch.</p>
+<div class="figure align-default" id="id9">
+<a class="reference internal image-reference" href="../_images/modelbased2.png"><img alt="../_images/modelbased2.png" src="../_images/modelbased2.png" style="width: 80%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 1.69 </span><span class="caption-text">Model-free vs. model-based RL. Source: <a class="bibtex reference internal" href="../zreferences.html#dayan2008a" id="id1">[Dayan &amp; Niv, 2008]</a></span><a class="headerlink" href="#id9" title="Permalink to this image">¶</a></p>
+</div>
+<p>If you had a <strong>model</strong> of the environment, you could plan ahead (what would happen if I did that?) and speed up learning (do not explore stupid ideas): <strong>model-based RL</strong> (MB).
+In chess, players <strong>plan</strong> ahead the possible moves up to a certain horizon and evaluate moves based on their emulated consequences.
+In real-time strategy games, learning the environment (<strong>world model</strong>) is part of the strategy: you do not attack right away.</p>
+</div>
+<div class="section" id="model-predictive-control-mpc">
+<h2><span class="section-number">1.2. </span>Model Predictive Control (MPC)<a class="headerlink" href="#model-predictive-control-mpc" title="Permalink to this headline">¶</a></h2>
+<div class='embed-container'><iframe src='https://www.youtube.com/embed/WGGqJ-vOoqE' frameborder='0' allowfullscreen></iframe></div>
+<p>Learning the world model is not complicated in theory.
+We just need to collect <em>enough</em> transitions <span class="math notranslate nohighlight">\(s_t, a_t, s_{t+1}, r_{t+1}\)</span> using a random agent (or during learning) and train a model to predict the next state and reward.</p>
+<div class="figure align-default" id="id10">
+<a class="reference internal image-reference" href="../_images/learningdynamics.svg"><img alt="../_images/learningdynamics.svg" src="../_images/learningdynamics.svg" width="80%" /></a>
+<p class="caption"><span class="caption-number">Fig. 1.70 </span><span class="caption-text">Learning the world model.</span><a class="headerlink" href="#id10" title="Permalink to this image">¶</a></p>
+</div>
+<p>Such a model is called the <strong>dynamics model</strong>, the <strong>transition model</strong> or the <strong>forward model</strong>: <strong>What happens if I do that?</strong> The model can be deterministic (use neural networks) or stochastic (use Gaussian Processes). Given an initial state <span class="math notranslate nohighlight">\(s_0\)</span> and a policy <span class="math notranslate nohighlight">\(\pi\)</span>, you can unroll the future using the local model.</p>
+<p>Once you have a good transition model, you can generate <strong>rollouts</strong>, i.e. imaginary trajectories / episodes using the model.</p>
+<div class="math notranslate nohighlight">
+\[\tau = (s_o, a_o, r_ 1, s_1, a_1, \ldots, s_T)\]</div>
+<p>You can then feed these trajectories to any model-free algorithm (value-based, policy-gradient) that will learn to maximize the returns.</p>
+<div class="math notranslate nohighlight">
+\[\mathcal{J}(\theta) = \mathbb{E}_{\tau}[R(\tau)]\]</div>
+<div class="figure align-default" id="id11">
+<a class="reference internal image-reference" href="../_images/mpc-rollout.png"><img alt="../_images/mpc-rollout.png" src="../_images/mpc-rollout.png" style="width: 60%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 1.71 </span><span class="caption-text">Imaginary rollouts can be used to improve the policy. Source: <a class="bibtex reference internal" href="../zreferences.html#kurutach2018" id="id2">[Kurutach et al., 2018]</a>.</span><a class="headerlink" href="#id11" title="Permalink to this image">¶</a></p>
+</div>
+<p>The only sample complexity is the one needed to train the model: the rest is <strong>emulated</strong>. Drawback: This can only work when the model is close to perfect, especially for long trajectories or probabilistic MDPs.</p>
+<p>For long horizons, the slightest imperfection in the model can accumulate (<strong>drift</strong>) and lead to completely wrong trajectories.
+The emulated trajectory cannot be generated by the current policy <span class="math notranslate nohighlight">\(\pi_\theta\)</span>, the policy gradient is biased (especially if you are on-policy), the algorithm does not converge. If you have a perfect model, you should not be using RL anyway as classical control methods would be much faster (but see AlphaGo).</p>
+<div class="figure align-default" id="id12">
+<a class="reference internal image-reference" href="../_images/mpc-drift1.jpeg"><img alt="../_images/mpc-drift1.jpeg" src="../_images/mpc-drift1.jpeg" style="width: 100%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 1.72 </span><span class="caption-text">Imaginary rollouts generated by an imperfect model can drigt for long horizons. Source: <a class="reference external" href="https://medium.com/&#64;jonathan_hui/rl-model-based-reinforcement-learning-3c2b6f0aa323">https://medium.com/&#64;jonathan_hui/rl-model-based-reinforcement-learning-3c2b6f0aa323</a></span><a class="headerlink" href="#id12" title="Permalink to this image">¶</a></p>
+</div>
+<p>The solution is to <strong>replan</strong> at each time step and execute the first planned action <strong>in the real environment</strong>.</p>
+<div class="figure align-default" id="id13">
+<a class="reference internal image-reference" href="../_images/mpc-drift2.jpeg"><img alt="../_images/mpc-drift2.jpeg" src="../_images/mpc-drift2.jpeg" style="width: 100%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 1.73 </span><span class="caption-text">Constantly replanning allows to correct the trajectories. Source: <a class="reference external" href="https://medium.com/&#64;jonathan_hui/rl-model-based-reinforcement-learning-3c2b6f0aa323">https://medium.com/&#64;jonathan_hui/rl-model-based-reinforcement-learning-3c2b6f0aa323</a></span><a class="headerlink" href="#id13" title="Permalink to this image">¶</a></p>
+</div>
+<p><strong>Model Predictive Control</strong> iteratively plans complete trajectories, but only selects the first action.</p>
+<div class="admonition-model-predictive-control admonition">
+<p class="admonition-title">Model Predictive Control</p>
+<p><img alt="" src="../_images/mpc-algo.png" /></p>
+<p>Source: <a class="reference external" href="http://rail.eecs.berkeley.edu/deeprlcourse-fa17/f17docs/lecture_9_model_based_rl.pdf">http://rail.eecs.berkeley.edu/deeprlcourse-fa17/f17docs/lecture_9_model_based_rl.pdf</a></p>
+</div>
+<div class="figure align-default" id="id14">
+<a class="reference internal image-reference" href="../_images/mpc-architecture.png"><img alt="../_images/mpc-architecture.png" src="../_images/mpc-architecture.png" style="width: 100%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 1.74 </span><span class="caption-text">A neural network can be used to learn the model in an MPC architecture. Source: <a class="bibtex reference internal" href="../zreferences.html#nagabandi2017" id="id3">[Nagabandi et al., 2017]</a>.</span><a class="headerlink" href="#id14" title="Permalink to this image">¶</a></p>
+</div>
+<p>The planner can actually be anything, it does not have to be a RL algorithm. For example, it can be iLQR (Iterative Linear Quadratic Regulator), a non-linear optimization method (see <a class="reference external" href="https://jonathan-hui.medium.com/rl-lqr-ilqr-linear-quadratic-regulator-a5de5104c750">https://jonathan-hui.medium.com/rl-lqr-ilqr-linear-quadratic-regulator-a5de5104c750</a>).</p>
+<p>Alternatively, one can use <strong>random-sampling shooting</strong>:</p>
+<ol class="simple">
+<li><p>in the current state, select a set of possible actions.</p></li>
+<li><p>generate rollouts with these action and compute their returns using the model.</p></li>
+<li><p>select the action whose rollout has the highest return.</p></li>
+</ol>
+<div class="figure align-default" id="id15">
+<a class="reference internal image-reference" href="../_images/mpc-example.png"><img alt="../_images/mpc-example.png" src="../_images/mpc-example.png" style="width: 60%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 1.75 </span><span class="caption-text">Random-sampling shooting. Source: <a class="bibtex reference internal" href="../zreferences.html#nagabandi2017" id="id4">[Nagabandi et al., 2017]</a>, <a class="reference external" href="https://bair.berkeley.edu/blog/2017/11/30/model-based-rl/">https://bair.berkeley.edu/blog/2017/11/30/model-based-rl/</a>.</span><a class="headerlink" href="#id15" title="Permalink to this image">¶</a></p>
+</div>
+<p>The main advantage of MPC is that you can change the reward function (the <strong>goal</strong>) on the fly: what you learn is the model, but planning is just an optimization procedure. You can set intermediary goals to the agent very flexibly: no need for a well-defined reward function. Model imperfection is not a problem as you replan all the time. The model can adapt to changes in the environment (slippery terrain, simulation to real-world).</p>
+<div class="figure align-default" id="id16">
+<a class="reference internal image-reference" href="../_images/mpc-application1.gif"><img alt="../_images/mpc-application1.gif" src="../_images/mpc-application1.gif" style="width: 60%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 1.76 </span><span class="caption-text">Application of MPC. Source: <a class="bibtex reference internal" href="../zreferences.html#nagabandi2017" id="id5">[Nagabandi et al., 2017]</a>, <a class="reference external" href="https://bair.berkeley.edu/blog/2017/11/30/model-based-rl/">https://bair.berkeley.edu/blog/2017/11/30/model-based-rl/</a>.</span><a class="headerlink" href="#id16" title="Permalink to this image">¶</a></p>
+</div>
+<div class="figure align-default" id="id17">
+<a class="reference internal image-reference" href="../_images/mpc-application2.gif"><img alt="../_images/mpc-application2.gif" src="../_images/mpc-application2.gif" style="width: 60%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 1.77 </span><span class="caption-text">Application of MPC. Source: <a class="bibtex reference internal" href="../zreferences.html#nagabandi2017" id="id6">[Nagabandi et al., 2017]</a>, <a class="reference external" href="https://bair.berkeley.edu/blog/2017/11/30/model-based-rl/">https://bair.berkeley.edu/blog/2017/11/30/model-based-rl/</a>.</span><a class="headerlink" href="#id17" title="Permalink to this image">¶</a></p>
+</div>
+</div>
+<div class="section" id="dyna-q">
+<h2><span class="section-number">1.3. </span>Dyna-Q<a class="headerlink" href="#dyna-q" title="Permalink to this headline">¶</a></h2>
+<div class='embed-container'><iframe src='https://www.youtube.com/embed/0MVpljc2KJc' frameborder='0' allowfullscreen></iframe></div>
+<p>Another approach to MB RL is to <strong>augment</strong> MF methods with MB rollouts. The MF algorithm (e.g. Q-learning) learns from transitions <span class="math notranslate nohighlight">\((s, a, r, s')\)</span> sampled either with:</p>
+<ul class="simple">
+<li><p><strong>real experience</strong>: interaction with the environment.</p></li>
+<li><p><strong>simulated experience</strong>: simulation by the model.</p></li>
+</ul>
+<div class="figure align-default" id="id18">
+<a class="reference internal image-reference" href="../_images/dynaq.png"><img alt="../_images/dynaq.png" src="../_images/dynaq.png" style="width: 80%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 1.78 </span><span class="caption-text">Dyna-Q: RL with planning. Source: <a class="reference external" href="https://towardsdatascience.com/reinforcement-learning-model-based-planning-methods-5e99cae0abb8">https://towardsdatascience.com/reinforcement-learning-model-based-planning-methods-5e99cae0abb8</a></span><a class="headerlink" href="#id18" title="Permalink to this image">¶</a></p>
+</div>
+<p>If the simulated transitions are good enough, the MF algorithm can converge using much less <strong>real transitions</strong>, thereby reducing its <strong>sample complexity</strong>. The <strong>Dyna-Q</strong> algorithm <a class="bibtex reference internal" href="../zreferences.html#sutton1990" id="id7">[Sutton &amp; Barto, 1990]</a> is an extension of Q-learning to integrate a model <span class="math notranslate nohighlight">\(M(s, a) = (s', r')\)</span>. The model can be tabular or approximated with a NN.</p>
+<div class="admonition-dyna-q admonition">
+<p class="admonition-title">Dyna-Q</p>
+<ul>
+<li><p>Initialize values <span class="math notranslate nohighlight">\(Q(s, a)\)</span> and model <span class="math notranslate nohighlight">\(M(s, a)\)</span>.</p></li>
+<li><p><strong>for</strong> <span class="math notranslate nohighlight">\(t \in [0, T_\text{total}]\)</span>:</p>
+<ul class="simple">
+<li><p>Select <span class="math notranslate nohighlight">\(a_t\)</span> using <span class="math notranslate nohighlight">\(Q\)</span>, take it on the <strong>real environment</strong> and observe <span class="math notranslate nohighlight">\(s_{t+1}\)</span> and <span class="math notranslate nohighlight">\(r_{t+1}\)</span>.</p></li>
+<li><p>Update the Q-value of the <strong>real</strong> action:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[\Delta Q(s_t, a_t) = \alpha \, (r_{t+1} + \gamma \, \max_a Q(s_{t+1}, a) - Q(s_t, a_t))\]</div>
+<ul class="simple">
+<li><p>Update the model:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[M(s, a) \leftarrow (s_{t+1}, r_{t+1})\]</div>
+<ul>
+<li><p><strong>for</strong> <span class="math notranslate nohighlight">\(K\)</span> steps:</p>
+<ul class="simple">
+<li><p>Sample a state <span class="math notranslate nohighlight">\(s_k\)</span> from a list of visited states.</p></li>
+<li><p>Select <span class="math notranslate nohighlight">\(a_k\)</span> using <span class="math notranslate nohighlight">\(Q\)</span>, predict <span class="math notranslate nohighlight">\(s_{k+1}\)</span> and <span class="math notranslate nohighlight">\(r_{k+1}\)</span> using the <strong>model</strong> <span class="math notranslate nohighlight">\(M(s_k, a_k)\)</span>.</p></li>
+<li><p>Update the Q-value of the <strong>imagined</strong> action:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[\Delta Q(s_k, a_k) = \alpha \, (r_{k+1} + \gamma \, \max_a Q(s_{k+1}, a) - Q(s_k, a_k))\]</div>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="figure align-default" id="id19">
+<a class="reference internal image-reference" href="../_images/dynaq2.png"><img alt="../_images/dynaq2.png" src="../_images/dynaq2.png" style="width: 80%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 1.79 </span><span class="caption-text">Dyna-Q: RL with planning. Source: <a class="bibtex reference internal" href="../zreferences.html#sutton1998" id="id8">[Sutton &amp; Barto, 1998]</a>.</span><a class="headerlink" href="#id19" title="Permalink to this image">¶</a></p>
+</div>
+<p>It is interesting to notice that Dyna-Q is very similar to DQN and its <strong>experience replay memory</strong>.
+In DQN, the ERM stores <strong>real transitions</strong> generated in the past.
+In Dyna-Q, the model generates <strong>imagined transitions</strong> based on past real transitions.</p>
+</div>
+</div>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./4-MB"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+        </div>
+    </div>
+    
+    
+    <div class='prev-next-bottom'>
+        
+    <a class='left-prev' id="prev-link" href="../3-MF/7-SAC.html" title="previous page"><span class="section-number">7. </span>Maximum Entropy RL (SAC)</a>
+    <a class='right-next' id="next-link" href="../5-exercises/ex1-Python.html" title="next page"><span class="section-number">1. </span>Introduction to Python</a>
+
+    </div>
+    <footer class="footer mt-5 mt-md-0">
+    <div class="container">
+      <p>
+        
+          By Julien Vitay - julien.vitay@informatik.tu-chemnitz.de<br/>
+        
+            &copy; Copyright 2020.<br/>
+          <div class="extra_footer">
+            Technische Universität Chemnitz - Faculty of Computer Science - Professorship for Artificial Intelligence
+          </div>
+      </p>
+    </div>
+  </footer>
+</main>
+
+
+      </div>
+    </div>
+
+    
+  <script src="../_static/js/index.3da636dd464baa7582d2.js"></script>
+
+
+    
+  </body>
+</html>
