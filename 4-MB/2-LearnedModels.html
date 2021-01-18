@@ -1,0 +1,952 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>2. Learned world models &#8212; Deep Reinforcement Learning</title>
+    
+  <link rel="stylesheet" href="../_static/css/index.73d71520a4ca3b99cfee5594769eaaae.css">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+  <link rel="stylesheet"
+    href="../_static/vendor/open-sans_all/1.44.1/index.css">
+  <link rel="stylesheet"
+    href="../_static/vendor/lato_latin-ext/1.44.1/index.css">
+
+    
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/sphinx-book-theme.40e2e510f6b7d1648584402491bb10fe.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/style.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    
+  <link rel="preload" as="script" href="../_static/js/index.3da636dd464baa7582d2.js">
+
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/togglebutton.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../_static/sphinx-book-theme.d31b09fe5c1d09cb49b26a786de4a05d.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processRefs": false, "processEnvironments": false}})</script>
+    <script async="async" src="https://unpkg.com/thebelab@latest/lib/index.js"></script>
+    <script >
+        const thebe_selector = ".thebe"
+        const thebe_selector_input = "pre"
+        const thebe_selector_output = ".output"
+    </script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <link rel="canonical" href="https://julien-vitay.net/lecturenotes-deeprl/4-MB/2-LearnedModels.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="1. Introduction to Python" href="../5-exercises/ex1-Python.html" />
+    <link rel="prev" title="1. Model-based RL" href="1-MB.html" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en" />
+
+
+<!-- Opengraph tags -->
+<meta property="og:url"         content="https://julien-vitay.net/lecturenotes-deeprl/4-MB/2-LearnedModels.html" />
+<meta property="og:type"        content="article" />
+<meta property="og:title"       content="Learned world models" />
+<meta property="og:description" content="Learned world models  Slides: pdf  There are two families of model-based algorithms using a learned transition model:  Model-based augmented model-free (MBMF) a" />
+<meta property="og:image"       content="https://julien-vitay.net/lecturenotes-deeprl/_static/tuc.svg" />
+
+<meta name="twitter:card" content="summary" />
+
+
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
+<a class="navbar-brand text-wrap" href="../index.html">
+  
+  <img src="../_static/tuc.svg" class="logo" alt="logo">
+  
+  
+  <h1 class="site-logo" id="site-title">Deep Reinforcement Learning</h1>
+  
+</a>
+</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form>
+<nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+    <ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../intro.html">
+   Deep Reinforcement Learning
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Introduction
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../1-intro/1-Introduction.html">
+   1. Introduction
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../1-intro/2-Math.html">
+   2. Math basics
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Tabular RL
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../2-tabular/1-Bandits.html">
+   1. Bandits
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../2-tabular/2-MDP.html">
+   2. Markov Decision Processes
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../2-tabular/3-DP.html">
+   3. Dynamic Programming
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../2-tabular/4-MC.html">
+   4. Monte-Carlo (MC) methods
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../2-tabular/5-TD.html">
+   5. Temporal Difference learning
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../2-tabular/6-FA.html">
+   6. Function approximation
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../2-tabular/7-NN.html">
+   7. Deep learning
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Model-free RL
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../3-MF/1-DQN.html">
+   1. Deep Q-Learning (DQN)
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../3-MF/2-BeyondDQN.html">
+   2. Beyond DQN
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../3-MF/3-PG.html">
+   3. Policy gradient (PG)
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../3-MF/4-A3C.html">
+   4. Advantage actor-critic (A2C, A3C)
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../3-MF/5-DDPG.html">
+   5. Deep Deterministic Policy Gradient (DDPG)
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../3-MF/6-PPO.html">
+   6. Natural gradients (TRPO, PPO)
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../3-MF/7-SAC.html">
+   7. Maximum Entropy RL (SAC)
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Model-based RL
+ </span>
+</p>
+<ul class="current nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="1-MB.html">
+   1. Model-based RL
+  </a>
+ </li>
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   2. Learned world models
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Exercises
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="../5-exercises/ex1-Python.html">
+   1. Introduction to Python
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="../5-exercises/1-Python.html">
+     1.1. Notebook
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../5-exercises/1-Python-solution.html">
+     1.2. Solution
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="../5-exercises/ex2-Numpy.html">
+   2. Numpy and Matplotlib
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="../5-exercises/2-Numpy.html">
+     2.1. Notebook
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../5-exercises/2-Numpy-solution.html">
+     2.2. Solution
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="../5-exercises/ex3-Sampling.html">
+   3. Sampling
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="../5-exercises/3-Sampling.html">
+     3.1. Notebook
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../5-exercises/3-Sampling-solution.html">
+     3.2. Solution
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="../5-exercises/ex4-Bandits.html">
+   4. Bandits (part 1)
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="../5-exercises/4-Bandits.html">
+     4.1. Notebook
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../5-exercises/4-Bandits-solution.html">
+     4.2. Solution
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="../5-exercises/ex5-Bandits2.html">
+   5. Bandits (part 2)
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="../5-exercises/5-Bandits2.html">
+     5.1. Notebook
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../5-exercises/5-Bandits2-solution.html">
+     5.2. Solution
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="../5-exercises/ex6-DP.html">
+   6. Dynamic programming
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="../5-exercises/6-DP.html">
+     6.1. Notebook
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../5-exercises/6-DP-solution.html">
+     6.2. Solution
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="../5-exercises/ex7-Gym.html">
+   7. Gym environments
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="../5-exercises/7-Gym.html">
+     7.1. Notebook
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../5-exercises/7-Gym-solution.html">
+     7.2. Solution
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="../5-exercises/ex8-MC.html">
+   8. Monte-Carlo control
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="../5-exercises/8-MonteCarlo.html">
+     8.1. Notebook
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../5-exercises/8-MonteCarlo-solution.html">
+     8.2. Solution
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="../5-exercises/ex9-TD.html">
+   9. Q-learning
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="../5-exercises/9-TD.html">
+     9.1. Notebook
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../5-exercises/9-TD-solution.html">
+     9.2. Solution
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="../5-exercises/ex10-Eligibilitytraces.html">
+   10. Eligibility traces
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="../5-exercises/10-Eligibilitytraces.html">
+     10.1. Notebook
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../5-exercises/10-Eligibilitytraces-solution.html">
+     10.2. Solution
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="../5-exercises/ex11-Keras.html">
+   11. Keras
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="../5-exercises/11-Keras.html">
+     11.1. Notebook
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../5-exercises/11-Keras-solution.html">
+     11.2. Solution
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  References
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../zreferences.html">
+   1. Bibliography
+  </a>
+ </li>
+</ul>
+
+</nav> <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="row topbar fixed-top container-xl">
+    <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show">
+    </div>
+    <div class="col pl-2 topbar-main">
+        
+        <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+            data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+            aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+            title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+            <i class="fas fa-bars"></i>
+            <i class="fas fa-arrow-left"></i>
+            <i class="fas fa-arrow-up"></i>
+        </button>
+        
+        
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="../_sources/4-MB/2-LearnedModels.md"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.md</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+</div>
+
+        <!-- Source interaction buttons -->
+
+
+        <!-- Full screen (wrap in <a> to have style consistency -->
+        <a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+                data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+                title="Fullscreen mode"><i
+                    class="fas fa-expand"></i></button></a>
+
+        <!-- Launch buttons -->
+
+    </div>
+
+    <!-- Table of contents -->
+    <div class="d-none d-md-block col-md-2 bd-toc show">
+        
+        <div class="tocsection onthispage pt-5 pb-3">
+            <i class="fas fa-list"></i> Contents
+        </div>
+        <nav id="bd-toc-nav">
+            <ul class="nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#i2a-imagination-augmented-agents">
+   2.1. I2A - Imagination-augmented agents
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#temporal-difference-models-tdm">
+   2.2. Temporal difference models - TDM
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#world-models">
+   2.3. World models
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#deep-planning-network-planet">
+   2.4. Deep Planning Network - PlaNet
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#dreamer">
+   2.5. Dreamer
+  </a>
+ </li>
+</ul>
+
+        </nav>
+        
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+        
+              <div>
+                
+  <div class="section" id="learned-world-models">
+<h1><span class="section-number">2. </span>Learned world models<a class="headerlink" href="#learned-world-models" title="Permalink to this headline">¶</a></h1>
+<p>Slides: <a class="reference external" href="https://www.tu-chemnitz.de/informatik/KI/edu/deeprl/lectures/pdf/4.2-LearnedModels.pdf">pdf</a></p>
+<p>There are two families of model-based algorithms using a learned transition model:</p>
+<ul class="simple">
+<li><p><strong>Model-based augmented model-free</strong> (MBMF) are inspired from Dyna-Q: the model <strong>generates</strong> imaginary transitions/rollouts that are used to train a model-free algorithm.</p>
+<ul>
+<li><p>NAF: Normalized advantage functions <a class="bibtex reference internal" href="../zreferences.html#gu2016a" id="id1">[Gu et al., 2016]</a></p></li>
+<li><p>I2A: Imagination-augmented agents <a class="bibtex reference internal" href="../zreferences.html#weber2017" id="id2">[Weber et al., 2017]</a></p></li>
+<li><p>MBVE: model-based value estimation <a class="bibtex reference internal" href="../zreferences.html#feinberg2018" id="id3">[Feinberg et al., 2018]</a></p></li>
+</ul>
+</li>
+<li><p><strong>Model-based planning</strong> methods are inspired from MPC: the learned model is used to <strong>plan</strong> actions that maximize the RL objective.</p>
+<ul>
+<li><p>TDM: Temporal difference models <a class="bibtex reference internal" href="../zreferences.html#pong2018" id="id4">[Pong et al., 2018]</a></p></li>
+<li><p>World models <a class="bibtex reference internal" href="../zreferences.html#ha2018" id="id5">[Ha &amp; Schmidhuber, 2018]</a></p></li>
+<li><p>PlaNet <a class="bibtex reference internal" href="../zreferences.html#hafner2019" id="id6">[Hafner et al., 2019]</a></p></li>
+<li><p>Dreamer <a class="bibtex reference internal" href="../zreferences.html#hafner2020" id="id7">[Hafner et al., 2020]</a></p></li>
+</ul>
+</li>
+</ul>
+<div class="section" id="i2a-imagination-augmented-agents">
+<h2><span class="section-number">2.1. </span>I2A - Imagination-augmented agents<a class="headerlink" href="#i2a-imagination-augmented-agents" title="Permalink to this headline">¶</a></h2>
+<div class='embed-container'><iframe src='https://www.youtube.com/embed/liTOxOByPpg' frameborder='0' allowfullscreen></iframe></div>
+<p>I2A <a class="bibtex reference internal" href="../zreferences.html#weber2017" id="id8">[Weber et al., 2017]</a> is a <strong>model-based augmented model-free method</strong>: it trains a MF algorithm (A3C) with the help of <strong>rollouts</strong> generated by a MB model.</p>
+<div class="figure align-default" id="id26">
+<a class="reference internal image-reference" href="../_images/i2a-sokoban.png"><img alt="../_images/i2a-sokoban.png" src="../_images/i2a-sokoban.png" style="width: 100%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 2.58 </span><span class="caption-text">Sokoban. Source <a class="bibtex reference internal" href="../zreferences.html#weber2017" id="id9">[Weber et al., 2017]</a>.</span><a class="headerlink" href="#id26" title="Permalink to this image">¶</a></p>
+</div>
+<p>They showcase their algorithm on the puzzle environment <strong>Sokoban</strong>, where you need to move boxes to specified locations. Sokoban is a quite hard game, as actions are irreversible (you can get stuck) and the solution requires many actions (sparse rewards). MF methods are bad at this game as they learn through trials-and-(many)-errors.</p>
+<div class='embed-container'><iframe src='https://www.youtube.com/embed/fg8QImlvB-k' frameborder='0' allowfullscreen></iframe></div>
+<p>The <strong>model</strong> learns to predict the next frame and the next reward based on the four last frames and the chosen action.</p>
+<div class="figure align-default" id="id27">
+<a class="reference internal image-reference" href="../_images/i2a-model.png"><img alt="../_images/i2a-model.png" src="../_images/i2a-model.png" style="width: 100%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 2.59 </span><span class="caption-text">I2A model. Source <a class="bibtex reference internal" href="../zreferences.html#weber2017" id="id10">[Weber et al., 2017]</a>.</span><a class="headerlink" href="#id27" title="Permalink to this image">¶</a></p>
+</div>
+<p>It is a <strong>convolutional autoencoder</strong>, taking additionally an action <span class="math notranslate nohighlight">\(a\)</span> as input and predicting the next reward. It can be pretrained using a random policy, and later fine-tuned during training.</p>
+<div class="figure align-default" id="id28">
+<a class="reference internal image-reference" href="../_images/i2a-architecture.png"><img alt="../_images/i2a-architecture.png" src="../_images/i2a-architecture.png" style="width: 100%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 2.60 </span><span class="caption-text">I2A architecture. Source <a class="bibtex reference internal" href="../zreferences.html#weber2017" id="id11">[Weber et al., 2017]</a>.</span><a class="headerlink" href="#id28" title="Permalink to this image">¶</a></p>
+</div>
+<p>The <strong>imagination core</strong> is composed of the environment model <span class="math notranslate nohighlight">\(M(s, a)\)</span> and a <strong>rollout policy</strong> <span class="math notranslate nohighlight">\(\hat{\pi}\)</span>. As Sokoban is a POMDP (partially observable), the notation uses <strong>observation</strong> <span class="math notranslate nohighlight">\(o_t\)</span> instead of states <span class="math notranslate nohighlight">\(s_t\)</span>, but it does not really matter here.
+The <strong>rollout policy</strong> <span class="math notranslate nohighlight">\(\hat{\pi}\)</span> is a simple and fast policy. It does not have to be the trained policy <span class="math notranslate nohighlight">\(\pi\)</span>.
+It could even be a random policy, or a pretrained policy using for example A3C directly.
+In I2A, it is a <strong>distilled policy</strong> from the trained policy <span class="math notranslate nohighlight">\(\pi\)</span> (see later).
+Take home message: given the current observation <span class="math notranslate nohighlight">\(o_t\)</span> and a policy <span class="math notranslate nohighlight">\(\hat{\pi}\)</span>, we can predict the next observation <span class="math notranslate nohighlight">\(\hat{o}_{t+1}\)</span> and the next reward <span class="math notranslate nohighlight">\(\hat{r}_{t+1}\)</span>.</p>
+<p>The <strong>imagination rollout module</strong> uses the imagination core to predict iteratively the next <span class="math notranslate nohighlight">\(\tau\)</span> frames and rewards using the current frame <span class="math notranslate nohighlight">\(o_t\)</span> and the rollout policy:</p>
+<div class="math notranslate nohighlight">
+\[o_t \rightarrow \hat{o}_{t+1} \rightarrow \hat{o}_{t+2} \rightarrow \ldots \rightarrow \hat{o}_{t+\tau}\]</div>
+<p>The <span class="math notranslate nohighlight">\(\tau\)</span> frames and rewards are passed <strong>backwards</strong> to a convolutional LSTM (from <span class="math notranslate nohighlight">\(t+\tau\)</span> to <span class="math notranslate nohighlight">\(t\)</span>) which produces an embedding / encoding of the rollout. The output of the imagination rollout module is a vector <span class="math notranslate nohighlight">\(e_i\)</span> (the final state of the LSTM) representing the whole rollout, including the (virtually) obtained rewards. Note that because of the stochasticity of the rollout policy <span class="math notranslate nohighlight">\(\hat{\pi}\)</span>, different rollouts can lead to different encoding vectors.</p>
+<p>For the current observation <span class="math notranslate nohighlight">\(o_t\)</span>, we then generate one <strong>rollout</strong> per possible action (5 in Sokoban):</p>
+<ul class="simple">
+<li><p>What would happen if I do action 1?</p></li>
+<li><p>What would happen if I do action 2?</p></li>
+<li><p>etc.</p></li>
+</ul>
+<p>The resulting vectors are concatenated to the output of <strong>model-free</strong> path (a convolutional neural network taking the current observation as input). Altogether, we have a huge NN with weights <span class="math notranslate nohighlight">\(\theta\)</span> (model, encoder, MF path) producing an input <span class="math notranslate nohighlight">\(s_t\)</span> to the <strong>A3C</strong> module.</p>
+<p>We can then learn the policy <span class="math notranslate nohighlight">\(\pi\)</span> and value function <span class="math notranslate nohighlight">\(V\)</span> based on this input to maximize the returns:</p>
+<div class="math notranslate nohighlight">
+\[\nabla_\theta \mathcal{J}(\theta) =  \mathbb{E}_{s_t \sim \rho_\theta, a_t \sim \pi_\theta}[\nabla_\theta \log \pi_\theta (s_t, a_t) \, (\sum_{k=0}^{n-1} \gamma^{k} \, r_{t+k+1} + \gamma^n \, V_\varphi(s_{t+n+1}) - V_\varphi(s_t)) ]\]</div>
+<div class="math notranslate nohighlight">
+\[\mathcal{L}(\varphi) =  \mathbb{E}_{s_t \sim \rho_\theta, a_t \sim \pi_\theta}[(\sum_{k=0}^{n-1} \gamma^{k} \, r_{t+k+1} + \gamma^n \, V_\varphi(s_{t+n+1}) - V_\varphi(s_t))^2]\]</div>
+<p>The complete architecture may seem complex, but everything is differentiable so we can apply backpropagation and train the network <strong>end-to-end</strong> using multiple workers. It is the A3C algorithm (MF), but <strong>augmented</strong> by MB rollouts, i.e. with explicit information about the future.</p>
+<p>The <strong>rollout policy</strong> <span class="math notranslate nohighlight">\(\hat{\pi}\)</span> is trained using <strong>policy distillation</strong> of the trained policy <span class="math notranslate nohighlight">\(\pi\)</span> <a class="bibtex reference internal" href="../zreferences.html#rusu2016" id="id12">[Rusu et al., 2016]</a>. The small rollout policy network with weights <span class="math notranslate nohighlight">\(\hat{\theta}\)</span> tries to copy the outputs <span class="math notranslate nohighlight">\(\pi(s, a)\)</span> of the bigger policy network (A3C). This is a supervised learning task: just minimize the KL divergence between the two policies:</p>
+<div class="math notranslate nohighlight">
+\[\mathcal{L}(\hat{\theta}) = \mathbb{E}_{s, a} [D_\text{KL}(\hat{\pi}(s, a) || \pi(s, a))]\]</div>
+<p>As the network is smaller, it won’t be as good as <span class="math notranslate nohighlight">\(\pi\)</span>, but its learning objective is easier.</p>
+<div class="figure align-default" id="id29">
+<a class="reference internal image-reference" href="../_images/policydistillation.png"><img alt="../_images/policydistillation.png" src="../_images/policydistillation.png" style="width: 80%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 2.61 </span><span class="caption-text">Policy distillation. Source <a class="bibtex reference internal" href="../zreferences.html#rusu2016" id="id13">[Rusu et al., 2016]</a>.</span><a class="headerlink" href="#id29" title="Permalink to this image">¶</a></p>
+</div>
+<div class="admonition-distral-distill-and-transfer-learning admonition">
+<p class="admonition-title">Distral : distill and transfer learning</p>
+<p>Distillation can be used to ensure generalization over different environments <a class="bibtex reference internal" href="../zreferences.html#teh2017" id="id14">[Teh et al., 2017]</a>.
+Each learning algorithms learns its own task, but tries not to diverge too much from a <strong>shared policy</strong>, which turns out to be good at all tasks.</p>
+<div class="figure align-default" id="id30">
+<a class="reference internal image-reference" href="../_images/distral.png"><img alt="../_images/distral.png" src="../_images/distral.png" style="width: 100%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 2.62 </span><span class="caption-text">Distral architecture. Source <a class="bibtex reference internal" href="../zreferences.html#teh2017" id="id15">[Teh et al., 2017]</a>.</span><a class="headerlink" href="#id30" title="Permalink to this image">¶</a></p>
+</div>
+</div>
+<p>Unsurprisingly, I2A performs better than A3C on Sokoban. The deeper the rollout, the better.</p>
+<div class="figure align-default" id="id31">
+<a class="reference internal image-reference" href="../_images/i2a-results.png"><img alt="../_images/i2a-results.png" src="../_images/i2a-results.png" style="width: 100%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 2.63 </span><span class="caption-text">I2A results on Sokoban. Source <a class="bibtex reference internal" href="../zreferences.html#weber2017" id="id16">[Weber et al., 2017]</a>.</span><a class="headerlink" href="#id31" title="Permalink to this image">¶</a></p>
+</div>
+<p>The model does not even have to be perfect: the MF path can compensate for imperfections.</p>
+<div class="figure align-default" id="id32">
+<a class="reference internal image-reference" href="../_images/i2a-results2.png"><img alt="../_images/i2a-results2.png" src="../_images/i2a-results2.png" style="width: 100%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 2.64 </span><span class="caption-text">I2A results on Sokoban. Source <a class="bibtex reference internal" href="../zreferences.html#weber2017" id="id17">[Weber et al., 2017]</a>.</span><a class="headerlink" href="#id32" title="Permalink to this image">¶</a></p>
+</div>
+<div class='embed-container'><iframe src='https://www.youtube.com/embed/llwAwE7ItdM' frameborder='0' allowfullscreen></iframe></div>
+</div>
+<div class="section" id="temporal-difference-models-tdm">
+<h2><span class="section-number">2.2. </span>Temporal difference models - TDM<a class="headerlink" href="#temporal-difference-models-tdm" title="Permalink to this headline">¶</a></h2>
+<div class='embed-container'><iframe src='https://www.youtube.com/embed/Qedw02mDtrs' frameborder='0' allowfullscreen></iframe></div>
+<p>One problem with model-based planning is the <strong>discretization time step</strong> (difference between <span class="math notranslate nohighlight">\(t\)</span> and <span class="math notranslate nohighlight">\(t+1\)</span>).
+It is determined by the action rate: how often a different action <span class="math notranslate nohighlight">\(a_t\)</span> has to be taken.
+In robotics, it could be below the millisecond, leading to very long trajectories in terms of steps.</p>
+<div class="figure align-default" id="id33">
+<a class="reference internal image-reference" href="../_images/tdm-mb-bike-plan-small.png"><img alt="../_images/tdm-mb-bike-plan-small.png" src="../_images/tdm-mb-bike-plan-small.png" style="width: 70%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 2.65 </span><span class="caption-text">Planning a path from Berkeley to the Golden Gate bridge has a very long horizon. Source: <a class="reference external" href="https://bairblog.github.io/2018/04/26/tdm/">https://bairblog.github.io/2018/04/26/tdm/</a>.</span><a class="headerlink" href="#id33" title="Permalink to this image">¶</a></p>
+</div>
+<p>If you want to go from Berkeley to the Golden State bridge with your bike, planning over leg movements will be very expensive (long horizon).
+A solution is <strong>multiple steps ahead planning</strong>. Instead of learning a one-step model:</p>
+<div class="math notranslate nohighlight">
+\[s_{t+1} = f_\theta(s_t, a_t)\]</div>
+<p>one learns to predict the state achieved in <span class="math notranslate nohighlight">\(T\)</span> steps using the current policy:</p>
+<div class="math notranslate nohighlight">
+\[s_{t+ T} = f_\theta(s_t, a_t, \pi)\]</div>
+<p>Planning and acting occur at different time scales.</p>
+<p>A problem with RL in general is how to define the <strong>reward function</strong>.
+If you goal is to travel from Berkeley to the Golden State bridge, which reward function should you use?</p>
+<ul class="simple">
+<li><p>+1 at the bridge, 0 otherwise (sparse).</p></li>
+<li><p>+100 at the bridge, -1 otherwise (sparse).</p></li>
+<li><p>minus the distance to the bridge (dense).</p></li>
+</ul>
+<p><strong>Goal-conditioned RL</strong> defines the reward function using the distance between the achieved state <span class="math notranslate nohighlight">\(s_{t+1}\)</span> and a <strong>goal state</strong> <span class="math notranslate nohighlight">\(s_g\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[r(s_t, a_t, s_{t+1}) = - || s_{t+1} - s_g ||\]</div>
+<p>An action is good if it brings the agent closer to its goal.
+The Euclidean distance works well for the biking example (e.g. using a GPS), but the metric can be adapted to the task.</p>
+<p>One advantage is that you can learn multiple “tasks” at the same time with a single policy, not the only one hard-coded in the reward function. Another advantage is that it makes a better use of exploration by learning from mistakes: <strong>hindsight experience replay</strong> (HER, <a class="bibtex reference internal" href="../zreferences.html#andrychowicz2017" id="id18">[Andrychowicz et al., 2017]</a>).</p>
+<p>If your goal is to reach <span class="math notranslate nohighlight">\(s_g\)</span> but the agent generates a trajectory landing in <span class="math notranslate nohighlight">\(s_{g'}\)</span>, you can learn that this trajectory is good way to reach <span class="math notranslate nohighlight">\(s_{g'}\)</span>! In football, if you try to score a goal but end up doing a pass to a teammate, you can learn that this was a bad shot <strong>and</strong> a good pass.
+HER is a model-based method: you implicitly learn a model of the environment by knowing how to reach any position.</p>
+<div class="figure align-default" id="id34">
+<a class="reference internal image-reference" href="../_images/HER.png"><img alt="../_images/HER.png" src="../_images/HER.png" style="width: 80%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 2.66 </span><span class="caption-text">Hindsight experience replay allows to learn even from mistakes. Source: <a class="reference external" href="https://openai.com/blog/ingredients-for-robotics-research/">https://openai.com/blog/ingredients-for-robotics-research/</a></span><a class="headerlink" href="#id34" title="Permalink to this image">¶</a></p>
+</div>
+<p>Exploration never fails: you always learn to do something, even if this was not your original goal.
+The principle of HER can be used in all model-free methods: DQN, DDPG, etc.</p>
+<p>Using the goal-conditioned reward function <span class="math notranslate nohighlight">\(r(s_t, a_t, s_{t+1}) = - || s_{t+1} - s_g ||\)</span>, how can we learn?
+TDM introduces goal-conditioned Q-value with a horizon <span class="math notranslate nohighlight">\(T\)</span>:  <span class="math notranslate nohighlight">\(Q(s, a, s_g, T)\)</span>. The Q-value of an action should denote <strong>how close</strong> we will be from the goal <span class="math notranslate nohighlight">\(s_g\)</span> in <span class="math notranslate nohighlight">\(T\)</span> steps.
+If we can estimate these Q-values, we can use a planning algorithm such as MPC to find the action that will bring us closer to the goal easily:</p>
+<div class="math notranslate nohighlight">
+\[a^* = \text{arg}\max_{a_t} \, r(s_{t+T}, a_{t+T}, s_{t+T + 1})\]</div>
+<p>This corresponds to planning <span class="math notranslate nohighlight">\(T\)</span> steps ahead; which action should I do now in order to be close to the goal in <span class="math notranslate nohighlight">\(T\)</span> steps?</p>
+<p><img alt="" src="../_images/tdm-steps1.jpeg" /></p>
+<p><img alt="" src="../_images/tdm-steps2.jpeg" /></p>
+<p>Source: <a class="reference external" href="https://bairblog.github.io/2018/04/26/tdm/">https://bairblog.github.io/2018/04/26/tdm/</a></p>
+<p>If the horizon <span class="math notranslate nohighlight">\(T\)</span> is well chosen, we only need to plan over a small number of intermediary positions, not over each possible action.
+TDM is model-free on each subgoal, but model-based on the whole trajectory.</p>
+<p>How can we learn the goal-conditioned Q-values <span class="math notranslate nohighlight">\(Q(s, a, s_g, T)\)</span> with a <strong>model</strong>?
+TDM introduces a recursive relationship for the Q-values:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+    Q(s, a, s_g, T) &amp;= \begin{cases} 
+        \mathbb{E}_{s'} [r(s, a, s')] \; \text{if} \; T=0\\
+        &amp;\\
+        \mathbb{E}_{s'} [\max_a \, Q(s', a, s_g, T-1)] \; \text{otherwise.}\\
+        \end{cases} \\
+        &amp;\\
+        &amp;= \mathbb{E}_{s'} [r(s, a, s') \, \mathbb{1}(T=0) + \max_a \, Q(s', a, s_g, T-1) \, \mathbb{1}(T\neq 0)]\\
+\end{aligned}\end{split}\]</div>
+<p>If we plan over <span class="math notranslate nohighlight">\(T=0\)</span> steps, i.e. immediately after the action <span class="math notranslate nohighlight">\((s, a)\)</span>, the Q-value is the remaining distance to the goal from the next state <span class="math notranslate nohighlight">\(s'\)</span>.
+Otherwise, it is the Q-value of the greedy action in the next state <span class="math notranslate nohighlight">\(s'\)</span> with an horizon <span class="math notranslate nohighlight">\(T-1\)</span> (one step shorter).
+This allows to learn the Q-values from <strong>single transitions</strong> <span class="math notranslate nohighlight">\((s_t, a_t, s_{t+1})\)</span>:</p>
+<ul class="simple">
+<li><p>with <span class="math notranslate nohighlight">\(T=0\)</span>, the target is the remaining distance to the goal.</p></li>
+<li><p>with <span class="math notranslate nohighlight">\(T&gt;0\)</span>, the target is the Q-value of the next action at a shorter horizon.</p></li>
+</ul>
+<p>The critic learns to minimize the prediction error <strong>off-policy</strong>:</p>
+<div class="math notranslate nohighlight">
+\[\mathcal{L}(\theta) = \mathbb{E}_{s_t, a_t, s_{t+1} \in \mathcal{D}} [(r(s_t, a_t, s_{t+1}) \, \mathbb{1}(T=0) + \max_a \, Q(s_{t+1}, a, s_g, T-1) \, \mathbb{1}(T\neq 0) - Q(s_t, a_t, s_g, T))^2]\]</div>
+<p>This is a model-free Q-learning-like update rule, that can be learned by any off-policy value-based algorithm (DQN, DDPG) and an experience replay memory.
+The cool trick is that, with a single transition <span class="math notranslate nohighlight">\((s_t, a_t, s_{t+1})\)</span>, you can train the critic with:</p>
+<ul class="simple">
+<li><p>different horizons <span class="math notranslate nohighlight">\(T\)</span>, e.g. between 0 and <span class="math notranslate nohighlight">\(T_\text{max}\)</span>.</p></li>
+<li><p>different goals <span class="math notranslate nohighlight">\(s_g\)</span>. You can sample any achievable state as a goal, including the “true” <span class="math notranslate nohighlight">\(s_{t+T}\)</span> (hindsight).</p></li>
+</ul>
+<p>You do not only learn to reach <span class="math notranslate nohighlight">\(s_g\)</span>, but any state! TDM learns a lot of information from a single transition, so it has a very good sample complexity.</p>
+<p>TDM learns to break long trajectories into finite horizons (model-based planning) by learning model-free (Q-learning updates).
+The critic learns how good an action (s, a) is order to reach a state <span class="math notranslate nohighlight">\(s_g\)</span> in <span class="math notranslate nohighlight">\(T\)</span> steps.</p>
+<div class="math notranslate nohighlight">
+\[Q(s, a, s_g, T) = \mathbb{E}_{s'} [r(s, a, s') \, \mathbb{1}(T=0) + \max_a \, Q(s', a, s_g, T-1) \, \mathbb{1}(T\neq 0)]\]</div>
+<p>The actor uses MPC planning to iteratively select actions that bring us closer to the goal in <span class="math notranslate nohighlight">\(T\)</span> steps:</p>
+<div class="math notranslate nohighlight">
+\[a_t = \text{arg}\max_{a} \, Q(s_{t}, a, s_{g}, T)\]</div>
+<p>The argmax can be estimated via sampling.
+TDM is a model-based method in disguise: it does predict the next state directly, but how much closer it will be to the goal via Q-learning.</p>
+<p>For problems where the model is easy to learn, the performance of TDM is on par with model-based methods (MPC).</p>
+<div class="figure align-default" id="id35">
+<a class="reference internal image-reference" href="../_images/tdm-results1.gif"><img alt="../_images/tdm-results1.gif" src="../_images/tdm-results1.gif" style="width: 80%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 2.67 </span><span class="caption-text">TDM learns control problems which are easy for MB algorithms. Source: <a class="reference external" href="https://bairblog.github.io/2018/04/26/tdm/">https://bairblog.github.io/2018/04/26/tdm/</a>.</span><a class="headerlink" href="#id35" title="Permalink to this image">¶</a></p>
+</div>
+<p>Model-free methods have a much higher sample complexity. TDM learns much more from single transitions.</p>
+<div class="figure align-default" id="id36">
+<a class="reference internal image-reference" href="../_images/tdm-results2.jpg"><img alt="../_images/tdm-results2.jpg" src="../_images/tdm-results2.jpg" style="width: 80%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 2.68 </span><span class="caption-text">TDM learns control problems which are easy for MB algorithms. Source: <a class="reference external" href="https://bairblog.github.io/2018/04/26/tdm/">https://bairblog.github.io/2018/04/26/tdm/</a>.</span><a class="headerlink" href="#id36" title="Permalink to this image">¶</a></p>
+</div>
+<p>For problems where the model is complex to learn, the performance of TDM is on par with model-free methods (DDPG).</p>
+<div class="figure align-default" id="id37">
+<a class="reference internal image-reference" href="../_images/tdm-results3.gif"><img alt="../_images/tdm-results3.gif" src="../_images/tdm-results3.gif" style="width: 80%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 2.69 </span><span class="caption-text">TDM learns control problems which are easy for MF algorithms. Source: <a class="reference external" href="https://bairblog.github.io/2018/04/26/tdm/">https://bairblog.github.io/2018/04/26/tdm/</a>.</span><a class="headerlink" href="#id37" title="Permalink to this image">¶</a></p>
+</div>
+<p>Model-based methods suffer from model imprecision on long horizons. TDM plans over shorter horizons <span class="math notranslate nohighlight">\(T\)</span>.</p>
+<div class="figure align-default" id="id38">
+<a class="reference internal image-reference" href="../_images/tdm-results4.jpg"><img alt="../_images/tdm-results4.jpg" src="../_images/tdm-results4.jpg" style="width: 80%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 2.70 </span><span class="caption-text">TDM learns control problems which are easy for MF algorithms. Source: <a class="reference external" href="https://bairblog.github.io/2018/04/26/tdm/">https://bairblog.github.io/2018/04/26/tdm/</a>.</span><a class="headerlink" href="#id38" title="Permalink to this image">¶</a></p>
+</div>
+</div>
+<div class="section" id="world-models">
+<h2><span class="section-number">2.3. </span>World models<a class="headerlink" href="#world-models" title="Permalink to this headline">¶</a></h2>
+<div class='embed-container'><iframe src='https://www.youtube.com/embed/O1Qt23Eg8MM' frameborder='0' allowfullscreen></iframe></div>
+<p>The core idea of <strong>world models</strong> <a class="bibtex reference internal" href="../zreferences.html#ha2018" id="id19">[Ha &amp; Schmidhuber, 2018]</a> is to explicitly separate the <strong>world model</strong> (what will happen next) from the <strong>controller</strong> (how to act). Deep RL NN are usually small, as rewards do not contain enough information to train huge networks.</p>
+<div class="figure align-default" id="id39">
+<a class="reference internal image-reference" href="../_images/wm-overview.svg"><img alt="../_images/wm-overview.svg" src="../_images/wm-overview.svg" width="100%" /></a>
+<p class="caption"><span class="caption-number">Fig. 2.71 </span><span class="caption-text">Architecture of world models. Source: <a class="reference external" href="https://worldmodels.github.io/">https://worldmodels.github.io/</a>.</span><a class="headerlink" href="#id39" title="Permalink to this image">¶</a></p>
+</div>
+<p>A huge <strong>world model</strong> can be efficiently trained by supervised or unsupervised methods.
+A small <strong>controller</strong> should not need too many trials if its input representations are good.</p>
+<p>The vision module <span class="math notranslate nohighlight">\(V\)</span> is trained as a <strong>variational autoencoder</strong> (VAE) on single frames of the game. The latent vector <span class="math notranslate nohighlight">\(\mathbf{z}_t\)</span> contains a compressed representation of the frame <span class="math notranslate nohighlight">\(\mathbf{o}_t\)</span>.</p>
+<div class="figure align-default" id="id40">
+<a class="reference internal image-reference" href="../_images/wm-vae.svg"><img alt="../_images/wm-vae.svg" src="../_images/wm-vae.svg" width="100%" /></a>
+<p class="caption"><span class="caption-number">Fig. 2.72 </span><span class="caption-text">Vision module. Source: <a class="reference external" href="https://worldmodels.github.io/">https://worldmodels.github.io/</a>.</span><a class="headerlink" href="#id40" title="Permalink to this image">¶</a></p>
+</div>
+<p>The sequence of latent representations <span class="math notranslate nohighlight">\(\mathbf{z}_0, \ldots \mathbf{z}_t\)</span> in a game is fed to a LSTM layer together with the actions <span class="math notranslate nohighlight">\(a_t\)</span> to compress what happens over time. A <strong>Mixture Density Network</strong> (MDN) is used to predict the <strong>distribution</strong> of the next latent representations <span class="math notranslate nohighlight">\(P(\mathbf{z}_{t+1} | a_t, \mathbf{h}_t, \ldots \mathbf{z}_t)\)</span>.</p>
+<p>The RNN-MDN architecture <a class="bibtex reference internal" href="../zreferences.html#ha2017a" id="id20">[Ha &amp; Eck, 2017]</a> has been used successfully in the past for sequence generation problems such as generating handwriting and sketches (Sketch-RNN, see <a class="reference external" href="https://magenta.tensorflow.org/sketch-rnn-demo">https://magenta.tensorflow.org/sketch-rnn-demo</a> for demos).</p>
+<div class="figure align-default" id="id41">
+<a class="reference internal image-reference" href="../_images/wm-mdn_rnn.svg"><img alt="../_images/wm-mdn_rnn.svg" src="../_images/wm-mdn_rnn.svg" width="100%" /></a>
+<p class="caption"><span class="caption-number">Fig. 2.73 </span><span class="caption-text">Memory module. Source: <a class="reference external" href="https://worldmodels.github.io/">https://worldmodels.github.io/</a>.</span><a class="headerlink" href="#id41" title="Permalink to this image">¶</a></p>
+</div>
+<p>The last step is the <strong>controller</strong>. It takes a latent representation <span class="math notranslate nohighlight">\(\mathbf{z}_t\)</span> and the current hidden state of the LSTM <span class="math notranslate nohighlight">\(\mathbf{h}_t\)</span> as inputs and selects an action <strong>linearly</strong>:</p>
+<div class="math notranslate nohighlight">
+\[a_t = \text{tanh}(W \, [\mathbf{z}_t, \mathbf{h}_t ] + b)\]</div>
+<p>A RL actor cannot get simpler as that…</p>
+<div class="figure align-default" id="id42">
+<a class="reference internal image-reference" href="../_images/wm-schematic.svg"><img alt="../_images/wm-schematic.svg" src="../_images/wm-schematic.svg" width="70%" /></a>
+<p class="caption"><span class="caption-number">Fig. 2.74 </span><span class="caption-text">Controller. Source: <a class="reference external" href="https://worldmodels.github.io/">https://worldmodels.github.io/</a>.</span><a class="headerlink" href="#id42" title="Permalink to this image">¶</a></p>
+</div>
+<p>The controller is not even trained with RL: it uses a genetic algorithm, the Covariance-Matrix Adaptation Evolution Strategy (CMA-ES), to find the output weights that maximize the returns. The world model is trained by classical supervised learning using a random agent before learning.</p>
+<p>Refer <a class="reference external" href="https://worldmodels.github.io/">https://worldmodels.github.io/</a> to see the model in action.</p>
+<p><strong>Algorithm:</strong></p>
+<ol class="simple">
+<li><p>Collect 10,000 rollouts from a random policy.</p></li>
+<li><p>Train VAE (V) to encode each frame into a latent vector <span class="math notranslate nohighlight">\(\mathbf{z} \in \mathcal{R}^{32}\)</span>.</p></li>
+<li><p>Train MDN-RNN (M) to model <span class="math notranslate nohighlight">\(P(\mathbf{z}_{t+1} | a_t, \mathbf{h}_t, \ldots \mathbf{z}_t)\)</span>.</p></li>
+<li><p>Evolve Controller (C) to maximize the expected cumulative reward of a rollout.</p></li>
+</ol>
+<p>The <strong>world model</strong> V+M is learned <strong>offline</strong> with a random agent, using unsupervised learning.
+The <strong>controller</strong> C has few weights (1000) and can be trained by evolutionary algorithms, not even RL.
+The network can even learn by playing entirely in its <strong>own imagination</strong> as the world model can be applied on itself and predict all future frames.
+It just need to additionally predict the reward.
+The learned policy can then be transferred to the real environment.</p>
+</div>
+<div class="section" id="deep-planning-network-planet">
+<h2><span class="section-number">2.4. </span>Deep Planning Network - PlaNet<a class="headerlink" href="#deep-planning-network-planet" title="Permalink to this headline">¶</a></h2>
+<div class='embed-container'><iframe src='https://www.youtube.com/embed/h77PXNDgHD0' frameborder='0' allowfullscreen></iframe></div>
+<p>PlaNet <a class="bibtex reference internal" href="../zreferences.html#hafner2019" id="id21">[Hafner et al., 2019]</a> extends the idea of World models by learning the model together with the policy (<strong>end-to-end</strong>).
+It learns a <strong>latent dynamics model</strong> that takes the past observations <span class="math notranslate nohighlight">\(o_t\)</span> into account (needed for POMDPs):</p>
+<div class="math notranslate nohighlight">
+\[s_{t}, r_{t+1}, \hat{o}_t = f(o_t, a_t, s_{t-1})\]</div>
+<p>and plans in the latent space using multiple rollouts:</p>
+<div class="math notranslate nohighlight">
+\[a_t = \text{arg}\max_a \mathbb{E}[R(s_t, a, s_{t+1}, \ldots)]\]</div>
+<p>The latent dynamics model is a sequential variational autoencoder learning concurrently:</p>
+<ol class="simple">
+<li><p>An <strong>encoder</strong> from the observation <span class="math notranslate nohighlight">\(o_t\)</span> to the latent space <span class="math notranslate nohighlight">\(s_t\)</span>: <span class="math notranslate nohighlight">\(q(s_t | o_t)\)</span>.</p></li>
+<li><p>A <strong>decoder</strong> from the latent space to the reconstructed observation <span class="math notranslate nohighlight">\(\hat{o}_t\)</span>: <span class="math notranslate nohighlight">\(p(\hat{o}_t | s_t)\)</span>.</p></li>
+<li><p>A <strong>transition model</strong> to predict the next latent representation given an action: <span class="math notranslate nohighlight">\(p(s_{t+1} | s_t, a_t)\)</span>.</p></li>
+<li><p>A <strong>reward model</strong> predicting the immediate reward: <span class="math notranslate nohighlight">\(p(r_t | s_t)\)</span>.</p></li>
+</ol>
+<div class="figure align-default" id="id43">
+<a class="reference internal image-reference" href="../_images/planet-model.png"><img alt="../_images/planet-model.png" src="../_images/planet-model.png" style="width: 100%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 2.75 </span><span class="caption-text">Latent dynamics model of PlaNet <a class="bibtex reference internal" href="../zreferences.html#hafner2019" id="id22">[Hafner et al., 2019]</a>. Source: <a class="reference external" href="https://ai.googleblog.com/2019/02/introducing-planet-deep-planning.html">https://ai.googleblog.com/2019/02/introducing-planet-deep-planning.html</a>.</span><a class="headerlink" href="#id43" title="Permalink to this image">¶</a></p>
+</div>
+<p>The loss function to train this <strong>recurrent state-space model</strong> (RSSM), with a deterministic component in the transition model (RNN) and stochastic components is not shown here.</p>
+<p>Training sequences <span class="math notranslate nohighlight">\((o_1, a_1, o_2, \ldots, o_T)\)</span> can be generated <strong>off-policy</strong> (e.g. from demonstrations) or on-policy.</p>
+<div class="figure align-default" id="id44">
+<a class="reference internal image-reference" href="../_images/dreamer-model.gif"><img alt="../_images/dreamer-model.gif" src="../_images/dreamer-model.gif" style="width: 70%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 2.76 </span><span class="caption-text">Latent dynamics model of PlaNet <a class="bibtex reference internal" href="../zreferences.html#hafner2019" id="id23">[Hafner et al., 2019]</a>. Source: <a class="reference external" href="https://ai.googleblog.com/2020/03/introducing-dreamer-scalable.html">https://ai.googleblog.com/2020/03/introducing-dreamer-scalable.html</a>.</span><a class="headerlink" href="#id44" title="Permalink to this image">¶</a></p>
+</div>
+<p>From a single observation <span class="math notranslate nohighlight">\(o_t\)</span> encoded into <span class="math notranslate nohighlight">\(s_t\)</span>, 10000 rollouts are generated using <strong>random sampling</strong>.
+A belief over action sequences is updated using the <strong>cross-entropy method</strong> (CEM) in order to restrict the search.
+The first action of the sequence with the highest estimated return (reward model) is executed.
+At the next time step, planning starts from scratch: Model Predictive Control.
+There is no actor in PlaNet, only a transition model used for planning.</p>
+<div class="figure align-default" id="id45">
+<a class="reference internal image-reference" href="../_images/planet-planning.png"><img alt="../_images/planet-planning.png" src="../_images/planet-planning.png" style="width: 70%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 2.77 </span><span class="caption-text">Planning module of PlaNet <a class="bibtex reference internal" href="../zreferences.html#hafner2019" id="id24">[Hafner et al., 2019]</a>. Source: <a class="reference external" href="https://ai.googleblog.com/2019/02/introducing-planet-deep-planning.html">https://ai.googleblog.com/2019/02/introducing-planet-deep-planning.html</a>.</span><a class="headerlink" href="#id45" title="Permalink to this image">¶</a></p>
+</div>
+<p>Planet learns continuous image-based control problems in 2000 episodes, where D4PG needs 50 times more.</p>
+<div class='embed-container'><iframe src='https://www.youtube.com/embed/tZk1eof_VNA' frameborder='0' allowfullscreen></iframe></div>
+<p>The latent dynamics model can learn 6 control tasks <strong>at the same time</strong>.
+As there is no actor, but only a planner, the same network can control all agents!</p>
+</div>
+<div class="section" id="dreamer">
+<h2><span class="section-number">2.5. </span>Dreamer<a class="headerlink" href="#dreamer" title="Permalink to this headline">¶</a></h2>
+<p>Dreamer <a class="bibtex reference internal" href="../zreferences.html#hafner2020" id="id25">[Hafner et al., 2020]</a> extends the idea of PlaNet by additionally <strong>training an actor</strong> instead of using a MPC planner.
+The latent dynamics model is the same RSSM architecture.
+Training a “model-free” actor on imaginary rollouts instead of MPC planning should reduce the computational time.</p>
+<div class="figure align-default" id="id46">
+<a class="reference internal image-reference" href="../_images/dreamer-principle.png"><img alt="../_images/dreamer-principle.png" src="../_images/dreamer-principle.png" style="width: 100%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 2.78 </span><span class="caption-text">Architecture of Dreamer. Source: <a class="reference external" href="https://ai.googleblog.com/2020/03/introducing-dreamer-scalable.html">https://ai.googleblog.com/2020/03/introducing-dreamer-scalable.html</a>.</span><a class="headerlink" href="#id46" title="Permalink to this image">¶</a></p>
+</div>
+<p>The behavior module learns to predict the value of a state <span class="math notranslate nohighlight">\(V_\varphi(s)\)</span> and the policy <span class="math notranslate nohighlight">\(\pi_\theta(s)\)</span> (actor-critic).
+It is trained <strong>in imagination</strong> in the latent space using the reward model for the immediate rewards (to compute returns) and the transition model for the next states.</p>
+<div class="figure align-default" id="id47">
+<a class="reference internal image-reference" href="../_images/dreamer-actor.gif"><img alt="../_images/dreamer-actor.gif" src="../_images/dreamer-actor.gif" style="width: 100%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 2.79 </span><span class="caption-text">Training of the actor-critic behaviour module is end-to-end using a single rollout. Source: <a class="reference external" href="https://ai.googleblog.com/2020/03/introducing-dreamer-scalable.html">https://ai.googleblog.com/2020/03/introducing-dreamer-scalable.html</a>.</span><a class="headerlink" href="#id47" title="Permalink to this image">¶</a></p>
+</div>
+<p>The current observation <span class="math notranslate nohighlight">\(o_t\)</span> is encoded into a state <span class="math notranslate nohighlight">\(s_t\)</span>, the actor selects an action <span class="math notranslate nohighlight">\(a_t\)</span>, the transition model predicts <span class="math notranslate nohighlight">\(s_{t+1}\)</span>, the reward model predicts <span class="math notranslate nohighlight">\(r_{t+1}\)</span>, the critic predicts <span class="math notranslate nohighlight">\(V_\varphi(s_t)\)</span>.
+At the end of the sequence, we apply <strong>backpropagation-through-time</strong> to train the actor and the critic.</p>
+<p>The <strong>critic</strong> <span class="math notranslate nohighlight">\(V_\varphi(s_t)\)</span> is trained on the imaginary sequence <span class="math notranslate nohighlight">\((s_t, a_t, r_{t+1}, s_{t+1}, \ldots, s_T)\)</span> to minimize the prediction error with the <span class="math notranslate nohighlight">\(\lambda\)</span>-return:</p>
+<div class="math notranslate nohighlight">
+\[R^\lambda_t = (1  - \lambda) \, \sum_{n=1}^{T-t-1} \lambda^{n-1} \, R^n_t + \lambda^{T-t-1} \, R_t\]</div>
+<p>The <strong>actor</strong> <span class="math notranslate nohighlight">\(\pi_\theta(s_t, a_t)\)</span> is trained on the sequence to maximize the sum of the value of the future states:</p>
+<div class="math notranslate nohighlight">
+\[\mathcal{J}(\theta) = \mathbb{E}_{s_t, a_t \sim \pi_\theta} [\sum_{t'=t}^T V_\varphi(s_{t'})]\]</div>
+<p>The main advantage of training an actor is that we need only one rollout when training it: backpropagation maximizes the expected returns.
+When acting, we just need to encode the history of the episode in the latent space, and the actor becomes model-free!</p>
+<div class="figure align-default" id="id48">
+<a class="reference internal image-reference" href="../_images/dreamer-architecture.png"><img alt="../_images/dreamer-architecture.png" src="../_images/dreamer-architecture.png" style="width: 100%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 2.80 </span><span class="caption-text">Overview of Dreamer. Source: <a class="reference external" href="https://ai.googleblog.com/2020/03/introducing-dreamer-scalable.html">https://ai.googleblog.com/2020/03/introducing-dreamer-scalable.html</a>.</span><a class="headerlink" href="#id48" title="Permalink to this image">¶</a></p>
+</div>
+<p>Dreamer beats model-free and model-based methods on 20 continuous control tasks.</p>
+<div class="figure align-default" id="id49">
+<a class="reference internal image-reference" href="../_images/dreamer-results.gif"><img alt="../_images/dreamer-results.gif" src="../_images/dreamer-results.gif" style="width: 100%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 2.81 </span><span class="caption-text">Dreamer on several continuous control tasks. Source: <a class="reference external" href="https://ai.googleblog.com/2020/03/introducing-dreamer-scalable.html">https://ai.googleblog.com/2020/03/introducing-dreamer-scalable.html</a>.</span><a class="headerlink" href="#id49" title="Permalink to this image">¶</a></p>
+</div>
+<div class="figure align-default" id="id50">
+<a class="reference internal image-reference" href="../_images/dreamer-results.png"><img alt="../_images/dreamer-results.png" src="../_images/dreamer-results.png" style="width: 100%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 2.82 </span><span class="caption-text">Performance of Dreamer. Source: <a class="reference external" href="https://ai.googleblog.com/2020/03/introducing-dreamer-scalable.html">https://ai.googleblog.com/2020/03/introducing-dreamer-scalable.html</a>.</span><a class="headerlink" href="#id50" title="Permalink to this image">¶</a></p>
+</div>
+<p>It also learns Atari and Deepmind lab video games, sometimes on par with Rainbow or IMPALA!</p>
+<div class="figure align-default" id="id51">
+<a class="reference internal image-reference" href="../_images/dreamer-resultsatari.gif"><img alt="../_images/dreamer-resultsatari.gif" src="../_images/dreamer-resultsatari.gif" style="width: 100%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 2.83 </span><span class="caption-text">Dreamer on Atari and DML games. Source: <a class="reference external" href="https://dreamrl.github.io/">https://dreamrl.github.io/</a>.</span><a class="headerlink" href="#id51" title="Permalink to this image">¶</a></p>
+</div>
+<div class="figure align-default" id="id52">
+<a class="reference internal image-reference" href="../_images/dreamer-resultsatari.png"><img alt="../_images/dreamer-resultsatari.png" src="../_images/dreamer-resultsatari.png" style="width: 100%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 2.84 </span><span class="caption-text">Performance of Dreamer. Source: <a class="reference external" href="https://dreamrl.github.io/l">https://dreamrl.github.io/l</a>.</span><a class="headerlink" href="#id52" title="Permalink to this image">¶</a></p>
+</div>
+</div>
+</div>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./4-MB"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+        </div>
+    </div>
+    
+    
+    <div class='prev-next-bottom'>
+        
+    <a class='left-prev' id="prev-link" href="1-MB.html" title="previous page"><span class="section-number">1. </span>Model-based RL</a>
+    <a class='right-next' id="next-link" href="../5-exercises/ex1-Python.html" title="next page"><span class="section-number">1. </span>Introduction to Python</a>
+
+    </div>
+    <footer class="footer mt-5 mt-md-0">
+    <div class="container">
+      <p>
+        
+          By Julien Vitay - julien.vitay@informatik.tu-chemnitz.de<br/>
+        
+            &copy; Copyright 2020.<br/>
+          <div class="extra_footer">
+            Technische Universität Chemnitz - Faculty of Computer Science - Professorship for Artificial Intelligence
+          </div>
+      </p>
+    </div>
+  </footer>
+</main>
+
+
+      </div>
+    </div>
+
+    
+  <script src="../_static/js/index.3da636dd464baa7582d2.js"></script>
+
+
+    
+  </body>
+</html>
