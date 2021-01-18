@@ -691,6 +691,7 @@
     <span class="o">!</span>apt-get install cmake &gt; /dev/null <span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span>
     <span class="o">!</span>pip install box2d &gt; /dev/null <span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span>
     <span class="o">!</span>pip install gym<span class="o">[</span>box2d<span class="o">]</span> &gt; /dev/null <span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span>
+    <span class="o">!</span>pip install gym<span class="o">[</span>atari<span class="o">]</span>
     
     <span class="kn">import</span> <span class="nn">gym</span>
 
@@ -719,6 +720,20 @@
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Requirement already satisfied: gym[atari] in /usr/local/lib/python3.6/dist-packages (0.17.3)
+Requirement already satisfied: scipy in /usr/local/lib/python3.6/dist-packages (from gym[atari]) (1.4.1)
+Requirement already satisfied: pyglet&lt;=1.5.0,&gt;=1.4.0 in /usr/local/lib/python3.6/dist-packages (from gym[atari]) (1.5.0)
+Requirement already satisfied: cloudpickle&lt;1.7.0,&gt;=1.2.0 in /usr/local/lib/python3.6/dist-packages (from gym[atari]) (1.3.0)
+Requirement already satisfied: numpy&gt;=1.10.4 in /usr/local/lib/python3.6/dist-packages (from gym[atari]) (1.19.5)
+Requirement already satisfied: atari-py~=0.2.0; extra == &quot;atari&quot; in /usr/local/lib/python3.6/dist-packages (from gym[atari]) (0.2.6)
+Requirement already satisfied: opencv-python; extra == &quot;atari&quot; in /usr/local/lib/python3.6/dist-packages (from gym[atari]) (4.1.2.30)
+Requirement already satisfied: Pillow; extra == &quot;atari&quot; in /usr/local/lib/python3.6/dist-packages (from gym[atari]) (7.0.0)
+Requirement already satisfied: future in /usr/local/lib/python3.6/dist-packages (from pyglet&lt;=1.5.0,&gt;=1.4.0-&gt;gym[atari]) (0.16.0)
+Requirement already satisfied: six in /usr/local/lib/python3.6/dist-packages (from atari-py~=0.2.0; extra == &quot;atari&quot;-&gt;gym[atari]) (1.15.0)
+</pre></div>
+</div>
+</div>
 </div>
 <div class="section" id="cartpole-balancing-task">
 <h2><span class="section-number">12.2.1. </span>Cartpole balancing task<a class="headerlink" href="#cartpole-balancing-task" title="Permalink to this headline">¶</a></h2>
@@ -730,7 +745,6 @@
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create the environment</span>
-<span class="o">!</span>rm -rf video/
 <span class="n">env</span> <span class="o">=</span> <span class="n">wrap_env</span><span class="p">(</span><span class="n">gym</span><span class="o">.</span><span class="n">make</span><span class="p">(</span><span class="s1">&#39;CartPole-v0&#39;</span><span class="p">))</span>
 
 <span class="c1"># Sample the initial state</span>
@@ -764,12 +778,19 @@
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Return: 12.0
+</pre></div>
+</div>
+<div class="output text_html"><video alt="test" autoplay loop controls style="height: 400px;">
+                    <source src="data:video/mp4;base64,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" type="video/mp4" /></video></div></div>
 </div>
 <p>As the problem is quite simple (4 state variables, 2 actions), DQN can run on a single CPU. However, we advise that you run the notebook on a GPU in Colab to avoid emptying the battery of your laptop too fast or making it too warm as training takes quite a long time.</p>
+<p>We will forget from now on to display the cartpole on colab, it does not work well.</p>
 </div>
 <div class="section" id="creating-the-model">
 <h2><span class="section-number">12.2.2. </span>Creating the model<a class="headerlink" href="#creating-the-model" title="Permalink to this headline">¶</a></h2>
-<p>The first step is to create the value network using <code class="docutils literal notranslate"><span class="pre">keras</span></code>. We will not need anything fancy: a simple fully connected network with 4 input neurons, two hidden layers of 16 neurons each and 2 output neurons will do the trick. ReLU activation functions all along and the Adam optimizer.</p>
+<p>The first step is to create the value network using <code class="docutils literal notranslate"><span class="pre">keras</span></code>. We will not need anything fancy: a simple fully connected network with 4 input neurons, two hidden layers of 64 neurons each and 2 output neurons will do the trick. ReLU activation functions all along and the Adam optimizer.</p>
 <p><strong>Q:</strong> Which loss function should we use? Think about which arguments have to passed to <code class="docutils literal notranslate"><span class="pre">model.compile()</span></code> and what activation function is required in the output layer.</p>
 <p>We will need to create two identical networks: the trained network and the target network. You should therefore create a method that returns a compiled model, so it can be called two times. You should pass it the environment (so the network can know how many input and output neurons it needs) and the learning rate for the Adam optimizer.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">create_model</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">lr</span><span class="p">):</span>
@@ -789,8 +810,8 @@
     <span class="n">model</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">models</span><span class="o">.</span><span class="n">Sequential</span><span class="p">()</span>
     
     <span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">observation_space</span><span class="o">.</span><span class="n">shape</span><span class="p">))</span>
-    <span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;relu&#39;</span><span class="p">))</span>
-    <span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;relu&#39;</span><span class="p">))</span>
+    <span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="mi">64</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;relu&#39;</span><span class="p">))</span>
+    <span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="mi">64</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;relu&#39;</span><span class="p">))</span>
     <span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">action_space</span><span class="o">.</span><span class="n">n</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span><span class="p">))</span>
     
     <span class="n">model</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">loss</span><span class="o">=</span><span class="s1">&#39;mse&#39;</span><span class="p">,</span> <span class="n">optimizer</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">optimizers</span><span class="o">.</span><span class="n">Adam</span><span class="p">(</span><span class="n">lr</span><span class="o">=</span><span class="n">lr</span><span class="p">))</span>
@@ -811,8 +832,7 @@
 <p><em>Hint:</em> <code class="docutils literal notranslate"><span class="pre">model.predict()</span></code> expects an array of shape (N, 4), with N the number of examples. Here, we have only one example, so make sure to reshape <code class="docutils literal notranslate"><span class="pre">state</span></code> so it has the shape (1, 4) (otherwise tf will complain).</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>rm -rf video/
-<span class="n">env</span> <span class="o">=</span> <span class="n">wrap_env</span><span class="p">(</span><span class="n">gym</span><span class="o">.</span><span class="n">make</span><span class="p">(</span><span class="s1">&#39;CartPole-v0&#39;</span><span class="p">))</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">env</span> <span class="o">=</span> <span class="n">gym</span><span class="o">.</span><span class="n">make</span><span class="p">(</span><span class="s1">&#39;CartPole-v0&#39;</span><span class="p">)</span>
 
 <span class="n">state</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;State:&quot;</span><span class="p">,</span> <span class="n">state</span><span class="p">)</span>
@@ -828,19 +848,19 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>State: [-0.03491105  0.02891665 -0.03018521 -0.01446241]
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>State: [-0.01228574  0.00488752  0.02812964 -0.00934043]
 Model: &quot;sequential&quot;
 _________________________________________________________________
 Layer (type)                 Output Shape              Param #   
 =================================================================
-dense (Dense)                (None, 16)                80        
+dense (Dense)                (None, 64)                320       
 _________________________________________________________________
-dense_1 (Dense)              (None, 16)                272       
+dense_1 (Dense)              (None, 64)                4160      
 _________________________________________________________________
-dense_2 (Dense)              (None, 2)                 34        
+dense_2 (Dense)              (None, 2)                 130       
 =================================================================
-Total params: 386
-Trainable params: 386
+Total params: 4,610
+Trainable params: 4,610
 Non-trainable params: 0
 _________________________________________________________________
 None
@@ -848,18 +868,18 @@ Model: &quot;sequential_1&quot;
 _________________________________________________________________
 Layer (type)                 Output Shape              Param #   
 =================================================================
-dense_3 (Dense)              (None, 16)                80        
+dense_3 (Dense)              (None, 64)                320       
 _________________________________________________________________
-dense_4 (Dense)              (None, 16)                272       
+dense_4 (Dense)              (None, 64)                4160      
 _________________________________________________________________
-dense_5 (Dense)              (None, 2)                 34        
+dense_5 (Dense)              (None, 2)                 130       
 =================================================================
-Total params: 386
-Trainable params: 386
+Total params: 4,610
+Trainable params: 4,610
 Non-trainable params: 0
 _________________________________________________________________
 None
-Predictions: [0.02599236 0.00307963] [ 0.00118344 -0.00799696]
+Predictions: [-0.0029409   0.00551502] [0.00421481 0.0009347 ]
 </pre></div>
 </div>
 </div>
@@ -884,7 +904,7 @@ Predictions: [0.02599236 0.00307963] [ 0.00118344 -0.00799696]
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Predictions: [0.02599236 0.00307963] [0.02599236 0.00307963]
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Predictions: [-0.0029409   0.00551502] [-0.0029409   0.00551502]
 </pre></div>
 </div>
 </div>
@@ -919,8 +939,8 @@ Predictions: [0.02599236 0.00307963] [ 0.00118344 -0.00799696]
         <span class="bp">self</span><span class="o">.</span><span class="n">dones</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">done</span><span class="p">)</span>
         
     <span class="k">def</span> <span class="nf">sample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">):</span>
-        <span class="c1"># Do not return samples if we do not have at least batch_size transitions</span>
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">states</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">batch_size</span><span class="p">:</span> 
+        <span class="c1"># Do not return samples if we do not have at least 2*batch_size transitions</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">states</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="o">*</span><span class="n">batch_size</span><span class="p">:</span> 
             <span class="k">return</span> <span class="p">[]</span>
             
         <span class="c1"># Randomly choose the indices of the samples.</span>
@@ -939,8 +959,7 @@ Predictions: [0.02599236 0.00307963] [ 0.00118344 -0.00799696]
 <p><strong>Q:</strong> Run a random agent on Cartpole for a few episodes and append each transition to a replay buffer with small capacity (e.g. 100) and sample batches from time to time. Check that everything makes sense.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>rm -rf video/
-<span class="n">env</span> <span class="o">=</span> <span class="n">wrap_env</span><span class="p">(</span><span class="n">gym</span><span class="o">.</span><span class="n">make</span><span class="p">(</span><span class="s1">&#39;CartPole-v0&#39;</span><span class="p">))</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">env</span> <span class="o">=</span> <span class="n">gym</span><span class="o">.</span><span class="n">make</span><span class="p">(</span><span class="s1">&#39;CartPole-v0&#39;</span><span class="p">)</span>
 
 <span class="n">buffer</span> <span class="o">=</span> <span class="n">ReplayBuffer</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
 
@@ -968,9 +987,211 @@ Predictions: [0.02599236 0.00307963] [ 0.00118344 -0.00799696]
     <span class="c1"># Sample a minibatch</span>
     <span class="n">batch</span> <span class="o">=</span> <span class="n">buffer</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">batch</span><span class="p">)</span>
-
-<span class="c1"># Exit cleanly</span>
-<span class="n">env</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[]
+[array([[-0.04588702,  0.17571342, -0.04359217, -0.26982999],
+       [-0.03494416,  0.56720267, -0.06050751, -0.88364164],
+       [-0.02360011,  0.37295228, -0.07818034, -0.61057763],
+       [-0.01614106,  0.56907494, -0.0903919 , -0.92682465],
+       [ 0.01054631,  0.96163079, -0.13385819, -1.57121202],
+       [ 0.04514565,  0.57564238, -0.19174444, -1.08637116],
+       [-0.07998055, -0.42091214,  0.07157347,  0.65326576],
+       [-0.0883988 , -0.226856  ,  0.08463878,  0.38395145],
+       [-0.13009838, -1.01217643,  0.15373449,  1.67594304],
+       [-0.15034191, -1.20871176,  0.18725335,  2.01228927]]), array([1, 0, 1, 1, 0, 1, 1, 0, 0, 1]), array([1., 1., 1., 1., 1., 1., 1., 1., 1., 1.]), array([[-0.04237275,  0.37142947, -0.04898877, -0.5759372 ],
+       [-0.02360011,  0.37295228, -0.07818034, -0.61057763],
+       [-0.01614106,  0.56907494, -0.0903919 , -0.92682465],
+       [-0.00475956,  0.76529356, -0.10892839, -1.24649   ],
+       [ 0.02977892,  0.76833619, -0.16528243, -1.32310072],
+       [ 0.0566585 ,  0.77270422, -0.21347187, -1.43257474],
+       [-0.0883988 , -0.226856  ,  0.08463878,  0.38395145],
+       [-0.09293592, -0.42307124,  0.09231781,  0.70207482],
+       [-0.15034191, -1.20871176,  0.18725335,  2.01228927],
+       [-0.17451615, -1.01596628,  0.22749914,  1.78295639]]), array([False, False, False, False, False,  True, False, False, False,
+        True])]
+[array([[-0.03494416,  0.56720267, -0.06050751, -0.88364164],
+       [-0.01614106,  0.56907494, -0.0903919 , -0.92682465],
+       [ 0.01054631,  0.96163079, -0.13385819, -1.57121202],
+       [-0.03861068, -0.41916791,  0.01007019,  0.61341107],
+       [-0.06767495, -0.61528014,  0.05299678,  0.92883467],
+       [-0.11378421, -0.81570892,  0.12680595,  1.34642685],
+       [ 0.02946412,  0.00944244, -0.02332485, -0.04617419],
+       [ 0.03375079,  0.40034929, -0.03117082, -0.64635371],
+       [ 0.04175778,  0.59589138, -0.04409789, -0.94868711],
+       [ 0.0536756 ,  0.79157841, -0.06307163, -1.25489287]]), array([0, 1, 0, 0, 1, 0, 1, 1, 1, 1]), array([1., 1., 1., 1., 1., 1., 1., 1., 1., 1.]), array([[-0.02360011,  0.37295228, -0.07818034, -0.61057763],
+       [-0.00475956,  0.76529356, -0.10892839, -1.24649   ],
+       [ 0.02977892,  0.76833619, -0.16528243, -1.32310072],
+       [-0.04699404, -0.61442913,  0.02233841,  0.90924863],
+       [-0.07998055, -0.42091214,  0.07157347,  0.65326576],
+       [-0.13009838, -1.01217643,  0.15373449,  1.67594304],
+       [ 0.02965297,  0.20489096, -0.02424833, -0.3461241 ],
+       [ 0.04175778,  0.59589138, -0.04409789, -0.94868711],
+       [ 0.0536756 ,  0.79157841, -0.06307163, -1.25489287],
+       [ 0.06950717,  0.98744873, -0.08816949, -1.56664493]]), array([False, False, False, False, False, False, False, False, False,
+       False])]
+[array([[-0.07998055, -0.42091214,  0.07157347,  0.65326576],
+       [-0.09293592, -0.42307124,  0.09231781,  0.70207482],
+       [-0.13009838, -1.01217643,  0.15373449,  1.67594304],
+       [ 0.04456579, -0.18728104, -0.04528   ,  0.28217656],
+       [ 0.0331856 , -0.18607367, -0.02843163,  0.25533923],
+       [ 0.10512582,  0.98990177, -0.14555671, -1.6302918 ],
+       [-0.02366513,  0.22517243, -0.04587956, -0.30802066],
+       [-0.01916168,  0.03073322, -0.05203997, -0.03015261],
+       [-0.07011939, -0.54787848,  0.01115384,  0.69896567],
+       [-0.1743693 , -0.74925887,  0.15544077,  1.14156613]]), array([1, 0, 0, 0, 1, 0, 0, 1, 0, 1]), array([1., 1., 1., 1., 1., 1., 1., 1., 1., 1.]), array([[-0.0883988 , -0.226856  ,  0.08463878,  0.38395145],
+       [-0.10139734, -0.61934327,  0.10635931,  1.0223321 ],
+       [-0.15034191, -1.20871176,  0.18725335,  2.01228927],
+       [ 0.04082017, -0.38172886, -0.03963647,  0.56024157],
+       [ 0.02946412,  0.00944244, -0.02332485, -0.04617419],
+       [ 0.12492386,  0.79675917, -0.17816255, -1.38628425],
+       [-0.01916168,  0.03073322, -0.05203997, -0.03015261],
+       [-0.01854701,  0.22656133, -0.05264303, -0.33878997],
+       [-0.08107695, -0.74315328,  0.02513316,  0.99513882],
+       [-0.18935448, -0.5564717 ,  0.17827209,  0.9013877 ]]), array([False, False, False, False, False, False, False, False, False,
+       False])]
+[array([[ 0.08925615,  0.79348391, -0.11950239, -1.30271612],
+       [-0.01337126, -0.16199547, -0.06068205,  0.21019852],
+       [-0.01661117, -0.35619964, -0.05647808,  0.48313902],
+       [-0.03721756, -0.35365612, -0.0314414 ,  0.42638794],
+       [-0.07011939, -0.54787848,  0.01115384,  0.69896567],
+       [-0.12959367, -0.54997232,  0.09129524,  0.74776884],
+       [-0.15551766, -0.94258199,  0.12760519,  1.39177889],
+       [ 0.02423362,  0.35477442, -0.02756646, -0.56215783],
+       [ 0.05267667, -0.03268853, -0.07391405, -0.03808703],
+       [ 0.03940372, -0.01677189, -0.13481805, -0.39240767]]), array([1, 0, 1, 0, 0, 0, 1, 1, 0, 1]), array([1., 1., 1., 1., 1., 1., 1., 1., 1., 1.]), array([[ 0.10512582,  0.98990177, -0.14555671, -1.6302918 ],
+       [-0.01661117, -0.35619964, -0.05647808,  0.48313902],
+       [-0.02373516, -0.16032796, -0.0468153 ,  0.17320423],
+       [-0.04429068, -0.54831896, -0.02291364,  0.70899563],
+       [-0.08107695, -0.74315328,  0.02513316,  0.99513882],
+       [-0.14059312, -0.74622723,  0.10625061,  1.06772877],
+       [-0.1743693 , -0.74925887,  0.15544077,  1.14156613],
+       [ 0.03132911,  0.55027215, -0.03880962, -0.86339652],
+       [ 0.0520229 , -0.226677  , -0.07467579,  0.23039023],
+       [ 0.03906829,  0.17997992, -0.1426662 , -0.72437389]]), array([False, False, False, False, False, False, False, False, False,
+       False])]
+[array([[-0.11378421, -0.81570892,  0.12680595,  1.34642685],
+       [ 0.02946412,  0.00944244, -0.02332485, -0.04617419],
+       [ 0.06950717,  0.98744873, -0.08816949, -1.56664493],
+       [-0.07011939, -0.54787848,  0.01115384,  0.69896567],
+       [ 0.03411469, -0.00360845, -0.19010635, -0.69103416],
+       [-0.01561388,  0.24260873, -0.01121911, -0.27438396],
+       [-0.0107617 ,  0.43788894, -0.01670679, -0.5705842 ],
+       [ 0.03019177,  0.83091222, -0.07015847, -1.21931716],
+       [ 0.06840585,  0.24965211, -0.12729061, -0.43298024],
+       [ 0.08232539,  0.25331111, -0.15120872, -0.51592219]]), array([0, 1, 0, 0, 1, 1, 0, 0, 1, 0]), array([1., 1., 1., 1., 1., 1., 1., 1., 1., 1.]), array([[-0.13009838, -1.01217643,  0.15373449,  1.67594304],
+       [ 0.02965297,  0.20489096, -0.02424833, -0.3461241 ],
+       [ 0.08925615,  0.79348391, -0.11950239, -1.30271612],
+       [-0.08107695, -0.74315328,  0.02513316,  0.99513882],
+       [ 0.03404252,  0.19357148, -0.20392703, -1.03703072],
+       [-0.0107617 ,  0.43788894, -0.01670679, -0.5705842 ],
+       [-0.00200392,  0.24300522, -0.02811847, -0.28321098],
+       [ 0.04681002,  0.63676127, -0.09454481, -0.94941686],
+       [ 0.07339889,  0.44632481, -0.13595022, -0.76292497],
+       [ 0.08739161,  0.06060563, -0.16152716, -0.27444836]]), array([False, False, False, False, False, False, False, False, False,
+       False])]
+[array([[-0.02373516, -0.16032796, -0.0468153 ,  0.17320423],
+       [-0.09594002, -0.93860222,  0.04503593,  1.295608  ],
+       [-0.01656031,  0.04732154, -0.0116582 ,  0.02195434],
+       [-0.01561388,  0.24260873, -0.01121911, -0.27438396],
+       [ 0.00869979,  0.43947173, -0.03982674, -0.6058149 ],
+       [ 0.03019177,  0.83091222, -0.07015847, -1.21931716],
+       [ 0.08739161,  0.06060563, -0.16152716, -0.27444836],
+       [ 0.02318629, -0.16544129,  0.06638922,  0.36720994],
+       [ 0.02252386,  0.21795011,  0.0882486 , -0.06800942],
+       [ 0.01640814, -0.17726995,  0.12111231,  0.6315977 ]]), array([0, 1, 1, 1, 1, 0, 1, 1, 0, 0]), array([1., 1., 1., 1., 1., 1., 1., 1., 1., 1.]), array([[-0.02694172, -0.3547497 , -0.04335122,  0.45075865],
+       [-0.11471206, -0.74408039,  0.07094809,  1.01735721],
+       [-0.01561388,  0.24260873, -0.01121911, -0.27438396],
+       [-0.0107617 ,  0.43788894, -0.01670679, -0.5705842 ],
+       [ 0.01748923,  0.6351273 , -0.05194304, -0.91077149],
+       [ 0.04681002,  0.63676127, -0.09454481, -0.94941686],
+       [ 0.08860372,  0.25761936, -0.16701613, -0.61340485],
+       [ 0.01987746,  0.02867756,  0.07373342,  0.09617723],
+       [ 0.02688286,  0.02168106,  0.08688841,  0.25115996],
+       [ 0.01286274, -0.37385492,  0.13374427,  0.95983516]]), array([False, False, False, False, False, False, False, False, False,
+       False])]
+[array([[ 0.0520229 , -0.226677  , -0.07467579,  0.23039023],
+       [ 0.02847391,  0.37003179, -0.10387816, -0.90265178],
+       [ 0.03813067, -0.20079893, -0.18317346, -0.3466444 ],
+       [-0.02140737,  0.24235326, -0.00628339, -0.26874016],
+       [ 0.01748923,  0.6351273 , -0.05194304, -0.91077149],
+       [ 0.08860372,  0.25761936, -0.16701613, -0.61340485],
+       [ 0.10284877,  0.65165459, -0.19835798, -1.2969111 ],
+       [-0.01357656, -0.18525485,  0.1997725 ,  0.81854805],
+       [-0.01315511,  0.14671572, -0.03682447, -0.31321735],
+       [ 0.00486409,  0.74280442, -0.11908856, -1.4356092 ]]), array([0, 0, 1, 0, 1, 1, 0, 1, 0, 1]), array([1., 1., 1., 1., 1., 1., 1., 1., 1., 1.]), array([[ 0.04748936, -0.42065683, -0.07006798,  0.49861478],
+       [ 0.03587455,  0.17645877, -0.1219312 , -0.64434272],
+       [ 0.03411469, -0.00360845, -0.19010635, -0.69103416],
+       [-0.01656031,  0.04732154, -0.0116582 ,  0.02195434],
+       [ 0.03019177,  0.83091222, -0.07015847, -1.21931716],
+       [ 0.09375611,  0.45463285, -0.17928422, -0.95368777],
+       [ 0.11588186,  0.4595259 , -0.2242962 , -1.07230467],
+       [-0.01728166,  0.00665442,  0.21614346,  0.59475248],
+       [-0.01022079, -0.04786282, -0.04308882, -0.03237137],
+       [ 0.01972017,  0.93917647, -0.14780074, -1.76301036]]), array([False, False, False, False, False, False,  True,  True, False,
+       False])]
+[array([[-0.01561388,  0.24260873, -0.01121911, -0.27438396],
+       [-0.0107617 ,  0.43788894, -0.01670679, -0.5705842 ],
+       [ 0.01987746,  0.02867756,  0.07373342,  0.09617723],
+       [ 0.02045101, -0.16741948,  0.07565696,  0.41118155],
+       [ 0.01763368,  0.2203797 ,  0.08674614, -0.12180875],
+       [ 0.02731648, -0.17456726,  0.09191161,  0.569935  ],
+       [-0.01307542,  0.35042117, -0.08086043, -0.79721063],
+       [ 0.04680089, -0.16049118, -0.03509216,  0.27523426],
+       [-0.02027473,  0.22240778,  0.07877649, -0.14882592],
+       [ 0.0113827 , -0.37571906,  0.1455837 ,  1.02055041]]), array([1, 0, 0, 1, 0, 0, 1, 1, 1, 0]), array([1., 1., 1., 1., 1., 1., 1., 1., 1., 1.]), array([[-0.0107617 ,  0.43788894, -0.01670679, -0.5705842 ],
+       [-0.00200392,  0.24300522, -0.02811847, -0.28321098],
+       [ 0.02045101, -0.16741948,  0.07565696,  0.41118155],
+       [ 0.01710263,  0.02655296,  0.08388059,  0.14327715],
+       [ 0.02204128,  0.02412895,  0.08430996,  0.19693188],
+       [ 0.02382514, -0.37084988,  0.10331031,  0.89010017],
+       [-0.00606699,  0.54655402, -0.09680465, -1.1141957 ],
+       [ 0.04359106,  0.03511342, -0.02958747, -0.02830697],
+       [-0.01582658,  0.41631846,  0.07579997, -0.41565355],
+       [ 0.00386832, -0.57244916,  0.16599471,  1.35517444]]), array([False, False, False, False, False, False, False, False, False,
+       False])]
+[array([[-6.02428909e-03, -3.77613571e-01,  1.78768312e-01,
+         1.05020945e+00],
+       [-1.40961151e-02, -4.97950406e-02, -3.10058632e-02,
+         1.02872809e-02],
+       [-1.60248718e-02, -4.66227879e-02, -3.88080202e-02,
+        -5.97399823e-02],
+       [ 4.42933311e-02, -1.59572005e-01, -3.01536094e-02,
+         2.54895909e-01],
+       [ 4.89776485e-02, -3.70983886e-01,  5.85792870e-02,
+         9.07854348e-01],
+       [ 1.13826996e-02, -3.75719058e-01,  1.45583701e-01,
+         1.02055041e+00],
+       [-4.59710778e-03,  2.41846810e-01, -6.59756969e-02,
+        -3.76268034e-01],
+       [ 2.39828428e-04,  4.37840767e-01, -7.35010576e-02,
+        -6.89002147e-01],
+       [ 1.20013721e-02, -3.37180309e-01, -9.67229348e-02,
+         3.64580237e-01],
+       [ 5.25776591e-03, -5.30804141e-01, -8.94313301e-02,
+         6.25266258e-01]]), array([1, 1, 1, 0, 0, 0, 1, 0, 0, 0]), array([1., 1., 1., 1., 1., 1., 1., 1., 1., 1.]), array([[-1.35765605e-02, -1.85254846e-01,  1.99772501e-01,
+         8.18548046e-01],
+       [-1.50920159e-02,  1.45757540e-01, -3.08001176e-02,
+        -2.92014867e-01],
+       [-1.69573275e-02,  1.49033483e-01, -4.00028198e-02,
+        -3.64410108e-01],
+       [ 4.11018910e-02, -3.54250735e-01, -2.50556912e-02,
+         5.37917438e-01],
+       [ 4.15579708e-02, -5.66847830e-01,  7.67363739e-02,
+         1.21835879e+00],
+       [ 3.86831841e-03, -5.72449163e-01,  1.65994709e-01,
+         1.35517444e+00],
+       [ 2.39828428e-04,  4.37840767e-01, -7.35010576e-02,
+        -6.89002147e-01],
+       [ 8.99664377e-03,  2.43811687e-01, -8.72811005e-02,
+        -4.20334199e-01],
+       [ 5.25776591e-03, -5.30804141e-01, -8.94313301e-02,
+         6.25266258e-01],
+       [-5.35831690e-03, -7.24571315e-01, -7.69260049e-02,
+         8.88497710e-01]]), array([False, False, False, False, False, False, False, False, False,
+       False])]
 </pre></div>
 </div>
 </div>
@@ -1042,7 +1263,7 @@ Predictions: [0.02599236 0.00307963] [ 0.00118344 -0.00799696]
 
         <span class="k">return</span> <span class="n">returns</span><span class="p">,</span> <span class="n">losses</span>
 
-    <span class="k">def</span> <span class="nf">test</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">render</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">test</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 
         <span class="c1"># TODO: one episode with epsilon temporarily set to 0</span>
 
@@ -1050,53 +1271,49 @@ Predictions: [0.02599236 0.00307963] [ 0.00118344 -0.00799696]
 </pre></div>
 </div>
 <p>With this structure, it will be very simple to actually train the DQN on Cartpole:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span># Create the environment
-!rm -rf video/
-env = wrap_env(gym.make(&#39;CartPole-v0&#39;))
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create the environment</span>
+<span class="n">env</span> <span class="o">=</span> <span class="n">gym</span><span class="o">.</span><span class="n">make</span><span class="p">(</span><span class="s1">&#39;CartPole-v0&#39;</span><span class="p">)</span>
 
-# Create the agent
-agent = DQNAgent(env, create_model, other_parameters)
+<span class="c1"># Create the agent</span>
+<span class="n">agent</span> <span class="o">=</span> <span class="n">DQNAgent</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">create_model</span><span class="p">,</span> <span class="n">other_parameters</span><span class="p">)</span>
 
-# Train the agent
-returns, losses = agent.train(nb_episodes)
+<span class="c1"># Train the agent</span>
+<span class="n">returns</span><span class="p">,</span> <span class="n">losses</span> <span class="o">=</span> <span class="n">agent</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">nb_episodes</span><span class="p">)</span>
 
-# Plot the returns
-plt.figure(figsize=(10, 6))
-plt.plot(returns)
-plt.plot(running_mean(returns, 10))
-plt.xlabel(&quot;Episodes&quot;)
-plt.ylabel(&quot;Returns&quot;)
+<span class="c1"># Plot the returns</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">returns</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">running_mean</span><span class="p">(</span><span class="n">returns</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Episodes&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Returns&quot;</span><span class="p">)</span>
 
-# Plot the losses
-plt.figure(figsize=(10, 6))
-plt.plot(losses)
-plt.xlabel(&quot;Episodes&quot;)
-plt.ylabel(&quot;Training loss&quot;)
+<span class="c1"># Plot the losses</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">losses</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Episodes&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Training loss&quot;</span><span class="p">)</span>
 
-plt.show()
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 
-# Test the network
-nb_steps = agent.test(render=True)
-print(&quot;Number of steps:&quot;, nb_steps)
-
-# Show video
-show_video()
+<span class="c1"># Test the network</span>
+<span class="n">nb_steps</span> <span class="o">=</span> <span class="n">agent</span><span class="o">.</span><span class="n">test</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Number of steps:&quot;</span><span class="p">,</span> <span class="n">nb_steps</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>So you “just” have to fill the holes.</p>
 <div class="section" id="init-initializing-the-agent">
 <h3><span class="section-number">12.2.4.1. </span>1 - <code class="docutils literal notranslate"><span class="pre">__init__()</span></code>: Initializing the agent<a class="headerlink" href="#init-initializing-the-agent" title="Permalink to this headline">¶</a></h3>
 <p>In this method, you should first copy the value of the parameters as attributes: learning rate, epsilon, gamma and so on.</p>
-<p>Suggested values: gamma = 0.99, learning_rate = 0.005</p>
+<p>Suggested values: gamma = 0.99, learning_rate = 0.001</p>
 <p>The second thing to do is to create the trained and target networks (with the same weights) and save them as attributes (the other methods will use them). Do not forget to clear the keras session first, otherwise the RAM will be quickly filled.</p>
-<p>The third thing is to create an instance of the ERM. Use a buffer limit of 10000 transitions (should be passed as a parameter).</p>
+<p>The third thing is to create an instance of the ERM. Use a buffer limit of 5000 transitions (should be passed as a parameter).</p>
 <p>Do not hesitate to add other stuff as you implementing the other methods (e.g. counters).</p>
 </div>
 <div class="section" id="act-action-selection">
 <h3><span class="section-number">12.2.4.2. </span>2 - <code class="docutils literal notranslate"><span class="pre">act()</span></code>: action selection<a class="headerlink" href="#act-action-selection" title="Permalink to this headline">¶</a></h3>
 <p>We will use a simple <span class="math notranslate nohighlight">\(\epsilon\)</span>-greedy method for the action selection, as in the previous exercises.</p>
 <p>The only difference is that we have to use the trained model to get the greedy action, using <code class="docutils literal notranslate"><span class="pre">trained_model.predict()</span></code>. This will return the Q-value of the two actions left and right. Use <code class="docutils literal notranslate"><span class="pre">argmax()</span></code> to return the greedy action (with probability 1 - <span class="math notranslate nohighlight">\(\epsilon\)</span>). <code class="docutils literal notranslate"><span class="pre">env.action_space.sample()</span></code> should be used for the exploration (do not use the Q-network in that case, it is slow!).</p>
-<p><span class="math notranslate nohighlight">\(\epsilon\)</span> will be scheduled with an initial value of 1.0 and an exponential decay rate of 0.0002 after each action. It is always better to keep a little exploration, even if <span class="math notranslate nohighlight">\(\epsilon\)</span> has decayed to 0. Keep a minimal value of 0.05 for epsilon.</p>
+<p><span class="math notranslate nohighlight">\(\epsilon\)</span> will be scheduled with an initial value of 1.0 and an exponential decay rate of 0.0005 after each action. It is always better to keep a little exploration, even if <span class="math notranslate nohighlight">\(\epsilon\)</span> has decayed to 0. Keep a minimal value of 0.05 for epsilon.</p>
 <p><strong>Q:</strong> Once this has been implemented, run your very slow random agent for 100 episodes to check everything works correctly.</p>
 </div>
 <div class="section" id="train-training-loop">
@@ -1122,9 +1339,9 @@ show_video()
 </ul>
 </li>
 </ul>
-<p>The main difference with Q-learning is that <code class="docutils literal notranslate"><span class="pre">update()</span></code> will be called only every <code class="docutils literal notranslate"><span class="pre">T_train</span> <span class="pre">=</span> <span class="pre">5</span></code> steps: the number of updates to the trained network will be 5 times smaller that the number of steps made in the environment. Beware that if the ERM does not have enough transitions yet (less than the batch size), you should not call <code class="docutils literal notranslate"><span class="pre">update()</span></code>.</p>
-<p>Updating the target network (copying the weights of the trained network) should happen every 20 updates, i.e. every 100 steps. Pass these parameters to the constructor of the agent.</p>
-<p>The batch size can be set to 128.</p>
+<p>The main difference with Q-learning is that <code class="docutils literal notranslate"><span class="pre">update()</span></code> will be called only every <code class="docutils literal notranslate"><span class="pre">T_train</span> <span class="pre">=</span> <span class="pre">4</span></code> steps: the number of updates to the trained network will be 4 times smaller that the number of steps made in the environment. Beware that if the ERM does not have enough transitions yet (less than the batch size), you should not call <code class="docutils literal notranslate"><span class="pre">update()</span></code>.</p>
+<p>Updating the target network (copying the weights of the trained network) should happen every 100 steps. Pass these parameters to the constructor of the agent.</p>
+<p>The batch size can be set to 32.</p>
 </div>
 <div class="section" id="update-training-the-value-network">
 <h3><span class="section-number">12.2.4.4. </span>4 - <code class="docutils literal notranslate"><span class="pre">update()</span></code>: training the value network<a class="headerlink" href="#update-training-the-value-network" title="Permalink to this headline">¶</a></h3>
@@ -1151,7 +1368,7 @@ show_video()
 <p>That way, the first output neuron has a squared error of 0, so it won’t learn anything. Only the second output neuron will have a non-zero mse and learn.</p>
 <p>There are more efficient ways to do this (using masks), but this will do the trick, the drawback being that we have to make a forward pass on the minibatch before calling <code class="docutils literal notranslate"><span class="pre">fit()</span></code>.</p>
 <p>The rest is pretty much the same as for your Q-learning agent. Do not forget that actions leading to a terminal state should only use the reward as a target, not the complete Bellman target <span class="math notranslate nohighlight">\(r + \gamma \max Q\)</span>.</p>
-<p><em>Hint:</em> as we sample a minibatch of 128 transitions, it is faster to call:</p>
+<p><em>Hint:</em> as we sample a minibatch of 32 transitions, it is faster to call:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">Q_values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">training_model</span><span class="o">.</span><span class="n">predict_on_batch</span><span class="p">(</span><span class="n">states</span><span class="p">))</span>
 </pre></div>
 </div>
@@ -1160,12 +1377,12 @@ show_video()
 </pre></div>
 </div>
 <p>for reasons internal to tensorflow. Note that with tf2, you need to cast the result to numpy arrays as eager mode is now the default.</p>
-<p>The method should return the training loss, which is contained in the <code class="docutils literal notranslate"><span class="pre">History</span></code> object returned by <code class="docutils literal notranslate"><span class="pre">model.fit()</span></code>. <code class="docutils literal notranslate"><span class="pre">model.fit()</span></code> should be called for one epoch only, a batch size of 128, and <code class="docutils literal notranslate"><span class="pre">verbose</span></code> set to 0.</p>
+<p>The method should return the training loss, which is contained in the <code class="docutils literal notranslate"><span class="pre">History</span></code> object returned by <code class="docutils literal notranslate"><span class="pre">model.fit()</span></code>. <code class="docutils literal notranslate"><span class="pre">model.fit()</span></code> should be called for one epoch only, a batch size of 32, and <code class="docutils literal notranslate"><span class="pre">verbose</span></code> set to 0.</p>
 </div>
 <div class="section" id="test">
 <h3><span class="section-number">12.2.4.5. </span>5 - <code class="docutils literal notranslate"><span class="pre">test()</span></code><a class="headerlink" href="#test" title="Permalink to this headline">¶</a></h3>
-<p>This method should run one episode with epsilon set to 0, without learning. The number of steps should be returned (do not bother discounting with gamma, the goal is to be up for 200 steps). If <code class="docutils literal notranslate"><span class="pre">render</span></code>, call <code class="docutils literal notranslate"><span class="pre">self.env.render()</span></code> to make the video.</p>
-<p><strong>Q:</strong> Let’s go! Run the agent for 250 episodes and observe how fast it manages to keep the pole up for 200 steps.</p>
+<p>This method should run one episode with epsilon set to 0, without learning. The number of steps should be returned (do not bother discounting with gamma, the goal is to be up for 200 steps).</p>
+<p><strong>Q:</strong> Let’s go! Run the agent for 100 episodes and observe how fast it manages to keep the pole up for 200 steps.</p>
 <p>Beware that running the same network twice can lead to very different results. In particular, policy collapse (the network was almost perfect, but suddenly crashes and becomes random) can happen. Just be patient.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -1190,10 +1407,7 @@ show_video()
 
         <span class="c1"># Create the replay memory</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">buffer</span> <span class="o">=</span> <span class="n">ReplayBuffer</span><span class="p">(</span><span class="n">buffer_limit</span><span class="p">)</span>
-        
-        <span class="c1"># Internal time</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="o">=</span> <span class="mi">0</span>
-        
+                
     <span class="k">def</span> <span class="nf">act</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
 
         <span class="c1"># epsilon-greedy</span>
@@ -1228,11 +1442,6 @@ show_video()
             
         <span class="c1"># Train the model on the minibatch</span>
         <span class="n">history</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">states</span><span class="p">,</span> <span class="n">targets</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-        
-        <span class="c1"># Update the target model</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="o">+=</span> <span class="mi">1</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">target_update_period</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">target_model</span><span class="o">.</span><span class="n">set_weights</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">get_weights</span><span class="p">())</span>
         
         <span class="k">return</span> <span class="n">history</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="s1">&#39;loss&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
 
@@ -1271,6 +1480,10 @@ show_video()
                 <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">batch</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">steps</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">training_update_period</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
                     <span class="n">loss</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">batch</span><span class="p">)</span>
                     <span class="n">loss_episode</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">loss</span><span class="p">)</span>
+
+                <span class="c1"># Update the target model</span>
+                <span class="k">if</span> <span class="n">steps</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">target_update_period</span> <span class="ow">and</span> <span class="n">steps</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">target_update_period</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">target_model</span><span class="o">.</span><span class="n">set_weights</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">get_weights</span><span class="p">())</span>
             
                 <span class="c1"># Go in the next state</span>
                 <span class="n">state</span> <span class="o">=</span> <span class="n">next_state</span>
@@ -1291,7 +1504,6 @@ show_video()
             <span class="n">clear_output</span><span class="p">(</span><span class="n">wait</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
             <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Episode&#39;</span><span class="p">,</span> <span class="n">episode</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
             <span class="nb">print</span><span class="p">(</span><span class="s1">&#39; total steps:&#39;</span><span class="p">,</span> <span class="n">steps</span><span class="p">)</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39; total training updates:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="p">)</span>
             <span class="nb">print</span><span class="p">(</span><span class="s1">&#39; length of the episode:&#39;</span><span class="p">,</span> <span class="n">steps_episode</span><span class="p">)</span>
             <span class="nb">print</span><span class="p">(</span><span class="s1">&#39; return of the episode:&#39;</span><span class="p">,</span> <span class="n">return_episode</span><span class="p">)</span>
             <span class="nb">print</span><span class="p">(</span><span class="s1">&#39; current loss:&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">loss_episode</span><span class="p">))</span>
@@ -1309,8 +1521,6 @@ show_video()
         <span class="n">done</span> <span class="o">=</span> <span class="kc">False</span>
         
         <span class="k">while</span> <span class="ow">not</span> <span class="n">done</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">render</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">render</span><span class="p">()</span>
             <span class="n">action</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">act</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
             <span class="n">next_state</span><span class="p">,</span> <span class="n">reward</span><span class="p">,</span> <span class="n">done</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>
             <span class="n">state</span> <span class="o">=</span> <span class="n">next_state</span>
@@ -1325,18 +1535,18 @@ show_video()
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Parameters</span>
-<span class="n">nb_episodes</span> <span class="o">=</span> <span class="mi">250</span>
-<span class="n">batch_size</span> <span class="o">=</span> <span class="mi">128</span>
+<span class="n">nb_episodes</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="n">batch_size</span> <span class="o">=</span> <span class="mi">32</span>
 
 <span class="n">epsilon</span> <span class="o">=</span> <span class="mf">1.0</span>
-<span class="n">epsilon_decay</span> <span class="o">=</span> <span class="mf">0.0002</span>
+<span class="n">epsilon_decay</span> <span class="o">=</span> <span class="mf">0.0005</span>
 
 <span class="n">gamma</span> <span class="o">=</span> <span class="mf">0.99</span>
 
 <span class="n">learning_rate</span> <span class="o">=</span> <span class="mf">0.005</span> 
-<span class="n">buffer_limit</span> <span class="o">=</span> <span class="mi">10000</span>
-<span class="n">target_update_period</span> <span class="o">=</span> <span class="mi">20</span>
-<span class="n">training_update_period</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="n">buffer_limit</span> <span class="o">=</span> <span class="mi">5000</span>
+<span class="n">target_update_period</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="n">training_update_period</span> <span class="o">=</span> <span class="mi">4</span>
 </pre></div>
 </div>
 </div>
@@ -1344,8 +1554,7 @@ show_video()
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create the environment</span>
-<span class="o">!</span>rm -rf video/
-<span class="n">env</span> <span class="o">=</span> <span class="n">wrap_env</span><span class="p">(</span><span class="n">gym</span><span class="o">.</span><span class="n">make</span><span class="p">(</span><span class="s1">&#39;CartPole-v0&#39;</span><span class="p">))</span>
+<span class="n">env</span> <span class="o">=</span> <span class="n">gym</span><span class="o">.</span><span class="n">make</span><span class="p">(</span><span class="s1">&#39;CartPole-v0&#39;</span><span class="p">)</span>
 
 <span class="c1"># Create the agent</span>
 <span class="n">agent</span> <span class="o">=</span> <span class="n">DQNAgent</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">create_model</span><span class="p">,</span> <span class="n">learning_rate</span><span class="p">,</span> <span class="n">epsilon</span><span class="p">,</span> <span class="n">epsilon_decay</span><span class="p">,</span> <span class="n">gamma</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">,</span> <span class="n">target_update_period</span><span class="p">,</span> <span class="n">training_update_period</span><span class="p">,</span> <span class="n">buffer_limit</span><span class="p">)</span>
@@ -1370,12 +1579,11 @@ show_video()
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Episode 250
- total steps: 31965
- total training updates: 6367
- length of the episode: 200
- return of the episode: 200.0
- current loss: 5.803836356848478
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Episode 100
+ total steps: 8599
+ length of the episode: 174
+ return of the episode: 174.0
+ current loss: 5.679146097149959
  epsilon: 0.05
 </pre></div>
 </div>
@@ -1386,16 +1594,19 @@ show_video()
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Test the network</span>
-<span class="n">nb_steps</span> <span class="o">=</span> <span class="n">agent</span><span class="o">.</span><span class="n">test</span><span class="p">(</span><span class="n">render</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">nb_steps</span> <span class="o">=</span> <span class="n">agent</span><span class="o">.</span><span class="n">test</span><span class="p">()</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Number of steps:&quot;</span><span class="p">,</span> <span class="n">nb_steps</span><span class="p">)</span>
-
-<span class="n">show_video</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Number of steps: 131
 </pre></div>
 </div>
 </div>
 </div>
 <p><strong>Q:</strong> How does the loss evolve? Does it make sense?</p>
-<p><strong>A:</strong> The Q-values are non-stationary: the initial Q-values are very small (the agent fails almost immediately), while they are around 40 after training (200 steps, but discounted with gamma). Prediction error increase with the magnitude of the Q-values, so the loss is a poor indicator of the convergence of the network.</p>
+<p><strong>A:</strong> The Q-values are non-stationary: the initial Q-values are very small (the agent fails almost immediately), while they are around 40 after training (200 steps, but discounted with gamma). The mse increases with the magnitude of the Q-values, so the loss is a poor indicator of the convergence of the network.</p>
 </div>
 </div>
 <div class="section" id="reward-scaling">
@@ -1415,10 +1626,11 @@ show_video()
     <span class="n">Q_values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">agent</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">)))[</span><span class="mi">0</span><span class="p">][</span><span class="n">action</span><span class="p">])</span>
     <span class="n">next_state</span><span class="p">,</span> <span class="n">reward</span><span class="p">,</span> <span class="n">done</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">agent</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>
     <span class="n">state</span> <span class="o">=</span> <span class="n">next_state</span>
-    <span class="n">nb_steps</span> <span class="o">+=</span> <span class="mi">1</span>
 
 <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">Q_values</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Steps&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Q-value&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -1427,7 +1639,7 @@ show_video()
 <img alt="../_images/12-DQN-solution_29_0.png" src="../_images/12-DQN-solution_29_0.png" />
 </div>
 </div>
-<p><strong>A:</strong> The predicted Q-values at the beginning of learning are close to 0, as the weights are randomly initialized. They must grow to around 100, which is very slow. If the target Q-values were around 1, learning might be much faster.</p>
+<p><strong>A:</strong> The predicted Q-values at the beginning of learning are close to 0, as the weights are randomly initialized. They must grow to around 40, which takes a lot of time. If the target Q-values were around 1, learning might be much faster.</p>
 <p><strong>Q:</strong> Implement <strong>reward scaling</strong> by dividing the received rewards by a fixed factor of 100 when computing the Bellman targets. That way, the final Q-values will be around 1, what may be much easier  to learned.</p>
 <p><em>Tip:</em> in order to avoid a huge copy and paste, you can inherit from your DQNAgent and ony reimplement the desired function:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">ScaledDQNAgent</span> <span class="p">(</span><span class="n">DQNAgent</span><span class="p">):</span>
@@ -1435,7 +1647,7 @@ show_video()
         <span class="c1"># Change the content of this function only</span>
 </pre></div>
 </div>
-<p>Reduce a bit the learning rate (e.g. 0.001) as the magnitude of the targets has changed.</p>
+<p>You should reduce a bit the learning rate (e.g. 0.001) as the magnitude of the targets has changed.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">ScaledDQNAgent</span><span class="p">(</span><span class="n">DQNAgent</span><span class="p">):</span>
@@ -1461,11 +1673,6 @@ show_video()
         <span class="c1"># Train the model on the minibatch</span>
         <span class="n">history</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">states</span><span class="p">,</span> <span class="n">targets</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
         
-        <span class="c1"># Update the target model</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="o">+=</span> <span class="mi">1</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">target_update_period</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">target_model</span><span class="o">.</span><span class="n">set_weights</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">get_weights</span><span class="p">())</span>
-        
         <span class="k">return</span> <span class="n">history</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="s1">&#39;loss&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
 </pre></div>
 </div>
@@ -1474,11 +1681,10 @@ show_video()
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create the environment</span>
-<span class="o">!</span>rm -rf video/
-<span class="n">env</span> <span class="o">=</span> <span class="n">wrap_env</span><span class="p">(</span><span class="n">gym</span><span class="o">.</span><span class="n">make</span><span class="p">(</span><span class="s1">&#39;CartPole-v0&#39;</span><span class="p">))</span>
+<span class="n">env</span> <span class="o">=</span> <span class="n">gym</span><span class="o">.</span><span class="n">make</span><span class="p">(</span><span class="s1">&#39;CartPole-v0&#39;</span><span class="p">)</span>
 
 <span class="c1"># Create the agent</span>
-<span class="n">learning_rate</span> <span class="o">=</span> <span class="mf">0.001</span> 
+<span class="n">learning_rate</span> <span class="o">=</span> <span class="mf">0.001</span>
 <span class="n">agent</span> <span class="o">=</span> <span class="n">ScaledDQNAgent</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">create_model</span><span class="p">,</span> <span class="n">learning_rate</span><span class="p">,</span> <span class="n">epsilon</span><span class="p">,</span> <span class="n">epsilon_decay</span><span class="p">,</span> <span class="n">gamma</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">,</span> <span class="n">target_update_period</span><span class="p">,</span> <span class="n">training_update_period</span><span class="p">,</span> <span class="n">buffer_limit</span><span class="p">)</span>
 
 <span class="c1"># Train the agent</span>
@@ -1486,10 +1692,10 @@ show_video()
 
 <span class="c1"># Test the network</span>
 <span class="n">agent</span><span class="o">.</span><span class="n">epsilon</span> <span class="o">=</span> <span class="mf">0.0</span>
-        
+
+<span class="c1"># Q-values     </span>
 <span class="n">state</span> <span class="o">=</span> <span class="n">agent</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
 <span class="n">done</span> <span class="o">=</span> <span class="kc">False</span>
-
 <span class="n">Q_values</span> <span class="o">=</span> <span class="p">[]</span>
 
 <span class="k">while</span> <span class="ow">not</span> <span class="n">done</span><span class="p">:</span>
@@ -1497,10 +1703,6 @@ show_video()
     <span class="n">Q_values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">agent</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">)))[</span><span class="mi">0</span><span class="p">][</span><span class="n">action</span><span class="p">])</span>
     <span class="n">next_state</span><span class="p">,</span> <span class="n">reward</span><span class="p">,</span> <span class="n">done</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">agent</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>
     <span class="n">state</span> <span class="o">=</span> <span class="n">next_state</span>
-    <span class="n">nb_steps</span> <span class="o">+=</span> <span class="mi">1</span>
-    
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Number of steps:&quot;</span><span class="p">,</span> <span class="n">nb_steps</span><span class="p">)</span>
-
 
 <span class="c1"># Plot the returns</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
@@ -1525,14 +1727,12 @@ show_video()
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Episode 250
- total steps: 23408
- total training updates: 4656
- length of the episode: 131
- return of the episode: 131.0
- current loss: 4.6440566480809e-05
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Episode 100
+ total steps: 9986
+ length of the episode: 200
+ return of the episode: 200.0
+ current loss: 0.0003223761088884203
  epsilon: 0.05
-Number of steps: 562
 </pre></div>
 </div>
 <img alt="../_images/12-DQN-solution_33_1.png" src="../_images/12-DQN-solution_33_1.png" />
@@ -1543,15 +1743,18 @@ Number of steps: 562
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Test the network</span>
-<span class="n">nb_steps</span> <span class="o">=</span> <span class="n">agent</span><span class="o">.</span><span class="n">test</span><span class="p">(</span><span class="n">render</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">nb_steps</span> <span class="o">=</span> <span class="n">agent</span><span class="o">.</span><span class="n">test</span><span class="p">()</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Number of steps:&quot;</span><span class="p">,</span> <span class="n">nb_steps</span><span class="p">)</span>
-
-<span class="n">show_video</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Number of steps: 200
 </pre></div>
 </div>
 </div>
 </div>
-<p><strong>Q:</strong> Depending on the time left and your motivation, vary the different parameters to understand their influence: learning rate, target update frequency, training update frequency, epsilon decay, gamma, etc. Change the size of the network. If you find better hyperparameters than what is proposed, please report it for next year!</p>
+<p><strong>Q:</strong> Depending on the time left and your motivation, vary the different parameters to understand their influence: learning rate, target update frequency, training update frequency, epsilon decay, gamma, etc. Change the size of the network. If you find better hyperparameters than what is proposed, please report them for next year!</p>
 </div>
 </div>
 

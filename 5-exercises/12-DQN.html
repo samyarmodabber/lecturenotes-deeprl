@@ -691,6 +691,7 @@
     <span class="o">!</span>apt-get install cmake &gt; /dev/null <span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span>
     <span class="o">!</span>pip install box2d &gt; /dev/null <span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span>
     <span class="o">!</span>pip install gym<span class="o">[</span>box2d<span class="o">]</span> &gt; /dev/null <span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span>
+    <span class="o">!</span>pip install gym<span class="o">[</span>atari<span class="o">]</span>
     
     <span class="kn">import</span> <span class="nn">gym</span>
 
@@ -730,7 +731,6 @@
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create the environment</span>
-<span class="o">!</span>rm -rf video/
 <span class="n">env</span> <span class="o">=</span> <span class="n">wrap_env</span><span class="p">(</span><span class="n">gym</span><span class="o">.</span><span class="n">make</span><span class="p">(</span><span class="s1">&#39;CartPole-v0&#39;</span><span class="p">))</span>
 
 <span class="c1"># Sample the initial state</span>
@@ -764,17 +764,13 @@
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Return: 20.0
-</pre></div>
 </div>
-</div>
-</div>
-<p>As the problem is quite simple (4 state variables, 2 actions), DQN can run on a single CPU (GPU does not bring much). However, we advise that you run the notebook on Colab to avoid emptying the battery of your laptop too fast as training takes quite a long time.</p>
+<p>As the problem is quite simple (4 state variables, 2 actions), DQN can run on a single CPU. However, we advise that you run the notebook on a GPU in Colab to avoid emptying the battery of your laptop too fast or making it too warm as training takes quite a long time.</p>
+<p>We will forget from now on to display the cartpole on colab, it does not work well.</p>
 </div>
 <div class="section" id="creating-the-model">
 <h2><span class="section-number">12.1.2. </span>Creating the model<a class="headerlink" href="#creating-the-model" title="Permalink to this headline">¶</a></h2>
-<p>The first step is to create the value network using <code class="docutils literal notranslate"><span class="pre">keras</span></code>. We will not need anything fancy: a simple fully connected network with 4 input neurons, two hidden layers of 16 neurons each and 2 output neurons will do the trick. ReLU activation functions all along and the Adam optimizer.</p>
+<p>The first step is to create the value network using <code class="docutils literal notranslate"><span class="pre">keras</span></code>. We will not need anything fancy: a simple fully connected network with 4 input neurons, two hidden layers of 64 neurons each and 2 output neurons will do the trick. ReLU activation functions all along and the Adam optimizer.</p>
 <p><strong>Q:</strong> Which loss function should we use? Think about which arguments have to passed to <code class="docutils literal notranslate"><span class="pre">model.compile()</span></code> and what activation function is required in the output layer.</p>
 <p>We will need to create two identical networks: the trained network and the target network. You should therefore create a method that returns a compiled model, so it can be called two times. You should pass it the environment (so the network can know how many input and output neurons it needs) and the learning rate for the Adam optimizer.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">create_model</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">lr</span><span class="p">):</span>
@@ -833,8 +829,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">dones</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">done</span><span class="p">)</span>
         
     <span class="k">def</span> <span class="nf">sample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">):</span>
-        <span class="c1"># Do not return samples if we do not have at least batch_size transitions</span>
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">states</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">batch_size</span><span class="p">:</span> 
+        <span class="c1"># Do not return samples if we do not have at least 2*batch_size transitions</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">states</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="o">*</span><span class="n">batch_size</span><span class="p">:</span> 
             <span class="k">return</span> <span class="p">[]</span>
             
         <span class="c1"># Randomly choose the indices of the samples.</span>
@@ -918,7 +914,7 @@
 
         <span class="k">return</span> <span class="n">returns</span><span class="p">,</span> <span class="n">losses</span>
 
-    <span class="k">def</span> <span class="nf">test</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">render</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">test</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 
         <span class="c1"># TODO: one episode with epsilon temporarily set to 0</span>
 
@@ -926,53 +922,49 @@
 </pre></div>
 </div>
 <p>With this structure, it will be very simple to actually train the DQN on Cartpole:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span># Create the environment
-!rm -rf video/
-env = wrap_env(gym.make(&#39;CartPole-v0&#39;))
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create the environment</span>
+<span class="n">env</span> <span class="o">=</span> <span class="n">gym</span><span class="o">.</span><span class="n">make</span><span class="p">(</span><span class="s1">&#39;CartPole-v0&#39;</span><span class="p">)</span>
 
-# Create the agent
-agent = DQNAgent(env, create_model, other_parameters)
+<span class="c1"># Create the agent</span>
+<span class="n">agent</span> <span class="o">=</span> <span class="n">DQNAgent</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">create_model</span><span class="p">,</span> <span class="n">other_parameters</span><span class="p">)</span>
 
-# Train the agent
-returns, losses = agent.train(nb_episodes)
+<span class="c1"># Train the agent</span>
+<span class="n">returns</span><span class="p">,</span> <span class="n">losses</span> <span class="o">=</span> <span class="n">agent</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">nb_episodes</span><span class="p">)</span>
 
-# Plot the returns
-plt.figure(figsize=(10, 6))
-plt.plot(returns)
-plt.plot(running_mean(returns, 10))
-plt.xlabel(&quot;Episodes&quot;)
-plt.ylabel(&quot;Returns&quot;)
+<span class="c1"># Plot the returns</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">returns</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">running_mean</span><span class="p">(</span><span class="n">returns</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Episodes&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Returns&quot;</span><span class="p">)</span>
 
-# Plot the losses
-plt.figure(figsize=(10, 6))
-plt.plot(losses)
-plt.xlabel(&quot;Episodes&quot;)
-plt.ylabel(&quot;Training loss&quot;)
+<span class="c1"># Plot the losses</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">losses</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Episodes&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Training loss&quot;</span><span class="p">)</span>
 
-plt.show()
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 
-# Test the network without exploration
-nb_steps = agent.test(render=True)
-print(&quot;Number of steps:&quot;, nb_steps)
-
-# Show video
-show_video()
+<span class="c1"># Test the network</span>
+<span class="n">nb_steps</span> <span class="o">=</span> <span class="n">agent</span><span class="o">.</span><span class="n">test</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Number of steps:&quot;</span><span class="p">,</span> <span class="n">nb_steps</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>So you “just” have to fill the holes.</p>
 <div class="section" id="init-initializing-the-agent">
 <h3><span class="section-number">12.1.4.1. </span>1 - <code class="docutils literal notranslate"><span class="pre">__init__()</span></code>: Initializing the agent<a class="headerlink" href="#init-initializing-the-agent" title="Permalink to this headline">¶</a></h3>
 <p>In this method, you should first copy the value of the parameters as attributes: learning rate, epsilon, gamma and so on.</p>
-<p>Suggested values: gamma = 0.99, learning_rate = 0.005</p>
+<p>Suggested values: gamma = 0.99, learning_rate = 0.001</p>
 <p>The second thing to do is to create the trained and target networks (with the same weights) and save them as attributes (the other methods will use them). Do not forget to clear the keras session first, otherwise the RAM will be quickly filled.</p>
-<p>The third thing is to create an instance of the ERM. Use a buffer limit of 10000 transitions (should be passed as a parameter).</p>
+<p>The third thing is to create an instance of the ERM. Use a buffer limit of 5000 transitions (should be passed as a parameter).</p>
 <p>Do not hesitate to add other stuff as you implementing the other methods (e.g. counters).</p>
 </div>
 <div class="section" id="act-action-selection">
 <h3><span class="section-number">12.1.4.2. </span>2 - <code class="docutils literal notranslate"><span class="pre">act()</span></code>: action selection<a class="headerlink" href="#act-action-selection" title="Permalink to this headline">¶</a></h3>
 <p>We will use a simple <span class="math notranslate nohighlight">\(\epsilon\)</span>-greedy method for the action selection, as in the previous exercises.</p>
 <p>The only difference is that we have to use the trained model to get the greedy action, using <code class="docutils literal notranslate"><span class="pre">trained_model.predict()</span></code>. This will return the Q-value of the two actions left and right. Use <code class="docutils literal notranslate"><span class="pre">argmax()</span></code> to return the greedy action (with probability 1 - <span class="math notranslate nohighlight">\(\epsilon\)</span>). <code class="docutils literal notranslate"><span class="pre">env.action_space.sample()</span></code> should be used for the exploration (do not use the Q-network in that case, it is slow!).</p>
-<p><span class="math notranslate nohighlight">\(\epsilon\)</span> will be scheduled with an initial value of 1.0 and an exponential decay rate of 0.0002 after each action. It is always better to keep a little exploration, even if <span class="math notranslate nohighlight">\(\epsilon\)</span> has decayed to 0. Keep a minimal value of 0.05 for epsilon.</p>
+<p><span class="math notranslate nohighlight">\(\epsilon\)</span> will be scheduled with an initial value of 1.0 and an exponential decay rate of 0.0005 after each action. It is always better to keep a little exploration, even if <span class="math notranslate nohighlight">\(\epsilon\)</span> has decayed to 0. Keep a minimal value of 0.05 for epsilon.</p>
 <p><strong>Q:</strong> Once this has been implemented, run your very slow random agent for 100 episodes to check everything works correctly.</p>
 </div>
 <div class="section" id="train-training-loop">
@@ -998,9 +990,9 @@ show_video()
 </ul>
 </li>
 </ul>
-<p>The main difference with Q-learning is that <code class="docutils literal notranslate"><span class="pre">update()</span></code> will be called only every <code class="docutils literal notranslate"><span class="pre">T_train</span> <span class="pre">=</span> <span class="pre">5</span></code> steps: the number of updates to the trained network will be 5 times smaller that the number of steps made in the environment. Beware that if the ERM does not have enough transitions yet (less than the batch size), you should not call <code class="docutils literal notranslate"><span class="pre">update()</span></code>.</p>
-<p>Updating the target network (copying the weights of the trained network) should happen every 20 updates, i.e. every 100 steps. Pass these parameters to the constructor of the agent.</p>
-<p>The batch size can be set to 128.</p>
+<p>The main difference with Q-learning is that <code class="docutils literal notranslate"><span class="pre">update()</span></code> will be called only every <code class="docutils literal notranslate"><span class="pre">T_train</span> <span class="pre">=</span> <span class="pre">4</span></code> steps: the number of updates to the trained network will be 4 times smaller that the number of steps made in the environment. Beware that if the ERM does not have enough transitions yet (less than the batch size), you should not call <code class="docutils literal notranslate"><span class="pre">update()</span></code>.</p>
+<p>Updating the target network (copying the weights of the trained network) should happen every 100 steps. Pass these parameters to the constructor of the agent.</p>
+<p>The batch size can be set to 32.</p>
 </div>
 <div class="section" id="update-training-the-value-network">
 <h3><span class="section-number">12.1.4.4. </span>4 - <code class="docutils literal notranslate"><span class="pre">update()</span></code>: training the value network<a class="headerlink" href="#update-training-the-value-network" title="Permalink to this headline">¶</a></h3>
@@ -1027,7 +1019,7 @@ show_video()
 <p>That way, the first output neuron has a squared error of 0, so it won’t learn anything. Only the second output neuron will have a non-zero mse and learn.</p>
 <p>There are more efficient ways to do this (using masks), but this will do the trick, the drawback being that we have to make a forward pass on the minibatch before calling <code class="docutils literal notranslate"><span class="pre">fit()</span></code>.</p>
 <p>The rest is pretty much the same as for your Q-learning agent. Do not forget that actions leading to a terminal state should only use the reward as a target, not the complete Bellman target <span class="math notranslate nohighlight">\(r + \gamma \max Q\)</span>.</p>
-<p><em>Hint:</em> as we sample a minibatch of 128 transitions, it is faster to call:</p>
+<p><em>Hint:</em> as we sample a minibatch of 32 transitions, it is faster to call:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">Q_values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">training_model</span><span class="o">.</span><span class="n">predict_on_batch</span><span class="p">(</span><span class="n">states</span><span class="p">))</span>
 </pre></div>
 </div>
@@ -1036,12 +1028,12 @@ show_video()
 </pre></div>
 </div>
 <p>for reasons internal to tensorflow. Note that with tf2, you need to cast the result to numpy arrays as eager mode is now the default.</p>
-<p>The method should return the training loss, which is contained in the <code class="docutils literal notranslate"><span class="pre">History</span></code> object returned by <code class="docutils literal notranslate"><span class="pre">model.fit()</span></code>. <code class="docutils literal notranslate"><span class="pre">model.fit()</span></code> should be called for one epoch only, a batch size of 128, and <code class="docutils literal notranslate"><span class="pre">verbose</span></code> set to 0.</p>
+<p>The method should return the training loss, which is contained in the <code class="docutils literal notranslate"><span class="pre">History</span></code> object returned by <code class="docutils literal notranslate"><span class="pre">model.fit()</span></code>. <code class="docutils literal notranslate"><span class="pre">model.fit()</span></code> should be called for one epoch only, a batch size of 32, and <code class="docutils literal notranslate"><span class="pre">verbose</span></code> set to 0.</p>
 </div>
 <div class="section" id="test">
 <h3><span class="section-number">12.1.4.5. </span>5 - <code class="docutils literal notranslate"><span class="pre">test()</span></code><a class="headerlink" href="#test" title="Permalink to this headline">¶</a></h3>
-<p>This method should run one episode with epsilon set to 0, without learning. The number of steps should be returned (do not bother discounting with gamma, the goal is to be up for 200 steps). If <code class="docutils literal notranslate"><span class="pre">render</span></code>, call <code class="docutils literal notranslate"><span class="pre">self.env.render()</span></code> to make the video.</p>
-<p><strong>Q:</strong> Let’s go! Run the agent for 250 episodes and observe how fast it manages to keep the pole up for 200 steps.</p>
+<p>This method should run one episode with epsilon set to 0, without learning. The number of steps should be returned (do not bother discounting with gamma, the goal is to be up for 200 steps).</p>
+<p><strong>Q:</strong> Let’s go! Run the agent for 100 episodes and observe how fast it manages to keep the pole up for 200 steps.</p>
 <p>Beware that running the same network twice can lead to very different results. In particular, policy collapse (the network was almost perfect, but suddenly crashes and becomes random) can happen. Just be patient.</p>
 <p><strong>Q:</strong> How does the loss evolve? Does it make sense?</p>
 </div>
@@ -1056,8 +1048,8 @@ show_video()
         <span class="c1"># Change the content of this function only</span>
 </pre></div>
 </div>
-<p>Reduce a bit the learning rate (e.g. 0.001) as the magnitude of the targets has changed.</p>
-<p><strong>Q:</strong> Depending on the time left and your motivation, vary the different parameters to understand their influence: learning rate, target update frequency, training update frequency, epsilon decay, gamma, etc. Change the size of the network. If you find better hyperparameters than what is proposed, please report it for next year!</p>
+<p>You should reduce a bit the learning rate (e.g. 0.001) as the magnitude of the targets has changed.</p>
+<p><strong>Q:</strong> Depending on the time left and your motivation, vary the different parameters to understand their influence: learning rate, target update frequency, training update frequency, epsilon decay, gamma, etc. Change the size of the network. If you find better hyperparameters than what is proposed, please report them for next year!</p>
 </div>
 </div>
 
