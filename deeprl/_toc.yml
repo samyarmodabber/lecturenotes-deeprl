@@ -29,6 +29,7 @@
 - part: Model-based RL
   chapters:
     - file: 4-MB/1-MB
+    - file: 4-MB/2-LearnedModels
 
 - part: Exercises
   chapters:
