@@ -1,0 +1,15 @@
+# DQN
+
+The goal of this exercise is toimplement DQN on the Cartpole balancing problem.
+
+**Presentation**
+
+<div class="embed-container">
+  <iframe src="https://www.youtube.com/embed/" frameborder="0" allowfullscreen></iframe>
+</div>
+
+**Commented solution**
+
+<div class="embed-container">
+  <iframe src="https://www.youtube.com/embed/" frameborder="0" allowfullscreen></iframe>
+</div>

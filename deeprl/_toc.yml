@@ -113,6 +113,13 @@
         - file: 5-exercises/11-Keras-solution
           title: Solution
 
+    - file: 5-exercises/ex12-DQN
+      sections:
+        - file: 5-exercises/12-DQN
+          title: Notebook
+        - file: 5-exercises/12-DQN-solution
+          title: Solution
+
 
 - part: References
   chapters:
