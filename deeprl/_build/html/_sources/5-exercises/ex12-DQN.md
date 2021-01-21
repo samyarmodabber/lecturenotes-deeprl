@@ -1,6 +1,6 @@
 # DQN
 
-The goal of this exercise is toimplement DQN on the Cartpole balancing problem.
+The goal of this exercise is to implement DQN on the Cartpole balancing problem.
 
 **Presentation**
 
