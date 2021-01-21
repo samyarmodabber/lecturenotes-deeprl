@@ -30,7 +30,7 @@
   chapters:
     - file: 4-MB/1-MB
     - file: 4-MB/2-LearnedModels
-    - file: 4-MB/3-AlphaGo
+    #- file: 4-MB/3-AlphaGo
 
 - part: Exercises
   chapters:
