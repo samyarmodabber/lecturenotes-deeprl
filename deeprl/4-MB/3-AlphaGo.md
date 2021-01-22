@@ -1,8 +1,11 @@
 # AlphaGo
 
+Slides: [pdf](https://www.tu-chemnitz.de/informatik/KI/edu/deeprl/lectures/pdf/4.3-AlphaGo.pdf)
+
 
 ## The game of Go
 
+<div class='embed-container'><iframe src='https://www.youtube.com/embed/kTguIv-D8NI' frameborder='0' allowfullscreen></iframe></div>
 
 ```{note} Play Go in Chemnitz:
 
@@ -68,6 +71,8 @@ Game (sub-)tree of Go. Source: <https://www.quora.com/What-does-it-mean-that-Alp
 ```
 
 ## AlphaGo
+
+<div class='embed-container'><iframe src='https://www.youtube.com/embed/XrHoydElCaM' frameborder='0' allowfullscreen></iframe></div>
 
 ### Architecture
 
@@ -218,6 +223,9 @@ Source: <https://medium.com/@karpathy/alphago-in-context-c47718cb95a5>
 
 ## AlphaZero
 
+
+<div class='embed-container'><iframe src='https://www.youtube.com/embed/fHpNbQEDIB8' frameborder='0' allowfullscreen></iframe></div>
+
 ```{figure} ../img/AlphaZero-perf.gif
 ---
 width: 100%
@@ -229,7 +237,7 @@ AlphaZero {cite}`Silver2018` totally skips the **supervised learning** part: the
 
 ```{figure} ../img/alphazero.jpg
 ---
-width: 100%
+width: 80%
 ---
 Architecture of AlphaZero {cite}`Silver2018`.
 ```
