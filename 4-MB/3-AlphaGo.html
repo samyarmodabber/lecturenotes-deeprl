@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>AlphaGo &#8212; Deep Reinforcement Learning</title>
+    <title>3. AlphaGo &#8212; Deep Reinforcement Learning</title>
     
   <link rel="stylesheet" href="../_static/css/index.73d71520a4ca3b99cfee5594769eaaae.css">
 
@@ -58,6 +58,8 @@
     <link rel="canonical" href="https://julien-vitay.net/lecturenotes-deeprl/4-MB/3-AlphaGo.html" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="1. Introduction to Python" href="../5-exercises/ex1-Python.html" />
+    <link rel="prev" title="2. Learned world models" href="2-LearnedModels.html" />
 
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="en" />
@@ -67,7 +69,7 @@
 <meta property="og:url"         content="https://julien-vitay.net/lecturenotes-deeprl/4-MB/3-AlphaGo.html" />
 <meta property="og:type"        content="article" />
 <meta property="og:title"       content="AlphaGo" />
-<meta property="og:description" content="AlphaGo  The game of Go  Note  Play Go in Chemnitz:  https://www.facebook.com/GoClubChemnitz/    The Goban.  Go is an ancient two-opponents board game, where ea" />
+<meta property="og:description" content="AlphaGo  Slides: pdf  The game of Go  &lt;div class=&#39;embed-container&#39;&gt;&lt;iframe src=&#39;https://www.youtube.com/embed/kTguIv-D8NI&#39; frameborder=&#39;0&#39; allowfullscreen&gt;&lt;/ifr" />
 <meta property="og:image"       content="https://julien-vitay.net/lecturenotes-deeprl/_static/tuc.svg" />
 
 <meta name="twitter:card" content="summary" />
@@ -209,7 +211,7 @@
   Model-based RL
  </span>
 </p>
-<ul class="nav sidenav_l1">
+<ul class="current nav sidenav_l1">
  <li class="toctree-l1">
   <a class="reference internal" href="1-MB.html">
    1. Model-based RL
@@ -218,6 +220,11 @@
  <li class="toctree-l1">
   <a class="reference internal" href="2-LearnedModels.html">
    2. Learned world models
+  </a>
+ </li>
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   3. AlphaGo
   </a>
  </li>
 </ul>
@@ -539,49 +546,49 @@
             <ul class="nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#the-game-of-go">
-   The game of Go
+   3.1. The game of Go
   </a>
   <ul class="nav section-nav flex-column">
    <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#minimax-and-alpha-beta">
-     Minimax and Alpha-Beta
+     3.1.1. Minimax and Alpha-Beta
     </a>
    </li>
   </ul>
  </li>
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#id1">
-   AlphaGo
+   3.2. AlphaGo
   </a>
   <ul class="nav section-nav flex-column">
    <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#architecture">
-     Architecture
+     3.2.1. Architecture
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#monte-carlo-tree-search">
-     Monte-Carlo Tree Search
+     3.2.2. Monte-Carlo Tree Search
     </a>
     <ul class="nav section-nav flex-column">
      <li class="toc-h4 nav-item toc-entry">
       <a class="reference internal nav-link" href="#selection-phase">
-       Selection phase
+       3.2.2.1. Selection phase
       </a>
      </li>
      <li class="toc-h4 nav-item toc-entry">
       <a class="reference internal nav-link" href="#expansion-phase">
-       Expansion phase
+       3.2.2.2. Expansion phase
       </a>
      </li>
      <li class="toc-h4 nav-item toc-entry">
       <a class="reference internal nav-link" href="#evaluaiton-phase">
-       Evaluaiton phase
+       3.2.2.3. Evaluaiton phase
       </a>
      </li>
      <li class="toc-h4 nav-item toc-entry">
       <a class="reference internal nav-link" href="#backup-phase">
-       Backup phase
+       3.2.2.4. Backup phase
       </a>
      </li>
     </ul>
@@ -590,12 +597,12 @@
  </li>
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#alphazero">
-   AlphaZero
+   3.3. AlphaZero
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#muzero">
-   MuZero
+   3.4. MuZero
   </a>
  </li>
 </ul>
@@ -610,9 +617,11 @@
               <div>
                 
   <div class="section" id="alphago">
-<h1>AlphaGo<a class="headerlink" href="#alphago" title="Permalink to this headline">¶</a></h1>
+<h1><span class="section-number">3. </span>AlphaGo<a class="headerlink" href="#alphago" title="Permalink to this headline">¶</a></h1>
+<p>Slides: <a class="reference external" href="https://www.tu-chemnitz.de/informatik/KI/edu/deeprl/lectures/pdf/4.3-AlphaGo.pdf">pdf</a></p>
 <div class="section" id="the-game-of-go">
-<h2>The game of Go<a class="headerlink" href="#the-game-of-go" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">3.1. </span>The game of Go<a class="headerlink" href="#the-game-of-go" title="Permalink to this headline">¶</a></h2>
+<div class='embed-container'><iframe src='https://www.youtube.com/embed/kTguIv-D8NI' frameborder='0' allowfullscreen></iframe></div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Play Go in Chemnitz:</p>
@@ -620,21 +629,21 @@
 </div>
 <div class="figure align-default" id="id14">
 <a class="reference internal image-reference" href="../_images/go.png"><img alt="../_images/go.png" src="../_images/go.png" style="width: 60%;" /></a>
-<p class="caption"><span class="caption-text">The Goban.</span><a class="headerlink" href="#id14" title="Permalink to this image">¶</a></p>
+<p class="caption"><span class="caption-number">Fig. 3.14 </span><span class="caption-text">The Goban.</span><a class="headerlink" href="#id14" title="Permalink to this image">¶</a></p>
 </div>
 <p><strong>Go</strong> is an ancient two-opponents board game, where each player successively places stones on a 19x19 grid. When a stone is surrounded by four opponents, it dies. The goal is to ensure strategical position in order to cover the biggest territory. There are around <span class="math notranslate nohighlight">\(10^{170}\)</span> possible states and 250 actions available at each turn (<span class="math notranslate nohighlight">\(10^{761}\)</span> possible games), making it a much harder game than chess for a computer (35 possible actions, <span class="math notranslate nohighlight">\(10^{120}\)</span> possible games). A game lasts 150 moves on average (80 in chess). Up until 2015 and <strong>AlphaGo</strong>, Go AIs could not compete with world-class experts, and people usually considered AI would need at least another 20 years to solve it.</p>
 <div class="section" id="minimax-and-alpha-beta">
-<h3>Minimax and Alpha-Beta<a class="headerlink" href="#minimax-and-alpha-beta" title="Permalink to this headline">¶</a></h3>
+<h3><span class="section-number">3.1.1. </span>Minimax and Alpha-Beta<a class="headerlink" href="#minimax-and-alpha-beta" title="Permalink to this headline">¶</a></h3>
 <div class="figure align-default" id="id15">
 <a class="reference internal image-reference" href="../_images/minimax.png"><img alt="../_images/minimax.png" src="../_images/minimax.png" style="width: 100%;" /></a>
-<p class="caption"><span class="caption-text">Example of a game tree.</span><a class="headerlink" href="#id15" title="Permalink to this image">¶</a></p>
+<p class="caption"><span class="caption-number">Fig. 3.15 </span><span class="caption-text">Example of a game tree.</span><a class="headerlink" href="#id15" title="Permalink to this image">¶</a></p>
 </div>
 <p><strong>Minimax</strong> algorithm expand the whole game tree, simulating the moves of the MAX (you) and MIN (your opponent) players.
 The final outcome (win or lose) is assigned to the leaves.
 It allows to solve <strong>zero sum games</strong>: what MAX wins is lost by MIN, and vice-versa. We suppose MIN plays optimally (i.e. in his own interest).</p>
 <div class="figure align-default" id="id16">
 <a class="reference internal image-reference" href="../_images/minimax-sol.png"><img alt="../_images/minimax-sol.png" src="../_images/minimax-sol.png" style="width: 100%;" /></a>
-<p class="caption"><span class="caption-text">Minimax iteratively backpropagates the value of the leaves according to who plays.</span><a class="headerlink" href="#id16" title="Permalink to this image">¶</a></p>
+<p class="caption"><span class="caption-number">Fig. 3.16 </span><span class="caption-text">Minimax iteratively backpropagates the value of the leaves according to who plays.</span><a class="headerlink" href="#id16" title="Permalink to this image">¶</a></p>
 </div>
 <p>The value of the leaves is propagated backwards to the starting position: MAX chooses the action leading to the state with the highest value, MIN does the opposite.
 For most games, the tree becomes too huge for such a systematic search:</p>
@@ -645,7 +654,7 @@ For most games, the tree becomes too huge for such a systematic search:</p>
 <p>Alpha-Beta methods work well for simple problems where the complete game tree can be manipulated: Tic-Tac-Toe has only a couple of possible states and actions (<span class="math notranslate nohighlight">\(3^9 = 19000\)</span> states).</p>
 <div class="figure align-default" id="id17">
 <a class="reference internal image-reference" href="../_images/tictactoe.jpg"><img alt="../_images/tictactoe.jpg" src="../_images/tictactoe.jpg" style="width: 100%;" /></a>
-<p class="caption"><span class="caption-text">Game tree of tic-tac-toe.</span><a class="headerlink" href="#id17" title="Permalink to this image">¶</a></p>
+<p class="caption"><span class="caption-number">Fig. 3.17 </span><span class="caption-text">Game tree of tic-tac-toe.</span><a class="headerlink" href="#id17" title="Permalink to this image">¶</a></p>
 </div>
 <p>It also works when precise heuristics can be derived in a reasonable time.
 This is the principle of <strong>IBM DeepBlue</strong> which was the first Chess AI to beat a world champion (Garry Kasparov) in 1995.
@@ -654,14 +663,15 @@ Carefully engineered heuristics (with the help of chess masters) allowed DeepBlu
 <span class="math notranslate nohighlight">\(250^{6} \approx 10^{15}\)</span>, so even if your processor evaluates 1 billion nodes per second, it would need 11 days to evaluate a single position 6 moves away…</p>
 <div class="figure align-default" id="id18">
 <a class="reference internal image-reference" href="../_images/gotree.png"><img alt="../_images/gotree.png" src="../_images/gotree.png" style="width: 100%;" /></a>
-<p class="caption"><span class="caption-text">Game (sub-)tree of Go. Source: <a class="reference external" href="https://www.quora.com/What-does-it-mean-that-AlphaGo-relied-on-Monte-Carlo-tree-search/answer/Kostis-Gourgoulias">https://www.quora.com/What-does-it-mean-that-AlphaGo-relied-on-Monte-Carlo-tree-search/answer/Kostis-Gourgoulias</a></span><a class="headerlink" href="#id18" title="Permalink to this image">¶</a></p>
+<p class="caption"><span class="caption-number">Fig. 3.18 </span><span class="caption-text">Game (sub-)tree of Go. Source: <a class="reference external" href="https://www.quora.com/What-does-it-mean-that-AlphaGo-relied-on-Monte-Carlo-tree-search/answer/Kostis-Gourgoulias">https://www.quora.com/What-does-it-mean-that-AlphaGo-relied-on-Monte-Carlo-tree-search/answer/Kostis-Gourgoulias</a></span><a class="headerlink" href="#id18" title="Permalink to this image">¶</a></p>
 </div>
 </div>
 </div>
 <div class="section" id="id1">
-<h2>AlphaGo<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">3.2. </span>AlphaGo<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<div class='embed-container'><iframe src='https://www.youtube.com/embed/XrHoydElCaM' frameborder='0' allowfullscreen></iframe></div>
 <div class="section" id="architecture">
-<h3>Architecture<a class="headerlink" href="#architecture" title="Permalink to this headline">¶</a></h3>
+<h3><span class="section-number">3.2.1. </span>Architecture<a class="headerlink" href="#architecture" title="Permalink to this headline">¶</a></h3>
 <p>AlphaGo <a class="bibtex reference internal" href="../zreferences.html#silver2016" id="id2">[Silver et al., 2016]</a> uses four different neural networks:</p>
 <ul class="simple">
 <li><p>The <strong>rollout policy</strong> and the <strong>SL policy network</strong> use supervised learning to predict expert human moves in any state.</p></li>
@@ -671,7 +681,7 @@ Carefully engineered heuristics (with the help of chess masters) allowed DeepBlu
 <p>The rollout policy and the value network are used to guide stochastic tree exploration in <strong>Monte-Carlo Tree Search (MCTS)</strong> (MPC-like planning algorithm).</p>
 <div class="figure align-default" id="id19">
 <a class="reference internal image-reference" href="../_images/alphago.png"><img alt="../_images/alphago.png" src="../_images/alphago.png" style="width: 100%;" /></a>
-<p class="caption"><span class="caption-text">Architecture of AlphaGo <a class="bibtex reference internal" href="../zreferences.html#silver2016" id="id3">[Silver et al., 2016]</a>.</span><a class="headerlink" href="#id19" title="Permalink to this image">¶</a></p>
+<p class="caption"><span class="caption-number">Fig. 3.19 </span><span class="caption-text">Architecture of AlphaGo <a class="bibtex reference internal" href="../zreferences.html#silver2016" id="id3">[Silver et al., 2016]</a>.</span><a class="headerlink" href="#id19" title="Permalink to this image">¶</a></p>
 </div>
 <p>Supervised learning is used for bootstrapping the policy network.</p>
 <p>A <strong>policy network</strong> <span class="math notranslate nohighlight">\(\rho_\sigma\)</span> is trained to predict human expert moves:</p>
@@ -700,24 +710,24 @@ The RL policy network already wins 85% of the time against the strongest AI at t
 A <strong>value network</strong> <span class="math notranslate nohighlight">\(\nu_\theta\)</span> finally learns to predict the outcome of a game (+1 when winning, -1 when losing) based on the self-play positions generated by the RL policy network.</p>
 <div class="figure align-default" id="id20">
 <a class="reference internal image-reference" href="../_images/alphago-policy.jpg"><img alt="../_images/alphago-policy.jpg" src="../_images/alphago-policy.jpg" style="width: 50%;" /></a>
-<p class="caption"><span class="caption-text">The policy network learns the probability of selecting different moves. Source: <a class="bibtex reference internal" href="../zreferences.html#silver2016" id="id4">[Silver et al., 2016]</a>.</span><a class="headerlink" href="#id20" title="Permalink to this image">¶</a></p>
+<p class="caption"><span class="caption-number">Fig. 3.20 </span><span class="caption-text">The policy network learns the probability of selecting different moves. Source: <a class="bibtex reference internal" href="../zreferences.html#silver2016" id="id4">[Silver et al., 2016]</a>.</span><a class="headerlink" href="#id20" title="Permalink to this image">¶</a></p>
 </div>
 <div class="figure align-default" id="id21">
 <a class="reference internal image-reference" href="../_images/alphago-value.jpg"><img alt="../_images/alphago-value.jpg" src="../_images/alphago-value.jpg" style="width: 50%;" /></a>
-<p class="caption"><span class="caption-text">The value network learns to predict the value of any possible state under the learned policy. Source: <a class="bibtex reference internal" href="../zreferences.html#silver2016" id="id5">[Silver et al., 2016]</a>.</span><a class="headerlink" href="#id21" title="Permalink to this image">¶</a></p>
+<p class="caption"><span class="caption-number">Fig. 3.21 </span><span class="caption-text">The value network learns to predict the value of any possible state under the learned policy. Source: <a class="bibtex reference internal" href="../zreferences.html#silver2016" id="id5">[Silver et al., 2016]</a>.</span><a class="headerlink" href="#id21" title="Permalink to this image">¶</a></p>
 </div>
 </div>
 <div class="section" id="monte-carlo-tree-search">
-<h3>Monte-Carlo Tree Search<a class="headerlink" href="#monte-carlo-tree-search" title="Permalink to this headline">¶</a></h3>
+<h3><span class="section-number">3.2.2. </span>Monte-Carlo Tree Search<a class="headerlink" href="#monte-carlo-tree-search" title="Permalink to this headline">¶</a></h3>
 <div class="figure align-default" id="id22">
 <a class="reference internal image-reference" href="../_images/mcts.png"><img alt="../_images/mcts.png" src="../_images/mcts.png" style="width: 100%;" /></a>
-<p class="caption"><span class="caption-text">Monte-Carlo Tree Search (MCTS). Source: <a class="bibtex reference internal" href="../zreferences.html#silver2016" id="id6">[Silver et al., 2016]</a>.</span><a class="headerlink" href="#id22" title="Permalink to this image">¶</a></p>
+<p class="caption"><span class="caption-number">Fig. 3.22 </span><span class="caption-text">Monte-Carlo Tree Search (MCTS). Source: <a class="bibtex reference internal" href="../zreferences.html#silver2016" id="id6">[Silver et al., 2016]</a>.</span><a class="headerlink" href="#id22" title="Permalink to this image">¶</a></p>
 </div>
 <p>The final AlphaGo player uses <strong>Monte-Carlo Tree Search</strong> (MCTS), which is an incremental tree search (depth-limited), biased by the Q-value of known transitions.
 The game tree is traversed depth-first from the current state, but the order of the visits depends on the value of the transition.
 MCTS was previously the standard approach for Go AIs, but based on expert moves only, not deep networks. One step of MCTS consists of four phases:</p>
 <div class="section" id="selection-phase">
-<h4>Selection phase<a class="headerlink" href="#selection-phase" title="Permalink to this headline">¶</a></h4>
+<h4><span class="section-number">3.2.2.1. </span>Selection phase<a class="headerlink" href="#selection-phase" title="Permalink to this headline">¶</a></h4>
 <p>In the <strong>selection phase</strong>, a path is found in the tree of possible actions using <strong>Upper Confidence Bound</strong> (UCB).
 The probability of selecting an action when sampling the tree depends on:</p>
 <ul class="simple">
@@ -729,7 +739,7 @@ The probability of selecting an action when sampling the tree depends on:</p>
 \[a_t = \text{argmax}_a \, Q(s, a) + K \cdot \frac{P(s, a)}{1 + N(s, a)}\]</div>
 </div>
 <div class="section" id="expansion-phase">
-<h4>Expansion phase<a class="headerlink" href="#expansion-phase" title="Permalink to this headline">¶</a></h4>
+<h4><span class="section-number">3.2.2.2. </span>Expansion phase<a class="headerlink" href="#expansion-phase" title="Permalink to this headline">¶</a></h4>
 <p>In the <strong>expansion phase</strong>, a leaf state <span class="math notranslate nohighlight">\(s_L\)</span> of the game tree is reached.
 The leaf is <strong>expanded</strong>, and the possible successors of that state are added to the tree.
 One requires a <strong>model</strong> to know which states are possible successors, but this is very easy in Go.</p>
@@ -738,7 +748,7 @@ One requires a <strong>model</strong> to know which states are possible successo
 <p>The tree therefore grows every time a <strong>Monte-Carlo sampling</strong> (“episode”) is done.</p>
 </div>
 <div class="section" id="evaluaiton-phase">
-<h4>Evaluaiton phase<a class="headerlink" href="#evaluaiton-phase" title="Permalink to this headline">¶</a></h4>
+<h4><span class="section-number">3.2.2.3. </span>Evaluaiton phase<a class="headerlink" href="#evaluaiton-phase" title="Permalink to this headline">¶</a></h4>
 <p>In the <strong>evaluation phase</strong>, the leaf <span class="math notranslate nohighlight">\(s_L\)</span> is evaluated both by</p>
 <ul class="simple">
 <li><p>the RL value network <span class="math notranslate nohighlight">\(\nu_\theta\)</span> (how likely can we win from that state)</p></li>
@@ -751,7 +761,7 @@ The rollout is of course imperfect, but complements the value network: they are 
 <p>This solves the bias/variance trade-off.</p>
 </div>
 <div class="section" id="backup-phase">
-<h4>Backup phase<a class="headerlink" href="#backup-phase" title="Permalink to this headline">¶</a></h4>
+<h4><span class="section-number">3.2.2.4. </span>Backup phase<a class="headerlink" href="#backup-phase" title="Permalink to this headline">¶</a></h4>
 <p>In the <strong>backup phase</strong>, the Q-values of all actions taken when descending the tree are updated with the value of the leaf node:</p>
 <div class="math notranslate nohighlight">
 \[Q(s, a) = \frac{1}{N(s, a)} \sum_{i=1}^{n} V(s_L^i) \]</div>
@@ -787,15 +797,16 @@ Training took several weeks on 1202 CPUs and 176 GPUs.</p>
 </div>
 </div>
 <div class="section" id="alphazero">
-<h2>AlphaZero<a class="headerlink" href="#alphazero" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">3.3. </span>AlphaZero<a class="headerlink" href="#alphazero" title="Permalink to this headline">¶</a></h2>
+<div class='embed-container'><iframe src='https://www.youtube.com/embed/fHpNbQEDIB8' frameborder='0' allowfullscreen></iframe></div>
 <div class="figure align-default" id="id23">
 <a class="reference internal image-reference" href="../_images/AlphaZero-perf.gif"><img alt="../_images/AlphaZero-perf.gif" src="../_images/AlphaZero-perf.gif" style="width: 100%;" /></a>
-<p class="caption"><span class="caption-text">Performance of AlphaZero <a class="bibtex reference internal" href="../zreferences.html#silver2018" id="id7">[Silver et al., 2018]</a>. Source: <a class="reference external" href="https://deepmind.com/blog/alphago-zero-learning-scratch/">https://deepmind.com/blog/alphago-zero-learning-scratch/</a>.</span><a class="headerlink" href="#id23" title="Permalink to this image">¶</a></p>
+<p class="caption"><span class="caption-number">Fig. 3.23 </span><span class="caption-text">Performance of AlphaZero <a class="bibtex reference internal" href="../zreferences.html#silver2018" id="id7">[Silver et al., 2018]</a>. Source: <a class="reference external" href="https://deepmind.com/blog/alphago-zero-learning-scratch/">https://deepmind.com/blog/alphago-zero-learning-scratch/</a>.</span><a class="headerlink" href="#id23" title="Permalink to this image">¶</a></p>
 </div>
 <p>AlphaZero <a class="bibtex reference internal" href="../zreferences.html#silver2018" id="id8">[Silver et al., 2018]</a> totally skips the <strong>supervised learning</strong> part: the RL policy network starts self-play from scratch!</p>
 <div class="figure align-default" id="id24">
-<a class="reference internal image-reference" href="../_images/alphazero.jpg"><img alt="../_images/alphazero.jpg" src="../_images/alphazero.jpg" style="width: 100%;" /></a>
-<p class="caption"><span class="caption-text">Architecture of AlphaZero <a class="bibtex reference internal" href="../zreferences.html#silver2018" id="id9">[Silver et al., 2018]</a>.</span><a class="headerlink" href="#id24" title="Permalink to this image">¶</a></p>
+<a class="reference internal image-reference" href="../_images/alphazero.jpg"><img alt="../_images/alphazero.jpg" src="../_images/alphazero.jpg" style="width: 80%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 3.24 </span><span class="caption-text">Architecture of AlphaZero <a class="bibtex reference internal" href="../zreferences.html#silver2018" id="id9">[Silver et al., 2018]</a>.</span><a class="headerlink" href="#id24" title="Permalink to this image">¶</a></p>
 </div>
 <p>The RL policy network uses MCTS to select moves, not a softmax-like selection as in AlphaGo.
 The policy and value networks are merged into a <strong>two-headed monster</strong>: the convolutional residual layers are shared to predict both:</p>
@@ -829,7 +840,7 @@ The value network <span class="math notranslate nohighlight">\(V_\varphi(s)\)</s
 <p>By using a single network instead of four and learning faster, AlphaZero also greatly reduces the energy consumption.</p>
 <div class="figure align-default" id="id25">
 <a class="reference internal image-reference" href="../_images/alphazero-efficiency.png"><img alt="../_images/alphazero-efficiency.png" src="../_images/alphazero-efficiency.png" style="width: 100%;" /></a>
-<p class="caption"><span class="caption-text">Power consumption of AlphaZero <a class="bibtex reference internal" href="../zreferences.html#silver2018" id="id10">[Silver et al., 2018]</a>. Source: <a class="reference external" href="https://deepmind.com/blog/article/alphazero-shedding-new-light-grand-games-chess-shogi-and-go">https://deepmind.com/blog/article/alphazero-shedding-new-light-grand-games-chess-shogi-and-go</a>.</span><a class="headerlink" href="#id25" title="Permalink to this image">¶</a></p>
+<p class="caption"><span class="caption-number">Fig. 3.25 </span><span class="caption-text">Power consumption of AlphaZero <a class="bibtex reference internal" href="../zreferences.html#silver2018" id="id10">[Silver et al., 2018]</a>. Source: <a class="reference external" href="https://deepmind.com/blog/article/alphazero-shedding-new-light-grand-games-chess-shogi-and-go">https://deepmind.com/blog/article/alphazero-shedding-new-light-grand-games-chess-shogi-and-go</a>.</span><a class="headerlink" href="#id25" title="Permalink to this image">¶</a></p>
 </div>
 <p><strong>The same algorithm can also play Chess and Shogi!</strong>
 The network weights are reset for each game, but it uses the same architecture and hyperparameters.
@@ -837,18 +848,18 @@ After only 8 hours of training, AlphaZero beats Stockfish with 28-72-00, the bes
 This proves the algorithm is generic and can be applied to any board game.</p>
 <div class="figure align-default" id="id26">
 <a class="reference internal image-reference" href="../_images/alphazero.gif"><img alt="../_images/alphazero.gif" src="../_images/alphazero.gif" style="width: 100%;" /></a>
-<p class="caption"><span class="caption-text">AlphaZero can reach sota performance on Go, Cjess and Shogi. Source: <a class="reference external" href="https://deepmind.com/blog/article/alphazero-shedding-new-light-grand-games-chess-shogi-and-go">https://deepmind.com/blog/article/alphazero-shedding-new-light-grand-games-chess-shogi-and-go</a></span><a class="headerlink" href="#id26" title="Permalink to this image">¶</a></p>
+<p class="caption"><span class="caption-number">Fig. 3.26 </span><span class="caption-text">AlphaZero can reach sota performance on Go, Cjess and Shogi. Source: <a class="reference external" href="https://deepmind.com/blog/article/alphazero-shedding-new-light-grand-games-chess-shogi-and-go">https://deepmind.com/blog/article/alphazero-shedding-new-light-grand-games-chess-shogi-and-go</a></span><a class="headerlink" href="#id26" title="Permalink to this image">¶</a></p>
 </div>
 </div>
 <div class="section" id="muzero">
-<h2>MuZero<a class="headerlink" href="#muzero" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">3.4. </span>MuZero<a class="headerlink" href="#muzero" title="Permalink to this headline">¶</a></h2>
 <p>MuZero <a class="bibtex reference internal" href="../zreferences.html#schrittwieser2019" id="id11">[Schrittwieser et al., 2019]</a> is the latest extension of AlphaZero.
 Instead of relying on a perfect simulator for the MCTS, it learns the dynamics model instead.</p>
 <div class="math notranslate nohighlight">
 \[s_{t+1}, r_{t+1} = f(s_t, a_t)\]</div>
 <div class="figure align-default" id="id27">
 <a class="reference internal image-reference" href="../_images/muzero.png"><img alt="../_images/muzero.png" src="../_images/muzero.png" style="width: 100%;" /></a>
-<p class="caption"><span class="caption-text">Architecture of MuZero <a class="bibtex reference internal" href="../zreferences.html#schrittwieser2019" id="id12">[Schrittwieser et al., 2019]</a>.</span><a class="headerlink" href="#id27" title="Permalink to this image">¶</a></p>
+<p class="caption"><span class="caption-number">Fig. 3.27 </span><span class="caption-text">Architecture of MuZero <a class="bibtex reference internal" href="../zreferences.html#schrittwieser2019" id="id12">[Schrittwieser et al., 2019]</a>.</span><a class="headerlink" href="#id27" title="Permalink to this image">¶</a></p>
 </div>
 <p>MuZero is composed of three neural networks:</p>
 <ul class="simple">
@@ -869,7 +880,7 @@ Self-played games are stored in a huge experience replay memory.</p>
 <p>MuZero beats AlphaZero on Chess, Go and Shogi, but also R2D2 on Atari games. The representation network <span class="math notranslate nohighlight">\(h\)</span> allows to encode the Atari frames in a compressed manner that allows planning over raw images.</p>
 <div class="figure align-default" id="id28">
 <a class="reference internal image-reference" href="../_images/muzero-results.png"><img alt="../_images/muzero-results.png" src="../_images/muzero-results.png" style="width: 100%;" /></a>
-<p class="caption"><span class="caption-text">Performance of MuZero <a class="bibtex reference internal" href="../zreferences.html#schrittwieser2019" id="id13">[Schrittwieser et al., 2019]</a>.</span><a class="headerlink" href="#id28" title="Permalink to this image">¶</a></p>
+<p class="caption"><span class="caption-number">Fig. 3.28 </span><span class="caption-text">Performance of MuZero <a class="bibtex reference internal" href="../zreferences.html#schrittwieser2019" id="id13">[Schrittwieser et al., 2019]</a>.</span><a class="headerlink" href="#id28" title="Permalink to this image">¶</a></p>
 </div>
 </div>
 </div>
@@ -902,6 +913,8 @@ Self-played games are stored in a huge experience replay memory.</p>
     
     <div class='prev-next-bottom'>
         
+    <a class='left-prev' id="prev-link" href="2-LearnedModels.html" title="previous page"><span class="section-number">2. </span>Learned world models</a>
+    <a class='right-next' id="next-link" href="../5-exercises/ex1-Python.html" title="next page"><span class="section-number">1. </span>Introduction to Python</a>
 
     </div>
     <footer class="footer mt-5 mt-md-0">
