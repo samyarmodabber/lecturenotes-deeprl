@@ -1,0 +1,1047 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>4. Successor representations &#8212; Deep Reinforcement Learning</title>
+    
+  <link rel="stylesheet" href="../_static/css/index.73d71520a4ca3b99cfee5594769eaaae.css">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+  <link rel="stylesheet"
+    href="../_static/vendor/open-sans_all/1.44.1/index.css">
+  <link rel="stylesheet"
+    href="../_static/vendor/lato_latin-ext/1.44.1/index.css">
+
+    
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/sphinx-book-theme.40e2e510f6b7d1648584402491bb10fe.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/style.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    
+  <link rel="preload" as="script" href="../_static/js/index.3da636dd464baa7582d2.js">
+
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/togglebutton.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../_static/sphinx-book-theme.d31b09fe5c1d09cb49b26a786de4a05d.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processRefs": false, "processEnvironments": false}})</script>
+    <script async="async" src="https://unpkg.com/thebelab@latest/lib/index.js"></script>
+    <script >
+        const thebe_selector = ".thebe"
+        const thebe_selector_input = "pre"
+        const thebe_selector_output = ".output"
+    </script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <link rel="canonical" href="https://julien-vitay.net/lecturenotes-deeprl/4-MB/4-SR.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="1. Introduction to Python" href="../5-exercises/ex1-Python.html" />
+    <link rel="prev" title="3. AlphaGo" href="3-AlphaGo.html" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en" />
+
+
+<!-- Opengraph tags -->
+<meta property="og:url"         content="https://julien-vitay.net/lecturenotes-deeprl/4-MB/4-SR.html" />
+<meta property="og:type"        content="article" />
+<meta property="og:title"       content="Successor representations" />
+<meta property="og:description" content="Successor representations  Slides: pdf  Model-based vs. Model-free  &lt;div class=&#39;embed-container&#39;&gt;&lt;iframe src=&#39;https://www.youtube.com/embed/jt9YvApme3Q&#39; framebo" />
+<meta property="og:image"       content="https://julien-vitay.net/lecturenotes-deeprl/_static/tuc.svg" />
+
+<meta name="twitter:card" content="summary" />
+
+
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
+<a class="navbar-brand text-wrap" href="../index.html">
+  
+  <img src="../_static/tuc.svg" class="logo" alt="logo">
+  
+  
+  <h1 class="site-logo" id="site-title">Deep Reinforcement Learning</h1>
+  
+</a>
+</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form>
+<nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+    <ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../intro.html">
+   Deep Reinforcement Learning
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Introduction
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../1-intro/1-Introduction.html">
+   1. Introduction
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../1-intro/2-Math.html">
+   2. Math basics
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Tabular RL
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../2-tabular/1-Bandits.html">
+   1. Bandits
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../2-tabular/2-MDP.html">
+   2. Markov Decision Processes
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../2-tabular/3-DP.html">
+   3. Dynamic Programming
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../2-tabular/4-MC.html">
+   4. Monte-Carlo (MC) methods
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../2-tabular/5-TD.html">
+   5. Temporal Difference learning
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../2-tabular/6-FA.html">
+   6. Function approximation
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../2-tabular/7-NN.html">
+   7. Deep learning
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Model-free RL
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../3-MF/1-DQN.html">
+   1. Deep Q-Learning (DQN)
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../3-MF/2-BeyondDQN.html">
+   2. Beyond DQN
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../3-MF/3-PG.html">
+   3. Policy gradient (PG)
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../3-MF/4-A3C.html">
+   4. Advantage actor-critic (A2C, A3C)
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../3-MF/5-DDPG.html">
+   5. Deep Deterministic Policy Gradient (DDPG)
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../3-MF/6-PPO.html">
+   6. Natural gradients (TRPO, PPO)
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../3-MF/7-SAC.html">
+   7. Maximum Entropy RL (SAC)
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Model-based RL
+ </span>
+</p>
+<ul class="current nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="1-MB.html">
+   1. Model-based RL
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="2-LearnedModels.html">
+   2. Learned world models
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="3-AlphaGo.html">
+   3. AlphaGo
+  </a>
+ </li>
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   4. Successor representations
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Exercises
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="../5-exercises/ex1-Python.html">
+   1. Introduction to Python
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="../5-exercises/1-Python.html">
+     1.1. Notebook
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../5-exercises/1-Python-solution.html">
+     1.2. Solution
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="../5-exercises/ex2-Numpy.html">
+   2. Numpy and Matplotlib
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="../5-exercises/2-Numpy.html">
+     2.1. Notebook
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../5-exercises/2-Numpy-solution.html">
+     2.2. Solution
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="../5-exercises/ex3-Sampling.html">
+   3. Sampling
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="../5-exercises/3-Sampling.html">
+     3.1. Notebook
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../5-exercises/3-Sampling-solution.html">
+     3.2. Solution
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="../5-exercises/ex4-Bandits.html">
+   4. Bandits (part 1)
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="../5-exercises/4-Bandits.html">
+     4.1. Notebook
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../5-exercises/4-Bandits-solution.html">
+     4.2. Solution
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="../5-exercises/ex5-Bandits2.html">
+   5. Bandits (part 2)
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="../5-exercises/5-Bandits2.html">
+     5.1. Notebook
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../5-exercises/5-Bandits2-solution.html">
+     5.2. Solution
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="../5-exercises/ex6-DP.html">
+   6. Dynamic programming
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="../5-exercises/6-DP.html">
+     6.1. Notebook
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../5-exercises/6-DP-solution.html">
+     6.2. Solution
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="../5-exercises/ex7-Gym.html">
+   7. Gym environments
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="../5-exercises/7-Gym.html">
+     7.1. Notebook
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../5-exercises/7-Gym-solution.html">
+     7.2. Solution
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="../5-exercises/ex8-MC.html">
+   8. Monte-Carlo control
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="../5-exercises/8-MonteCarlo.html">
+     8.1. Notebook
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../5-exercises/8-MonteCarlo-solution.html">
+     8.2. Solution
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="../5-exercises/ex9-TD.html">
+   9. Q-learning
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="../5-exercises/9-TD.html">
+     9.1. Notebook
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../5-exercises/9-TD-solution.html">
+     9.2. Solution
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="../5-exercises/ex10-Eligibilitytraces.html">
+   10. Eligibility traces
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="../5-exercises/10-Eligibilitytraces.html">
+     10.1. Notebook
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../5-exercises/10-Eligibilitytraces-solution.html">
+     10.2. Solution
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="../5-exercises/ex11-Keras.html">
+   11. Keras
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="../5-exercises/11-Keras.html">
+     11.1. Notebook
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../5-exercises/11-Keras-solution.html">
+     11.2. Solution
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="../5-exercises/ex12-DQN.html">
+   12. DQN
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="../5-exercises/12-DQN.html">
+     12.1. Notebook
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../5-exercises/12-DQN-solution.html">
+     12.2. Solution
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  References
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../zreferences.html">
+   1. Bibliography
+  </a>
+ </li>
+</ul>
+
+</nav> <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="row topbar fixed-top container-xl">
+    <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show">
+    </div>
+    <div class="col pl-2 topbar-main">
+        
+        <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+            data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+            aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+            title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+            <i class="fas fa-bars"></i>
+            <i class="fas fa-arrow-left"></i>
+            <i class="fas fa-arrow-up"></i>
+        </button>
+        
+        
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="../_sources/4-MB/4-SR.md"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.md</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+</div>
+
+        <!-- Source interaction buttons -->
+
+
+        <!-- Full screen (wrap in <a> to have style consistency -->
+        <a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+                data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+                title="Fullscreen mode"><i
+                    class="fas fa-expand"></i></button></a>
+
+        <!-- Launch buttons -->
+
+    </div>
+
+    <!-- Table of contents -->
+    <div class="d-none d-md-block col-md-2 bd-toc show">
+        
+        <div class="tocsection onthispage pt-5 pb-3">
+            <i class="fas fa-list"></i> Contents
+        </div>
+        <nav id="bd-toc-nav">
+            <ul class="nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#model-based-vs-model-free">
+   4.1. Model-based vs. Model-free
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#comparison">
+     4.1.1. Comparison
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#goal-directed-learning-vs-habit-formation">
+     4.1.2. Goal-directed learning vs. habit formation
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id1">
+   4.2. Successor representations
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#principle-of-successor-representations">
+     4.2.1. Principle of successor representations
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#learning-successor-representations">
+     4.2.2. Learning successor representations
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#successor-features">
+   4.3. Successor features
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#deep-successor-reinforcement-learning">
+   4.4. Deep Successor Reinforcement Learning
+  </a>
+ </li>
+</ul>
+
+        </nav>
+        
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+        
+              <div>
+                
+  <div class="section" id="successor-representations">
+<h1><span class="section-number">4. </span>Successor representations<a class="headerlink" href="#successor-representations" title="Permalink to this headline">¶</a></h1>
+<p>Slides: <a class="reference external" href="https://www.tu-chemnitz.de/informatik/KI/edu/deeprl/lectures/pdf/4.4-SR.pdf">pdf</a></p>
+<div class="section" id="model-based-vs-model-free">
+<h2><span class="section-number">4.1. </span>Model-based vs. Model-free<a class="headerlink" href="#model-based-vs-model-free" title="Permalink to this headline">¶</a></h2>
+<div class='embed-container'><iframe src='https://www.youtube.com/embed/jt9YvApme3Q' frameborder='0' allowfullscreen></iframe></div>
+<div class="section" id="comparison">
+<h3><span class="section-number">4.1.1. </span>Comparison<a class="headerlink" href="#comparison" title="Permalink to this headline">¶</a></h3>
+<p>Model-free methods use the <strong>reward prediction error</strong> (RPE) to update values:</p>
+<div class="math notranslate nohighlight">
+\[
+    \delta_t = r_{t+1} + \gamma \, V^\pi(s_{t+1}) - V^\pi(s_t)
+\]</div>
+<div class="math notranslate nohighlight">
+\[
+    \Delta V^\pi(s_t) = \alpha \, \delta_t
+\]</div>
+<p>Encountered rewards propagate very slowly to all states and actions.
+If the environment changes (transition probabilities, rewards), they have to relearn everything.
+After training, selecting an action is very fast.</p>
+<p>Model-based RL can learn very fast changes in the transition or reward distributions:</p>
+<div class="math notranslate nohighlight">
+\[
+    \Delta r(s_t, a_t, s_{t+1}) = \alpha \, (r_{t+1} - r(s_t, a_t, s_{t+1}))
+\]</div>
+<div class="math notranslate nohighlight">
+\[
+    \Delta p(s' | s_t, a_t) = \alpha \, (\mathbb{I}(s_{t+1} = s') - p(s' | s_t, a_t))
+\]</div>
+<p>But selecting an action requires planning in the tree of possibilities (slow).</p>
+<p>Relative advantages of MF and MB methods:</p>
+<table class="colwidths-auto table">
+<thead>
+<tr class="row-odd"><th class="text-align:left head"><p></p></th>
+<th class="text-align:left head"><p>Inference speed</p></th>
+<th class="text-align:left head"><p>Sample complexity</p></th>
+<th class="text-align:left head"><p>Optimality</p></th>
+<th class="text-align:left head"><p>Flexibility</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-align:left"><p>Model-free</p></td>
+<td class="text-align:left"><p>fast</p></td>
+<td class="text-align:left"><p>high</p></td>
+<td class="text-align:left"><p>yes</p></td>
+<td class="text-align:left"><p>no</p></td>
+</tr>
+<tr class="row-odd"><td class="text-align:left"><p>Model-based</p></td>
+<td class="text-align:left"><p>slow</p></td>
+<td class="text-align:left"><p>low</p></td>
+<td class="text-align:left"><p>as good as the model</p></td>
+<td class="text-align:left"><p>yes</p></td>
+</tr>
+</tbody>
+</table>
+<p>A trade-off would be nice… Most MB models in the deep RL literature are hybrid MB/MF models anyway.</p>
+</div>
+<div class="section" id="goal-directed-learning-vs-habit-formation">
+<h3><span class="section-number">4.1.2. </span>Goal-directed learning vs. habit formation<a class="headerlink" href="#goal-directed-learning-vs-habit-formation" title="Permalink to this headline">¶</a></h3>
+<p>Two forms of behavior are observed in the animal psychology literature:</p>
+<ol class="simple">
+<li><p><strong>Goal-directed</strong> behavior learns Stimulus <span class="math notranslate nohighlight">\(\rightarrow\)</span> Response <span class="math notranslate nohighlight">\(\rightarrow\)</span> Outcome associations.</p></li>
+<li><p><strong>Habits</strong> are developed by overtraining Stimulus <span class="math notranslate nohighlight">\(\rightarrow\)</span> Response associations.</p></li>
+</ol>
+<p>The main difference is that habits are not influenced by <strong>outcome devaluation</strong>, i.e. when reard slose their value.</p>
+<div class="figure align-default" id="id16">
+<a class="reference internal image-reference" href="../_images/rewarddevaluation.jpg"><img alt="../_images/rewarddevaluation.jpg" src="../_images/rewarddevaluation.jpg" style="width: 80%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 4.14 </span><span class="caption-text">Outcome devaluation. Credit: Bernard W. Balleine</span><a class="headerlink" href="#id16" title="Permalink to this image">¶</a></p>
+</div>
+<p>The classical theory assigns MF to habits and MB to goal-directed, mostly because their sensitivity to outcome devaluation.
+The open question is the arbitration mechanism between these two segregated process: who takes control?
+Recent work suggests both systems are largely overlapping.</p>
+</div>
+</div>
+<div class="section" id="id1">
+<h2><span class="section-number">4.2. </span>Successor representations<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<div class='embed-container'><iframe src='https://www.youtube.com/embed/Qt2Qtf_WbfM' frameborder='0' allowfullscreen></iframe></div>
+<div class="section" id="principle-of-successor-representations">
+<h3><span class="section-number">4.2.1. </span>Principle of successor representations<a class="headerlink" href="#principle-of-successor-representations" title="Permalink to this headline">¶</a></h3>
+<p>Successor representations (SR, <a class="bibtex reference internal" href="../zreferences.html#dayan1993" id="id2">[Dayan, 1993]</a>) have been introduced to combine MF and MB properties. Let’s split the definition of the value of a state:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{align}
+    V^\pi(s) &amp;= \mathbb{E}_{\pi} [\sum_{k=0}^\infty \gamma^k \, r_{t+k+1} | s_t =s] \\
+            &amp;\\
+               &amp;= \mathbb{E}_{\pi} [\begin{bmatrix} 1 \\ \gamma \\ \gamma^2 \\ \ldots \\ \gamma^\infty \end{bmatrix} \times
+                  \begin{bmatrix} \mathbb{I}(s_{t}) \\ \mathbb{I}(s_{t+1}) \\ \mathbb{I}(s_{t+2}) \\ \ldots \\ \mathbb{I}(s_{\infty}) \end{bmatrix}  \times
+                  \begin{bmatrix} r_{t+1} \\ r_{t+2} \\ r_{t+3} \\ \ldots \\ r_{t+\infty} \end{bmatrix} 
+                | s_t =s]\\
+\end{align}
+\end{split}\]</div>
+<p>where <span class="math notranslate nohighlight">\(\mathbb{I}(s_{t})\)</span> is 1 when the agent is in <span class="math notranslate nohighlight">\(s_t\)</span> at time <span class="math notranslate nohighlight">\(t\)</span>, 0 otherwise.</p>
+<p>The left part corresponds to the <strong>transition dynamics</strong>: which states will be visited by the policy, discounted by <span class="math notranslate nohighlight">\(\gamma\)</span>.
+The right part corresponds to the <strong>immediate reward</strong> in each visited state.
+Couldn’t we learn the transition dynamics and the reward distribution separately in a model-free manner?</p>
+<p>SR rewrites the value of a state into an <strong>expected discounted future state occupancy</strong> <span class="math notranslate nohighlight">\(M^\pi(s, s')\)</span> and an <strong>expected immediate reward</strong> <span class="math notranslate nohighlight">\(r(s')\)</span> by summing over all possible states <span class="math notranslate nohighlight">\(s'\)</span> of the MDP:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{align}
+    V^\pi(s) &amp;= \mathbb{E}_{\pi} [\sum_{k=0}^\infty \gamma^k \, r_{t+k+1} | s_t =s] \\
+            &amp;\\
+               &amp;= \sum_{s' \in \mathcal{S}} \mathbb{E}_{\pi} [\sum_{k=0}^\infty \gamma^k \, \mathbb{I}(s_{t+k}=s') \times r_{t+k+1}  | s_t =s]\\
+            &amp;\\
+               &amp;\approx \sum_{s' \in \mathcal{S}} \mathbb{E}_{\pi} [\sum_{k=0}^\infty \gamma^k \, \mathbb{I}(s_{t+k}=s')  | s_t =s] \times \mathbb{E} [r_{t+1}  | s_{t}=s']\\
+            &amp;\\
+               &amp;\approx \sum_{s' \in \mathcal{S}} M^\pi(s, s') \times r(s')\\
+\end{align}
+\end{split}\]</div>
+<p>The underlying assumption is that the world dynamics are independent from the reward function (which does not depend on the policy).
+This allows to re-use knowledge about world dynamics in other contexts (e.g. a new reward function in the same environment): <strong>transfer learning</strong>.</p>
+<div class="figure align-default" id="id17">
+<a class="reference internal image-reference" href="../_images/sr-transferlearning.png"><img alt="../_images/sr-transferlearning.png" src="../_images/sr-transferlearning.png" style="width: 80%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 4.15 </span><span class="caption-text">Transfer learning in Gridworld. Source: <a class="reference external" href="https://awjuliani.medium.com/the-present-in-terms-of-the-future-successor-representations-in-reinforcement-learning-316b78c5fa3">https://awjuliani.medium.com/the-present-in-terms-of-the-future-successor-representations-in-reinforcement-learning-316b78c5fa3</a></span><a class="headerlink" href="#id17" title="Permalink to this image">¶</a></p>
+</div>
+<p>What matters is the states that you will visit and how interesting they are, not the order in which you visit them.
+Knowing that being in the mensa will eventually get you some food is enough to know that being in the mensa is a good state: you do not need to remember which exact sequence of transitions will put food in your mouth.</p>
+<p>SR algorithms must estimate two quantities:</p>
+<ul class="simple">
+<li><p>The <strong>expected immediate reward</strong> received after each state:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[r(s) = \mathbb{E} [r_{t+1} | s_t = s]\]</div>
+<ul class="simple">
+<li><p>The <strong>expected discounted future state occupancy</strong> (the <strong>SR</strong> itself):</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[M^\pi(s, s') = \mathbb{E}_{\pi} [\sum_{k=0}^\infty \gamma^k \, \mathbb{I}(s_{t+k} = s') | s_t = s]\]</div>
+<p>The value of a state <span class="math notranslate nohighlight">\(s\)</span> is then computed with:</p>
+<div class="math notranslate nohighlight">
+\[
+    V^\pi(s) = \sum_{s' \in \mathcal{S}} M(s, s') \times r(s')
+\]</div>
+<p>what allows to infer the policy (e.g. using an actor-critic architecture). The immediate reward for a state can be estimated very quickly and flexibly after receiving each reward:</p>
+<div class="math notranslate nohighlight">
+\[
+    \Delta \, r(s_t) = \alpha \, (r_{t+1} - r(s_t))
+\]</div>
+<p>Imagine a very simple MDP with 4 states and a single deterministic action:</p>
+<div class="figure align-default">
+<a class="reference internal image-reference" href="../_images/sr-simplemdp.svg"><img alt="../_images/sr-simplemdp.svg" src="../_images/sr-simplemdp.svg" width="60%" /></a>
+</div>
+<p>The transition matrix <span class="math notranslate nohighlight">\(\mathcal{P}^\pi\)</span> depicts the possible <span class="math notranslate nohighlight">\((s, s')\)</span> transitions:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\mathcal{P}^\pi = \begin{bmatrix}
+0 &amp; 1 &amp; 0 &amp; 0 \\
+0 &amp; 0 &amp; 1 &amp; 0 \\
+0 &amp; 0 &amp; 0 &amp; 1 \\
+0 &amp; 0 &amp; 0 &amp; 1 \\
+\end{bmatrix}\end{split}\]</div>
+<p>The SR matrix <span class="math notranslate nohighlight">\(M\)</span> also represents the future transitions discounted by <span class="math notranslate nohighlight">\(\gamma\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}M = \begin{bmatrix}
+1 &amp; \gamma &amp; \gamma^2 &amp; \gamma^3 \\
+0 &amp; 1 &amp; \gamma &amp; \gamma^2 \\
+0 &amp; 0 &amp; 1  &amp; \gamma\\
+0 &amp; 0 &amp; 0 &amp; 1 \\
+\end{bmatrix}\end{split}\]</div>
+<div class="admonition-sr-matrix-in-a-tolman-s-maze admonition">
+<p class="admonition-title">SR matrix in a Tolman’s maze</p>
+<p><img alt="" src="../_images/sr-tolman.png" /></p>
+<p>The SR represents whether a state can be reached soon from the current state (b) using the current policy.
+The SR depends on the policy:</p>
+<ul class="simple">
+<li><p>A random agent will map the local neighborhood (c).</p></li>
+<li><p>A goal-directed agent will have SR representations that follow the optimal path (d).</p></li>
+</ul>
+<p>It is therefore different from the transition matrix, as it depends on behavior and rewards.
+The exact dynamics are lost compared to MB: it only represents whether a state is reachable, not how.</p>
+<p>Source: <a class="bibtex reference internal" href="../zreferences.html#russek2017" id="id3">[Russek et al., 2017]</a></p>
+</div>
+<p>The SR matrix reflects the proximity between states depending on the transitions and the policy. it does not have to be a spatial relationship.</p>
+<div class="figure align-default">
+<a class="reference internal image-reference" href="../_images/schapiro1.png"><img alt="../_images/schapiro1.png" src="../_images/schapiro1.png" style="width: 60%;" /></a>
+</div>
+<div class="figure align-default" id="id18">
+<a class="reference internal image-reference" href="../_images/schapiro2.png"><img alt="../_images/schapiro2.png" src="../_images/schapiro2.png" style="width: 60%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 4.16 </span><span class="caption-text">Probabilistic MDP and the corresponding SR matrix. Source: <a class="bibtex reference internal" href="../zreferences.html#stachenfeld2017" id="id4">[Stachenfeld et al., 2017]</a>.</span><a class="headerlink" href="#id18" title="Permalink to this image">¶</a></p>
+</div>
+</div>
+<div class="section" id="learning-successor-representations">
+<h3><span class="section-number">4.2.2. </span>Learning successor representations<a class="headerlink" href="#learning-successor-representations" title="Permalink to this headline">¶</a></h3>
+<p>How can we learn the SR matrix for all pairs of states?</p>
+<div class="math notranslate nohighlight">
+\[
+    M^\pi(s, s') = \mathbb{E}_{\pi} [\sum_{k=0}^\infty \gamma^k \, \mathbb{I}(s_{t+k} = s') | s_t = s]
+\]</div>
+<p>We first notice that the SR obeys a recursive Bellman-like equation:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+    M^\pi(s, s') &amp;= \mathbb{I}(s_{t} = s') + \mathbb{E}_{\pi} [\sum_{k=1}^\infty \gamma^k \, \mathbb{I}(s_{t+k} = s') | s_t = s] \\
+            &amp;= \mathbb{I}(s_{t} = s') + \gamma \, \mathbb{E}_{\pi} [\sum_{k=0}^\infty \gamma^k \, \mathbb{I}(s_{t+k+1} = s') | s_t = s] \\
+            &amp;= \mathbb{I}(s_{t} = s') + \gamma \, \mathbb{E}_{s_{t+1} \sim \mathcal{P}^\pi(s' | s)} [\mathbb{E}_{\pi} [\sum_{k=0}^\infty \gamma^k \, \mathbb{I}(s_{t+k} = s') | s_{t+1} = s] ]\\
+            &amp;= \mathbb{I}(s_{t} = s') + \gamma \, \mathbb{E}_{s_{t+1} \sim \mathcal{P}^\pi(s' | s)} [M^\pi(s_{t+1}, s')]\\
+\end{aligned}\end{split}\]</div>
+<p>This is reminiscent of TDM: the remaining distance to the goal is 0 if I am already at the goal, or gamma the distance from the next state to the goal.</p>
+<p>If we know the transition matrix for a fixed policy <span class="math notranslate nohighlight">\(\pi\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[\mathcal{P}^\pi(s, s') = \sum_a \pi(s, a) \, p(s' | s, a)\]</div>
+<p>we can obtain the SR directly with matrix inversion as we did in <strong>dynamic programming</strong>:</p>
+<div class="math notranslate nohighlight">
+\[
+    M^\pi = I + \gamma \, \mathcal{P}^\pi \times M^\pi
+\]</div>
+<p>so that:</p>
+<div class="math notranslate nohighlight">
+\[
+    M^\pi = (I - \gamma \, \mathcal{P}^\pi)^{-1}
+\]</div>
+<p>This DP approach is called <strong>model-based SR</strong> (MB-SR, <a class="bibtex reference internal" href="../zreferences.html#momennejad2017a" id="id5">[Momennejad et al., 2017]</a>) as it necessitates to know the environment dynamics.</p>
+<p>If we do not know the transition probabilities, we simply sample a single <span class="math notranslate nohighlight">\(s_t, s_{t+1}\)</span> transition:</p>
+<div class="math notranslate nohighlight">
+\[
+    M^\pi(s_t, s') \approx \mathbb{I}(s_{t} = s') + \gamma \, M^\pi(s_{t+1}, s')
+\]</div>
+<p>We can define a <strong>sensory prediction error</strong> (SPE):</p>
+<div class="math notranslate nohighlight">
+\[
+    \delta^\text{SR}_t = \mathbb{I}(s_{t} = s') + \gamma \, M^\pi(s_{t+1}, s') - M(s_t, s')
+\]</div>
+<p>that is used to update an estimate of the SR:</p>
+<div class="math notranslate nohighlight">
+\[
+    \Delta M^\pi(s_t, s') = \alpha \, \delta^\text{SR}_t
+\]</div>
+<p>This is <strong>SR-TD</strong>, using a SPE instead of RPE, which learns only from transitions but ignores rewards.</p>
+<p>The SPE has to be applied on ALL successor states <span class="math notranslate nohighlight">\(s'\)</span> after a transition <span class="math notranslate nohighlight">\((s_t, s_{t+1})\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[
+    M^\pi(s_t, \mathbf{s'}) = M^\pi(s_t, \mathbf{s'}) + \alpha \, (\mathbb{I}(s_{t}=\mathbf{s'}) + \gamma \, M^\pi(s_{t+1}, \mathbf{s'}) - M(s_t, \mathbf{s'}))
+\]</div>
+<p>Contrary to the RPE, the SPE is a <strong>vector</strong> of prediction errors, used to update one row of the SR matrix.
+The SPE tells how <strong>surprising</strong> a transition <span class="math notranslate nohighlight">\(s_t \rightarrow s_{t+1}\)</span> is for the SR.</p>
+<div class="admonition-summary admonition">
+<p class="admonition-title">Summary</p>
+<p>The SR matrix represents the <strong>expected discounted future state occupancy</strong>:</p>
+<div class="math notranslate nohighlight">
+\[M^\pi(s, s') = \mathbb{E}_{\pi} [\sum_{k=0}^\infty \gamma^k \, \mathbb{I}(s_{t+k} = s') | s_t = s]\]</div>
+<p>It can be learned using a TD-like SPE from single transitions:</p>
+<div class="math notranslate nohighlight">
+\[
+    M^\pi(s_t, \mathbf{s'}) = M^\pi(s_t, \mathbf{s'}) + \alpha \, (\mathbb{I}(s_{t}=\mathbf{s'}) + \gamma \, M^\pi(s_{t+1}, \mathbf{s'}) - M(s_t, \mathbf{s'}))
+\]</div>
+<p>The immediate reward in each state can be learned <strong>independently from the policy</strong>:</p>
+<div class="math notranslate nohighlight">
+\[
+    \Delta \, r(s_t) = \alpha \, (r_{t+1} - r(s_t))
+\]</div>
+<p>The value <span class="math notranslate nohighlight">\(V^\pi(s)\)</span> of a state is obtained by summing of all successor states:</p>
+<div class="math notranslate nohighlight">
+\[
+    V^\pi(s) = \sum_{s' \in \mathcal{S}} M(s, s') \times r(s')
+\]</div>
+<p>This critic can be used to train an <strong>actor</strong> <span class="math notranslate nohighlight">\(\pi_\theta\)</span> using regular TD learning (e.g. A3C).</p>
+</div>
+<p>Note that it is straightforward to extend the idea of SR to state-action pairs:</p>
+<div class="math notranslate nohighlight">
+\[M^\pi(s, a, s') = \mathbb{E}_{\pi} [\sum_{k=0}^\infty \gamma^k \, \mathbb{I}(s_{t+k} = s') | s_t = s, a_t = a]\]</div>
+<p>allowing to estimate Q-values:</p>
+<div class="math notranslate nohighlight">
+\[
+    Q^\pi(s, a) = \sum_{s' \in \mathcal{S}} M(s, a, s') \times r(s')
+\]</div>
+<p>using SARSA or Q-learning-like SPEs:</p>
+<div class="math notranslate nohighlight">
+\[
+    \delta^\text{SR}_t = \mathbb{I}(s_{t} = s') + \gamma \, M^\pi(s_{t+1}, a_{t+1}, s') - M(s_t, a_{t}, s')
+\]</div>
+<p>depending on the choice of the next action <span class="math notranslate nohighlight">\(a_{t+1}\)</span> (on- or off-policy).</p>
+</div>
+</div>
+<div class="section" id="successor-features">
+<h2><span class="section-number">4.3. </span>Successor features<a class="headerlink" href="#successor-features" title="Permalink to this headline">¶</a></h2>
+<div class='embed-container'><iframe src='https://www.youtube.com/embed/3eOUgtU-3Vc' frameborder='0' allowfullscreen></iframe></div>
+<p>The SR matrix associates each state to all others (<span class="math notranslate nohighlight">\(N\times N\)</span> matrix):</p>
+<ul class="simple">
+<li><p>curse of dimensionality.</p></li>
+<li><p>only possible for discrete state spaces.</p></li>
+</ul>
+<p>A better idea is to describe each state <span class="math notranslate nohighlight">\(s\)</span> by a feature vector <span class="math notranslate nohighlight">\(\phi(s) = [\phi_i(s)]_{i=1}^d\)</span> with less dimensions than the number of states.
+This feature vector can be constructed (see the lecture on function approximation) or learned by an autoencoder (latent representation).</p>
+<p>The <strong>successor feature representation</strong> (SFR) represents the discounted probability of observing a feature <span class="math notranslate nohighlight">\(\phi_j\)</span> after being in <span class="math notranslate nohighlight">\(s\)</span>. Instead of predicting when the agent will see a cat after being in the current state <span class="math notranslate nohighlight">\(s\)</span>, the SFR predicts when it will see eyes, ears or whiskers independently:</p>
+<div class="math notranslate nohighlight">
+\[
+    M^\pi_j(s) = M^\pi(s, \phi_j) = \mathbb{E}_{\pi} [\sum_{k=0}^\infty \gamma^k \, \mathbb{I}(\phi_j(s_{t+k})) | s_t = s, a_t = a]
+\]</div>
+<p>Linear SFR <a class="bibtex reference internal" href="../zreferences.html#gehring2015" id="id6">[Gehring, 2015]</a> supposes that it can be linearly approximated from the features of the current state:</p>
+<div class="math notranslate nohighlight">
+\[
+    M^\pi_j(s) = M^\pi(s, \phi_j) = \sum_{i=1}^d m_{i, j} \, \phi_i(s)
+\]</div>
+<p>The value of a state is now defined as the sum over successor features of their immediate reward discounted by the SFR:</p>
+<div class="math notranslate nohighlight">
+\[
+    V^\pi(s) = \sum_{j=1}^d M^\pi_j(s) \, r(\phi_j) = \sum_{j=1}^d r(\phi_j) \, \sum_{i=1}^d m_{i, j} \, \phi_i(s)
+\]</div>
+<p>The SFR matrix <span class="math notranslate nohighlight">\(M^\pi = [m_{i, j}]_{i, j}\)</span> associates each feature <span class="math notranslate nohighlight">\(\phi_i\)</span> of the current state to all successor features <span class="math notranslate nohighlight">\(\phi_j\)</span>: Knowing that I see a kitchen door in the current state, how likely will I see a food outcome in the near future?</p>
+<p>Each successor feature <span class="math notranslate nohighlight">\(\phi_j\)</span> is associated to an expected immediate reward <span class="math notranslate nohighlight">\(r(\phi_j)\)</span>: A good state is a state where food features (high <span class="math notranslate nohighlight">\(r(\phi_j)\)</span>) are likely to happen soon (high <span class="math notranslate nohighlight">\(m_{i, j}\)</span>).</p>
+<p>In matrix-vector form:</p>
+<div class="math notranslate nohighlight">
+\[
+    V^\pi(s) = \mathbf{r}^T \times M^\pi \times \phi(s)
+\]</div>
+<p>The reward vector <span class="math notranslate nohighlight">\(\mathbf{r}\)</span> only depends on the features and can be learned independently from the policy, but can be made context-dependent: Food features can be made more important when the agent is hungry, less when thirsty.</p>
+<p><strong>Transfer learning</strong> becomes possible in the same environment:</p>
+<ul class="simple">
+<li><p>Different goals (searching for food or water, going to place A or B) only require different reward vectors.</p></li>
+<li><p>The dynamics of the environment are stored in the SFR.</p></li>
+</ul>
+<p>How can we learn the SFR matrix <span class="math notranslate nohighlight">\(M^\pi\)</span>?</p>
+<div class="math notranslate nohighlight">
+\[
+    V^\pi(s) = \mathbf{r}^T \times M^\pi \times \phi(s)
+\]</div>
+<p>We only need to use the sensory prediction error for a transition between the feature vectors <span class="math notranslate nohighlight">\(\phi(s_t)\)</span> and <span class="math notranslate nohighlight">\(\phi(s_{t+1})\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[\delta_t^\text{SFR} = \phi(s_t) + \gamma \, M^\pi \times \phi(s_{t+1}) - M^\pi \times \phi(s_t)\]</div>
+<p>and use it to update the whole matrix:</p>
+<div class="math notranslate nohighlight">
+\[\Delta M^\pi = \delta_t^\text{SFR} \times \phi(s_t)^T\]</div>
+<p>However, this linear approximation scheme only works for <strong>fixed</strong> feature representation <span class="math notranslate nohighlight">\(\phi(s)\)</span>. We need to go deeper…</p>
+</div>
+<div class="section" id="deep-successor-reinforcement-learning">
+<h2><span class="section-number">4.4. </span>Deep Successor Reinforcement Learning<a class="headerlink" href="#deep-successor-reinforcement-learning" title="Permalink to this headline">¶</a></h2>
+<div class="figure align-default" id="id19">
+<a class="reference internal image-reference" href="../_images/DSR.png"><img alt="../_images/DSR.png" src="../_images/DSR.png" style="width: 100%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 4.17 </span><span class="caption-text">Deep Successor Reinforcement Learning architecture. <a class="bibtex reference internal" href="../zreferences.html#kulkarni2016" id="id7">[Kulkarni et al., 2016]</a>.</span><a class="headerlink" href="#id19" title="Permalink to this image">¶</a></p>
+</div>
+<p>Each state <span class="math notranslate nohighlight">\(s_t\)</span> is represented by a D-dimensional (D=512) vector <span class="math notranslate nohighlight">\(\phi(s_t) = f_\theta(s_t)\)</span> which is the output of an encoder. A decoder <span class="math notranslate nohighlight">\(g_{\hat{\theta}}\)</span> is used to provide a reconstruction loss, so <span class="math notranslate nohighlight">\(\phi(s_t)\)</span> is a latent representation of an autoencoder:</p>
+<div class="math notranslate nohighlight">
+\[\mathcal{L}_\text{reconstruction}(\theta, \hat{\theta}) = \mathbb{E}[(g_{\hat{\theta}}(\phi(s_t)) - s_t)^2]\]</div>
+<p>The immediate reward <span class="math notranslate nohighlight">\(R(s_t)\)</span> is linearly predicted from the feature vector <span class="math notranslate nohighlight">\(\phi(s_t)\)</span> using a reward vector <span class="math notranslate nohighlight">\(\mathbf{w}\)</span>.</p>
+<div class="math notranslate nohighlight">
+\[R(s_t) = \phi(s_t)^T \times \mathbf{w}\]</div>
+<div class="math notranslate nohighlight">
+\[\mathcal{L}_\text{reward}(\mathbf{w}, \theta) = \mathbb{E}[(r_{t+1} - \phi(s_t)^T \times \mathbf{w})^2]\]</div>
+<p>The reconstruction loss is important, otherwise the latent representation <span class="math notranslate nohighlight">\(\phi(s_t)\)</span> would be too reward-oriented and would not generalize.
+The reward function is learned on a single task, but it can fine-tuned on another task, with all other weights frozen.</p>
+<p>For each available action <span class="math notranslate nohighlight">\(a\)</span>, a DNN <span class="math notranslate nohighlight">\(u_\alpha\)</span> predicts the future feature occupancy <span class="math notranslate nohighlight">\(M(s, s', a)\)</span> for the current state:</p>
+<div class="math notranslate nohighlight">
+\[m_{s_t a} = u_\alpha(s_t, a)\]</div>
+<p>The Q-value of an action is simply the dot product between the SR of an action and the reward vector <span class="math notranslate nohighlight">\(\mathbf{w}\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[Q(s_t, a) = \mathbf{w}^T \times m_{s_t a} \]</div>
+<p>The selected action is <span class="math notranslate nohighlight">\(\epsilon\)</span>-greedily selected around the greedy action:</p>
+<div class="math notranslate nohighlight">
+\[a_t = \text{arg}\max_a Q(s_t, a)\]</div>
+<p>The SR of each action is learned using the Q-learning-like SPE (with fixed <span class="math notranslate nohighlight">\(\theta\)</span> and a target network <span class="math notranslate nohighlight">\(u_{\alpha'}\)</span>):</p>
+<div class="math notranslate nohighlight">
+\[\mathcal{L}^\text{SPE}(\alpha) = \mathbb{E}[\sum_a (\phi(s_t) + \gamma \, \max_{a'} u_{\alpha'}(s_{t+1}, a') - u_\alpha(s_t, a))^2]\]</div>
+<p>The compound loss is used to train the complete network end-to-end <strong>off-policy</strong> using a replay buffer (DQN-like).</p>
+<div class="math notranslate nohighlight">
+\[\mathcal{L}(\theta, \hat{\theta}, \mathbf{w}, \alpha) = \mathcal{L}_\text{reconstruction}(\theta, \hat{\theta}) + \mathcal{L}_\text{reward}(\mathbf{w}, \theta) + \mathcal{L}^\text{SPE}(\alpha)\]</div>
+<div class="figure align-default" id="id20">
+<a class="reference internal image-reference" href="../_images/DSR-algorithm.png"><img alt="../_images/DSR-algorithm.png" src="../_images/DSR-algorithm.png" style="width: 100%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 4.18 </span><span class="caption-text">Deep Successor Reinforcement Learning algorithm. <a class="bibtex reference internal" href="../zreferences.html#kulkarni2016" id="id8">[Kulkarni et al., 2016]</a>.</span><a class="headerlink" href="#id20" title="Permalink to this image">¶</a></p>
+</div>
+<div class="figure align-default" id="id21">
+<a class="reference internal image-reference" href="../_images/DSR-results.png"><img alt="../_images/DSR-results.png" src="../_images/DSR-results.png" style="width: 100%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 4.19 </span><span class="caption-text">Deep Successor Reinforcement Learning results. <a class="bibtex reference internal" href="../zreferences.html#kulkarni2016" id="id9">[Kulkarni et al., 2016]</a>.</span><a class="headerlink" href="#id21" title="Permalink to this image">¶</a></p>
+</div>
+<p>The interesting property is that you do not need rewards to learn:</p>
+<ul class="simple">
+<li><p>A random agent can be used to learn the encoder and the SR, but <span class="math notranslate nohighlight">\(\mathbf{w}\)</span> can be left untouched.</p></li>
+<li><p>When rewards are introduced (or changed), only <span class="math notranslate nohighlight">\(\mathbf{w}\)</span> has to be adapted, while DQN would have to re-learn all Q-values.</p></li>
+</ul>
+<div class="figure align-default" id="id22">
+<a class="reference internal image-reference" href="../_images/DSR-results2.png"><img alt="../_images/DSR-results2.png" src="../_images/DSR-results2.png" style="width: 100%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 4.20 </span><span class="caption-text">Change in the value of distal rewards. <a class="bibtex reference internal" href="../zreferences.html#kulkarni2016" id="id10">[Kulkarni et al., 2016]</a>.</span><a class="headerlink" href="#id22" title="Permalink to this image">¶</a></p>
+</div>
+<p>This is the principle of <strong>latent learning</strong> in animal psychology: fooling around in an environment without a goal allows to learn the structure of the world, what can speed up learning when a task is introduced.
+The SR is a <strong>cognitive map</strong> of the environment: learning task-unspecific relationships.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The same idea was published by three different groups at the same time (preprint in 2016, conference in 2017): <a class="bibtex reference internal" href="../zreferences.html#barreto2016" id="id11">[Barreto et al., 2016]</a>, <a class="bibtex reference internal" href="../zreferences.html#kulkarni2016" id="id12">[Kulkarni et al., 2016]</a>, <a class="bibtex reference internal" href="../zreferences.html#zhang2016" id="id13">[Zhang et al., 2016]</a>. The <a class="bibtex reference internal" href="../zreferences.html#barreto2016" id="id14">[Barreto et al., 2016]</a> is from Deepmind, so it tends to be cited more…</p>
+</div>
+<div class="admonition-visual-semantic-planning-using-deep-successor-representations admonition">
+<p class="admonition-title">Visual Semantic Planning using Deep Successor Representations</p>
+<p>See the paper: <a class="bibtex reference internal" href="../zreferences.html#zhu2017a" id="id15">[Zhu et al., 2017]</a></p>
+<div class='embed-container'><iframe src='https://www.youtube.com/embed/_2pYVw6ATKo' frameborder='0' allowfullscreen></iframe></div>
+</div>
+</div>
+</div>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./4-MB"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+        </div>
+    </div>
+    
+    
+    <div class='prev-next-bottom'>
+        
+    <a class='left-prev' id="prev-link" href="3-AlphaGo.html" title="previous page"><span class="section-number">3. </span>AlphaGo</a>
+    <a class='right-next' id="next-link" href="../5-exercises/ex1-Python.html" title="next page"><span class="section-number">1. </span>Introduction to Python</a>
+
+    </div>
+    <footer class="footer mt-5 mt-md-0">
+    <div class="container">
+      <p>
+        
+          By Julien Vitay - julien.vitay@informatik.tu-chemnitz.de<br/>
+        
+            &copy; Copyright 2020.<br/>
+          <div class="extra_footer">
+            Technische Universität Chemnitz - Faculty of Computer Science - Professorship for Artificial Intelligence
+          </div>
+      </p>
+    </div>
+  </footer>
+</main>
+
+
+      </div>
+    </div>
+
+    
+  <script src="../_static/js/index.3da636dd464baa7582d2.js"></script>
+
+
+    
+  </body>
+</html>
