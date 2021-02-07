@@ -1,0 +1,927 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>1. Outlook &#8212; Deep Reinforcement Learning</title>
+    
+  <link rel="stylesheet" href="../_static/css/index.73d71520a4ca3b99cfee5594769eaaae.css">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+  <link rel="stylesheet"
+    href="../_static/vendor/open-sans_all/1.44.1/index.css">
+  <link rel="stylesheet"
+    href="../_static/vendor/lato_latin-ext/1.44.1/index.css">
+
+    
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/sphinx-book-theme.40e2e510f6b7d1648584402491bb10fe.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/style.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    
+  <link rel="preload" as="script" href="../_static/js/index.3da636dd464baa7582d2.js">
+
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/togglebutton.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../_static/sphinx-book-theme.d31b09fe5c1d09cb49b26a786de4a05d.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processRefs": false, "processEnvironments": false}})</script>
+    <script async="async" src="https://unpkg.com/thebelab@latest/lib/index.js"></script>
+    <script >
+        const thebe_selector = ".thebe"
+        const thebe_selector_input = "pre"
+        const thebe_selector_output = ".output"
+    </script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <link rel="canonical" href="https://julien-vitay.net/lecturenotes-deeprl/4-MB/5-Outlook.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="1. Introduction to Python" href="../5-exercises/ex1-Python.html" />
+    <link rel="prev" title="4. Successor representations" href="4-SR.html" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en" />
+
+
+<!-- Opengraph tags -->
+<meta property="og:url"         content="https://julien-vitay.net/lecturenotes-deeprl/4-MB/5-Outlook.html" />
+<meta property="og:type"        content="article" />
+<meta property="og:title"       content="Outlook" />
+<meta property="og:description" content="Outlook  Slides: pdf  Limits of deep reinforcement lerning  Overview  Model-free methods (DQN, A3C, DDPG, PPO, SAC) are able to find optimal policies in complex" />
+<meta property="og:image"       content="https://julien-vitay.net/lecturenotes-deeprl/_static/tuc.svg" />
+
+<meta name="twitter:card" content="summary" />
+
+
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
+<a class="navbar-brand text-wrap" href="../index.html">
+  
+  <img src="../_static/tuc.svg" class="logo" alt="logo">
+  
+  
+  <h1 class="site-logo" id="site-title">Deep Reinforcement Learning</h1>
+  
+</a>
+</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form>
+<nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+    <ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../intro.html">
+   Deep Reinforcement Learning
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Introduction
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../1-intro/1-Introduction.html">
+   1. Introduction
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../1-intro/2-Math.html">
+   2. Math basics
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Tabular RL
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../2-tabular/1-Bandits.html">
+   1. Bandits
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../2-tabular/2-MDP.html">
+   2. Markov Decision Processes
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../2-tabular/3-DP.html">
+   3. Dynamic Programming
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../2-tabular/4-MC.html">
+   4. Monte-Carlo (MC) methods
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../2-tabular/5-TD.html">
+   5. Temporal Difference learning
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../2-tabular/6-FA.html">
+   6. Function approximation
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../2-tabular/7-NN.html">
+   7. Deep learning
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Model-free RL
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../3-MF/1-DQN.html">
+   1. Deep Q-Learning (DQN)
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../3-MF/2-BeyondDQN.html">
+   2. Beyond DQN
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../3-MF/3-PG.html">
+   3. Policy gradient (PG)
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../3-MF/4-A3C.html">
+   4. Advantage actor-critic (A2C, A3C)
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../3-MF/5-DDPG.html">
+   5. Deep Deterministic Policy Gradient (DDPG)
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../3-MF/6-PPO.html">
+   6. Natural gradients (TRPO, PPO)
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../3-MF/7-SAC.html">
+   7. Maximum Entropy RL (SAC)
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Model-based RL
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="1-MB.html">
+   1. Model-based RL
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="2-LearnedModels.html">
+   2. Learned world models
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="3-AlphaGo.html">
+   3. AlphaGo
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="4-SR.html">
+   4. Successor representations
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Going beyond
+ </span>
+</p>
+<ul class="current nav sidenav_l1">
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   1. Outlook
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Exercises
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="../5-exercises/ex1-Python.html">
+   1. Introduction to Python
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="../5-exercises/1-Python.html">
+     1.1. Notebook
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../5-exercises/1-Python-solution.html">
+     1.2. Solution
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="../5-exercises/ex2-Numpy.html">
+   2. Numpy and Matplotlib
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="../5-exercises/2-Numpy.html">
+     2.1. Notebook
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../5-exercises/2-Numpy-solution.html">
+     2.2. Solution
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="../5-exercises/ex3-Sampling.html">
+   3. Sampling
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="../5-exercises/3-Sampling.html">
+     3.1. Notebook
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../5-exercises/3-Sampling-solution.html">
+     3.2. Solution
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="../5-exercises/ex4-Bandits.html">
+   4. Bandits (part 1)
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="../5-exercises/4-Bandits.html">
+     4.1. Notebook
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../5-exercises/4-Bandits-solution.html">
+     4.2. Solution
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="../5-exercises/ex5-Bandits2.html">
+   5. Bandits (part 2)
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="../5-exercises/5-Bandits2.html">
+     5.1. Notebook
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../5-exercises/5-Bandits2-solution.html">
+     5.2. Solution
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="../5-exercises/ex6-DP.html">
+   6. Dynamic programming
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="../5-exercises/6-DP.html">
+     6.1. Notebook
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../5-exercises/6-DP-solution.html">
+     6.2. Solution
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="../5-exercises/ex7-Gym.html">
+   7. Gym environments
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="../5-exercises/7-Gym.html">
+     7.1. Notebook
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../5-exercises/7-Gym-solution.html">
+     7.2. Solution
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="../5-exercises/ex8-MC.html">
+   8. Monte-Carlo control
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="../5-exercises/8-MonteCarlo.html">
+     8.1. Notebook
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../5-exercises/8-MonteCarlo-solution.html">
+     8.2. Solution
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="../5-exercises/ex9-TD.html">
+   9. Q-learning
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="../5-exercises/9-TD.html">
+     9.1. Notebook
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../5-exercises/9-TD-solution.html">
+     9.2. Solution
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="../5-exercises/ex10-Eligibilitytraces.html">
+   10. Eligibility traces
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="../5-exercises/10-Eligibilitytraces.html">
+     10.1. Notebook
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../5-exercises/10-Eligibilitytraces-solution.html">
+     10.2. Solution
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="../5-exercises/ex11-Keras.html">
+   11. Keras
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="../5-exercises/11-Keras.html">
+     11.1. Notebook
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../5-exercises/11-Keras-solution.html">
+     11.2. Solution
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="../5-exercises/ex12-DQN.html">
+   12. DQN
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="../5-exercises/12-DQN.html">
+     12.1. Notebook
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../5-exercises/12-DQN-solution.html">
+     12.2. Solution
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  References
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../zreferences.html">
+   1. Bibliography
+  </a>
+ </li>
+</ul>
+
+</nav> <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="row topbar fixed-top container-xl">
+    <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show">
+    </div>
+    <div class="col pl-2 topbar-main">
+        
+        <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+            data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+            aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+            title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+            <i class="fas fa-bars"></i>
+            <i class="fas fa-arrow-left"></i>
+            <i class="fas fa-arrow-up"></i>
+        </button>
+        
+        
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="../_sources/4-MB/5-Outlook.md"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.md</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+</div>
+
+        <!-- Source interaction buttons -->
+
+
+        <!-- Full screen (wrap in <a> to have style consistency -->
+        <a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+                data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+                title="Fullscreen mode"><i
+                    class="fas fa-expand"></i></button></a>
+
+        <!-- Launch buttons -->
+
+    </div>
+
+    <!-- Table of contents -->
+    <div class="d-none d-md-block col-md-2 bd-toc show">
+        
+        <div class="tocsection onthispage pt-5 pb-3">
+            <i class="fas fa-list"></i> Contents
+        </div>
+        <nav id="bd-toc-nav">
+            <ul class="nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#limits-of-deep-reinforcement-lerning">
+   1.1. Limits of deep reinforcement lerning
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#overview">
+     1.1.1. Overview
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#rl-libraries">
+     1.1.2. RL libraries
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#inverse-rl-learning-the-reward-function">
+   1.2. Inverse RL - learning the reward function
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#intrinsic-motivation-and-curiosity">
+   1.3. Intrinsic motivation and curiosity
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#hierarchical-rl-learning-different-action-levels">
+   1.4. Hierarchical RL - learning different action levels
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#meta-reinforcement-learning-rl-2">
+   1.5. Meta Reinforcement learning - RL
+   <span class="math notranslate nohighlight">
+    \(^2\)
+   </span>
+  </a>
+ </li>
+</ul>
+
+        </nav>
+        
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+        
+              <div>
+                
+  <div class="section" id="outlook">
+<h1><span class="section-number">1. </span>Outlook<a class="headerlink" href="#outlook" title="Permalink to this headline">¶</a></h1>
+<p>Slides: <a class="reference external" href="https://www.tu-chemnitz.de/informatik/KI/edu/deeprl/lectures/pdf/5.1-Outlook.pdf">pdf</a></p>
+<div class="section" id="limits-of-deep-reinforcement-lerning">
+<h2><span class="section-number">1.1. </span>Limits of deep reinforcement lerning<a class="headerlink" href="#limits-of-deep-reinforcement-lerning" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="overview">
+<h3><span class="section-number">1.1.1. </span>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h3>
+<p><strong>Model-free methods</strong> (DQN, A3C, DDPG, PPO, SAC) are able to find optimal policies in complex MDPs by just <strong>sampling</strong> transitions.
+They suffer however from a high <strong>sample complexity</strong>, i.e. they need ridiculous amounts of samples to converge.</p>
+<p><strong>Model-based methods</strong> (I2A, Dreamer, MuZero) use <strong>learned dynamics</strong> to predict the future and plan the consequences of an action.
+The sample complexity is lower, but learning a good model can be challenging. Inference times can be prohibitive.</p>
+<div class="figure align-default" id="id15">
+<a class="reference internal image-reference" href="../_images/drl-overview.svg"><img alt="../_images/drl-overview.svg" src="../_images/drl-overview.svg" width="100%" /></a>
+<p class="caption"><span class="caption-number">Fig. 1.80 </span><span class="caption-text">Overview of deep RL methods. Source: <a class="reference external" href="https://github.com/avillemin/RL-Personnal-Notebook">https://github.com/avillemin/RL-Personnal-Notebook</a></span><a class="headerlink" href="#id15" title="Permalink to this image">¶</a></p>
+</div>
+<p>Deep RL is still very unstable. Depending on initialization, deep RL networks may or may not converge (30% of runs converge to a worse policy than a random agent).
+Careful optimization such as TRPO / PPO help, but not completely.
+You never know if failure is your fault (wrong network, bad hyperparameters, bug), or just bad luck.</p>
+<blockquote class="twitter-tweet"><p lang="en" dir="ltr">Deep RL is popular because it&#39;s the only area in ML where it&#39;s socially acceptable to train on the test set.</p>&mdash; Jacob Andreas (@jacobandreas) <a href="https://twitter.com/jacobandreas/status/924356906344267776?ref_src=twsrc%5Etfw">October 28, 2017</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+<p>As it uses neural networks, deep RL <strong>overfits</strong> its training data, i.e. the environment it is trained on.
+If you change anything to the environment dynamics, you need to retrain from scratch.
+OpenAI Five collects 900 years of game experience per day on Dota 2: it overfits the game, it does not learn how to play.
+Modify the map a little bit and everything is gone (but see Meta RL - RL<span class="math notranslate nohighlight">\(^2\)</span> later).</p>
+<p>Classical methods sometimes still work better. Model Predictive Control (MPC) is able to control Mujoco robots much better than RL through classical optimization techniques (e.g. iterative LQR) while needing much less computations.
+If you have a good physics model, do not use DRL. Reserve it for unknown systems, or when using noisy sensors (images).
+Genetic algorithms (CMA-ES) sometimes give better results than RL to train policy networks.</p>
+<div class='embed-container'><iframe src='https://www.youtube.com/embed/uRVAX_sFT24' frameborder='0' allowfullscreen></iframe></div>
+<p>You cannot do that with deep RL (yet):</p>
+<div class='embed-container'><iframe src='https://www.youtube.com/embed/fRj34o4hN4I' frameborder='0' allowfullscreen></iframe></div>
+</div>
+<div class="section" id="rl-libraries">
+<h3><span class="section-number">1.1.2. </span>RL libraries<a class="headerlink" href="#rl-libraries" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">keras-rl</span></code>: many deep RL algorithms implemented directly in keras: DQN, DDQN, DDPG, Continuous DQN (CDQN or NAF), Cross-Entropy Method (CEM)…</p></li>
+</ul>
+<p><a class="reference external" href="https://github.com/matthiasplappert/keras-rl">https://github.com/matthiasplappert/keras-rl</a></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">OpenAI</span> <span class="pre">Baselines</span></code> from OpenAI: A2C, ACER, ACKTR, DDPG, DQN, PPO, TRPO… Not maintained anymore.</p></li>
+</ul>
+<p><a class="reference external" href="https://github.com/openai/baselines">https://github.com/openai/baselines</a></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">Stable</span> <span class="pre">baselines</span></code> from Inria Flowers, a clean rewrite of OpenAI baselines also including SAC and TD3.</p></li>
+</ul>
+<p><a class="reference external" href="https://github.com/hill-a/stable-baselines">https://github.com/hill-a/stable-baselines</a></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">rlkit</span></code> from Vitchyr Pong (PhD student at Berkeley) with in particular model-based algorithms (TDM).</p></li>
+</ul>
+<p><a class="reference external" href="https://github.com/vitchyr/rlkit">https://github.com/vitchyr/rlkit</a></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">chainer-rl</span></code> implemented in Chainer: A3C, ACER, DQN, DDPG, PGT, PCL, PPO, TRPO.</p></li>
+</ul>
+<p><a class="reference external" href="https://github.com/chainer/chainerrl">https://github.com/chainer/chainerrl</a></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">RL</span> <span class="pre">Mushroom</span></code> is a very modular library based on Pytorch allowing to implement DQN and variants, DDPG, SAC, TD3, TRPO, PPO.</p></li>
+</ul>
+<p><a class="reference external" href="https://github.com/MushroomRL/mushroom-rl">https://github.com/MushroomRL/mushroom-rl</a></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">Tensorforce</span></code> implement in tensorflow: DQN and variants, A3C, DDPG, TRPO, PPO.</p></li>
+</ul>
+<p><a class="reference external" href="https://github.com/tensorforce/tensorforce">https://github.com/tensorforce/tensorforce</a></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">Tensorflow</span> <span class="pre">Agents</span></code> is officially supported by tensorflow: DQN, A3C, DDPG, TD3, PPO, SAC.</p></li>
+</ul>
+<p><a class="reference external" href="https://github.com/tensorflow/agents">https://github.com/tensorflow/agents</a></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">Coach</span></code> from Intel Nervana also provides many state-of-the-art algorithms.</p></li>
+</ul>
+<p><a class="reference external" href="https://github.com/NervanaSystems/coach">https://github.com/NervanaSystems/coach</a></p>
+<div class="figure align-default" id="id16">
+<a class="reference internal image-reference" href="../_images/coach.png"><img alt="../_images/coach.png" src="../_images/coach.png" style="width: 100%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 1.81 </span><span class="caption-text">Deep RL algorithms available in Coach. Source: <a class="reference external" href="https://github.com/NervanaSystems/coach">https://github.com/NervanaSystems/coach</a></span><a class="headerlink" href="#id16" title="Permalink to this image">¶</a></p>
+</div>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">rllib</span></code> is part of the more global ML framework Ray, which also includes Tune for hyperparameter optimization.</p></li>
+</ul>
+<p>It has implementations in both tensorflow and Pytorch.</p>
+<p>All major model-free algorithms are implemented (DQN, Rainbow, A3C, DDPG, PPO, SAC), including their distributed variants (Ape-X, IMPALA, TD3) but also model-based algorithms (Dreamer!)</p>
+<p><a class="reference external" href="https://docs.ray.io/en/master/rllib.html">https://docs.ray.io/en/master/rllib.html</a></p>
+<div class="figure align-default" id="id17">
+<a class="reference internal image-reference" href="../_images/rllib1.svg"><img alt="../_images/rllib1.svg" src="../_images/rllib1.svg" width="100%" /></a>
+<p class="caption"><span class="caption-number">Fig. 1.82 </span><span class="caption-text">Architecture of rllib. Source: <a class="reference external" href="https://docs.ray.io/en/master/rllib.html">https://docs.ray.io/en/master/rllib.html</a></span><a class="headerlink" href="#id17" title="Permalink to this image">¶</a></p>
+</div>
+</div>
+</div>
+<div class="section" id="inverse-rl-learning-the-reward-function">
+<h2><span class="section-number">1.2. </span>Inverse RL - learning the reward function<a class="headerlink" href="#inverse-rl-learning-the-reward-function" title="Permalink to this headline">¶</a></h2>
+<p>RL is an optimization method: it maximizes the reward function that you provide it.
+If you do not design the reward function correctly, the agent may not do what you expect.
+In the Coast runners game, turbos provide small rewards but respawn very fast: it is more optimal to collect them repeatedly than to try to finish the race.</p>
+<div class='embed-container'><iframe src='https://www.youtube.com/embed/tlOIHko8ySg' frameborder='0' allowfullscreen></iframe></div>
+<p>Defining the reward function that does what you want becomes an art.
+RL algorithms work better with dense rewards than sparse ones. It is tempting to introduce intermediary rewards.
+You end up covering so many special cases that it becomes unusable: Go as fast as you can but not in a curve, except if you are on a closed circuit but not if it rains…</p>
+<div class='embed-container'><iframe src='https://www.youtube.com/embed/8QnD8ZM0YCo' frameborder='0' allowfullscreen></iframe></div>
+<p>In the OpenAI <strong>Lego stacking</strong> paper <a class="bibtex reference internal" href="../zreferences.html#popov2017" id="id1">[Popov et al., 2017]</a>, it was perhaps harder to define the reward function than to implement DDPG.</p>
+<div class="figure align-default" id="id18">
+<a class="reference internal image-reference" href="../_images/lego_reward.png"><img alt="../_images/lego_reward.png" src="../_images/lego_reward.png" style="width: 100%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 1.83 </span><span class="caption-text">Lego stacking handmade reward function <a class="bibtex reference internal" href="../zreferences.html#popov2017" id="id2">[Popov et al., 2017]</a>.</span><a class="headerlink" href="#id18" title="Permalink to this image">¶</a></p>
+</div>
+<p>The goal of <strong>inverse RL</strong> (see <a class="bibtex reference internal" href="../zreferences.html#arora2019" id="id3">[Arora &amp; Doshi, 2019]</a> for a review) is to learn from <strong>demonstrations</strong> (e.g. from humans) which reward function is  maximized.
+This is not <strong>imitation learning</strong>, where you try to learn and reproduce actions.
+The goal if to find a <strong>parametrized representation</strong> of the reward function:</p>
+<div class="math notranslate nohighlight">
+\[\hat{r}(s) = \sum_{i=1}^K w_i \, \varphi_i(s)\]</div>
+<p>When the reward function has been learned, you can train a RL algorithm to find the optimal policy.</p>
+<div class="figure align-default" id="id19">
+<a class="reference internal image-reference" href="../_images/inverseRL.png"><img alt="../_images/inverseRL.png" src="../_images/inverseRL.png" style="width: 70%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 1.84 </span><span class="caption-text">Inverse RL allows to learn from demonstrations. Source: <a class="reference external" href="http://www.miubiq.cs.titech.ac.jp/modeling-risk-anticipation-and-defensive-driving-on-residential-roads-using-inverse-reinforcement-learning/">http://www.miubiq.cs.titech.ac.jp/modeling-risk-anticipation-and-defensive-driving-on-residential-roads-using-inverse-reinforcement-learning/</a></span><a class="headerlink" href="#id19" title="Permalink to this image">¶</a></p>
+</div>
+</div>
+<div class="section" id="intrinsic-motivation-and-curiosity">
+<h2><span class="section-number">1.3. </span>Intrinsic motivation and curiosity<a class="headerlink" href="#intrinsic-motivation-and-curiosity" title="Permalink to this headline">¶</a></h2>
+<p>One fundamental problem of RL is its dependence on the <strong>reward function</strong>.
+When rewards are <strong>sparse</strong>, the agent does not learn much (but see successor representations) unless its random exploration policy makes it discover rewards.
+The reward function is <strong>handmade</strong>, what is difficult in realistic complex problems.</p>
+<p>Human learning does not (only) rely on maximizing rewards or achieving goals.
+Especially infants discover the world by <strong>playing</strong>, i.e. interacting with the environment out of <strong>curiosity</strong>.</p>
+<blockquote>
+<div><p>What happens if I do that? Oh, that’s fun.</p>
+</div></blockquote>
+<p>This called <strong>intrinsic motivation</strong>: we are motivated by understanding the world, not only by getting rewards.
+Rewards are internally generated.</p>
+<div class="figure align-default" id="id20">
+<a class="reference internal image-reference" href="../_images/intrinsicmotivation.gif"><img alt="../_images/intrinsicmotivation.gif" src="../_images/intrinsicmotivation.gif" style="width: 50%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 1.85 </span><span class="caption-text">In intrinsic motivation, rewards are generated internally depending on the achieved states. Source: <a class="bibtex reference internal" href="../zreferences.html#barto2013" id="id4">[Barto, 2013]</a>.</span><a class="headerlink" href="#id20" title="Permalink to this image">¶</a></p>
+</div>
+<p>What is <strong>intrinsically</strong> rewarding / motivating / fun? Mostly what has <strong>unexpected</strong> consequences.</p>
+<ul class="simple">
+<li><p>If you can predict what is going to happen, it becomes boring.</p></li>
+<li><p>If you cannot predict, you can become <strong>curious</strong> and try to <strong>explore</strong> that action.</p></li>
+</ul>
+<div class="figure align-default" id="id21">
+<a class="reference internal image-reference" href="../_images/intrinsicreward.png"><img alt="../_images/intrinsicreward.png" src="../_images/intrinsicreward.png" style="width: 100%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 1.86 </span><span class="caption-text">Intrinsic rewards are defined by the ability to predict states. Source: <a class="reference external" href="https://medium.com/data-from-the-trenches/curiosity-driven-learning-through-next-state-prediction-f7f4e2f592fa">https://medium.com/data-from-the-trenches/curiosity-driven-learning-through-next-state-prediction-f7f4e2f592fa</a></span><a class="headerlink" href="#id21" title="Permalink to this image">¶</a></p>
+</div>
+<p>The <strong>intrinsic reward</strong> (IR) of an action is defined as the sensory prediction error:</p>
+<div class="math notranslate nohighlight">
+\[
+    \text{IR}(s_t, a_t, s_{t+1}) = || f(s_t, a_t) - s_{t+1}||
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(f(s_t, a_t)\)</span> is a <strong>forward model</strong> predicting the sensory consequences of an action.
+An agent maximizing the IR will tend to visit unknown / poorly predicted states (<strong>exploration</strong>).</p>
+<p>Is it a good idea to predict frames directly? Frames are highly dimensional and there will always be a remaining error.</p>
+<div class="figure align-default" id="id22">
+<a class="reference internal image-reference" href="../_images/intrinsicreward-hard.png"><img alt="../_images/intrinsicreward-hard.png" src="../_images/intrinsicreward-hard.png" style="width: 100%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 1.87 </span><span class="caption-text">Intrinsic rewards are defined by the ability to predict states. Source: <a class="reference external" href="https://medium.com/data-from-the-trenches/curiosity-driven-learning-through-next-state-prediction-f7f4e2f592fa">https://medium.com/data-from-the-trenches/curiosity-driven-learning-through-next-state-prediction-f7f4e2f592fa</a></span><a class="headerlink" href="#id22" title="Permalink to this image">¶</a></p>
+</div>
+<p>Moreover, they can be noisy and unpredictable, without being particularly interesting.</p>
+<div class="figure align-default" id="id23">
+<a class="reference internal image-reference" href="../_images/leaves.gif"><img alt="../_images/leaves.gif" src="../_images/leaves.gif" style="width: 50%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 1.88 </span><span class="caption-text">Falling leaves are hard to predict, but hardly interesting. Source: Giphy.</span><a class="headerlink" href="#id23" title="Permalink to this image">¶</a></p>
+</div>
+<p>What can we do? As usual, predict in a latent space!</p>
+<p>The intrinsic curiosity module (ICM, <a class="bibtex reference internal" href="../zreferences.html#pathak2017" id="id5">[Pathak et al., 2017]</a>) learns to provide an intrinsic reward for a transition <span class="math notranslate nohighlight">\((s_t, a_t, s_{t+1})\)</span> by comparing the predicted latent representation <span class="math notranslate nohighlight">\(\hat{\phi}(s_{t+1})\)</span> (using a <strong>forward</strong> model) to its “true” latent representation <span class="math notranslate nohighlight">\(\phi(s_{t+1})\)</span>.
+The feature representation <span class="math notranslate nohighlight">\(\phi(s_t)\)</span> is trained using an <strong>inverse model</strong> predicting the action leading from <span class="math notranslate nohighlight">\(s_t\)</span> to <span class="math notranslate nohighlight">\(s_{t+1}\)</span>.</p>
+<div class="figure align-default" id="id24">
+<a class="reference internal image-reference" href="../_images/icm.jpg"><img alt="../_images/icm.jpg" src="../_images/icm.jpg" style="width: 100%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 1.89 </span><span class="caption-text">intrinsic curiosity module. <a class="bibtex reference internal" href="../zreferences.html#pathak2017" id="id6">[Pathak et al., 2017]</a></span><a class="headerlink" href="#id24" title="Permalink to this image">¶</a></p>
+</div>
+<div class='embed-container'><iframe src='https://www.youtube.com/embed/J3FHOyhUn3A' frameborder='0' allowfullscreen></iframe></div>
+<div class="admonition-curiosity-driven-rl-on-atari-games admonition">
+<p class="admonition-title">Curiosity-driven RL on Atari games</p>
+<p><a class="bibtex reference internal" href="../zreferences.html#burda2018" id="id7">[Burda et al., 2018]</a>:</p>
+<div class='embed-container'><iframe src='https://www.youtube.com/embed/l1FqtAHfJLI' frameborder='0' allowfullscreen></iframe></div>
+</div>
+</div>
+<div class="section" id="hierarchical-rl-learning-different-action-levels">
+<h2><span class="section-number">1.4. </span>Hierarchical RL - learning different action levels<a class="headerlink" href="#hierarchical-rl-learning-different-action-levels" title="Permalink to this headline">¶</a></h2>
+<p>In all previous RL methods, the action space is fixed.
+When you read a recipe, the actions are “Cut carrots”, “Boil water”, etc.
+But how do you perform these <strong>high-level actions</strong>? Break them into subtasks iteratively until you arrive to muscle activations.
+But it is not possible to learn to cook a boeuf bourguignon using muscle activations as actions.</p>
+<div class="figure align-default" id="id25">
+<a class="reference internal image-reference" href="../_images/hierarchicalRL.png"><img alt="../_images/hierarchicalRL.png" src="../_images/hierarchicalRL.png" style="width: 100%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 1.90 </span><span class="caption-text">Hierarchical structure of preparing a boeuf bourguignon. Source: <a class="reference external" href="https://thegradient.pub/the-promise-of-hierarchical-reinforcement-learning/">https://thegradient.pub/the-promise-of-hierarchical-reinforcement-learning/</a></span><a class="headerlink" href="#id25" title="Permalink to this image">¶</a></p>
+</div>
+<p>Sub-policies (<strong>options</strong>) can be trained to solve simple tasks (going left, right, etc).
+A <strong>meta-learner</strong> or controller then learns to call each sub-policy when needed, at a much lower frequency <a class="bibtex reference internal" href="../zreferences.html#frans2017" id="id8">[Frans et al., 2017]</a>.</p>
+<div class="figure align-default" id="id26">
+<a class="reference internal image-reference" href="../_images/MLSH.gif"><img alt="../_images/MLSH.gif" src="../_images/MLSH.gif" style="width: 100%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 1.91 </span><span class="caption-text">Meta Learning Shared Hierarchies <a class="bibtex reference internal" href="../zreferences.html#frans2017" id="id9">[Frans et al., 2017]</a>. Source: <a class="reference external" href="https://openai.com/blog/learning-a-hierarchy/">https://openai.com/blog/learning-a-hierarchy/</a></span><a class="headerlink" href="#id26" title="Permalink to this image">¶</a></p>
+</div>
+<div class='embed-container'><iframe src='https://www.youtube.com/embed/zkJmH4NlzPs' frameborder='0' allowfullscreen></iframe></div>
+<p>Some additional references on Hierarchical Reinforcement Learning</p>
+<ul class="simple">
+<li><p><strong>MLSH:</strong> Frans, K., Ho, J., Chen, X., Abbeel, P., and Schulman, J. (2017). Meta Learning Shared Hierarchies. arXiv:1710.09767.</p></li>
+<li><p><strong>FUN:</strong> Vezhnevets, A. S., Osindero, S., Schaul, T., Heess, N., Jaderberg, M., Silver, D., et al. (2017). FeUdal Networks for Hierarchical Reinforcement Learning. arXiv:1703.01161</p></li>
+<li><p><strong>Option-Critic architecture:</strong> Bacon, P.-L., Harb, J., and Precup, D. (2016). The Option-Critic Architecture. arXiv:1609.05140.</p></li>
+<li><p><strong>HIRO:</strong> Nachum, O., Gu, S., Lee, H., and Levine, S. (2018). Data-Efficient Hierarchical Reinforcement Learning. arXiv:1805.08296.</p></li>
+<li><p><strong>HAC:</strong> Levy, A., Konidaris, G., Platt, R., and Saenko, K. (2019). Learning Multi-Level Hierarchies with Hindsight. arXiv:1712.00948.</p></li>
+<li><p><strong>Spinal-cortical:</strong> Heess, N., Wayne, G., Tassa, Y., Lillicrap, T., Riedmiller, M., and Silver, D. (2016). Learning and Transfer of Modulated Locomotor Controllers. arXiv:1610.05182.</p></li>
+</ul>
+</div>
+<div class="section" id="meta-reinforcement-learning-rl-2">
+<h2><span class="section-number">1.5. </span>Meta Reinforcement learning - RL<span class="math notranslate nohighlight">\(^2\)</span><a class="headerlink" href="#meta-reinforcement-learning-rl-2" title="Permalink to this headline">¶</a></h2>
+<p><strong>Meta learning</strong> is the ability to reuse skills acquired on a set of tasks to quickly acquire new (similar) ones (generalization).</p>
+<div class="figure align-default">
+<a class="reference internal image-reference" href="../_images/metalearning.png"><img alt="../_images/metalearning.png" src="../_images/metalearning.png" style="width: 100%;" /></a>
+</div>
+<div class="figure align-default" id="id27">
+<a class="reference internal image-reference" href="../_images/ml10.gif"><img alt="../_images/ml10.gif" src="../_images/ml10.gif" style="width: 100%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 1.92 </span><span class="caption-text">Meta Reinforcement learning. Source: <a class="reference external" href="https://meta-world.github.io/">https://meta-world.github.io/</a></span><a class="headerlink" href="#id27" title="Permalink to this image">¶</a></p>
+</div>
+<p>Meta RL is based on the idea of <strong>fast and slow</strong> learning:</p>
+<ul class="simple">
+<li><p>Slow learning is the adaptation of weights in the NN.</p></li>
+<li><p>Fast learning is the adaptation to changes in the environment.</p></li>
+</ul>
+<p>A simple strategy developed concurrently by <a class="bibtex reference internal" href="../zreferences.html#wang2017a" id="id10">[Wang et al., 2017a]</a> and <a class="bibtex reference internal" href="../zreferences.html#duan2016a" id="id11">[Duan et al., 2016]</a>is to have a model-free algorithm (e.g. A3C) integrate with a LSTM layer not only the current state <span class="math notranslate nohighlight">\(s_t\)</span>, but also the previous action <span class="math notranslate nohighlight">\(a_{t-1}\)</span> and reward <span class="math notranslate nohighlight">\(r_t\)</span>.</p>
+<div class="figure align-default" id="id28">
+<a class="reference internal image-reference" href="../_images/metarl-lstm.png"><img alt="../_images/metarl-lstm.png" src="../_images/metarl-lstm.png" style="width: 30%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 1.93 </span><span class="caption-text">Meta RL uses a LSTM layer to encode past actions and rewards in the state representation. Source: <a class="bibtex reference internal" href="../zreferences.html#wang2017a" id="id12">[Wang et al., 2017a]</a></span><a class="headerlink" href="#id28" title="Permalink to this image">¶</a></p>
+</div>
+<p>The policy of the agent becomes <strong>memory-guided</strong>: it selects an action depending on what it did before, not only the state.</p>
+<div class="figure align-default" id="id29">
+<a class="reference internal image-reference" href="../_images/RL_2.png"><img alt="../_images/RL_2.png" src="../_images/RL_2.png" style="width: 100%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 1.94 </span><span class="caption-text">Meta RL algorithms are trained on a set of similar MDPs. Source: <a class="bibtex reference internal" href="../zreferences.html#duan2016a" id="id13">[Duan et al., 2016]</a></span><a class="headerlink" href="#id29" title="Permalink to this image">¶</a></p>
+</div>
+<p>The algorithm is trained on a set of similar MDPs:</p>
+<ol class="simple">
+<li><p>Select a MDP <span class="math notranslate nohighlight">\(\mathcal{M}\)</span>.</p></li>
+<li><p>Reset the internal state of the LSTM.</p></li>
+<li><p>Sample trajectories and adapt the weights.</p></li>
+<li><p>Repeat 1, 2 and 3.</p></li>
+</ol>
+<p>The meta RL can be be trained an a multitude of 2-armed bandits, each giving a reward of 1 with probability <span class="math notranslate nohighlight">\(p\)</span> and <span class="math notranslate nohighlight">\(1-p\)</span>.
+Left is a classical bandit algorithm, right is the meta bandit:</p>
+<div class="figure align-default" id="id30">
+<a class="reference internal image-reference" href="../_images/metarl-twoarmed.gif"><img alt="../_images/metarl-twoarmed.gif" src="../_images/metarl-twoarmed.gif" style="width: 70%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 1.95 </span><span class="caption-text">Classical bandit (left) and meta-bandit (right) learning a new two-armed bandit problem. Source: <a class="reference external" href="https://hackernoon.com/learning-policies-for-learning-policies-meta-reinforcement-learning-rl%C2%B2-in-tensorflow-b15b592a2ddf">https://hackernoon.com/learning-policies-for-learning-policies-meta-reinforcement-learning-rl%C2%B2-in-tensorflow-b15b592a2ddf</a></span><a class="headerlink" href="#id30" title="Permalink to this image">¶</a></p>
+</div>
+<p>The meta bandit has learned that the best strategy for any 2-armed bandit is to sample both actions randomly at the beginning and then stick to the best one.
+The meta bandit does not learn to solve each problem, it learns <strong>how</strong> to solve them.</p>
+<div class="admonition-model-based-meta-reinforcement-learning-for-flight-with-suspended-payloads admonition">
+<p class="admonition-title">Model-Based Meta-Reinforcement Learning for Flight with Suspended Payloads</p>
+<p><a class="bibtex reference internal" href="../zreferences.html#belkhale2021" id="id14">[Belkhale et al., 2021]</a> <a class="reference external" href="https://sites.google.com/view/meta-rl-for-flight">https://sites.google.com/view/meta-rl-for-flight</a></p>
+<div class='embed-container'><iframe src='https://www.youtube.com/embed/AP5FgKjFpvQ' frameborder='0' allowfullscreen></iframe></div>
+</div>
+<p>Additional references on meta RL:</p>
+<ul class="simple">
+<li><p><strong>Meta RL:</strong> Wang JX, Kurth-Nelson Z, Tirumala D, Soyer H, Leibo JZ, Munos R, Blundell C, Kumaran D, Botvinick M. (2016). Learning to reinforcement learn. arXiv:161105763.</p></li>
+<li><p><strong>RL<span class="math notranslate nohighlight">\(^2\)</span></strong> Duan Y, Schulman J, Chen X, Bartlett PL, Sutskever I, Abbeel P. 2016. RL<span class="math notranslate nohighlight">\(^2\)</span>: Fast Reinforcement Learning via Slow Reinforcement Learning. arXiv:161102779.</p></li>
+<li><p><strong>MAML:</strong> Finn C, Abbeel P, Levine S. (2017). Model-Agnostic Meta-Learning for Fast Adaptation of Deep Networks. arXiv:170303400.</p></li>
+<li><p><strong>PEARL:</strong> Rakelly K, Zhou A, Quillen D, Finn C, Levine S. (2019). Efficient Off-Policy Meta-Reinforcement Learning via Probabilistic Context Variables. arXiv:190308254.</p></li>
+<li><p><strong>POET:</strong> Wang R, Lehman J, Clune J, Stanley KO. (2019). Paired Open-Ended Trailblazer (POET): Endlessly Generating Increasingly Complex and Diverse Learning Environments and Their Solutions. arXiv:190101753.</p></li>
+<li><p><strong>MetaGenRL:</strong> Kirsch L, van Steenkiste S, Schmidhuber J. (2020). Improving Generalization in Meta Reinforcement Learning using Learned Objectives. arXiv:191004098.</p></li>
+<li><p>Botvinick M, Ritter S, Wang JX, Kurth-Nelson Z, Blundell C, Hassabis D. (2019). Reinforcement Learning, Fast and Slow. Trends in Cognitive Sciences 23:408–422. doi:10.1016/j.tics.2019.02.006</p></li>
+<li><p><a class="reference external" href="https://lilianweng.github.io/lil-log/2019/06/23/meta-reinforcement-learning.html">https://lilianweng.github.io/lil-log/2019/06/23/meta-reinforcement-learning.html</a></p></li>
+<li><p><a class="reference external" href="https://hackernoon.com/learning-policies-for-learning-policies-meta-reinforcement-learning-rl%C2%B2-in-tensorflow-b15b592a2ddf">https://hackernoon.com/learning-policies-for-learning-policies-meta-reinforcement-learning-rl%C2%B2-in-tensorflow-b15b592a2ddf</a></p></li>
+<li><p><a class="reference external" href="https://towardsdatascience.com/learning-to-learn-more-meta-reinforcement-learning-f0cc92c178c1">https://towardsdatascience.com/learning-to-learn-more-meta-reinforcement-learning-f0cc92c178c1</a></p></li>
+<li><p><a class="reference external" href="https://eng.uber.com/poet-open-ended-deep-learning/">https://eng.uber.com/poet-open-ended-deep-learning/</a></p></li>
+</ul>
+</div>
+</div>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./4-MB"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+        </div>
+    </div>
+    
+    
+    <div class='prev-next-bottom'>
+        
+    <a class='left-prev' id="prev-link" href="4-SR.html" title="previous page"><span class="section-number">4. </span>Successor representations</a>
+    <a class='right-next' id="next-link" href="../5-exercises/ex1-Python.html" title="next page"><span class="section-number">1. </span>Introduction to Python</a>
+
+    </div>
+    <footer class="footer mt-5 mt-md-0">
+    <div class="container">
+      <p>
+        
+          By Julien Vitay - julien.vitay@informatik.tu-chemnitz.de<br/>
+        
+            &copy; Copyright 2020.<br/>
+          <div class="extra_footer">
+            Technische Universität Chemnitz - Faculty of Computer Science - Professorship for Artificial Intelligence
+          </div>
+      </p>
+    </div>
+  </footer>
+</main>
+
+
+      </div>
+    </div>
+
+    
+  <script src="../_static/js/index.3da636dd464baa7582d2.js"></script>
+
+
+    
+  </body>
+</html>

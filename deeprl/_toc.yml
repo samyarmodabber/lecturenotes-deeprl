@@ -33,6 +33,11 @@
     - file: 4-MB/3-AlphaGo
     - file: 4-MB/4-SR
 
+
+- part: Going beyond
+  chapters:
+    - file: 5-Goingfurther/1-Outlook
+
 - part: Exercises
   chapters:
     - file: 5-exercises/ex1-Python
